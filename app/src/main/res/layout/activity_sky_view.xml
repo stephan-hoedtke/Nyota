@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".SkyViewActivity"
+    android:keepScreenOn="true">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary"
+        android:layout_alignParentTop="true"
+        android:elevation="4dp"
+        android:theme="@style/NyotaTheme.ToolbarOverlay"
+        />
+
+    <com.stho.software.nyota.views.SkyView
+        android:id="@+id/skyView"
+        android:layout_below="@id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        />
+
+    <ImageView
+        android:id="@+id/iconTime"
+        android:layout_width="wrap_content"
+        android:layout_height="20sp"
+        android:layout_gravity="center_vertical"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="5sp"
+        android:layout_marginLeft="5sp"
+        android:layout_marginStart="5sp"
+        android:contentDescription="@string/label_icon"
+        android:src="@drawable/time"
+        />
+
+    <TextView
+        android:id="@+id/currentTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/iconTime"
+        android:layout_toEndOf="@+id/iconTime"
+        android:layout_gravity="center_vertical"
+        android:textSize="15sp"
+        android:text="@string/label_undefined"
+        />
+
+    <ImageView
+        android:id="@+id/iconOrientation"
+        android:layout_width="wrap_content"
+        android:layout_height="20sp"
+        android:layout_gravity="center_vertical"
+        android:layout_below="@id/iconTime"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignEnd="@id/iconTime"
+        android:layout_alignRight="@id/iconTime"
+        android:contentDescription="@string/label_undefined"
+        android:src="@drawable/horizontal" />
+
+    <TextView
+        android:id="@+id/orientation"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/currentTime"
+        android:layout_toRightOf="@id/iconOrientation"
+        android:layout_toEndOf="@+id/iconOrientation"
+        android:layout_gravity="center_vertical"
+        android:textSize="15sp"
+        android:text="@string/label_undefined"
+        />
+
+    <ImageView
+        android:id="@+id/iconHorizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="20sp"
+        android:layout_gravity="center_vertical"
+        android:layout_below="@id/iconOrientation"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignEnd="@id/iconTime"
+        android:layout_alignRight="@id/iconTime"
+        android:contentDescription="@string/label_undefined"
+        android:src="@drawable/horizontal" />
+
+    <TextView
+        android:id="@+id/horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/orientation"
+        android:layout_toRightOf="@id/iconHorizontal"
+        android:layout_toEndOf="@+id/iconHorizontal"
+        android:layout_gravity="center_vertical"
+        android:textSize="15sp"
+        android:text="@string/label_undefined"
+        />
+
+    <TextView
+        android:id="@+id/center"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/currentTime"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_gravity="center_vertical"
+        android:textSize="15sp"
+        android:text="@string/label_undefined"
+        />
+
+    <ImageView
+        android:id="@+id/down"
+        android:layout_width="wrap_content"
+        android:layout_height="20sp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_margin="@dimen/activity_horizontal_margin"
+        android:contentDescription="@string/label_undefined"
+        android:src="@drawable/down"
+        />
+
+    <ImageView
+        android:id="@+id/up"
+        android:layout_width="wrap_content"
+        android:layout_height="20sp"
+        android:layout_above="@id/down"
+        android:layout_alignStart="@id/down"
+        android:layout_alignLeft="@id/down"
+        android:layout_alignEnd="@id/down"
+        android:layout_alignRight="@id/down"
+        android:contentDescription="@string/label_undefined"
+        android:src="@drawable/up"
+        />
+
+    <ImageView
+        android:id="@+id/iconFreeze"
+        android:layout_width="wrap_content"
+        android:layout_height="20sp"
+        android:layout_above="@id/up"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_margin="@dimen/activity_vertical_margin"
+        android:contentDescription="@string/label_undefined"
+        android:src="@drawable/melted" />
+
+    <Button
+        android:id="@+id/refresh"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/label_disabled"
+        android:textColor="@color/colorPrimary"
+        android:background="@android:color/black"/>
+
+</RelativeLayout>
+
+

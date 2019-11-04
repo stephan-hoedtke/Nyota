@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.stho.software.nyota">
+
+    <uses-permission android:name="android.permission.ACCESS_GPS" />
+    <uses-permission android:name="android.permission.ACCESS_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:supportsRtl="true"
+        android:theme="@style/NyotaTheme">
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="@string/google_maps_key" />
+
+        <activity
+            android:name=".MainActivity"
+            android:screenOrientation="portrait"
+            android:taskAffinity=".MainActivity"
+            android:theme="@style/NyotaTheme.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <action android:name="android.intent.action.DEFAULT" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".ElementActivity"
+            android:parentActivityName=".MainActivity"
+            />
+        <activity android:name=".MoonAdapterActivity"
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/NyotaTheme.NoActionBar"
+            />
+        <activity android:name=".PlanetActivity"
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/NyotaTheme.NoActionBar"
+            />
+        <activity android:name=".SatelliteActivity"
+            android:parentActivityName=".MainActivity"
+            />
+        <activity
+            android:name=".ISSMapViewActivity"
+            android:icon="@drawable/iss_red"
+            android:label="@string/label_iss"
+            android:taskAffinity=".ISSMapViewActivity"
+            android:parentActivityName=".MainActivity" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".TLELoaderActivity"
+            android:parentActivityName=".SatelliteActivity"
+            />
+        <activity
+            android:name=".FinderActivity"
+            android:screenOrientation="portrait"
+            />
+        <activity
+            android:name=".SkyViewActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/NyotaTheme.NoActionBar"
+            />
+        <activity
+            android:name=".SettingsActivity"
+            android:label="@string/label_settings_title"
+            android:parentActivityName=".MainActivity"
+            />
+        <activity
+            android:name=".CitySelectionActivity"
+            android:label="@string/title_activity_location_selector"
+            android:parentActivityName=".MainActivity"
+            />
+        <activity
+            android:name=".CityActivity"
+            android:label="@string/title_activity_city"
+            android:parentActivityName=".CitySelectionActivity"
+            />
+        <activity
+            android:name=".ConstellationActivity"
+            android:label="@string/title_activity_constellation"
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/NyotaTheme.NoActionBar"
+            />
+        <activity
+            android:name=".TimeSelectionActivity"
+            android:label="@string/title_activity_time_selection"
+            android:parentActivityName=".MainActivity"
+            />
+    </application>
+
+</manifest>

@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".FinderActivity"
+    android:keepScreenOn="true">
+
+    <com.stho.software.nyota.views.DirectionPointerView
+        android:id="@+id/directionView"
+        android:layout_width="match_parent"
+        android:layout_height="200sp"
+        android:layout_alignParentTop="true"
+        android:contentDescription="@string/label_undefined"
+        android:background="@android:color/transparent"
+        />
+
+    <ImageView
+        android:id="@+id/iconOrientation"
+        android:layout_below="@id/directionView"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_gravity="center_vertical"
+        android:layout_width="20sp"
+        android:layout_height="20sp"
+        android:src="@drawable/compass"
+        android:contentDescription="@string/label_icon" />
+
+    <TextView
+        android:id="@+id/orientation"
+        android:layout_below="@id/directionView"
+        android:layout_toRightOf="@id/iconOrientation"
+        android:layout_toEndOf="@id/iconOrientation"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:text="@string/label_sample" />
+
+    <ImageView
+        android:id="@+id/iconHorizontal"
+        android:layout_below="@id/iconOrientation"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_gravity="center_vertical"
+        android:layout_width="20sp"
+        android:layout_height="20sp"
+        android:src="@drawable/horizontal"
+        android:contentDescription="@string/label_icon" />
+
+    <TextView
+        android:id="@+id/horizontal"
+        android:layout_below="@id/orientation"
+        android:layout_toRightOf="@id/iconHorizontal"
+        android:layout_toEndOf="@id/iconHorizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:text="@string/label_sample" />
+
+    <com.stho.software.nyota.views.HorizonView
+        android:id="@+id/horizonView"
+        android:layout_width="match_parent"
+        android:layout_height="200sp"
+        android:layout_below="@id/horizontal"
+        android:contentDescription="@string/label_undefined"
+        android:background="@android:color/transparent"
+        />
+
+    <ImageView
+        android:id="@+id/iconTime"
+        android:layout_width="wrap_content"
+        android:layout_height="20sp"
+        android:layout_gravity="center_vertical"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:contentDescription="@string/label_icon"
+        android:src="@drawable/time"
+        />
+
+    <TextView
+        android:id="@+id/currentTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/iconTime"
+        android:layout_toEndOf="@+id/iconTime"
+        android:layout_gravity="center_vertical"
+        android:textSize="15sp"
+        android:text="@string/label_undefined"
+        />
+
+    <ImageView
+        android:id="@+id/currentVisibility"
+        android:layout_width="wrap_content"
+        android:layout_height="20sp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_gravity="center_vertical"
+        android:contentDescription="@string/label_undefined"
+        android:src="@drawable/dizzy"
+        />
+
+    <Button
+        android:id="@+id/refresh"
+        android:layout_below="@id/horizonView"
+        android:layout_centerHorizontal="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/label_disabled"
+        android:textColor="@android:color/holo_blue_light"
+        android:background="@android:color/black"/>
+
+</RelativeLayout>
+
+

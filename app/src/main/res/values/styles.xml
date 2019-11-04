@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="NyotaTheme" parent="Theme.MaterialComponents.Light.DarkActionBar" >
+        <item name="android:colorPrimary">@color/colorPrimary</item>
+        <item name="android:colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="android:colorBackground">@color/colorBackground</item>
+        <item name="android:textColorPrimaryInverse">@color/colorDecent</item>
+        <item name="android:textColorHighlight">@color/colorDecent</item>
+        <item name="android:textColorSecondary">@color/colorDecent</item>
+        <item name="android:textColorSecondaryInverse">@color/colorDecent</item>
+        <item name="android:textColorPrimary">@color/colorAccent</item>
+        <item name="actionMenuTextColor">@color/colorAccent</item>
+        <item name="android:textColor">@color/textColor</item>
+        <item name="android:colorForeground">@color/colorDecent</item>
+        <item name="actionModeBackground">@color/colorBackground</item>
+    </style>
+
+    <style name="NyotaTheme.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="NyotaTheme.ToolbarOverlay" parent="ThemeOverlay.MaterialComponents.Dark.ActionBar">
+        <item name="colorControlNormal">@color/colorAccent</item>
+        <item name="android:textColorSecondary">@color/colorAccent</item>
+        <item name="android:textColorSecondaryInverse">@color/colorPrimary</item>
+    </style>
+
+    <style name="NyotaTheme.ToolbarPopupOverlay" parent="ThemeOverlay.MaterialComponents.Light" />
+
+</resources>

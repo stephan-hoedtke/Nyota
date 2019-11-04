@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory android:title="General">
+        <CheckBoxPreference
+            android:key="KEY_WHATEVER"
+            android:title="Whatever"
+            android:summary="Configure Whatever here"
+            />
+        <EditTextPreference
+            android:key="KEY_ZOOM"
+            android:title="Zoom"
+            android:summary="Zoom Level with default 1000"
+            android:numeric="integer"
+            />
+        <CheckBoxPreference
+            android:key="KEY_FLAT_FINDER"
+            android:title="Flat Finder"
+            android:summary="Finder points with phones surface"
+            />
+        <CheckBoxPreference
+            android:key="KEY_DISPLAY_NAMES"
+            android:title="Display Finder"
+            android:summary="Display element names"
+            />
+        <CheckBoxPreference
+            android:key="KEY_DISPLAY_SYMBOLS"
+            android:title="Display Symbols"
+            android:summary="Display element symbols"
+            />
+    </PreferenceCategory>
+</PreferenceScreen>
+

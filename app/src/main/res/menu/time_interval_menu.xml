@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/menu_minute" android:icon="@android:drawable/btn_plus" android:title="Minute" />
+    <item android:id="@+id/menu_hour" android:icon="@android:drawable/btn_plus" android:title="Hour" />
+    <item android:id="@+id/menu_day" android:icon="@android:drawable/btn_plus" android:title="Day" />
+    <item android:id="@+id/menu_month" android:icon="@drawable/down" android:title="Month" />
+    <item android:id="@+id/menu_year" android:icon="@drawable/up" android:title="Year" />
+</menu>
+

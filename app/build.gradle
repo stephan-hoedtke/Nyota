@@ -1,0 +1,60 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion 28
+
+    dataBinding {
+        enabled = true
+    }
+
+    defaultConfig {
+        applicationId "com.stho.software.nyota"
+        minSdkVersion 21
+        targetSdkVersion 28
+        versionCode 1
+        versionName "1.2.4"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    android.applicationVariants.all { variant ->
+        variant.outputs.all {
+            outputFileName = "Nyota.apk"
+        }
+    }
+    sourceSets { main { java.srcDirs = ['src/main/java', 'src/main/java/viewmodels'] } }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+}
+
+repositories {
+    flatDir {
+        dirs 'libs'
+    }
+}
+
+dependencies {
+    def appcompat_version = ""
+    def lifecycle_version = "2.0.0"
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    testImplementation 'junit:junit:4.12'
+    implementation 'androidx.appcompat:appcompat:1.1.0-alpha01'
+    implementation 'androidx.constraintlayout:constraintlayout:2.0.0-alpha3'
+    implementation 'android.arch.navigation:navigation-fragment:1.0.0-alpha09'
+    implementation "android.arch.navigation:navigation-ui:1.0.0-alpha09"
+    implementation 'com.google.android.material:material:1.1.0-alpha02'
+    implementation "androidx.lifecycle:lifecycle-extensions:$lifecycle_version"
+    implementation "androidx.lifecycle:lifecycle-viewmodel:$lifecycle_version"
+    implementation 'com.google.android.material:material:1.1.0-alpha02'
+    implementation 'org.osmdroid:osmdroid-android:5.6.3'
+    implementation 'org.jetbrains:annotations-java5:15.0'
+}

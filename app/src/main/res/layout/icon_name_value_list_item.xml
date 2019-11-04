@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:theme="@style/NyotaTheme"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:id="@+id/listItemIcon"
+        android:layout_width="0dp"
+        android:layout_height="20dp"
+        android:layout_gravity="center_vertical"
+        android:layout_weight="0.11"
+        android:contentDescription="@string/label_icon"
+        android:src="@mipmap/jupiter"
+        />
+
+    <TextView
+        android:id="@+id/listItemName"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/activity_horizontal_margin"
+        android:layout_marginStart="@dimen/activity_horizontal_margin"
+        android:layout_gravity="center_vertical"
+        android:layout_weight="0.44"
+        android:text="@string/label_default"
+        android:textSize="15sp" />
+
+    <TextView
+        android:id="@+id/listItemValue"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_weight="0.45"
+        android:textSize="15sp" />
+
+</LinearLayout>
+
