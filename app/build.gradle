@@ -1,60 +1,72 @@
 apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+apply plugin: "androidx.navigation.safeargs.kotlin"
 
 android {
-    compileSdkVersion 28
-
-    dataBinding {
-        enabled = true
-    }
+    compileSdkVersion 29
 
     defaultConfig {
-        applicationId "com.stho.software.nyota"
-        minSdkVersion 21
-        targetSdkVersion 28
+        applicationId "com.stho.nyota.KTL"
+        minSdkVersion 24
+        targetSdkVersion 29
         versionCode 1
-        versionName "1.2.4"
+        versionName "1.0"
+
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
     buildTypes {
         release {
             minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
-
-    android.applicationVariants.all { variant ->
-        variant.outputs.all {
-            outputFileName = "Nyota.apk"
-        }
-    }
-    sourceSets { main { java.srcDirs = ['src/main/java', 'src/main/java/viewmodels'] } }
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
-}
 
-repositories {
-    flatDir {
-        dirs 'libs'
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
+
+    sourceSets {
+        main {
+            res {
+                srcDirs 'src/main/res', 'src/main/res/planets'
+            }
+        }
+    }
+
+    android.applicationVariants.all { variant ->
+        variant.outputs.all {
+            outputFileName = "NyotaKTL.apk"
+        }
     }
 }
 
 dependencies {
-    def appcompat_version = ""
-    def lifecycle_version = "2.0.0"
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
-    testImplementation 'junit:junit:4.12'
-    implementation 'androidx.appcompat:appcompat:1.1.0-alpha01'
-    implementation 'androidx.constraintlayout:constraintlayout:2.0.0-alpha3'
-    implementation 'android.arch.navigation:navigation-fragment:1.0.0-alpha09'
-    implementation "android.arch.navigation:navigation-ui:1.0.0-alpha09"
-    implementation 'com.google.android.material:material:1.1.0-alpha02'
-    implementation "androidx.lifecycle:lifecycle-extensions:$lifecycle_version"
-    implementation "androidx.lifecycle:lifecycle-viewmodel:$lifecycle_version"
-    implementation 'com.google.android.material:material:1.1.0-alpha02'
-    implementation 'org.osmdroid:osmdroid-android:5.6.3'
-    implementation 'org.jetbrains:annotations-java5:15.0'
+    implementation fileTree(dir: "libs", include: ["*.jar"])
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+    implementation 'androidx.core:core-ktx:1.3.2'
+    implementation 'androidx.appcompat:appcompat:1.2.0'
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    implementation 'com.google.android.material:material:1.2.1'
+    implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
+    implementation 'androidx.navigation:navigation-fragment-ktx:2.3.1'
+    implementation 'androidx.navigation:navigation-ui-ktx:2.3.1'
+    implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
+    implementation 'androidx.navigation:navigation-fragment-ktx:2.3.1'
+    implementation 'androidx.navigation:navigation-ui-ktx:2.3.1'
+    implementation 'androidx.preference:preference-ktx:1.1.1'
+    implementation 'org.osmdroid:osmdroid-android:6.1.8'
+    implementation 'androidx.recyclerview:recyclerview:1.1.0'
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0'
+    implementation 'androidx.work:work-runtime:2.4.0'
+    implementation 'androidx.preference:preference-ktx:1.1.1'
+    testImplementation 'junit:junit:4.13.1'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.2'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
 }

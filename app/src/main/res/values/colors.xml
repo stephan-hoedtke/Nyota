@@ -1,10 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#3F21E5</color>
-    <color name="colorPrimaryDark">#30ef9f</color>
-    <color name="colorBackground">#030405</color>
-    <color name="colorAccent">#ff4081</color>
-    <color name="colorDecent">#ffffff</color>
-    <color name="blackHighlighted">#04ae33</color>
-    <color name="textColor">#deea89</color>
+    <color name="colorPrimary">#073767</color>
+    <color name="colorPrimaryDark">#00113c</color>
+    <color name="colorPrimaryLight">#426095</color>
+    <color name="colorSecondary">#fffde7</color>
+    <color name="colorSecondaryDark">#cccab5</color>
+    <color name="colorSecondaryLight">#ffffff</color>
+    <color name="colorSecondaryAccentText">#449988</color>
+    <color name="colorAccent">#fffde7</color>
+    <color name="colorBackground">#000000</color>
+    <color name="colorSelectedBackground">#031747</color>
+    <color name="colorPrimaryText">#fffde7</color>
+    <color name="colorPrimaryDisabledText">#eeede7</color>
+    <color name="colorSecondaryText">#00113c</color>
+    <color name="colorErrorText">#FF6666</color>
+    <color name="colorSignalBackground">#FF7777</color>
+    <!-- Original colors exported from Color Tool -->
+    <color name="primaryColor">#073767</color>
+    <color name="primaryLightColor">#426095</color>
+    <color name="primaryDarkColor">#00113c</color>
+    <color name="secondaryColor">#fffde7</color>
+    <color name="secondaryLightColor">#ffffff</color>
+    <color name="secondaryDarkColor">#cccab5</color>
+    <color name="primaryTextColor">#ffffff</color>
+    <color name="secondaryTextColor">#000000</color>
 </resources>

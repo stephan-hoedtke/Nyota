@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.stho.nyota.ui.satellites.SatelliteEarthFragment"
+    android:keepScreenOn="true">
+
+    <org.osmdroid.views.MapView
+        android:id="@+id/map"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <TextView
+        android:id="@+id/zoomInfo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:text="@string/default_zoom"
+        android:textColor="@android:color/holo_green_dark"
+        android:textSize="13sp"
+        />
+
+    <ImageView
+        android:id="@+id/buttonZoomOut"
+        android:layout_width="@dimen/button_size"
+        android:layout_height="@dimen/button_size"
+        android:src="@drawable/minus"
+        android:layout_margin="@dimen/fab_margin"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/buttonHome"
+        android:contentDescription="@string/label_empty" />
+
+    <ImageView
+        android:id="@+id/buttonHome"
+        android:layout_width="@dimen/button_size"
+        android:layout_height="@dimen/button_size"
+        android:src="@drawable/home"
+        android:layout_margin="@dimen/fab_margin"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@id/buttonZoomOut"
+        app:layout_constraintEnd_toStartOf="@id/buttonTarget"
+        android:contentDescription="@string/label_empty" />
+
+    <ImageView
+        android:id="@+id/buttonTarget"
+        android:layout_width="@dimen/button_size"
+        android:layout_height="@dimen/button_size"
+        android:src="@drawable/target"
+        android:layout_margin="@dimen/fab_margin"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@id/buttonHome"
+        app:layout_constraintEnd_toStartOf="@id/buttonZoomIn"
+        android:contentDescription="@string/label_empty" />
+
+    <ImageView
+        android:id="@+id/buttonZoomIn"
+        android:layout_width="@dimen/button_size"
+        android:layout_height="@dimen/button_size"
+        android:src="@drawable/plus"
+        android:layout_margin="@dimen/fab_margin"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@id/buttonTarget"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:contentDescription="@string/label_empty" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+

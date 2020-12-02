@@ -1,0 +1,63 @@
+package com.stho.nyota.sky.universe
+
+
+import com.stho.nyota.sky.utilities.*
+
+/**
+ * Created by shoedtke on 31.08.2016.
+ */
+@Suppress("PropertyName")
+abstract class AbstractElement : IElement {
+
+    // TODO: make RA and Decl constructor parameters, and avoid init() in derived classes like Target
+    var RA: Double = 0.0
+    var Decl: Double = 0.0
+    var magn: Double = 1.0 // brightness
+
+    override var position: Topocentric? = null
+        protected set
+
+    // forUTC the position (azimuth and altitude) for a given location and Local Sidereal Time (in angleInHours)
+    fun updateAzimuthAltitude(moment: IMoment) {
+        val HA = Degree.normalizeTo180(15 * moment.lst - RA) // Hour Angle (HA) is usually given in the interval -12 to +12 angleInHours, or -180 to +180 degrees
+        val x = Degree.cosines(HA) * Degree.cosines(Decl)
+        val y = Degree.sinus(HA) * Degree.cosines(Decl)
+        val z = Degree.sinus(Decl)
+        val latitude = moment.location.latitude
+        val xhor = x * Degree.sinus(latitude) - z * Degree.cosines(latitude)
+        val zhor = x * Degree.cosines(latitude) + z * Degree.sinus(latitude)
+        val azimuth = Degree.arcTan2(y, xhor) + 180 // measure from north eastward
+        val altitude = Degree.arcTan2(zhor, Math.sqrt(xhor * xhor + y * y))
+
+        // This completes our calculation of the local azimuth and altitude.
+        // Note that azimuth is 0 at North, 90 deg at East, 180 deg at South and 270 deg at West.
+        // Altitude is of course 0 at the (mathematical) horizon, 90 deg at zenith, and negative below the horizon.
+        position = Topocentric(azimuth, altitude)
+    }
+
+    override fun getBasics(moment: Moment): PropertyList {
+        val basics = PropertyList()
+        basics.add(com.stho.nyota.R.drawable.horizontal, Angle.toString(position!!.azimuth, Angle.AngleType.AZIMUTH) + Formatter.SPACE + Angle.toString(position!!.altitude, Angle.AngleType.ALTITUDE))
+        return basics
+    }
+
+    override fun getDetails(moment: Moment): PropertyList {
+        val details = PropertyList()
+        details.add(com.stho.nyota.R.drawable.horizontal, "Azimuth", Hour.fromDegree(position!!.azimuth))
+        details.add(com.stho.nyota.R.drawable.horizontal, "Altitude", Degree.fromDegree(position!!.altitude))
+        details.add(com.stho.nyota.R.drawable.equatorial, "Ascension", Hour.fromDegree(RA))
+        details.add(com.stho.nyota.R.drawable.equatorial, "Declination", Degree.fromDegree(Decl))
+        return details
+    }
+
+    override val visibility: Int
+        get() = when {
+            Topocentric.isVisible(position) -> com.stho.nyota.R.drawable.visible
+            Topocentric.isBelowHorizon(position) -> com.stho.nyota.R.drawable.invisible
+            else -> com.stho.nyota.R.drawable.dizzy
+        }
+
+    override val isVisible: Boolean
+        get() = Topocentric.isVisible(position)
+}
+

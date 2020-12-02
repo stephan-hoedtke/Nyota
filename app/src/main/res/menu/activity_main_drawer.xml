@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <group
+        android:id="@+id/menu_one"
+        android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_home"
+            android:icon="@drawable/menu_home"
+            android:title="@string/menu_home" />
+        <item
+            android:id="@+id/nav_satellites"
+            android:icon="@drawable/menu_satellites"
+            android:title="@string/menu_satellites" />
+        <item
+            android:id="@+id/nav_planets"
+            android:icon="@drawable/menu_planets"
+            android:title="@string/menu_planets" />
+        <item
+            android:id="@+id/nav_constellations"
+            android:icon="@drawable/menu_constellations"
+            android:title="@string/menu_constellations" />
+        <item
+            android:id="@+id/nav_stars"
+            android:icon="@drawable/menu_stars"
+            android:title="@string/menu_stars" />
+    </group>
+    <group
+        android:id="@+id/menu_two"
+        android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_city_picker"
+            android:icon="@drawable/menu_navigation"
+            android:title="@string/menu_city_picker" />
+        <item
+            android:id="@+id/nav_moment"
+            android:icon="@drawable/menu_clock"
+            android:title="@string/menu_moment" />
+        <item
+            android:id="@+id/nav_settings"
+            android:icon="@drawable/menu_settings"
+            android:title="@string/menu_settings" />
+    </group>
+</menu>

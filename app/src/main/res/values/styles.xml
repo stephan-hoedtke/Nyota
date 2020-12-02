@@ -1,31 +1,50 @@
-<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <style name="NyotaTheme" parent="Theme.MaterialComponents.Light.DarkActionBar" >
-        <item name="android:colorPrimary">@color/colorPrimary</item>
-        <item name="android:colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="android:colorBackground">@color/colorBackground</item>
-        <item name="android:textColorPrimaryInverse">@color/colorDecent</item>
-        <item name="android:textColorHighlight">@color/colorDecent</item>
-        <item name="android:textColorSecondary">@color/colorDecent</item>
-        <item name="android:textColorSecondaryInverse">@color/colorDecent</item>
-        <item name="android:textColorPrimary">@color/colorAccent</item>
-        <item name="actionMenuTextColor">@color/colorAccent</item>
-        <item name="android:textColor">@color/textColor</item>
-        <item name="android:colorForeground">@color/colorDecent</item>
-        <item name="actionModeBackground">@color/colorBackground</item>
+    <!-- Base application theme. -->
+    <style name="MyTheme" parent="Theme.AppCompat">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
     </style>
 
-    <style name="NyotaTheme.NoActionBar">
+    <style name="MyTheme.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
     </style>
 
-    <style name="NyotaTheme.ToolbarOverlay" parent="ThemeOverlay.MaterialComponents.Dark.ActionBar">
-        <item name="colorControlNormal">@color/colorAccent</item>
-        <item name="android:textColorSecondary">@color/colorAccent</item>
-        <item name="android:textColorSecondaryInverse">@color/colorPrimary</item>
+    <style name="MyTheme.Overlay" parent="ThemeOverlay.AppCompat.Dark">
+        <item name="android:textColorPrimary">@color/colorPrimaryText</item>
+        <item name="android:textColor">@color/colorPrimaryText</item>
     </style>
 
-    <style name="NyotaTheme.ToolbarPopupOverlay" parent="ThemeOverlay.MaterialComponents.Light" />
+    <style name="MyTheme.LargeText" parent="TextAppearance.AppCompat.Body1">
+        <item name="android:textSize">18sp</item>
+    </style>
+
+    <style name="MyTheme.TinyText" parent="TextAppearance.AppCompat.Body1">
+        <item name="android:textSize">14sp</item>
+    </style>
+
+    <style name="MyTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" >
+        <item name="android:textColorPrimary">@color/colorPrimaryText</item>
+    </style>
+
+    <style name="MyTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light">
+    </style>
+
+    <style name="MyTheme.Fragment">
+        <item name="android:background">@color/colorBackground</item>
+        <item name="android:textColor">@color/colorPrimaryText</item>
+        <item name="android:textSize">18sp</item>
+    </style>
+
+    <!-- My styles: NormalText and NormalText.Large, see AppTheme.Fragment -->
+    <style name="NormalText" parent="TextAppearance.AppCompat">
+        <item name="android:textColor">@color/colorPrimaryText</item>
+    </style>
+
+    <style name="NormalText.Large">
+        <item name="android:textSize">25sp</item>
+    </style>
 
 </resources>

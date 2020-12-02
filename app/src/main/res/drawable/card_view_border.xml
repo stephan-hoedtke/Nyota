@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- set this a foreground of the card view -->
+    <stroke
+        android:width="2dp"
+        android:color="@color/colorSecondary" />
+    <corners android:radius="7dp" />
+</shape>
+

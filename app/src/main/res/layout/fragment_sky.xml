@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.stho.nyota.ui.sky.SkyFragment">
+
+    <com.stho.software.nyota.views.SkyView
+        android:id="@+id/sky"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        />
+
+    <include android:id="@+id/time_overlay" layout="@layout/time_overlay" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

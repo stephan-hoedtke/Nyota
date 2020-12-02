@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/colorBackground"
+    android:screenOrientation="portrait"
+    android:keepScreenOn="true">
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/horizontal_guideline1"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.40"
+        />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/horizontal_guideline2"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.75"
+        />
+
+
+    <com.stho.software.nyota.views.HorizonView
+        android:id="@+id/horizonView"
+        android:layout_width="0dp"
+        android:layout_height="240dp"
+        app:layout_constraintBottom_toBottomOf="@id/horizontal_guideline1"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_margin="@dimen/text_margin"
+        android:contentDescription="@string/label_empty"
+        android:background="@android:color/transparent"
+        />
+
+    <ImageView
+        android:id="@+id/iconHorizontal"
+        android:layout_width="20sp"
+        android:layout_height="20sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="@id/horizontal_guideline1"
+        android:src="@drawable/horizontal"
+        android:contentDescription="@string/label_empty"
+        android:scaleType="centerInside" />
+
+    <TextView
+        android:id="@+id/horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toEndOf="@id/iconHorizontal"
+        app:layout_constraintTop_toTopOf="@id/iconHorizontal"
+        app:layout_constraintBottom_toBottomOf="@id/iconHorizontal"
+        android:text="@string/label_default_orientation" />
+
+    <FrameLayout
+        android:layout_width="0dp"
+        android:layout_height="170dp"
+        app:layout_constraintTop_toTopOf="@id/horizontal_guideline1"
+        app:layout_constraintBottom_toBottomOf="@id/horizontal_guideline2"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true"
+        android:layout_margin="@dimen/text_margin">
+
+        <ImageView
+            android:id="@+id/compass_background"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerInside"
+            android:contentDescription="@string/label_empty"
+            android:src="@drawable/magnetic_compass_background"
+            android:rotation="0" />
+
+        <com.stho.nyota.views.RotaryView
+            android:id="@+id/compass_ring"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:contentDescription="@string/label_empty"
+            android:scaleType="centerInside"
+            android:src="@drawable/magnetic_compass_ring"
+            android:rotation="60" />
+
+        <ImageView
+            android:id="@+id/compass_north_pointer"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerInside"
+            android:src="@drawable/magnetic_compass_pointer"
+            android:contentDescription="@string/label_empty"
+            android:rotation="30" />
+
+        <ImageView
+            android:id="@+id/directionView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerInside"
+            android:src="@drawable/magnetic_compass_pointer"
+            android:contentDescription="@string/label_empty"
+            android:rotation="45" />
+
+    </FrameLayout>
+
+    <ImageView
+        android:id="@+id/iconDirection"
+        android:layout_width="20sp"
+        android:layout_height="20sp"
+        android:src="@drawable/compass"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="@id/horizontal_guideline2"
+        android:contentDescription="@string/label_empty"
+        android:scaleType="centerInside" />
+
+    <TextView
+        android:id="@+id/direction"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toEndOf="@id/iconDirection"
+        app:layout_constraintTop_toTopOf="@id/iconDirection"
+        app:layout_constraintBottom_toBottomOf="@id/iconDirection"
+        android:layout_gravity="center_vertical"
+        android:text="@string/label_default_orientation" />
+
+    <include android:id="@+id/time_visibility_overlay" layout="@layout/time_visibility_overlay" />
+
+    <Button
+        android:id="@+id/buttonRefresh"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_margin="@dimen/text_margin"
+        android:text="@string/label_refresh"
+        android:textColor="@color/colorSecondary" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
