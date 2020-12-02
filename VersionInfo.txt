@@ -1,0 +1,1 @@
+Stable version coded in Java (latest changes from Nov 2019)
