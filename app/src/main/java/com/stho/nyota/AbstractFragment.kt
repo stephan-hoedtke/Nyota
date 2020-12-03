@@ -2,8 +2,11 @@ package com.stho.nyota
 
 import android.os.Bundle
 import android.view.View
+import android.widget.ImageView
+import android.widget.TextView
 import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LiveData
 import androidx.navigation.fragment.findNavController
@@ -13,8 +16,6 @@ import com.stho.nyota.sky.universe.Universe
 import com.stho.nyota.sky.utilities.Formatter
 import com.stho.nyota.sky.utilities.IProperty
 import com.stho.nyota.sky.utilities.Moment
-import kotlinx.android.synthetic.main.time_interval_footer.view.*
-import kotlinx.android.synthetic.main.time_overlay.view.*
 
 abstract class AbstractFragment : Fragment() {
 
@@ -34,6 +35,16 @@ abstract class AbstractFragment : Fragment() {
         fun onToggleShowDetails()
     }
 
+    private var bindingReference: AbstractFragmentBinding? = null
+    private val binding: AbstractFragmentBinding get() = bindingReference!!
+
+    private class AbstractFragmentBinding(view: View) {
+        val interval: TextView? = view.findViewById<TextView>(R.id.interval)
+        val buttonNext: ImageView? = view.findViewById<ImageView>(R.id.buttonNext)
+        val buttonPrevious: ImageView? = view.findViewById<ImageView>(R.id.buttonPrevious)
+        val imageTime: ImageView? = view.findViewById<ImageView>(R.id.imageTime)
+    }
+
     private val supportActionBar: ActionBar?
         get() = (activity as AppCompatActivity?)?.supportActionBar
 
@@ -41,15 +52,21 @@ abstract class AbstractFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setupFooterListener(view)
+        bindingReference = AbstractFragmentBinding(view)
+        setupFooterListener()
     }
 
-    private fun setupFooterListener(view: View) {
-        view.interval?.setOnClickListener { onIntervalSelect() }
-        view.interval?.setOnLongClickListener { onIntervalReset() }
-        view.buttonNext?.setOnClickListener { onButtonNext() }
-        view.buttonPrevious?.setOnClickListener { onButtonPrevious() }
-        view.imageTime?.setOnLongClickListener { onIntervalReset() }
+    override fun onDestroyView() {
+        super.onDestroyView()
+        bindingReference = null
+    }
+
+    private fun setupFooterListener() {
+        binding.interval?.setOnClickListener { onIntervalSelect() }
+        binding.interval?.setOnLongClickListener { onIntervalReset() }
+        binding.buttonNext?.setOnClickListener { onButtonNext() }
+        binding.buttonPrevious?.setOnClickListener { onButtonPrevious() }
+        binding.imageTime?.setOnLongClickListener { onIntervalReset() }
         abstractViewModel.intervalLD.observe(viewLifecycleOwner) { interval -> updateUpdateInterval(interval) }
         abstractViewModel.settings.updateLocationAutomaticallyLD.observe(viewLifecycleOwner) { value -> updateLocationAutomatically(value) }
         abstractViewModel.settings.updateTimeAutomaticallyLD.observe(viewLifecycleOwner) { value -> updateTimeAutomatically(value) }
@@ -91,9 +108,7 @@ abstract class AbstractFragment : Fragment() {
         abstractViewModel.onPrevious()
 
     private fun updateUpdateInterval(interval: Interval) {
-        view?.also {
-            it.interval?.text = interval.name
-        }
+        binding.interval?.text = interval.name
     }
 
     private fun updateLocationAutomatically(value: Boolean) {
@@ -101,10 +116,11 @@ abstract class AbstractFragment : Fragment() {
     }
 
     private fun updateTimeAutomatically(value: Boolean) {
-        view?.also {
-            it.imageTime?.isEnabled = !value
-        }
+        binding.imageTime?.isEnabled = !value
     }
+
+    protected fun getColor(resId: Int): Int =
+        ContextCompat.getColor(requireContext(), resId)
 
     companion object {
         fun toLocalTimeString(moment: Moment): String {

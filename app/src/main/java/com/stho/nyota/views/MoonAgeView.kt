@@ -6,10 +6,8 @@ import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.Path
 import android.util.AttributeSet
-import android.widget.ImageView
 import com.stho.nyota.sky.universe.Moon
 import com.stho.nyota.sky.utilities.UTC
-import kotlinx.android.synthetic.main.fragment_moon.view.*
 
 
 /**
@@ -46,7 +44,7 @@ class MoonAgeView : androidx.appcompat.widget.AppCompatImageView {
         val before = UTC.gapInHours(moon.prevNewMoon!!, moon.fullMoon!!)
         val after = UTC.gapInHours(moon.fullMoon!!, moon.nextNewMoon!!)
         val total = UTC.gapInHours(moon.prevNewMoon!!, moon.nextNewMoon!!)
-        setAge(moon.age, before / total, after / total);
+        setAge(moon.age, before / total, after / total)
     }
 
     fun setAge(age: Double, before: Double, after: Double) {

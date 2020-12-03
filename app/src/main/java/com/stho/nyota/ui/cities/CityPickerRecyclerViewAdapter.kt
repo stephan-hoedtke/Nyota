@@ -3,21 +3,17 @@ package com.stho.nyota.ui.cities
 import android.content.Context
 import android.view.*
 import android.view.GestureDetector.SimpleOnGestureListener
+import android.widget.RadioButton
+import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.stho.nyota.R
 import com.stho.nyota.sky.utilities.Cities
 import com.stho.nyota.sky.utilities.City
 import com.stho.nyota.sky.utilities.createDefaultBerlin
-import kotlinx.android.extensions.LayoutContainer
-import kotlinx.android.synthetic.main.fragment_city_picker_list_item.view.*
-import kotlinx.android.synthetic.main.fragment_interval_picker_list_item.view.radioButton
-import kotlinx.android.synthetic.main.fragment_interval_picker_list_item.view.textView
 
 
-/**
- * [RecyclerView.Adapter] that can display a [Satellite].
- */
+
 class CityPickerRecyclerViewAdapter(fragment: CityPickerFragment) : RecyclerView.Adapter<CityPickerRecyclerViewAdapter.ViewHolder>(), ISwipeToDeleteAdapter {
 
     private val context: Context = fragment.requireContext()
@@ -53,21 +49,23 @@ class CityPickerRecyclerViewAdapter(fragment: CityPickerFragment) : RecyclerView
     override fun getItemCount(): Int
         = cities.size
 
-    inner class ViewHolder(override val containerView: View) : RecyclerView.ViewHolder(containerView), LayoutContainer {
+    inner class ViewHolder(private val view: View) : RecyclerView.ViewHolder(view) {
+
+        internal var foregroundLayer: View = view.findViewById(R.id.foreground_layer)
 
         fun bind(city: City) {
             val isSelected = isSelected(city)
-            containerView.radioButton.isChecked = isSelected
-            containerView.radioButton.setOnClickListener {
+            view.radioButton?.isChecked = isSelected
+            view.radioButton?.setOnClickListener {
                 cities.findCityByIndex(adapterPosition)?.also { select(it) }
             }
-            containerView.isSelected = isSelected
-            containerView.textView.text = city.nameEx
-            containerView.setOnLongClickListener {
+            view.isSelected = isSelected
+            view.textView?.text = city.nameEx
+            view.setOnLongClickListener {
                 edit(city)
                 true
             }
-            containerView.setOnTouchListener { view: View, motionEvent: MotionEvent? ->
+            view.setOnTouchListener { view: View, motionEvent: MotionEvent? ->
                 gestureDetector.onTouchEvent(motionEvent)
                 view.performClick()
                 false
@@ -89,7 +87,7 @@ class CityPickerRecyclerViewAdapter(fragment: CityPickerFragment) : RecyclerView
     }
 
     override fun getForegroundLayer(viewHolder: RecyclerView.ViewHolder): View =
-        (viewHolder as CityPickerRecyclerViewAdapter.ViewHolder).containerView.foreground_layer
+        (viewHolder as CityPickerRecyclerViewAdapter.ViewHolder).foregroundLayer
 
     override fun getBackgroundColor(isCurrentlyActive: Boolean): Int =
         ContextCompat.getColor(context, if (isCurrentlyActive) R.color.colorSelectedBackground else R.color.colorBackground)
@@ -134,3 +132,9 @@ class CityPickerRecyclerViewAdapter(fragment: CityPickerFragment) : RecyclerView
         notifyDataSetChanged()
     }
 }
+
+private val View.radioButton: RadioButton?
+    get() = findViewById<RadioButton>(R.id.radioButton)
+
+private val View.textView: TextView?
+    get() = findViewById<TextView>(R.id.textView)

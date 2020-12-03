@@ -4,20 +4,20 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.lifecycle.Observer
-import com.stho.nyota.createViewModel
-import com.stho.nyota.sky.universe.Sun
-import com.stho.nyota.sky.utilities.Moment
 import com.stho.nyota.AbstractElementFragment
 import com.stho.nyota.AbstractViewModel
+import com.stho.nyota.createViewModel
+import com.stho.nyota.databinding.FragmentSunBinding
 import com.stho.nyota.sky.universe.IElement
-import kotlinx.android.synthetic.main.fragment_sun.view.*
-import kotlinx.android.synthetic.main.time_visibility_overlay.view.*
+import com.stho.nyota.sky.universe.Sun
+import com.stho.nyota.sky.utilities.Moment
 
 
 class SunFragment : AbstractElementFragment() {
 
-    lateinit var viewModel: SunViewModel
+    private lateinit var viewModel: SunViewModel
+    private var bindingReference: FragmentSunBinding? = null
+    private val binding: FragmentSunBinding get() = bindingReference!!
 
     override val abstractViewModel: AbstractViewModel
         get() = viewModel
@@ -27,15 +27,23 @@ class SunFragment : AbstractElementFragment() {
         viewModel = createViewModel(SunViewModel::class.java)
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val root = inflater.inflate(com.stho.nyota.R.layout.fragment_sun, container, false)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+        bindingReference = FragmentSunBinding.inflate(inflater, container,false)
 
-        super.setupBasics(root.basics)
-        super.setupDetails(root.details)
+        super.setupBasics(binding.basics)
+        super.setupDetails(binding.details)
 
-        viewModel.universeLD.observe(viewLifecycleOwner, Observer { universe -> updateSun(universe.moment) })
+        return binding.root
+    }
 
-        return root
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        viewModel.universeLD.observe(viewLifecycleOwner, { universe -> updateSun(universe.moment) })
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        bindingReference = null
     }
 
     override val element: IElement
@@ -50,12 +58,9 @@ class SunFragment : AbstractElementFragment() {
     }
 
     private fun bind(moment: Moment, sun: Sun) {
-        view?.also {
-            it.currentTime.text = toLocalTimeString(moment)
-            it.currentVisibility.setImageResource(sun.visibility)
-            it.title.text = sun.name
-        }
+        binding.timeVisibilityOverlay.currentTime.text = toLocalTimeString(moment)
+        binding.timeVisibilityOverlay.currentVisibility.setImageResource(sun.visibility)
+        binding.title.text = sun.name
         updateActionBar(sun.name, toLocalDateString(moment))
     }
-
 }

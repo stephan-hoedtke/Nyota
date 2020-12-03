@@ -11,7 +11,7 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.stho.nyota.*
-import kotlinx.android.synthetic.main.fragment_interval_picker.view.*
+import com.stho.nyota.databinding.FragmentIntervalPickerBinding
 
 // see here:
 // https://www.geeksforgeeks.org/dynamic-radiobutton-in-kotlin/
@@ -21,8 +21,10 @@ import kotlinx.android.synthetic.main.fragment_interval_picker.view.*
 
 class IntervalPickerFragment : AbstractFragment() {
 
-    lateinit var viewModel: IntervalPickerViewModel
-    lateinit var adapter: IntervalPickerRecyclerViewAdapter
+    private lateinit var viewModel: IntervalPickerViewModel
+    private lateinit var adapter: IntervalPickerRecyclerViewAdapter
+    private var bindingReference: FragmentIntervalPickerBinding? = null
+    private val binding: FragmentIntervalPickerBinding get() = bindingReference!!
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,20 +35,29 @@ class IntervalPickerFragment : AbstractFragment() {
     override val abstractViewModel: IAbstractViewModel
         get() = viewModel
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val root = inflater.inflate(R.layout.fragment_interval_picker, container, false)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+        bindingReference = FragmentIntervalPickerBinding.inflate(inflater, container, false)
 
         adapter = IntervalPickerRecyclerViewAdapter()
         adapter.onSelectionChanged = { interval -> onSelectionChanged(interval) }
         adapter.select(viewModel.interval)
 
-        root.list.layoutManager = LinearLayoutManager(requireContext())
-        root.list.adapter = adapter
-        root.list.addItemDecoration(RecyclerViewItemDivider(requireContext()))
-        root.buttonOK.setOnClickListener { onButtonOK() }
+        binding.list.layoutManager = LinearLayoutManager(requireContext())
+        binding.list.adapter = adapter
+        binding.list.addItemDecoration(RecyclerViewItemDivider(requireContext()))
+        binding.buttonOK.setOnClickListener { onButtonOK() }
 
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         updateActionBar(getString(R.string.title_choose_interval), "")
-        return root
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        bindingReference = null
     }
 
     override fun onPrepareOptionsMenu(menu: Menu) {

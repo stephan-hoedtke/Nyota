@@ -14,16 +14,17 @@ import androidx.navigation.fragment.findNavController
 import com.stho.nyota.AbstractFragment
 import com.stho.nyota.R
 import com.stho.nyota.createViewModel
+import com.stho.nyota.databinding.FragmentMomentBinding
 import com.stho.nyota.sky.utilities.Formatter
 import com.stho.nyota.sky.utilities.Moment
-import kotlinx.android.synthetic.main.fragment_moment.view.*
-import kotlinx.android.synthetic.main.time_interval_footer.view.*
 import java.util.*
 
 
 class MomentFragment : AbstractFragment(),  DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener {
 
     private lateinit var viewModel: MomentViewModel
+    private var bindingReference: FragmentMomentBinding? = null
+    private val binding: FragmentMomentBinding get() = bindingReference!!
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,25 +35,33 @@ class MomentFragment : AbstractFragment(),  DatePickerDialog.OnDateSetListener, 
     override val abstractViewModel: IAbstractViewModel
         get() = viewModel
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         // Inflate the layout for this fragment
-        val root = inflater.inflate(R.layout.fragment_moment, container, false)
+        bindingReference = FragmentMomentBinding.inflate(inflater, container, false)
 
+        binding.checkBoxAutomatic.setOnClickListener { viewModel.toggleAutomatic() }
+        binding.timeIntervalFooter.buttonNext.setOnClickListener { viewModel.onNext() }
+        binding.timeIntervalFooter.buttonPrevious.setOnClickListener { viewModel.onPrevious() }
+        binding.timeIntervalFooter.interval.setOnClickListener { onPickInterval() }
+        binding.editDate.setOnClickListener { showDatePickerDialog(viewModel.moment.localTime, this) }
+        binding.editTime.setOnClickListener { showTimePickerDialog(viewModel.moment.localTime, this) }
+        binding.editCity.setOnClickListener { onPickCity() }
+
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         viewModel.currentAutomaticMomentLD.observe(viewLifecycleOwner, { moment -> updateAutomaticMoment(moment) })
         viewModel.momentLD.observe(viewLifecycleOwner, { moment -> updateMoment(moment) })
         viewModel.updateTimeAutomaticallyLD.observe(viewLifecycleOwner, { moment -> updateTimeAutomatically(moment) })
-        viewModel.intervalLD.observe(viewLifecycleOwner, { interval -> view?.interval?.text = interval.name })
-
-        root.checkBoxAutomatic.setOnClickListener { viewModel.toggleAutomatic() }
-        root.buttonNext.setOnClickListener { viewModel.onNext() }
-        root.buttonPrevious.setOnClickListener { viewModel.onPrevious() }
-        root.interval.setOnClickListener { onPickInterval() }
-        root.editDate.setOnClickListener { showDatePickerDialog(viewModel.moment.localTime, this) }
-        root.editTime.setOnClickListener { showTimePickerDialog(viewModel.moment.localTime, this) }
-        root.editCity.setOnClickListener { onPickCity() }
-
+        viewModel.intervalLD.observe(viewLifecycleOwner, { interval -> binding.timeIntervalFooter.interval.text = interval.name })
         updateActionBar(getString(R.string.title_choose_time), "")
-        return root
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        bindingReference = null
     }
 
     override fun onPrepareOptionsMenu(menu: Menu) {
@@ -76,43 +85,35 @@ class MomentFragment : AbstractFragment(),  DatePickerDialog.OnDateSetListener, 
     }
 
     private fun updateAutomaticMoment(moment: Moment) {
-        view?.also {
-            it.currentCity.text = moment.city.name
-            it.currentGeoLocation.text = moment.city.location.toString()
-            it.currentDateTime.text = Formatter.toString(moment.utc, moment.city.timeZone, Formatter.TimeFormat.DATETIME_SEC_TIMEZONE)
-        }
+        binding.currentCity.text = moment.city.name
+        binding.currentGeoLocation.text = moment.city.location.toString()
+        binding.currentDateTime.text = Formatter.toString(moment.utc, moment.city.timeZone, Formatter.TimeFormat.DATETIME_SEC_TIMEZONE)
     }
 
     private fun updateMoment(moment: Moment) {
-        view?.also {
-            it.editCity.text = moment.city.name
-            it.editCity.paint.isUnderlineText = true
-            it.editGeoLocation.text = moment.city.location.toString()
-            it.editDate.text = Formatter.toString(moment.utc, moment.timeZone, Formatter.TimeFormat.DATE)
-            it.editDate.paint.isUnderlineText = true
-            it.editTime.text = Formatter.toString(moment.utc, moment.timeZone, Formatter.TimeFormat.TIME_SEC)
-            it.editTime.paint.isUnderlineText = true
-            it.editTimeZone.text = Formatter.toString(moment.utc, moment.timeZone, Formatter.TimeFormat.TIMEZONE)
-            updateClock(moment.localTime)
-         }
+        binding.editCity.text = moment.city.name
+        binding.editCity.paint.isUnderlineText = true
+        binding.editGeoLocation.text = moment.city.location.toString()
+        binding.editDate.text = Formatter.toString(moment.utc, moment.timeZone, Formatter.TimeFormat.DATE)
+        binding.editDate.paint.isUnderlineText = true
+        binding.editTime.text = Formatter.toString(moment.utc, moment.timeZone, Formatter.TimeFormat.TIME_SEC)
+        binding.editTime.paint.isUnderlineText = true
+        binding.editTimeZone.text = Formatter.toString(moment.utc, moment.timeZone, Formatter.TimeFormat.TIMEZONE)
+        updateClock(moment.localTime)
     }
 
     private fun updateClock(calendar: Calendar) {
-        view?.also {
-            val hour = calendar[Calendar.HOUR_OF_DAY] % 12
-            val minute = calendar[Calendar.MINUTE]
-            val seconds = calendar[Calendar.SECOND]
-            val minuteHour = minute / 60.0f
-            val secondsMinute = seconds / 60.0f
-            it.clockMinutes.rotation = 6.0f * (minute + secondsMinute)
-            it.clockHours.rotation = 30.0f * (hour + minuteHour)
-        }
+        val hour = calendar[Calendar.HOUR_OF_DAY] % 12
+        val minute = calendar[Calendar.MINUTE]
+        val seconds = calendar[Calendar.SECOND]
+        val minuteHour = minute / 60.0f
+        val secondsMinute = seconds / 60.0f
+        binding.clockMinutes.rotation = 6.0f * (minute + secondsMinute)
+        binding.clockHours.rotation = 30.0f * (hour + minuteHour)
     }
 
     private fun updateTimeAutomatically(auto: Boolean) {
-        view?.also {
-            it.checkBoxAutomatic.isChecked = auto
-        }
+        binding.checkBoxAutomatic.isChecked = auto
     }
 
     private fun onPickInterval() {

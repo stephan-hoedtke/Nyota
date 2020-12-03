@@ -6,21 +6,22 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
-import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.stho.nyota.AbstractFragment
 import com.stho.nyota.AbstractViewModel
 import com.stho.nyota.R
 import com.stho.nyota.TLELoaderTask
+import com.stho.nyota.databinding.FragmentSatelliteDownloadElementsBinding
 import com.stho.nyota.sky.universe.Satellite
 import com.stho.nyota.sky.utilities.Formatter
 import com.stho.nyota.sky.utilities.Moment
-import kotlinx.android.synthetic.main.fragment_satellite_download_elements.view.*
 
 
 class SatelliteDownloadElementsFragment : AbstractFragment() {
 
     private lateinit var viewModel: SatelliteDownloadElementsViewModel
+    private var bindingReference: FragmentSatelliteDownloadElementsBinding? = null
+    private val binding: FragmentSatelliteDownloadElementsBinding get() = bindingReference!!
 
     override val abstractViewModel: AbstractViewModel
         get() = viewModel
@@ -31,20 +32,26 @@ class SatelliteDownloadElementsFragment : AbstractFragment() {
         viewModel = createSatelliteViewModel(satelliteName)
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+        bindingReference = FragmentSatelliteDownloadElementsBinding.inflate(inflater, container, false)
 
-        val root = inflater.inflate(R.layout.fragment_satellite_download_elements, container, false)
+        binding.buttonDownloadTle.setOnClickListener { onClickDownloadTle() }
+        binding.buttonEarthView.setOnClickListener { onClickEarthView() }
 
-        viewModel.universeLD.observe(viewLifecycleOwner, Observer { universe -> updateSatellite(universe.moment) })
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        viewModel.universeLD.observe(viewLifecycleOwner, { universe -> updateSatellite(universe.moment) })
         viewModel.errorMessageLD.observe(viewLifecycleOwner, { errorMessage -> updateErrorMessage(errorMessage) })
         viewModel.processingStatusLD.observe(viewLifecycleOwner) { processing -> updateProcessingStatus(processing) }
+        Handler().postDelayed( { onClickDownloadTle() }, 100)
+    }
 
-        root.buttonDownloadTle.setOnClickListener { onClickDownloadTle() }
-        root.buttonEarthView.setOnClickListener { onClickEarthView() }
-
-        Handler().postDelayed( Runnable { onClickDownloadTle() }, 100)
-
-        return root
+    override fun onDestroyView() {
+        super.onDestroyView()
+        bindingReference = null
     }
 
     private fun updateSatellite(moment: Moment) {
@@ -52,41 +59,35 @@ class SatelliteDownloadElementsFragment : AbstractFragment() {
     }
 
     private fun bind(moment: Moment, satellite: Satellite) {
-        view?.also {
-            it.image.setImageResource(satellite.largeImageId)
-            it.title.text = satellite.displayName
-            it.tleDate.text = Formatter.formatDateTime.format(satellite.tle.date)
-            it.tleSummary.text = satellite.tle.toSummaryString()
-            if (satellite.tle.isOutdated) {
-                it.tleStatus.text = getString(R.string.label_outdated)
-                it.buttonDownloadTle.setImageResource(R.drawable.download_tle_red)
-            }
-            else {
-                it.tleStatus.text = getString(R.string.label_ok)
-                it.buttonDownloadTle.setImageResource(R.drawable.download_tle_green)
-            }
+        binding.image.setImageResource(satellite.largeImageId)
+        binding.title.text = satellite.displayName
+        binding.tleDate.text = Formatter.formatDateTime.format(satellite.tle.date)
+        binding.tleSummary.text = satellite.tle.toSummaryString()
+        if (satellite.tle.isOutdated) {
+            binding.tleStatus.text = getString(R.string.label_outdated)
+            binding.buttonDownloadTle.setImageResource(R.drawable.download_tle_red)
+        }
+        else {
+            binding.tleStatus.text = getString(R.string.label_ok)
+            binding.buttonDownloadTle.setImageResource(R.drawable.download_tle_green)
         }
         updateActionBar(satellite.name, toLocalDateString(moment))
     }
 
     private fun updateErrorMessage(errorMessage: String?) {
-        view?.also {
-            if (errorMessage.isNullOrBlank()) {
-                it.errorMessage.text = ""
-                it.errorMessage.visibility = View.INVISIBLE
-            }
-            else {
-                it.errorMessage.text = errorMessage
-                it.errorMessage.visibility = View.VISIBLE
-            }
+        if (errorMessage.isNullOrBlank()) {
+            binding.errorMessage.text = ""
+            binding.errorMessage.visibility = View.INVISIBLE
+        }
+        else {
+            binding.errorMessage.text = errorMessage
+            binding.errorMessage.visibility = View.VISIBLE
         }
     }
 
     private fun updateProcessingStatus(processing: Boolean) {
-        view?.also {
-            it.buttonDownloadTle.isEnabled = !processing
-            it.processingStatus.isVisible = processing
-        }
+        binding.buttonDownloadTle.isEnabled = !processing
+        binding.processingStatus.isVisible = processing
     }
 
     private fun onClickDownloadTle() {
@@ -96,10 +97,7 @@ class SatelliteDownloadElementsFragment : AbstractFragment() {
 
     private fun onClickEarthView() {
         val satelliteName: String = viewModel.satellite.name
-        val action =
-            SatelliteDownloadElementsFragmentDirections.actionNavSatelliteDownloadElementsToNavSatelliteEarth(
-                satelliteName
-            )
+        val action = SatelliteDownloadElementsFragmentDirections.actionNavSatelliteDownloadElementsToNavSatelliteEarth(satelliteName)
         findNavController().navigate(action)
     }
 

@@ -2,36 +2,46 @@ package com.stho.nyota
 
 import android.os.Bundle
 import android.view.View
+import android.widget.ImageView
 import androidx.core.os.bundleOf
-import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.stho.nyota.sky.universe.IElement
-import kotlinx.android.synthetic.main.fragment_moon.view.*
 
 abstract class AbstractElementFragment : AbstractFragment() {
 
     protected lateinit var basicsAdapter: PropertiesRecyclerViewAdapter
     protected lateinit var detailsAdapter: PropertiesRecyclerViewAdapter
+    private var bindingReference: AbstractElementFragmentBinding? = null
+    private val binding: AbstractElementFragmentBinding get() = bindingReference!!
 
     abstract val element: IElement
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        setupShowDetails(view)
+    private class AbstractElementFragmentBinding(view: View) {
+        val buttonShowDetails: ImageView? = view.findViewById<ImageView>(R.id.buttonShowDetails)
+        val details: RecyclerView? = view.findViewById<RecyclerView>(R.id.details)
     }
 
-    private fun setupShowDetails(view: View) {
-        view.buttonShowDetails?.setOnClickListener { onShowDetails() }
-        abstractViewModel.showDetailsLD.observe(viewLifecycleOwner, Observer { value -> updateShowDetails(value) })
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        bindingReference = AbstractElementFragmentBinding(view)
+        setupShowDetails()
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        bindingReference = null
+    }
+
+    private fun setupShowDetails() {
+        binding.buttonShowDetails?.setOnClickListener { onShowDetails() }
+        abstractViewModel.showDetailsLD.observe(viewLifecycleOwner, { value -> updateShowDetails(value) })
     }
 
     private fun updateShowDetails(value: Boolean) {
-        view?.also {
-            it.buttonShowDetails?.setImageResource(if (value) R.drawable.hide else R.drawable.show)
-            it.details?.visibility = if (value) View.VISIBLE else View.GONE
-        }
+        binding.buttonShowDetails?.setImageResource(if (value) R.drawable.hide else R.drawable.show)
+        binding.details?.visibility = if (value) View.VISIBLE else View.GONE
     }
 
     private fun onShowDetails() =
@@ -69,4 +79,3 @@ abstract class AbstractElementFragment : AbstractFragment() {
     private val bundleForElement: Bundle
         get() = bundleOf("ELEMENT" to element.name)
 }
-

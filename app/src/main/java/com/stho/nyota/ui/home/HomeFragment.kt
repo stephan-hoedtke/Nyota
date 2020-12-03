@@ -5,22 +5,21 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.FragmentManager
-import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.stho.nyota.*
+import com.stho.nyota.databinding.FragmentHomeBinding
 import com.stho.nyota.sky.universe.*
 import com.stho.nyota.sky.utilities.Moment
-import kotlinx.android.synthetic.main.fragment_home.view.*
-import kotlinx.android.synthetic.main.fragment_home.view.buttonSkyView
-import kotlinx.android.synthetic.main.fragment_moon.view.*
-import kotlinx.android.synthetic.main.time_overlay.view.*
+
 
 class HomeFragment : AbstractFragment() {
 
     // HomeFragment and HomeFragmentOptionsDialog share the view model instance, which is created with the activity as owner.
     private lateinit var viewModel: HomeViewModel
     private lateinit var adapter: ElementsRecyclerViewAdapter
+    private var bindingReference: FragmentHomeBinding? = null
+    private val binding: FragmentHomeBinding get() = bindingReference!!
 
     override val abstractViewModel: AbstractViewModel
         get() = viewModel
@@ -31,29 +30,35 @@ class HomeFragment : AbstractFragment() {
         loadOptionsFromBundle(savedInstanceState)
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val root = inflater.inflate(R.layout.fragment_home, container, false)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+        bindingReference = FragmentHomeBinding.inflate(inflater, container, false)
 
         adapter = ElementsRecyclerViewAdapter()
         adapter.onItemClick = { element -> openTarget(element) }
 
-        root.targets.layoutManager = LinearLayoutManager(requireContext())
-        root.targets.adapter = adapter
-        root.targets.addItemDecoration(RecyclerViewItemDivider(requireContext()))
+        binding.targets.layoutManager = LinearLayoutManager(requireContext())
+        binding.targets.adapter = adapter
+        binding.targets.addItemDecoration(RecyclerViewItemDivider(requireContext()))
+        binding.buttonSkyView.setOnClickListener { onSkyView() }
+        binding.buttonShowOptions.setOnClickListener { onShowOptions() }
+        binding.imageSun.setOnClickListener { onSun() }
+        binding.imageSun.setOnLongClickListener { onSkyViewForElement(viewModel.sun) }
+        binding.imageMoon.setOnClickListener { onMoon() }
+        binding.imageMoon.setOnLongClickListener { onSkyViewForElement(viewModel.moon) }
+        binding.imageIss.setOnClickListener { onIss() }
+        binding.imageIss.setOnLongClickListener { onSkyViewForElement(viewModel.iss) }
 
-        with(root) {
-            buttonSkyView.setOnClickListener { onSkyView() }
-            buttonShowOptions.setOnClickListener { onShowOptions() }
-            imageSun.setOnClickListener { onSun() }
-            imageSun.setOnLongClickListener { onSkyViewForElement(viewModel.sun) }
-            imageMoon.setOnClickListener { onMoon() }
-            imageMoon.setOnLongClickListener { onSkyViewForElement(viewModel.moon) }
-            imageIss.setOnClickListener { onIss() }
-            imageIss.setOnLongClickListener { onSkyViewForElement(viewModel.iss) }
-        }
+        return binding.root
+    }
 
-        viewModel.universeLD.observe(viewLifecycleOwner, Observer { universe -> updateUniverse(universe.moment) })
-        return root
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        viewModel.universeLD.observe(viewLifecycleOwner, { universe -> updateUniverse(universe.moment) })
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        bindingReference = null
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -94,13 +99,11 @@ class HomeFragment : AbstractFragment() {
     }
 
     private fun bind(moment: Moment, moon: Moon, sun: Sun, iss: Satellite) {
-        view?.also {
-            it.currentTime.text = toLocalTimeString(moment)
-            it.imageMoon.setImageResource(moon.imageId)
-            it.imageMoon.setPhase(moon)
-            it.imageSun.setImageResource(sun.imageId)
-            it.imageIss.setImageResource(iss.imageId)
-        }
+        binding.timeOverlay.currentTime.text = toLocalTimeString(moment)
+        binding.imageMoon.setImageResource(moon.imageId)
+        binding.imageMoon.setPhase(moon)
+        binding.imageSun.setImageResource(sun.imageId)
+        binding.imageIss.setImageResource(iss.imageId)
         updateActionBar(R.string.label_nyota, toLocalDateString(moment))
     }
 

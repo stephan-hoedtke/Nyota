@@ -3,16 +3,14 @@ package com.stho.nyota.ui.constellations
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
+import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.stho.nyota.R
 import com.stho.nyota.sky.universe.Constellation
 import com.stho.nyota.sky.universe.Constellations
-import kotlinx.android.extensions.LayoutContainer
-import kotlinx.android.synthetic.main.fragment_constellation_list_entry.view.*
 
-/**
- * [RecyclerView.Adapter] that can display a [Constallation].
- */
+
 class ConstellationListRecyclerViewAdapter : RecyclerView.Adapter<ConstellationListRecyclerViewAdapter.ViewHolder>() {
 
     private var entries: List<Constellation> = ArrayList<Constellation>()
@@ -30,16 +28,16 @@ class ConstellationListRecyclerViewAdapter : RecyclerView.Adapter<ConstellationL
 
     override fun getItemCount(): Int = entries.size
 
-    inner class ViewHolder(override val containerView: View) : RecyclerView.ViewHolder(containerView), LayoutContainer {
+    inner class ViewHolder(private val view: View) : RecyclerView.ViewHolder(view) {
         init {
-            containerView.setOnClickListener {
+            view.setOnClickListener {
                 onItemClick?.invoke(entries[adapterPosition])
             }
         }
         fun bind(constellation: Constellation) {
-            containerView.image.setImageResource(constellation.imageId)
-            containerView.name.text = constellation.name
-            containerView.position.text = constellation.position.toString()
+            view.image?.setImageResource(constellation.imageId)
+            view.name?.text = constellation.name
+            view.position?.text = constellation.position.toString()
         }
     }
 
@@ -48,3 +46,12 @@ class ConstellationListRecyclerViewAdapter : RecyclerView.Adapter<ConstellationL
         notifyDataSetChanged()
     }
 }
+
+private val View.image: ImageView?
+    get() = findViewById<ImageView>(R.id.image)
+
+private val View.name: TextView?
+    get() = findViewById<TextView>(R.id.name)
+
+private val View.position: TextView?
+    get() = findViewById<TextView>(R.id.position)

@@ -4,19 +4,19 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.lifecycle.Observer
 import com.stho.nyota.AbstractElementFragment
 import com.stho.nyota.AbstractViewModel
-import com.stho.nyota.R
+import com.stho.nyota.databinding.FragmentStarBinding
 import com.stho.nyota.sky.universe.IElement
 import com.stho.nyota.sky.universe.Star
 import com.stho.nyota.sky.utilities.Moment
-import kotlinx.android.synthetic.main.fragment_sun.view.*
-import kotlinx.android.synthetic.main.time_visibility_overlay.view.*
+
 
 class StarFragment : AbstractElementFragment() {
 
-    lateinit var viewModel: StarViewModel
+    private lateinit var viewModel: StarViewModel
+    private var bindingReference: FragmentStarBinding? = null
+    private val binding: FragmentStarBinding get() = bindingReference!!
 
     override val abstractViewModel: AbstractViewModel
         get() = viewModel
@@ -27,18 +27,26 @@ class StarFragment : AbstractElementFragment() {
         viewModel = createStarViewModel(planetName)
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val root = inflater.inflate(R.layout.fragment_star, container, false)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+        bindingReference = FragmentStarBinding.inflate(inflater, container, false)
 
-        super.setupBasics(root.basics)
-        super.setupDetails(root.details)
+        super.setupBasics(binding.basics)
+        super.setupDetails(binding.details)
 
-        viewModel.universeLD.observe(viewLifecycleOwner, Observer { universe -> updateStar(universe.moment) })
+        binding.buttonSkyView.setOnClickListener { onSkyView() }
+        binding.buttonFinderView.setOnClickListener { onFinderView() }
 
-        root.buttonSkyView.setOnClickListener { onSkyView() }
-        root.buttonFinderView.setOnClickListener { onFinderView() }
+        return binding.root
+    }
 
-        return root
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        viewModel.universeLD.observe(viewLifecycleOwner, { universe -> updateStar(universe.moment) })
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        bindingReference = null
     }
 
     override val element: IElement
@@ -53,12 +61,10 @@ class StarFragment : AbstractElementFragment() {
     }
 
     private fun bind(moment: Moment, star: Star) {
-        view?.also {
-            it.currentTime.text = toLocalTimeString(moment)
-            it.currentVisibility.setImageResource(star.visibility)
-            it.image.setImageResource(star.largeImageId)
-            it.title.text = star.name
-        }
+        binding.timeVisibilityOverlay.currentTime.text = toLocalTimeString(moment)
+        binding.timeVisibilityOverlay.currentVisibility.setImageResource(star.visibility)
+        binding.image.setImageResource(star.largeImageId)
+        binding.title.text = star.name
         updateActionBar(star.name, toLocalDateString(moment))
     }
 

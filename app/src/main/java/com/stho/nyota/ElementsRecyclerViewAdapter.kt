@@ -3,18 +3,12 @@ package com.stho.nyota
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
+import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.stho.nyota.sky.universe.AbstractElement
 import com.stho.nyota.sky.universe.IElement
 import com.stho.nyota.sky.universe.SolarSystem
-import kotlinx.android.extensions.LayoutContainer
-import kotlinx.android.synthetic.main.fragment_element_list_entry.view.*
-import kotlinx.android.synthetic.main.fragment_satellite.view.image
-import kotlinx.android.synthetic.main.property_list_entry.view.name
 
-/**
- * [RecyclerView.Adapter] that can display a [Satellite].
- */
 class ElementsRecyclerViewAdapter : RecyclerView.Adapter<ElementsRecyclerViewAdapter.ViewHolder>() {
 
     private var entries: List<IElement> = ArrayList()
@@ -30,21 +24,23 @@ class ElementsRecyclerViewAdapter : RecyclerView.Adapter<ElementsRecyclerViewAda
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        getElementByIndex(position)?.also { holder.bind(it) }
+        getElementByIndex(position)?.also {
+            holder.bind(it)
+        }
     }
 
     override fun getItemCount(): Int = entries.size
 
-    inner class ViewHolder(override val containerView: View) : RecyclerView.ViewHolder(containerView), LayoutContainer {
+    inner class ViewHolder(private val view: View) : RecyclerView.ViewHolder(view) {
         init {
-            containerView.setOnClickListener {
+            view.setOnClickListener {
                 getElementByIndex(adapterPosition)?.also { onItemClick?.invoke(it) }
             }
         }
         fun bind(element: IElement) {
-            containerView.image.setImageResource(element.imageId)
-            containerView.name.text = element.name
-            containerView.position.text = element.position.toString()
+            view.image?.setImageResource(element.imageId)
+            view.name?.text = element.name
+            view.position?.text = element.position.toString()
         }
     }
 
@@ -62,3 +58,12 @@ class ElementsRecyclerViewAdapter : RecyclerView.Adapter<ElementsRecyclerViewAda
         notifyDataSetChanged()
     }
 }
+
+private val View.image: ImageView?
+    get() = findViewById<ImageView>(R.id.image)
+
+private val View.name: TextView?
+    get() = findViewById<TextView>(R.id.name)
+
+private val View.position: TextView?
+    get() = findViewById<TextView>(R.id.position)

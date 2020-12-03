@@ -4,20 +4,18 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.lifecycle.Observer
 import com.stho.nyota.AbstractElementFragment
 import com.stho.nyota.AbstractViewModel
-import com.stho.nyota.R
+import com.stho.nyota.databinding.FragmentPlanetBinding
 import com.stho.nyota.sky.universe.AbstractPlanet
 import com.stho.nyota.sky.universe.IElement
 import com.stho.nyota.sky.utilities.Moment
-import kotlinx.android.synthetic.main.fragment_planet.view.*
-import kotlinx.android.synthetic.main.time_visibility_overlay.view.*
-
 
 class PlanetFragment : AbstractElementFragment() {
 
-    lateinit var viewModel: PlanetViewModel
+    private lateinit var viewModel: PlanetViewModel
+    private var bindingReference: FragmentPlanetBinding? = null
+    private val binding: FragmentPlanetBinding get() = bindingReference!!
 
     override val abstractViewModel: AbstractViewModel
         get() = viewModel
@@ -28,17 +26,26 @@ class PlanetFragment : AbstractElementFragment() {
         viewModel = createPlanetViewModel(planetName)
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val root = inflater.inflate(com.stho.nyota.R.layout.fragment_planet, container, false)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+        bindingReference = FragmentPlanetBinding.inflate(inflater, container, false)
 
-        super.setupBasics(root.basics)
-        super.setupDetails(root.details)
+        super.setupBasics(binding.basics)
+        super.setupDetails(binding.details)
 
-        viewModel.universeLD.observe(viewLifecycleOwner, Observer { universe -> updatePlanet(universe.moment) })
-        root.buttonSkyView.setOnClickListener { onSkyView() }
-        root.buttonFinderView.setOnClickListener { onFinderView() }
+        binding.buttonSkyView.setOnClickListener { onSkyView() }
+        binding.buttonFinderView.setOnClickListener { onFinderView() }
 
-        return root
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        viewModel.universeLD.observe(viewLifecycleOwner, { universe -> updatePlanet(universe.moment) })
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        bindingReference = null
     }
 
     override val element: IElement
@@ -53,13 +60,11 @@ class PlanetFragment : AbstractElementFragment() {
     }
 
     private fun bind(moment: Moment, planet: AbstractPlanet) {
-        view?.also {
-            it.currentTime.text = toLocalTimeString(moment)
-            it.currentVisibility.setImageResource(planet.visibility)
-            it.image.setImageResource(planet.largeImageId)
-            it.image.setPhase(planet);
-            it.title.text = planet.name
-        }
+        binding.timeVisibilityOverlay.currentTime.text = toLocalTimeString(moment)
+        binding.timeVisibilityOverlay.currentVisibility.setImageResource(planet.visibility)
+        binding.image.setImageResource(planet.largeImageId)
+        binding.image.setPhase(planet)
+        binding.title.text = planet.name
         updateActionBar(planet.name, toLocalDateString(moment))
     }
 

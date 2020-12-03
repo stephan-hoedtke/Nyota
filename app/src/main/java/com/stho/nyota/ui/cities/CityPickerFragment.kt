@@ -1,9 +1,10 @@
 package com.stho.nyota.ui.cities
 
 import android.os.Bundle
-import android.view.*
-import androidx.core.content.ContextCompat
-import androidx.lifecycle.Observer
+import android.view.LayoutInflater
+import android.view.Menu
+import android.view.View
+import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
@@ -11,14 +12,16 @@ import com.stho.nyota.AbstractFragment
 import com.stho.nyota.R
 import com.stho.nyota.RecyclerViewItemDivider
 import com.stho.nyota.createViewModel
+import com.stho.nyota.databinding.FragmentCityPickerBinding
 import com.stho.nyota.sky.utilities.Cities
 import com.stho.nyota.sky.utilities.City
-import kotlinx.android.synthetic.main.fragment_city_picker.view.*
 
 
 class CityPickerFragment : AbstractFragment() {
-    lateinit var viewModel: CityPickerViewModel
-    lateinit var adapter: CityPickerRecyclerViewAdapter
+    private lateinit var viewModel: CityPickerViewModel
+    private lateinit var adapter: CityPickerRecyclerViewAdapter
+    private var bindingReference: FragmentCityPickerBinding? = null
+    private val binding: FragmentCityPickerBinding get() = bindingReference!!
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,9 +32,9 @@ class CityPickerFragment : AbstractFragment() {
     override val abstractViewModel: IAbstractViewModel
         get() = viewModel
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         // Inflate the layout for this fragment
-        val root = inflater.inflate(R.layout.fragment_city_picker, container, false)
+        bindingReference = FragmentCityPickerBinding.inflate(inflater, container, false)
 
         adapter = CityPickerRecyclerViewAdapter(this)
         adapter.onSelectionChanged = { city -> onSelectionChanged(city) }
@@ -39,16 +42,25 @@ class CityPickerFragment : AbstractFragment() {
         adapter.onDelete = { position, city -> onDelete(position, city) }
         adapter.select(viewModel.moment.city)
 
-        root.list.attachItemTouchHelper(SwipeToDelete(adapter))
-        root.list.layoutManager = LinearLayoutManager(context)
-        root.list.adapter = adapter
-        root.list.addItemDecoration(RecyclerViewItemDivider(requireContext()))
-        root.buttonOK.setOnClickListener { onButtonOK() }
-        root.buttonDefault.setOnClickListener { onButtonDefault() }
+        binding.list.attachItemTouchHelper(SwipeToDelete(adapter))
+        binding.list.layoutManager = LinearLayoutManager(context)
+        binding.list.adapter = adapter
+        binding.list.addItemDecoration(RecyclerViewItemDivider(requireContext()))
+        binding.buttonOK.setOnClickListener { onButtonOK() }
+        binding.buttonDefault.setOnClickListener { onButtonDefault() }
 
-        viewModel.repository.citiesLD.observe(viewLifecycleOwner, Observer { cities -> updateCities(cities) })
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         updateActionBar(getString(R.string.title_choose_city), "")
-        return root
+        viewModel.repository.citiesLD.observe(viewLifecycleOwner, { cities -> updateCities(cities) })
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        bindingReference = null
     }
 
     override fun onPrepareOptionsMenu(menu: Menu) {
@@ -87,19 +99,9 @@ class CityPickerFragment : AbstractFragment() {
         snackbar.setAction("Undo") {
             undoDelete(position, city)
         }
-        snackbar.setActionTextColor(
-            ContextCompat.getColor(
-                requireContext(),
-                R.color.colorPrimaryText
-            )
-        )
-        snackbar.setBackgroundTint(
-            ContextCompat.getColor(
-                requireContext(),
-                R.color.colorSignalBackground
-            )
-        )
-        snackbar.setTextColor(ContextCompat.getColor(requireContext(), R.color.colorSecondaryText))
+        snackbar.setActionTextColor(getColor(R.color.colorPrimaryText))
+        snackbar.setBackgroundTint(getColor(R.color.colorSignalBackground))
+        snackbar.setTextColor(getColor(R.color.colorSecondaryText))
         snackbar.show()
     }
 

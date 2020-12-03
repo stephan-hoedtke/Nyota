@@ -4,15 +4,13 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.stho.nyota.*
+import com.stho.nyota.databinding.FragmentSatelliteListBinding
 import com.stho.nyota.sky.universe.Satellite
 import com.stho.nyota.sky.universe.Universe
 import com.stho.nyota.sky.utilities.Moment
-import kotlinx.android.synthetic.main.fragment_satellite_list.view.*
-import kotlinx.android.synthetic.main.time_overlay.view.*
 
 
 /**
@@ -22,6 +20,8 @@ class SatelliteListFragment : AbstractFragment() {
 
     private lateinit var viewModel: SatelliteListViewModel
     private lateinit var adapter: SatelliteListRecyclerViewAdapter
+    private var bindingReference: FragmentSatelliteListBinding? =  null
+    private val binding: FragmentSatelliteListBinding get() = bindingReference!!
 
     override val abstractViewModel: AbstractViewModel
         get() = viewModel
@@ -31,18 +31,27 @@ class SatelliteListFragment : AbstractFragment() {
         viewModel = createViewModel(SatelliteListViewModel::class.java)
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val root = inflater.inflate(R.layout.fragment_satellite_list, container, false)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+        bindingReference = FragmentSatelliteListBinding.inflate(inflater, container,false)
 
         adapter = SatelliteListRecyclerViewAdapter()
         adapter.onItemClick = { satellite -> openSatellite(satellite) }
 
-        root.list.layoutManager = LinearLayoutManager(requireContext())
-        root.list.adapter = adapter
-        root.list.addItemDecoration(RecyclerViewItemDivider(requireContext()))
+        binding.list.layoutManager = LinearLayoutManager(requireContext())
+        binding.list.adapter = adapter
+        binding.list.addItemDecoration(RecyclerViewItemDivider(requireContext()))
 
-        viewModel.universeLD.observe(viewLifecycleOwner, Observer { universe -> updateUniverse(universe) })
-        return root
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        viewModel.universeLD.observe(viewLifecycleOwner, { universe -> updateUniverse(universe) })
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        bindingReference = null
     }
 
     private fun updateUniverse(universe: Universe) {
@@ -51,9 +60,7 @@ class SatelliteListFragment : AbstractFragment() {
     }
 
     private fun bind(moment: Moment) {
-        view?.also {
-            it.currentTime.text = toLocalTimeString(moment)
-        }
+        binding.timeOverlay.currentTime.text = toLocalTimeString(moment)
         updateActionBar(R.string.label_satellites, toLocalDateString(moment))
     }
 

@@ -4,19 +4,18 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.lifecycle.Observer
 import com.stho.nyota.AbstractElementFragment
 import com.stho.nyota.AbstractViewModel
-import com.stho.nyota.R
+import com.stho.nyota.databinding.FragmentConstellationBinding
 import com.stho.nyota.sky.universe.Constellation
 import com.stho.nyota.sky.universe.IElement
 import com.stho.nyota.sky.utilities.Moment
-import kotlinx.android.synthetic.main.fragment_constellation.view.*
-import kotlinx.android.synthetic.main.time_visibility_overlay.*
 
 class ConstellationFragment : AbstractElementFragment() {
 
     private lateinit var viewModel: ConstellationViewModel
+    private var bindingReference: FragmentConstellationBinding? = null
+    private val binding: FragmentConstellationBinding get() = bindingReference!!
 
     override val abstractViewModel: AbstractViewModel
         get() = viewModel
@@ -27,17 +26,26 @@ class ConstellationFragment : AbstractElementFragment() {
         viewModel = createConstellationViewModel(constellationName)
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val root = inflater.inflate(R.layout.fragment_constellation, container, false)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+        bindingReference = FragmentConstellationBinding.inflate(inflater, container, false)
 
-        super.setupBasics(root.basics)
-        super.setupDetails(root.details)
+        super.setupBasics(binding.basics)
+        super.setupDetails(binding.details)
 
-        viewModel.universeLD.observe(viewLifecycleOwner, Observer { universe -> onUpdateConstellation(universe.moment) })
+        binding.buttonSkyView.setOnClickListener { onSkyView() }
+        binding.buttonFinderView.setOnClickListener { onFinderView() }
 
-        root.buttonSkyView.setOnClickListener { onSkyView() }
-        root.buttonFinderView.setOnClickListener { onFinderView() }
-        return root
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        viewModel.universeLD.observe(viewLifecycleOwner, { universe -> onUpdateConstellation(universe.moment) })
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        bindingReference = null
     }
 
     override val element: IElement
@@ -52,12 +60,10 @@ class ConstellationFragment : AbstractElementFragment() {
     }
 
     private fun bind(moment: Moment, constellation: Constellation) {
-        view?.apply {
-            currentTime.text = toLocalTimeString(moment)
-            currentVisibility.setImageResource(constellation.visibility)
-            image.setImageResource(constellation.largeImageId)
-            title.text = constellation.name
-        }
+        binding.timeVisibilityOverlay.currentTime.text = toLocalTimeString(moment)
+        binding.timeVisibilityOverlay.currentVisibility.setImageResource(constellation.visibility)
+        binding.image.setImageResource(constellation.largeImageId)
+        binding.title.text = constellation.name
         updateActionBar(constellation.name, toLocalDateString(moment))
     }
 

@@ -5,53 +5,55 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
-import androidx.lifecycle.Observer
-import com.stho.nyota.R
 import com.stho.nyota.createViewModel
-import com.stho.nyota.sky.utilities.City
-import kotlinx.android.synthetic.main.fragment_city.view.*
-import kotlinx.android.synthetic.main.fragment_home_dialog_options.*
-import kotlinx.android.synthetic.main.fragment_home_dialog_options.view.*
+import com.stho.nyota.databinding.FragmentHomeDialogOptionsBinding
+
 
 class HomeFragmentOptionsDialog: DialogFragment() {
 
     // HomeFragment and HomeFragmentOptionsDialog share the view model instance, which is created with the activity as owner.
     private lateinit var viewModel: HomeViewModel
+    private var bindingReference: FragmentHomeDialogOptionsBinding? = null
+    private val binding: FragmentHomeDialogOptionsBinding get() = bindingReference!!
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         viewModel = createViewModel(HomeViewModel::class.java)
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val root = inflater.inflate(R.layout.fragment_home_dialog_options, container, false)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+        bindingReference = FragmentHomeDialogOptionsBinding.inflate(inflater, container, false)
 
-        root.buttonOK.setOnClickListener { onOK() }
+        binding.buttonOK.setOnClickListener { onOK() }
 
-        viewModel.optionsLD.observe(viewLifecycleOwner, Observer { options -> updateOptions(options) })
-        return root
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        viewModel.optionsLD.observe(viewLifecycleOwner, { options -> updateOptions(options) })
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
     }
 
     private fun updateOptions(options: HomeViewModel.Options) {
-        view?.also {
-            it.checkBoxShowStars.isChecked = options.showStars
-            it.checkBoxShowPlanets.isChecked = options.showPlanets
-            it.checkBoxShowSatellites.isChecked = options.showSatellites
-            it.checkBoxShowTargets.isChecked = options.showTargets
-            it.checkBoxShowInvisibleElements.isChecked = options.showInvisibleElements
-        }
+        binding.checkBoxShowStars.isChecked = options.showStars
+        binding.checkBoxShowPlanets.isChecked = options.showPlanets
+        binding.checkBoxShowSatellites.isChecked = options.showSatellites
+        binding.checkBoxShowTargets.isChecked = options.showTargets
+        binding.checkBoxShowInvisibleElements.isChecked = options.showInvisibleElements
     }
 
     private fun onOK() {
-        view?.also {
-            viewModel.updateOptions(
-                showStars = it.checkBoxShowStars.isChecked,
-                showPlanets = it.checkBoxShowPlanets.isChecked,
-                showSatellites = it.checkBoxShowSatellites.isChecked,
-                showTargets = it.checkBoxShowTargets.isChecked,
-                showInvisibleElements = it.checkBoxShowInvisibleElements.isChecked
-            )
-        }
+        viewModel.updateOptions(
+            showStars = binding.checkBoxShowStars.isChecked,
+            showPlanets = binding.checkBoxShowPlanets.isChecked,
+            showSatellites = binding.checkBoxShowSatellites.isChecked,
+            showTargets = binding.checkBoxShowTargets.isChecked,
+            showInvisibleElements = binding.checkBoxShowInvisibleElements.isChecked
+        )
         dismiss()
     }
 }

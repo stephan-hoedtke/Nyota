@@ -4,19 +4,22 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.stho.nyota.*
-import com.stho.nyota.sky.universe.*
+import com.stho.nyota.databinding.FragmentStarListBinding
+import com.stho.nyota.sky.universe.IElement
+import com.stho.nyota.sky.universe.Star
+import com.stho.nyota.sky.universe.Universe
 import com.stho.nyota.sky.utilities.Moment
-import kotlinx.android.synthetic.main.fragment_star_list.view.*
-import kotlinx.android.synthetic.main.time_overlay.view.*
+
 
 class StarListFragment : AbstractFragment() {
 
     private lateinit var viewModel: StarListViewModel
     private lateinit var adapter: ElementsRecyclerViewAdapter
+    private var bindingReference: FragmentStarListBinding? = null
+    private val binding: FragmentStarListBinding get() = bindingReference!!
 
     override val abstractViewModel: AbstractViewModel
         get() = viewModel
@@ -26,19 +29,27 @@ class StarListFragment : AbstractFragment() {
         viewModel = createViewModel(StarListViewModel::class.java)
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        // Inflate the layout for this fragment
-        val root = inflater.inflate(R.layout.fragment_star_list, container, false)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+        bindingReference = FragmentStarListBinding.inflate(inflater, container, false)
 
         adapter = ElementsRecyclerViewAdapter()
         adapter.onItemClick = { element -> openTarget(element) }
 
-        root.stars.layoutManager = LinearLayoutManager(requireContext())
-        root.stars.adapter = adapter
-        root.stars.addItemDecoration(RecyclerViewItemDivider(requireContext()))
+        binding.stars.layoutManager = LinearLayoutManager(requireContext())
+        binding.stars.adapter = adapter
+        binding.stars.addItemDecoration(RecyclerViewItemDivider(requireContext()))
 
-        viewModel.universeLD.observe(viewLifecycleOwner, Observer { universe -> updateUniverse(universe) })
-        return root
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        viewModel.universeLD.observe(viewLifecycleOwner, { universe -> updateUniverse(universe) })
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        bindingReference = null
     }
 
     private fun openTarget(element: IElement) {
@@ -56,9 +67,7 @@ class StarListFragment : AbstractFragment() {
     }
 
     private fun bind(moment: Moment) {
-        view?.also {
-            it.currentTime.text = toLocalTimeString(moment)
-        }
+        binding.timeOverlay.currentTime.text = toLocalTimeString(moment)
         updateActionBar(getString(R.string.label_stars), toLocalDateString(moment))
     }
 }

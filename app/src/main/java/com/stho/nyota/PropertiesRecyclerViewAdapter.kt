@@ -3,15 +3,12 @@ package com.stho.nyota
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
+import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.stho.nyota.sky.universe.Satellite
-import com.stho.nyota.sky.utilities.IIconNameValue
 import com.stho.nyota.sky.utilities.IProperty
 import com.stho.nyota.sky.utilities.PropertyList
-import kotlinx.android.extensions.LayoutContainer
-import kotlinx.android.synthetic.main.fragment_satellite.view.image
-import kotlinx.android.synthetic.main.property_list_entry.view.*
-
 
 /**
  * [RecyclerView.Adapter] that can display a [Satellite].
@@ -33,16 +30,16 @@ class PropertiesRecyclerViewAdapter : RecyclerView.Adapter<PropertiesRecyclerVie
 
     override fun getItemCount(): Int = entries.size
 
-    inner class ViewHolder(override val containerView: View) : RecyclerView.ViewHolder(containerView), LayoutContainer {
+    inner class ViewHolder(val view: View) : RecyclerView.ViewHolder(view) {
 
         fun bind(entry: IProperty) {
-            containerView.image.setImageResource(entry.imageId)
-            containerView.name.text = entry.name
-            containerView.value.text = entry.value
+            view.image?.setImageResource(entry.imageId)
+            view.name?.text = entry.name
+            view.value?.text = entry.value
         }
 
         init {
-            containerView.setOnClickListener {
+            view.setOnClickListener {
                 onItemClick?.invoke(entries[adapterPosition])
             }
         }
@@ -53,3 +50,12 @@ class PropertiesRecyclerViewAdapter : RecyclerView.Adapter<PropertiesRecyclerVie
         notifyDataSetChanged()
     }
 }
+
+private val View.image: ImageView?
+    get() = findViewById<ImageView>(R.id.image)
+
+private val View.name: TextView?
+    get() = findViewById<TextView>(R.id.name)
+
+private val View.value: TextView?
+    get() = findViewById<TextView>(R.id.value)

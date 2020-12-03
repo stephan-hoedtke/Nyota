@@ -1,5 +1,4 @@
 package com.stho.nyota.ui.finder
-
 import android.content.Context
 import android.hardware.Sensor
 import android.hardware.SensorEvent
@@ -8,15 +7,12 @@ import android.hardware.SensorManager
 import android.os.Bundle
 import android.os.Handler
 import android.view.*
-import androidx.lifecycle.Observer
 import com.stho.nyota.AbstractFragment
 import com.stho.nyota.AbstractViewModel
-import com.stho.nyota.R
+import com.stho.nyota.databinding.FragmentFinderBinding
 import com.stho.nyota.sky.universe.IElement
 import com.stho.nyota.sky.utilities.Moment
 import com.stho.nyota.views.RotaryView
-import kotlinx.android.synthetic.main.fragment_finder.view.*
-import kotlinx.android.synthetic.main.time_visibility_overlay.view.*
 
 
 class FinderFragment : AbstractFragment(), SensorEventListener {
@@ -32,6 +28,8 @@ class FinderFragment : AbstractFragment(), SensorEventListener {
     private var display: Display? = null
 
     private lateinit var viewModel: FinderViewModel
+    private var bindingReference: FragmentFinderBinding? = null
+    private val binding: FragmentFinderBinding get() = bindingReference!!
 
     override val abstractViewModel: AbstractViewModel
         get() = viewModel
@@ -44,33 +42,41 @@ class FinderFragment : AbstractFragment(), SensorEventListener {
         windowManager = context?.getSystemService(Context.WINDOW_SERVICE) as WindowManager
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val root = inflater.inflate(R.layout.fragment_finder, container, false)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+        bindingReference = FragmentFinderBinding.inflate(inflater, container, false)
 
-        root.compass_ring.setOnRotateListener(object : RotaryView.OnRotateListener {
+        binding.compassRing.setOnRotateListener(object : RotaryView.OnRotateListener {
             override fun onRotate(delta: Double) {
                 viewModel.rotate(delta)
             }
         })
-        root.compass_ring.setOnDoubleTapListener(object : RotaryView.OnDoubleTapListener {
+        binding.compassRing.setOnDoubleTapListener(object : RotaryView.OnDoubleTapListener {
             override fun onDoubleTap() {
                 viewModel.reset()
             }
         })
-        viewModel.ringAngleLD.observe(viewLifecycleOwner, Observer {
-                alpha -> root.compass_ring.rotation = alpha
-        })
-        viewModel.northPointerPositionLD.observe(viewLifecycleOwner, Observer {
-                angle -> root.compass_north_pointer.rotation = -angle
-        })
-        viewModel.universeLD.observe(viewLifecycleOwner, Observer {
-                universe -> onUpdateElement(universe.moment)
-        })
-
 
         // TODO: Update on changes of orientation etc.
 
-        return root
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        viewModel.ringAngleLD.observe(viewLifecycleOwner, {
+                alpha -> binding.compassRing.rotation = alpha
+        })
+        viewModel.northPointerPositionLD.observe(viewLifecycleOwner, {
+                angle -> binding.compassNorthPointer.rotation = -angle
+        })
+        viewModel.universeLD.observe(viewLifecycleOwner, {
+                universe -> onUpdateElement(universe.moment)
+        })
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        bindingReference = null
     }
 
     override fun onResume() {
@@ -123,10 +129,8 @@ class FinderFragment : AbstractFragment(), SensorEventListener {
         bind(moment, viewModel.element)
 
     private fun bind(moment: Moment, element: IElement) {
-        view?.also {
-            it.currentTime?.text = toLocalTimeString(moment)
-            it.currentVisibility?.setImageResource(element.visibility)
-        }
+        binding.timeVisibilityOverlay.currentTime.text = toLocalTimeString(moment)
+        binding.timeVisibilityOverlay.currentVisibility.setImageResource(element.visibility)
         updateActionBar(element.name, toLocalDateString(moment))
     }
 
@@ -139,7 +143,7 @@ class FinderFragment : AbstractFragment(), SensorEventListener {
     }
 
     override fun onSensorChanged(event: SensorEvent?) {
-        when (event?.sensor?.getType()) {
+        when (event?.sensor?.type) {
             Sensor.TYPE_ACCELEROMETER -> {
                 System.arraycopy(
                     event.values,
@@ -176,7 +180,7 @@ class FinderFragment : AbstractFragment(), SensorEventListener {
       See the following training materials from google.
       https://codelabs.developers.google.com/codelabs/advanced-android-training-sensor-orientation/index.html?index=..%2F..advanced-android-training#0
      */
-    private fun getAdjustedRotationMatrix(): FloatArray? {
+    private fun getAdjustedRotationMatrix(): FloatArray {
         when (display?.rotation) {
             Surface.ROTATION_90 -> {
                 SensorManager.remapCoordinateSystem(rotationMatrix, SensorManager.AXIS_Y, SensorManager.AXIS_MINUS_X, rotationMatrixAdjusted)
@@ -195,4 +199,7 @@ class FinderFragment : AbstractFragment(), SensorEventListener {
             }
         }
     }
+
+    // TODO: compass sensor into main activity ??
 }
+
