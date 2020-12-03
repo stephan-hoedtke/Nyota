@@ -57,6 +57,7 @@
     <string name="hint_choose_time">Select the reference date and time</string>
     <string name="hint_city">Specify the details of the reference location</string>
     <string name="label_ok">OK</string>
+    <string name="label_done">Done</string>
     <string name="default_text">Default Text</string>
     <string name="label_default_orientation">115°</string>
     <string name="label_refresh">Refresh</string>

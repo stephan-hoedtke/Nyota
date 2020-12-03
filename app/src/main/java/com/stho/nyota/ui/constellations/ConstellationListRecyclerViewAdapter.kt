@@ -13,6 +13,7 @@ import com.stho.nyota.sky.universe.Constellations
 class ConstellationListRecyclerViewAdapter : RecyclerView.Adapter<ConstellationListRecyclerViewAdapter.ViewHolder>() {
 
     private var entries: List<Constellation> = ArrayList<Constellation>()
+
     var onItemClick: ((Constellation) -> Unit)? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {

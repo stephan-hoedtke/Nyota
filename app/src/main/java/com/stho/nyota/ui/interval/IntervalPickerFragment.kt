@@ -5,9 +5,6 @@ import android.view.LayoutInflater
 import android.view.Menu
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.app.ActionBar
-import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.stho.nyota.*
@@ -18,6 +15,7 @@ import com.stho.nyota.databinding.FragmentIntervalPickerBinding
 // with recyclerView and selector
 // https://stackoverflow.com/questions/39138315/how-to-highlight-selected-item-in-recyclerview
 //
+
 
 class IntervalPickerFragment : AbstractFragment() {
 
@@ -40,18 +38,18 @@ class IntervalPickerFragment : AbstractFragment() {
 
         adapter = IntervalPickerRecyclerViewAdapter()
         adapter.onSelectionChanged = { interval -> onSelectionChanged(interval) }
-        adapter.select(viewModel.interval)
 
         binding.list.layoutManager = LinearLayoutManager(requireContext())
         binding.list.adapter = adapter
         binding.list.addItemDecoration(RecyclerViewItemDivider(requireContext()))
-        binding.buttonOK.setOnClickListener { onButtonOK() }
+        binding.buttonDone.setOnClickListener { onDone() }
 
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        viewModel.settings.intervalLD.observe(viewLifecycleOwner, { interval -> updateInterval(interval) })
         updateActionBar(getString(R.string.title_choose_interval), "")
     }
 
@@ -65,13 +63,15 @@ class IntervalPickerFragment : AbstractFragment() {
         menu.clear()
     }
 
-    private fun onSelectionChanged(interval: Interval) {
-        // no need to do anything...
+    private fun updateInterval(interval: Interval) {
+        adapter.selectedInterval = interval
     }
 
-    private fun onButtonOK() {
-        val selectedInterval = adapter.getSelectedInterval()
-        viewModel.setInterval(selectedInterval)
+    private fun onSelectionChanged(interval: Interval) {
+        viewModel.setInterval(interval)
+    }
+
+    private fun onDone() {
         findNavController().popBackStack()
     }
 }

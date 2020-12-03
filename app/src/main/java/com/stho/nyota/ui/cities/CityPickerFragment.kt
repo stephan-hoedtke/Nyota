@@ -33,7 +33,6 @@ class CityPickerFragment : AbstractFragment() {
         get() = viewModel
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        // Inflate the layout for this fragment
         bindingReference = FragmentCityPickerBinding.inflate(inflater, container, false)
 
         adapter = CityPickerRecyclerViewAdapter(this)
@@ -46,16 +45,16 @@ class CityPickerFragment : AbstractFragment() {
         binding.list.layoutManager = LinearLayoutManager(context)
         binding.list.adapter = adapter
         binding.list.addItemDecoration(RecyclerViewItemDivider(requireContext()))
-        binding.buttonOK.setOnClickListener { onButtonOK() }
-        binding.buttonDefault.setOnClickListener { onButtonDefault() }
+        binding.buttonDone.setOnClickListener { onDone() }
 
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        viewModel.citiesLD.observe(viewLifecycleOwner, { cities -> updateCities(cities) })
+        viewModel.selectedCityLC.observe(viewLifecycleOwner, { city -> updateSelectedCity(city) })
         updateActionBar(getString(R.string.title_choose_city), "")
-        viewModel.repository.citiesLD.observe(viewLifecycleOwner, { cities -> updateCities(cities) })
     }
 
     override fun onDestroyView() {
@@ -71,8 +70,12 @@ class CityPickerFragment : AbstractFragment() {
     private fun updateCities(cities: Cities) =
         adapter.updateCities(cities)
 
+    private fun updateSelectedCity(city: City) {
+        adapter.selectedCity = city
+    }
+
     private fun onSelectionChanged(city: City) {
-        // no need to do anything...
+        viewModel.repository.setCity(city)
     }
 
     private fun onEdit(city: City) =
@@ -84,13 +87,8 @@ class CityPickerFragment : AbstractFragment() {
         showUndoSnackBar(position, city)
     }
 
-    private fun onButtonOK() {
-        viewModel.repository.setCity(adapter.getSelectedCity())
+    private fun onDone() {
         findNavController().popBackStack()
-    }
-
-    private fun onButtonDefault() {
-        // TODO: implement or remove
     }
 
     private fun showUndoSnackBar(position: Int, city: City) {

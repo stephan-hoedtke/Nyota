@@ -12,8 +12,16 @@ import com.stho.nyota.databinding.FragmentIntervalPickerListItemBinding
 class IntervalPickerRecyclerViewAdapter : RecyclerView.Adapter<IntervalPickerRecyclerViewAdapter.ViewHolder>() {
 
     private var entries: Array<Interval> = Interval.values()
-    private var selectedInterval: Interval = Interval.HOUR
 
+    var selectedInterval: Interval = Interval.HOUR
+        set(value) {
+            if (field != value) {
+                field = value
+                notifyDataSetChanged()
+            }
+        }
+
+    var onItemClick: ((Interval) -> Unit)? = null
     var onSelectionChanged: ((Interval) -> Unit)? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -41,24 +49,11 @@ class IntervalPickerRecyclerViewAdapter : RecyclerView.Adapter<IntervalPickerRec
             binding.radioButton.isChecked = isSelected
             binding.textView.text = interval.toString()
             binding.root.isSelected = isSelected
-            binding.root.setOnClickListener { select(entries[adapterPosition]) }
-            binding.radioButton.setOnClickListener { select(entries[adapterPosition]) }
+            binding.root.setOnClickListener { getIntervalByIndex(adapterPosition)?.also { onItemClick?.invoke(it) }  }
+            binding.radioButton.setOnClickListener { getIntervalByIndex(adapterPosition)?.also {  onSelectionChanged?.invoke(it) } }
         }
     }
 
-    fun select(interval: Interval) {
-        if (selectedInterval != interval) {
-            selectedInterval = interval
-            notifyDataSetChanged()
-            onSelectionChanged?.invoke(interval)
-        }
-    }
-
-    fun getSelectedInterval(): Interval {
-        return selectedInterval
-    }
-
-    private fun isSelected(interval: Interval): Boolean {
-        return interval == selectedInterval
-    }
+    private fun isSelected(interval: Interval): Boolean =
+        interval == selectedInterval
 }

@@ -15,9 +15,16 @@ import com.stho.nyota.sky.utilities.createDefaultBerlin
 class CityPickerRecyclerViewAdapter(fragment: CityPickerFragment) : RecyclerView.Adapter<CityPickerRecyclerViewAdapter.ViewHolder>(), ISwipeToDeleteAdapter {
 
     private val context: Context = fragment.requireContext()
-    private var cities: Cities = Cities()
-    private var selectedCity: City = City.createDefaultBerlin()
     private var gestureDetector: GestureDetector
+    private var cities: Cities = Cities()
+
+    var selectedCity: City = City.createDefaultBerlin()
+        set(value) {
+            if (field != value) {
+                field = value
+                notifyDataSetChanged()
+            }
+        }
 
     var onSelectionChanged: ((City) -> Unit)? = null
     var onEdit: ((City) -> Unit)? = null
@@ -55,11 +62,11 @@ class CityPickerRecyclerViewAdapter(fragment: CityPickerFragment) : RecyclerView
         fun bind(city: City) {
             val isSelected = isSelected(city)
             binding.radioButton.isChecked = isSelected
-            binding.radioButton.setOnClickListener { cities.findCityByIndex(adapterPosition)?.also { select(it) } }
+            binding.radioButton.setOnClickListener { cities.findCityByIndex(adapterPosition)?.also { onSelectionChanged?.invoke(it) } }
             binding.textView.text = city.nameEx
             binding.root.isSelected = isSelected
             binding.root.setOnLongClickListener {
-                edit(city)
+                onEdit?.invoke(city)
                 true
             }
             binding.root.setOnTouchListener { view: View, motionEvent: MotionEvent? ->
@@ -73,7 +80,7 @@ class CityPickerRecyclerViewAdapter(fragment: CityPickerFragment) : RecyclerView
                     return false
                 }
                 override fun onDoubleTap(motionEvent: MotionEvent): Boolean {
-                    edit(city)
+                    onEdit?.invoke(city)
                     return false
                 }
                 override fun onDoubleTapEvent(motionEvent: MotionEvent): Boolean {
@@ -97,14 +104,6 @@ class CityPickerRecyclerViewAdapter(fragment: CityPickerFragment) : RecyclerView
             notifyDataSetChanged()
             onSelectionChanged?.invoke(city)
         }
-    }
-
-    fun edit(city: City) {
-        onEdit?.invoke(city)
-    }
-
-    fun getSelectedCity(): City {
-        return selectedCity
     }
 
     fun updateCities(cities: Cities) {

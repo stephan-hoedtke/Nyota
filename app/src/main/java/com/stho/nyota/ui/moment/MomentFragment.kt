@@ -46,6 +46,7 @@ class MomentFragment : AbstractFragment(),  DatePickerDialog.OnDateSetListener, 
         binding.editDate.setOnClickListener { showDatePickerDialog(viewModel.moment.localTime, this) }
         binding.editTime.setOnClickListener { showTimePickerDialog(viewModel.moment.localTime, this) }
         binding.editCity.setOnClickListener { onPickCity() }
+        binding.buttonDone.setOnClickListener { onDone() }
 
         return binding.root
     }
@@ -123,6 +124,9 @@ class MomentFragment : AbstractFragment(),  DatePickerDialog.OnDateSetListener, 
 
     private fun onPickCity() =
         findNavController().navigate(R.id.action_global_nav_city_picker)
+
+    private fun onDone() =
+        findNavController().popBackStack()
 
     override fun onDateSet(view: DatePicker?, year: Int, month: Int, dayOfMonth: Int) =
         viewModel.setDate(year, month, dayOfMonth)

@@ -16,6 +16,7 @@ internal fun City.Companion.createCities(): List<City> {
         createDefaultSalamanca(),
         createDefaultParis(),
         createDefaultHamburg(),
+        createDefaultEichstaett(),
         createNewCity("You", true)
     )
 }
@@ -84,4 +85,10 @@ private fun City.Companion.createDefaultHamburg(): City {
     val location = Location(53.5511, 9.9937, 0.006)
     val timeZone = TimeZone.getTimeZone("CET") // Central European Standard Time
     return City("Hamburg", location, timeZone)
+}
+
+private fun City.Companion.createDefaultEichstaett(): City {
+    val location = Location(48.8912508, 11.189986, 0.393)
+    val timeZone = TimeZone.getTimeZone("CET") // Central European Standard Time
+    return City("Eichstätt", location, timeZone)
 }

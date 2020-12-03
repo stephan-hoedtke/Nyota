@@ -57,6 +57,7 @@ class City internal constructor(var name: String, var location: Location, var ti
             name.contains("venice", true) -> R.drawable.city_venice
             name.contains("salamanca", true) -> R.drawable.city_salamanca
             name.contains("hamburg", ignoreCase = true) -> R.drawable.city_hamburg
+            name.contains("eichst", true) -> R.drawable.city_eichstaett
             else -> R.drawable.city_lights
         }
     }
@@ -84,16 +85,21 @@ class City internal constructor(var name: String, var location: Location, var ti
                 imageId = R.drawable.logo_kreuzfahrer_guide
             )
 
+            name.contains("eichst", true) -> Copyright(
+                text = "@Copyright 2020 Wikipedia",
+                link = "https://en.wikipedia.org/wiki/Eichst%C3%A4tt",
+                imageId = R.drawable.logo_eichstaett
+            )
+
             name.contains("daressalaam", true) ||
             name.contains("monrovia", true) ||
             name.contains("lagos", ignoreCase = true) ||
             name.contains("lusaka", true) ||
-            name.contains("kigali", true) ->
-                Copyright(
-                    text = "© Copyright 2020 Stephan Hödtke",
-                    link = "bbc.co.uk",
-                    imageId = R.drawable.nyota
-                )
+            name.contains("kigali", true) -> Copyright(
+                text = "© Copyright 2020 Stephan Hödtke",
+                link = "bbc.co.uk",
+                imageId = R.drawable.nyota
+            )
 
             else -> Copyright(
                 text = "Amyn Nasser, LUMAS",
