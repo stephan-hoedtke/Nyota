@@ -28,24 +28,25 @@ abstract class AbstractSatellite : IElement {
     val speed: Double
         get() = 60 * velocity.length
 
-    override fun getBasics(moment: Moment): PropertyList {
-        val basics = PropertyList()
-        basics.add(com.stho.nyota.R.drawable.horizontal, Angle.toString(position!!.azimuth, Angle.AngleType.AZIMUTH) + Formatter.SPACE + Angle.toString(position!!.altitude, Angle.AngleType.ALTITUDE))
-        return basics
-    }
+    override fun getBasics(moment: Moment): PropertyList =
+        PropertyList().apply {
+            add(com.stho.nyota.R.drawable.horizontal, "Direction", position!!.toString())
+            add(com.stho.nyota.R.drawable.horizontal, "Azimuth", Hour.fromDegree(position!!.azimuth))
+            add(com.stho.nyota.R.drawable.horizontal, "Altitude", Degree.fromDegree(position!!.altitude))
+            add(com.stho.nyota.R.drawable.equatorial, "Height", Formatter.df0.format(location.altitude) + " km")
+            add(com.stho.nyota.R.drawable.distance, "Distance", Formatter.df0.format(position!!.distance) + " km")
+            add(com.stho.nyota.R.drawable.empty, "Speed", Formatter.df0.format(speed) + " km/h")
+        }
 
-    override fun getDetails(moment: Moment): PropertyList {
-        val details = PropertyList()
-        details.add(com.stho.nyota.R.drawable.horizontal, "Azimuth", Hour.fromDegree(position!!.azimuth))
-        details.add(com.stho.nyota.R.drawable.horizontal, "Altitude", Degree.fromDegree(position!!.altitude))
-        details.add(com.stho.nyota.R.drawable.equatorial, "Latitude", Degree.fromDegree(location.latitude))
-        details.add(com.stho.nyota.R.drawable.equatorial, "Longitude", Degree.fromDegree(location.longitude))
-        details.add(com.stho.nyota.R.drawable.equatorial, "Height", Formatter.df0.format(location.altitude) + " km")
-        details.add(com.stho.nyota.R.drawable.distance, "Distance", Formatter.df0.format(position!!.distance) + " km")
-        details.add(com.stho.nyota.R.drawable.star, "Speed", Formatter.df0.format(speed) + " km/h")
-        details.add(com.stho.nyota.R.drawable.time, "TLE", Formatter.formatDate.format(tle.date))
-        return details
-    }
+    override fun getDetails(moment: Moment): PropertyList =
+        PropertyList().apply {
+            add(com.stho.nyota.R.drawable.equatorial, "Latitude", Degree.fromDegree(location.latitude))
+            add(com.stho.nyota.R.drawable.equatorial, "Longitude", Degree.fromDegree(location.longitude))
+            add(com.stho.nyota.R.drawable.compass, "NORAD", tle.noradSatelliteNumber.toString())
+            add(com.stho.nyota.R.drawable.empty, "TLE", Formatter.formatDate.format(tle.date))
+            add(com.stho.nyota.R.drawable.empty, "Mean Distance", Formatter.df0.format(tle.meanDistanceFromEarth) + " km")
+            add(com.stho.nyota.R.drawable.empty, "Revolutions", Formatter.df2.format(tle.revolutionsPerDay))
+        }
 
     override val visibility: Int
         get() = when {

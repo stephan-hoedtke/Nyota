@@ -35,20 +35,18 @@ abstract class AbstractElement : IElement {
         position = Topocentric(azimuth, altitude)
     }
 
-    override fun getBasics(moment: Moment): PropertyList {
-        val basics = PropertyList()
-        basics.add(com.stho.nyota.R.drawable.horizontal, Angle.toString(position!!.azimuth, Angle.AngleType.AZIMUTH) + Formatter.SPACE + Angle.toString(position!!.altitude, Angle.AngleType.ALTITUDE))
-        return basics
-    }
+    override fun getBasics(moment: Moment): PropertyList =
+        PropertyList().apply {
+            add(com.stho.nyota.R.drawable.horizontal, "Direction", position!!.toString())
+            add(com.stho.nyota.R.drawable.horizontal, "Azimuth", Hour.fromDegree(position!!.azimuth))
+            add(com.stho.nyota.R.drawable.horizontal, "Altitude", Degree.fromDegree(position!!.altitude))
+        }
 
-    override fun getDetails(moment: Moment): PropertyList {
-        val details = PropertyList()
-        details.add(com.stho.nyota.R.drawable.horizontal, "Azimuth", Hour.fromDegree(position!!.azimuth))
-        details.add(com.stho.nyota.R.drawable.horizontal, "Altitude", Degree.fromDegree(position!!.altitude))
-        details.add(com.stho.nyota.R.drawable.equatorial, "Ascension", Hour.fromDegree(RA))
-        details.add(com.stho.nyota.R.drawable.equatorial, "Declination", Degree.fromDegree(Decl))
-        return details
-    }
+    override fun getDetails(moment: Moment): PropertyList =
+        PropertyList().apply {
+            add(com.stho.nyota.R.drawable.equatorial, "Ascension", Hour.fromDegree(RA))
+            add(com.stho.nyota.R.drawable.equatorial, "Declination", Degree.fromDegree(Decl))
+        }
 
     override val visibility: Int
         get() = when {

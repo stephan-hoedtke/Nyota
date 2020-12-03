@@ -104,23 +104,21 @@ class Sun : AbstractSolarSystemElement() {
         return ALTITUDE_SUNSET
     }
 
-    override fun getBasics(moment: Moment): PropertyList {
-        val basics = super.getBasics(moment)
-        basics.add(com.stho.nyota.R.drawable.sunrise, position?.riseTime, moment.timeZone)
-        basics.add(com.stho.nyota.R.drawable.sunset, position?.setTime, moment.timeZone)
-        return basics
-    }
+    override fun getBasics(moment: Moment): PropertyList =
+        super.getBasics(moment).apply {
+            add(com.stho.nyota.R.drawable.sunrise, "Rise", position?.riseTime, moment.timeZone)
+            add(com.stho.nyota.R.drawable.sunset, "Set", position?.setTime, moment.timeZone)
+        }
 
-    override fun getDetails(moment: Moment): PropertyList {
-        val details = super.getDetails(moment)
-        details.add(com.stho.nyota.R.drawable.sunset, "Set", position?.prevSetTime, moment.timeZone)
-        details.add(com.stho.nyota.R.drawable.sunrise, "Rise", position?.riseTime, moment.timeZone)
-        details.add(com.stho.nyota.R.drawable.sunset, "Set ", position?.setTime, moment.timeZone)
-        details.add(com.stho.nyota.R.drawable.sunrise, "Rise", position?.nextRiseTime, moment.timeZone)
-        details.add(com.stho.nyota.R.drawable.star, "In south", position?.inSouth, moment.timeZone)
-        details.add(com.stho.nyota.R.drawable.star, "Culmination angle", Degree.fromDegree(position!!.culmination))
-        return details
-    }
+    override fun getDetails(moment: Moment): PropertyList =
+        super.getDetails(moment).apply {
+            add(com.stho.nyota.R.drawable.sunset, "Previous Set", position?.prevSetTime, moment.timeZone)
+            add(com.stho.nyota.R.drawable.sunrise, "Rise", position?.riseTime, moment.timeZone)
+            add(com.stho.nyota.R.drawable.sunset, "Set ", position?.setTime, moment.timeZone)
+            add(com.stho.nyota.R.drawable.sunrise, "Next Rise", position?.nextRiseTime, moment.timeZone)
+            add(com.stho.nyota.R.drawable.empty, "In south", position?.inSouth, moment.timeZone)
+            add(com.stho.nyota.R.drawable.empty, "Culmination angle", Degree.fromDegree(position!!.culmination))
+        }
 
     companion object {
 

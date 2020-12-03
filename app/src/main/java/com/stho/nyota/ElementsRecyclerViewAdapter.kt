@@ -3,11 +3,11 @@ package com.stho.nyota
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.stho.nyota.databinding.FragmentElementListEntryBinding
 import com.stho.nyota.sky.universe.IElement
 import com.stho.nyota.sky.universe.SolarSystem
+
 
 class ElementsRecyclerViewAdapter : RecyclerView.Adapter<ElementsRecyclerViewAdapter.ViewHolder>() {
 
@@ -31,16 +31,14 @@ class ElementsRecyclerViewAdapter : RecyclerView.Adapter<ElementsRecyclerViewAda
 
     override fun getItemCount(): Int = entries.size
 
-    inner class ViewHolder(private val view: View) : RecyclerView.ViewHolder(view) {
-        init {
-            view.setOnClickListener {
-                getElementByIndex(adapterPosition)?.also { onItemClick?.invoke(it) }
-            }
-        }
+    inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+        private val binding: FragmentElementListEntryBinding = FragmentElementListEntryBinding.bind(view)
+
         fun bind(element: IElement) {
-            view.image?.setImageResource(element.imageId)
-            view.name?.text = element.name
-            view.position?.text = element.position.toString()
+            binding.image.setImageResource(element.imageId)
+            binding.name.text = element.name
+            binding.position.text = element.position.toString()
+            binding.root.setOnClickListener { getElementByIndex(adapterPosition)?.also { onItemClick?.invoke(it) } }
         }
     }
 
@@ -59,11 +57,3 @@ class ElementsRecyclerViewAdapter : RecyclerView.Adapter<ElementsRecyclerViewAda
     }
 }
 
-private val View.image: ImageView?
-    get() = findViewById<ImageView>(R.id.image)
-
-private val View.name: TextView?
-    get() = findViewById<TextView>(R.id.name)
-
-private val View.position: TextView?
-    get() = findViewById<TextView>(R.id.position)

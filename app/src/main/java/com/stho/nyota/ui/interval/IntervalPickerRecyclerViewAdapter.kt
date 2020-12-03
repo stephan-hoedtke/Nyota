@@ -3,11 +3,10 @@ package com.stho.nyota.ui.interval
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.RadioButton
-import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.stho.nyota.Interval
 import com.stho.nyota.R
+import com.stho.nyota.databinding.FragmentIntervalPickerListItemBinding
 
 
 class IntervalPickerRecyclerViewAdapter : RecyclerView.Adapter<IntervalPickerRecyclerViewAdapter.ViewHolder>() {
@@ -22,26 +21,28 @@ class IntervalPickerRecyclerViewAdapter : RecyclerView.Adapter<IntervalPickerRec
         return ViewHolder(view)
     }
 
+    private fun getIntervalByIndex(position: Int): Interval? =
+        if (position >= 0 && position < entries.size) entries[position] else null
+
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val interval = entries[position]
-        holder.bind(interval)
+        getIntervalByIndex(position)?.also {
+            holder.bind(it)
+        }
     }
 
     override fun getItemCount(): Int
         = entries.size
 
-    inner class ViewHolder(private val view: View) : RecyclerView.ViewHolder(view) {
-
-        init {
-            view.setOnClickListener { select(entries[adapterPosition]) }
-            view.radioButton.setOnClickListener { select(entries[adapterPosition]) }
-        }
+    inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+        private val binding: FragmentIntervalPickerListItemBinding = FragmentIntervalPickerListItemBinding.bind(view)
 
         fun bind(interval: Interval) {
             val isSelected = isSelected(interval)
-            view.radioButton.isChecked = isSelected
-            view.isSelected = isSelected
-            view.textView.text = interval.toString()
+            binding.radioButton.isChecked = isSelected
+            binding.textView.text = interval.toString()
+            binding.root.isSelected = isSelected
+            binding.root.setOnClickListener { select(entries[adapterPosition]) }
+            binding.radioButton.setOnClickListener { select(entries[adapterPosition]) }
         }
     }
 
@@ -61,11 +62,3 @@ class IntervalPickerRecyclerViewAdapter : RecyclerView.Adapter<IntervalPickerRec
         return interval == selectedInterval
     }
 }
-
-private val View.radioButton: RadioButton
-    get() = findViewById(R.id.radioButton)
-
-private val View.textView: TextView
-    get() = findViewById(R.id.textView)
-
-// TODO: use view binding correctly in recycler view adapter

@@ -3,17 +3,13 @@ package com.stho.nyota.ui.satellites
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.stho.nyota.R
+import com.stho.nyota.databinding.FragmentSatelliteListEntryBinding
 import com.stho.nyota.sky.universe.Satellite
 import com.stho.nyota.sky.universe.Satellites
 
 
-/**
- * [RecyclerView.Adapter] that can display a [Satellite].
- */
 class SatelliteListRecyclerViewAdapter : RecyclerView.Adapter<SatelliteListRecyclerViewAdapter.ViewHolder>() {
 
     private var satellites: Satellites = Satellites()
@@ -30,16 +26,16 @@ class SatelliteListRecyclerViewAdapter : RecyclerView.Adapter<SatelliteListRecyc
 
     override fun getItemCount(): Int = satellites.size
 
-    inner class ViewHolder(private val view: View) : RecyclerView.ViewHolder(view) {
-        init {
-            view.setOnClickListener { satellites.findSatelliteByIndex(adapterPosition)?.also { select(it) } }
-        }
+    inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+        private val binding: FragmentSatelliteListEntryBinding = FragmentSatelliteListEntryBinding.bind(view)
+
         fun bind(satellite: Satellite) {
-            view.image.setImageResource(satellite.imageId)
-            view.name.text = satellite.name
-            view.noradSatelliteNumber.text = satellite.noradSatelliteNumber.toString()
-            view.displayName.text = satellite.displayName
-            view.position.text = "${satellite.position}"
+            binding.image.setImageResource(satellite.imageId)
+            binding.name.text = satellite.name
+            binding.noradSatelliteNumber.text = satellite.noradSatelliteNumber.toString()
+            binding.displayName.text = satellite.displayName
+            binding.position.text = "${satellite.position}"
+            binding.root.setOnClickListener { satellites.findSatelliteByIndex(adapterPosition)?.also { select(it) } }
         }
     }
 
@@ -52,18 +48,3 @@ class SatelliteListRecyclerViewAdapter : RecyclerView.Adapter<SatelliteListRecyc
         onItemClick?.invoke(satellite)
     }
 }
-
-private val View.image: ImageView
-    get() = findViewById<ImageView>(R.id.image)
-
-private val View.name: TextView
-    get() = findViewById<TextView>(R.id.name)
-
-private val View.noradSatelliteNumber: TextView
-    get() = findViewById<TextView>(R.id.noradSatelliteNumber)
-
-private val View.displayName: TextView
-    get() = findViewById<TextView>(R.id.displayName)
-
-private val View.position: TextView
-    get() = findViewById<TextView>(R.id.position)

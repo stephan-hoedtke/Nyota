@@ -229,39 +229,35 @@ class Moon : AbstractSolarSystemElement() {
     override val distanceInKm: Double
         get() = Algorithms.EARTH_RADIUS * R
 
-    override fun getBasics(moment: Moment): PropertyList {
-        val basics = super.getBasics(moment)
-        basics.add(com.stho.nyota.R.drawable.sunset, position?.prevSetTime, moment.timeZone)
-        basics.add(com.stho.nyota.R.drawable.sunrise, position?.riseTime, moment.timeZone)
-        basics.add(com.stho.nyota.R.drawable.sunset, position?.setTime, moment.timeZone)
-        basics.add(com.stho.nyota.R.drawable.sunrise, position?.nextRiseTime, moment.timeZone)
-        basics.add(com.stho.nyota.R.drawable.angle, Degree.fromDegree(diameter))
-        return basics
-    }
+    override fun getBasics(moment: Moment): PropertyList =
+        super.getBasics(moment).apply {
+            add(com.stho.nyota.R.drawable.sunrise, "Rise", position?.riseTime, moment.timeZone)
+            add(com.stho.nyota.R.drawable.sunset, "Set", position?.setTime, moment.timeZone)
+            add(com.stho.nyota.R.drawable.angle, "Diameter", Degree.fromDegree(diameter))
+        }
 
-    override fun getDetails(moment: Moment): PropertyList {
-        val details = super.getDetails(moment)
-        details.add(com.stho.nyota.R.drawable.sunset, "Set", position?.prevSetTime, moment.timeZone)
-        details.add(com.stho.nyota.R.drawable.sunrise, "Rise", position?.riseTime, moment.timeZone)
-        details.add(com.stho.nyota.R.drawable.sunset, "Set ", position?.setTime, moment.timeZone)
-        details.add(com.stho.nyota.R.drawable.sunrise, "Rise", position?.nextRiseTime, moment.timeZone)
-        details.add(com.stho.nyota.R.drawable.star, "Age", Formatter.df2.format(age))
-        details.add(com.stho.nyota.R.drawable.angle, "Diameter", Degree.fromDegree(diameter))
-        details.add(com.stho.nyota.R.drawable.star, "Magnitude", Formatter.df2.format(magn))
-        details.add(com.stho.nyota.R.drawable.star, "FV", Degree.fromDegree(FV))
-        details.add(com.stho.nyota.R.drawable.star, "Phase", Formatter.df3.format(phase))
-        details.add(com.stho.nyota.R.drawable.star, "Phase angle", Formatter.df0.format(phaseAngle))
-        details.add(com.stho.nyota.R.drawable.star, "New", prevNewMoon, moment.timeZone)
-        details.add(com.stho.nyota.R.drawable.star, "Full", fullMoon, moment.timeZone)
-        details.add(com.stho.nyota.R.drawable.star, "New+", nextNewMoon, moment.timeZone)
-        details.add(com.stho.nyota.R.drawable.star, "Parallax", Degree.fromDegree(parallax))
-        details.add(com.stho.nyota.R.drawable.star, "Parallactic", Degree.fromDegree(parallacticAngle))
-        details.add(com.stho.nyota.R.drawable.star, "Meridian", position?.inSouth, moment.timeZone)
-        details.add(com.stho.nyota.R.drawable.star, "Culmination", Degree.fromDegree(position!!.culmination))
-        details.add(com.stho.nyota.R.drawable.star, "Shadow", Formatter.df0.format(nuclearShadow) + " - " + Formatter.df0.format(halfShadow) + " km")
-        details.add(com.stho.nyota.R.drawable.star, "Shadow Distance", Formatter.df0.format(near) + " - " + Formatter.df0.format(far) + " km")
-        return details
-    }
+    override fun getDetails(moment: Moment): PropertyList =
+        super.getDetails(moment).apply {
+            add(com.stho.nyota.R.drawable.sunset, "Previous Set", position?.prevSetTime, moment.timeZone)
+            add(com.stho.nyota.R.drawable.sunrise, "Rise", position?.riseTime, moment.timeZone)
+            add(com.stho.nyota.R.drawable.sunset, "Set ", position?.setTime, moment.timeZone)
+            add(com.stho.nyota.R.drawable.sunrise, "Next Rise", position?.nextRiseTime, moment.timeZone)
+            add(com.stho.nyota.R.drawable.empty, "Age", Formatter.df2.format(age))
+            add(com.stho.nyota.R.drawable.angle, "Diameter", Degree.fromDegree(diameter))
+            add(com.stho.nyota.R.drawable.empty, "Magnitude", Formatter.df2.format(magn))
+            add(com.stho.nyota.R.drawable.empty, "FV", Degree.fromDegree(FV))
+            add(com.stho.nyota.R.drawable.empty, "Phase", Formatter.df3.format(phase))
+            add(com.stho.nyota.R.drawable.empty, "Phase angle", Formatter.df0.format(phaseAngle))
+            add(com.stho.nyota.R.drawable.empty, "New", prevNewMoon, moment.timeZone)
+            add(com.stho.nyota.R.drawable.empty, "Full", fullMoon, moment.timeZone)
+            add(com.stho.nyota.R.drawable.empty, "New+", nextNewMoon, moment.timeZone)
+            add(com.stho.nyota.R.drawable.empty, "Parallax", Degree.fromDegree(parallax))
+            add(com.stho.nyota.R.drawable.empty, "Parallactic", Degree.fromDegree(parallacticAngle))
+            add(com.stho.nyota.R.drawable.empty, "Meridian", position?.inSouth, moment.timeZone)
+            add(com.stho.nyota.R.drawable.empty, "Culmination", Degree.fromDegree(position!!.culmination))
+            add(com.stho.nyota.R.drawable.empty, "Shadow", Formatter.df0.format(nuclearShadow) + " - " + Formatter.df0.format(halfShadow) + " km")
+            add(com.stho.nyota.R.drawable.empty, "Shadow Distance", Formatter.df0.format(near) + " - " + Formatter.df0.format(far) + " km")
+        }
 
     companion object {
         const val RADIUS = 1737.0 // in km

@@ -3,15 +3,13 @@ package com.stho.nyota.ui.cities
 import android.content.Context
 import android.view.*
 import android.view.GestureDetector.SimpleOnGestureListener
-import android.widget.RadioButton
-import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.stho.nyota.R
+import com.stho.nyota.databinding.FragmentCityPickerListItemBinding
 import com.stho.nyota.sky.utilities.Cities
 import com.stho.nyota.sky.utilities.City
 import com.stho.nyota.sky.utilities.createDefaultBerlin
-
 
 
 class CityPickerRecyclerViewAdapter(fragment: CityPickerFragment) : RecyclerView.Adapter<CityPickerRecyclerViewAdapter.ViewHolder>(), ISwipeToDeleteAdapter {
@@ -43,29 +41,28 @@ class CityPickerRecyclerViewAdapter(fragment: CityPickerFragment) : RecyclerView
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        cities.findCityByIndex(position)?.also { holder.bind(it) }
+        cities.findCityByIndex(position)?.also {
+            holder.bind(it)
+        }
     }
 
     override fun getItemCount(): Int
         = cities.size
 
-    inner class ViewHolder(private val view: View) : RecyclerView.ViewHolder(view) {
-
-        internal var foregroundLayer: View = view.findViewById(R.id.foreground_layer)
+    inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+        private val binding: FragmentCityPickerListItemBinding = FragmentCityPickerListItemBinding.bind(view)
 
         fun bind(city: City) {
             val isSelected = isSelected(city)
-            view.radioButton?.isChecked = isSelected
-            view.radioButton?.setOnClickListener {
-                cities.findCityByIndex(adapterPosition)?.also { select(it) }
-            }
-            view.isSelected = isSelected
-            view.textView?.text = city.nameEx
-            view.setOnLongClickListener {
+            binding.radioButton.isChecked = isSelected
+            binding.radioButton.setOnClickListener { cities.findCityByIndex(adapterPosition)?.also { select(it) } }
+            binding.textView.text = city.nameEx
+            binding.root.isSelected = isSelected
+            binding.root.setOnLongClickListener {
                 edit(city)
                 true
             }
-            view.setOnTouchListener { view: View, motionEvent: MotionEvent? ->
+            binding.root.setOnTouchListener { view: View, motionEvent: MotionEvent? ->
                 gestureDetector.onTouchEvent(motionEvent)
                 view.performClick()
                 false
@@ -84,6 +81,8 @@ class CityPickerRecyclerViewAdapter(fragment: CityPickerFragment) : RecyclerView
                 }
             })
         }
+
+        internal val foregroundLayer: View = binding.foregroundLayer
     }
 
     override fun getForegroundLayer(viewHolder: RecyclerView.ViewHolder): View =
@@ -132,9 +131,3 @@ class CityPickerRecyclerViewAdapter(fragment: CityPickerFragment) : RecyclerView
         notifyDataSetChanged()
     }
 }
-
-private val View.radioButton: RadioButton?
-    get() = findViewById<RadioButton>(R.id.radioButton)
-
-private val View.textView: TextView?
-    get() = findViewById<TextView>(R.id.textView)

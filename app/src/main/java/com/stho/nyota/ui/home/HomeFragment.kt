@@ -12,6 +12,7 @@ import com.stho.nyota.databinding.FragmentHomeBinding
 import com.stho.nyota.sky.universe.*
 import com.stho.nyota.sky.utilities.Moment
 
+// TODO: display list more proper
 
 class HomeFragment : AbstractFragment() {
 

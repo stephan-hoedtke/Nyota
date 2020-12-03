@@ -157,7 +157,7 @@ abstract class AbstractSolarSystemElement : AbstractElement() {
                     cosines(sun.position!!.altitude) * sinus(position!!.azimuth - sun.position!!.azimuth),
                     sinus(sun.position!!.altitude) * cosines(position!!.altitude) - cosines(sun.position!!.altitude) * sinus(position!!.altitude) * cosines(position!!.azimuth - sun.position!!.azimuth))
         } else {
-            0.0;
+            0.0
         }
     }
 
@@ -169,18 +169,15 @@ abstract class AbstractSolarSystemElement : AbstractElement() {
     open val distanceInKm: Double
         get() = Algorithms.ASTRONOMIC_UNIT * R
 
-    override fun getBasics(moment: Moment): PropertyList {
-        val basics = super.getBasics(moment)
-        basics.add(com.stho.nyota.R.drawable.distance, Formatter.df0.format(distanceInKm) + " km")
-        return basics
-    }
+    override fun getBasics(moment: Moment): PropertyList =
+        super.getBasics(moment).apply {
+            add(com.stho.nyota.R.drawable.distance, "Distance", Formatter.df0.format(distanceInKm) + " km")
+        }
 
-    override fun getDetails(moment: Moment): PropertyList {
-        val details = super.getDetails(moment)
-        details.add(com.stho.nyota.R.drawable.distance, "Distance", Formatter.df0.format(distanceInKm) + " km")
-        details.add(com.stho.nyota.R.drawable.angle, "Elongation", Degree.fromDegree(elongation))
-        return details
-    }
+    override fun getDetails(moment: Moment): PropertyList =
+        super.getDetails(moment).apply {
+            add(com.stho.nyota.R.drawable.angle, "Elongation", Degree.fromDegree(elongation))
+        }
 
     open fun calculateSetRiseTimes(moment: IMoment) {
         val inSouth = getTimeInSouth(moment)

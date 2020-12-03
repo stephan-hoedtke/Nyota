@@ -10,6 +10,8 @@ import com.stho.nyota.R
 import com.stho.nyota.databinding.FragmentSkyBinding
 import com.stho.nyota.sky.utilities.Moment
 
+// TODO: implement options in Sky view: show names, letters, lines, change colors, ...
+// TODO: implement styles
 
 class SkyFragment : AbstractFragment() {
 

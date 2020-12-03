@@ -18,33 +18,29 @@ abstract class AbstractPlanet : AbstractSolarSystemElement() {
 
     abstract fun calculateMagnitude()
 
-    override fun getDetails(moment: Moment): PropertyList {
-        val details: PropertyList = super.getDetails(moment)
-        details.add(com.stho.nyota.R.drawable.sunset, "Set", position?.prevSetTime, moment.timeZone)
-        details.add(com.stho.nyota.R.drawable.sunrise, "Rise", position?.riseTime, moment.timeZone)
-        details.add(com.stho.nyota.R.drawable.sunset, "Set ", position?.setTime, moment.timeZone)
-        details.add(com.stho.nyota.R.drawable.sunrise, "Rise", position?.nextRiseTime, moment.timeZone)
-        details.add(com.stho.nyota.R.drawable.star, "FV", Degree.fromDegree(FV))
-        details.add(com.stho.nyota.R.drawable.star, "Phase", Formatter.df3.format(phase))
-        details.add(com.stho.nyota.R.drawable.star, "Phase angle", Formatter.df0.format(phaseAngle))
-        details.add(com.stho.nyota.R.drawable.star, "Magnitude", Formatter.df2.format(magn))
-        details.add(com.stho.nyota.R.drawable.star, "Parallax", Formatter.df3.format(parallacticAngle))
-        details.add(com.stho.nyota.R.drawable.star, "In south", position?.inSouth, moment.timeZone)
-        details.add(com.stho.nyota.R.drawable.star, "Culmination angle", Degree.fromDegree(position!!.culmination))
-        return details
-    }
+    override fun getDetails(moment: Moment): PropertyList =
+        super.getDetails(moment).apply {
+            add(com.stho.nyota.R.drawable.sunset, "Set", position?.prevSetTime, moment.timeZone)
+            add(com.stho.nyota.R.drawable.sunrise, "Rise", position?.riseTime, moment.timeZone)
+            add(com.stho.nyota.R.drawable.sunset, "Set ", position?.setTime, moment.timeZone)
+            add(com.stho.nyota.R.drawable.sunrise, "Rise", position?.nextRiseTime, moment.timeZone)
+            add(com.stho.nyota.R.drawable.empty, "FV", Degree.fromDegree(FV))
+            add(com.stho.nyota.R.drawable.empty, "Phase", Formatter.df3.format(phase))
+            add(com.stho.nyota.R.drawable.empty, "Phase angle", Formatter.df0.format(phaseAngle))
+            add(com.stho.nyota.R.drawable.empty, "Magnitude", Formatter.df2.format(magn))
+            add(com.stho.nyota.R.drawable.empty, "Parallax", Formatter.df3.format(parallacticAngle))
+            add(com.stho.nyota.R.drawable.empty, "In south", position?.inSouth, moment.timeZone)
+            add(com.stho.nyota.R.drawable.empty, "Culmination angle", Degree.fromDegree(position!!.culmination))
+        }
 
-    protected override fun getHeightFor(moment: IMoment): Double {
-        val planet = getPlanetFor(moment)
-        return planet.height
-    }
+    override fun getHeightFor(moment: IMoment): Double =
+        getPlanetFor(moment).height
 
     private val height: Double
         get() = position!!.altitude - H0()
 
-    protected override fun H0(): Double {
-        return -0.583
-    }
+    override fun H0(): Double =
+        -0.583
 
     protected abstract fun getPlanetFor(moment: IMoment): AbstractPlanet
 }

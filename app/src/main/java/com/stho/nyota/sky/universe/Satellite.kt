@@ -93,13 +93,6 @@ class Satellite(override val name: String, val displayName: String, val noradSat
         location = getLocationForECI(positionVector, julianDay)
     }
 
-    override fun getBasics(moment: Moment): PropertyList {
-        val basics = super.getBasics(moment)
-        basics.add(com.stho.nyota.R.drawable.compass, "NORAD", this.noradSatelliteNumber.toString())
-        basics.add(com.stho.nyota.R.drawable.distance, "Distance", Formatter.df0.format(position!!.distance) + " km")
-        return basics
-    }
-
     companion object {
         private const val ISS: Int = 25544
         private const val HST: Int = 20580

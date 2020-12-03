@@ -11,6 +11,8 @@ import com.stho.nyota.sky.universe.Constellation
 import com.stho.nyota.sky.universe.IElement
 import com.stho.nyota.sky.utilities.Moment
 
+// TODO: show constellation in "real sky view", not just the Icon
+
 class ConstellationFragment : AbstractElementFragment() {
 
     private lateinit var viewModel: ConstellationViewModel

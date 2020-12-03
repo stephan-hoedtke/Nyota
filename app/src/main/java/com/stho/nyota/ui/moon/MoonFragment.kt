@@ -17,6 +17,8 @@ import com.stho.nyota.sky.utilities.Formatter
 import com.stho.nyota.sky.utilities.Moment
 
 
+// TODO: age view with touch events
+
 class MoonFragment : AbstractElementFragment() {
 
     private lateinit var viewModel: MoonViewModel

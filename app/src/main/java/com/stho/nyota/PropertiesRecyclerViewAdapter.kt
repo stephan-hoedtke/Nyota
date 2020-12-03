@@ -3,9 +3,8 @@ package com.stho.nyota
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.stho.nyota.databinding.PropertyListEntryBinding
 import com.stho.nyota.sky.universe.Satellite
 import com.stho.nyota.sky.utilities.IProperty
 import com.stho.nyota.sky.utilities.PropertyList
@@ -23,25 +22,26 @@ class PropertiesRecyclerViewAdapter : RecyclerView.Adapter<PropertiesRecyclerVie
         return ViewHolder(view)
     }
 
+    private fun getPropertyByIndex(position: Int): IProperty? =
+        if (position >= 0 && position < entries.size) entries[position] else null
+
+
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val entry: IProperty = entries[position]
-        holder.bind(entry)
+        getPropertyByIndex(position)?.also {
+            holder.bind(it)
+        }
     }
 
     override fun getItemCount(): Int = entries.size
 
-    inner class ViewHolder(val view: View) : RecyclerView.ViewHolder(view) {
+    inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+        private val binding: PropertyListEntryBinding = PropertyListEntryBinding.bind(view)
 
         fun bind(entry: IProperty) {
-            view.image?.setImageResource(entry.imageId)
-            view.name?.text = entry.name
-            view.value?.text = entry.value
-        }
-
-        init {
-            view.setOnClickListener {
-                onItemClick?.invoke(entries[adapterPosition])
-            }
+            binding.image.setImageResource(entry.imageId)
+            binding.name.text = entry.name
+            binding.value.text = entry.value
+            binding.root.setOnClickListener { getPropertyByIndex(adapterPosition)?.also { onItemClick?.invoke(it) } }
         }
     }
 
@@ -50,12 +50,3 @@ class PropertiesRecyclerViewAdapter : RecyclerView.Adapter<PropertiesRecyclerVie
         notifyDataSetChanged()
     }
 }
-
-private val View.image: ImageView?
-    get() = findViewById<ImageView>(R.id.image)
-
-private val View.name: TextView?
-    get() = findViewById<TextView>(R.id.name)
-
-private val View.value: TextView?
-    get() = findViewById<TextView>(R.id.value)
