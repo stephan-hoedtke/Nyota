@@ -5,20 +5,46 @@ import android.graphics.*
 import android.util.AttributeSet
 import android.view.View
 import com.stho.nyota.sky.utilities.Angle
+import com.stho.nyota.sky.utilities.AverageOrientation
 import com.stho.nyota.sky.utilities.Orientation
 import com.stho.nyota.sky.utilities.Topocentric
+import kotlin.math.cos
+import kotlin.math.sin
 
 /**
  * Created by shoedtke on 04.10.2016.
  */
 class HorizonView(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
-    private val rect = RectF()
-    private var altitude = -17.0
-    private var orientation: Orientation = Orientation()
-    private var flat = true
-    fun setFlat(flat: Boolean) {
-        this.flat = flat
+
+    init {
+        onCreate()
     }
+
+    private val rect = RectF()
+
+    var targetAltitude = -17.0
+        set(value) {
+            if (field != value) {
+                field = value
+                invalidate()
+            }
+        }
+
+    var currentDeviceOrientation: Orientation = Orientation.defaultOrientation
+        set(value) {
+            if (field != value) {
+                field = value
+                invalidate()
+            }
+        }
+
+    var flat: Boolean = true
+        set(value) {
+            if (field != value) {
+                field = value
+                invalidate()
+            }
+        }
 
     private fun onCreate() {
         pen.color = Color.WHITE
@@ -40,9 +66,10 @@ class HorizonView(context: Context?, attrs: AttributeSet?) : View(context, attrs
         circle.strokeWidth = 2f
     }
 
+    @Deprecated(message = "set both targetAzimuth and currentDeviceOrientation directly")
     fun setDirection(position: Topocentric, orientation: Orientation) {
-        this.altitude = position.altitude
-        this.orientation = orientation
+        this.targetAltitude = position.altitude
+        this.currentDeviceOrientation = orientation
         invalidate()
     }
 
@@ -56,10 +83,9 @@ class HorizonView(context: Context?, attrs: AttributeSet?) : View(context, attrs
         val b = t / 9.5f
         val middle = t / 2.6f
         val outer = t / 2.2f
-        val alpha: Float = 0 - orientation.getRoll()
-        val beta: Float =
-            if (flat) orientation.getDirection() else orientation.getAltitude()
-        var phi: Float = Angle.getAngleDifference(altitude.toFloat(), beta)
+        val alpha: Float = 0 - currentDeviceOrientation.roll.toFloat()
+        val beta: Float = if (flat) currentDeviceOrientation.direction.toFloat() else currentDeviceOrientation.pitch.toFloat()
+        var phi: Float = Angle.getAngleDifference(targetAltitude.toFloat(), beta)
         if (phi > 90) phi = 90f
         if (phi < -90) phi = -90f
         canvas.translate(w / 2.toFloat(), h / 2.toFloat())
@@ -72,9 +98,9 @@ class HorizonView(context: Context?, attrs: AttributeSet?) : View(context, attrs
         canvas.drawCircle(0f, 0f, r, circle)
         for (p in dots) {
             val x =
-                (middle * Math.cos(Math.toRadians(p.toDouble()))).toFloat()
+                (middle * cos(Math.toRadians(p.toDouble()))).toFloat()
             val y =
-                (middle * Math.sin(Math.toRadians(p.toDouble()))).toFloat()
+                (middle * sin(Math.toRadians(p.toDouble()))).toFloat()
             canvas.drawCircle(x, -y, 4f, green)
         }
         path.reset()
@@ -105,8 +131,5 @@ class HorizonView(context: Context?, attrs: AttributeSet?) : View(context, attrs
         private val path = Path()
         private val dots = intArrayOf(15, 30, 45, 60, 75, 105, 120, 135, 150, 165)
     }
-
-    init {
-        onCreate()
-    }
 }
+

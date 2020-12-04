@@ -10,9 +10,12 @@ import org.junit.Assert.*
  *
  * See [testing documentation](http://d.android.com/tools/testing).
  */
-class ExampleUnitTest {
+class TimeUnitTest {
+
     @Test
-    fun addition_isCorrect() {
-        assertEquals(4, 2 + 2)
+    fun nanoTime_isDifferentAlways() {
+        val a = System.nanoTime()
+        val b = System.nanoTime()
+        assertNotEquals(a, b)
     }
 }

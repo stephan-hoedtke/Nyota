@@ -5,21 +5,38 @@ import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.Path
-import android.graphics.drawable.GradientDrawable
 import android.util.AttributeSet
 import android.view.View
 import com.stho.nyota.sky.utilities.Orientation
 import com.stho.nyota.sky.utilities.Topocentric
+import kotlin.math.cos
+import kotlin.math.sin
 
 /**
  * Created by shoedtke on 04.10.2016.
  */
-class DirectionPointerView(
-    context: Context?,
-    attrs: AttributeSet?
-) : View(context, attrs) {
-    private var azimuth = 17.0
-    private var orientation: Orientation = Orientation()
+class DirectionPointerView(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
+
+    init {
+        onCreate()
+    }
+
+    var targetAzimuth: Double = 17.0
+        set(value) {
+            if (field != value) {
+                field = value
+                invalidate()
+            }
+        }
+
+    var currentDeviceOrientation: Orientation = Orientation.defaultOrientation
+        set(value) {
+            if (field != value) {
+                field = value
+                invalidate()
+            }
+        }
+
     private fun onCreate() {
         pen1.color = Color.WHITE
         pen1.style = Paint.Style.FILL_AND_STROKE
@@ -34,9 +51,10 @@ class DirectionPointerView(
         green.textSize = 50f
     }
 
+    @Deprecated(message = "set both targetAzimuth and currentDeviceOrientation directly")
     fun setDirection(position: Topocentric, orientation: Orientation) {
-        this.azimuth = position.azimuth
-        this.orientation = orientation
+        this.targetAzimuth = position.azimuth
+        this.currentDeviceOrientation = orientation
         invalidate()
     }
 
@@ -51,19 +69,19 @@ class DirectionPointerView(
         val middle = t / 2.6f
         val letter = t / 2.5f
         canvas.translate(w / 2.toFloat(), h / 2.toFloat())
-        canvas.rotate(0 - orientation.getAzimuth())
+        canvas.rotate(0 - currentDeviceOrientation.azimuth.toFloat())
         for (p in dots) {
             val x =
-                (middle * Math.cos(Math.toRadians(p.toDouble()))).toFloat()
+                (middle * cos(Math.toRadians(p.toDouble()))).toFloat()
             val y =
-                (middle * Math.sin(Math.toRadians(p.toDouble()))).toFloat()
+                (middle * sin(Math.toRadians(p.toDouble()))).toFloat()
             canvas.drawCircle(x, y, 4f, green)
         }
         drawTextCentered(canvas, "N", 0f, -letter, green)
         drawTextCentered(canvas, "E", letter, 0f, green)
         drawTextCentered(canvas, "S", 0f, letter, green)
         drawTextCentered(canvas, "W", -letter, 0f, green)
-        canvas.rotate(azimuth.toFloat())
+        canvas.rotate(targetAzimuth.toFloat())
         path.reset()
         path.moveTo(0f, -a)
         path.lineTo(-b, c)
@@ -79,13 +97,7 @@ class DirectionPointerView(
         canvas.drawCircle(0f, 0f, 7f, black)
     }
 
-    private fun drawTextCentered(
-        canvas: Canvas,
-        text: String,
-        x: Float,
-        y: Float,
-        pen: Paint
-    ) {
+    private fun drawTextCentered(canvas: Canvas, text: String, x: Float, y: Float, pen: Paint) {
         val w = pen.measureText(text)
         val h = pen.descent() + pen.ascent()
         canvas.drawText(text, x - w / 2f, y - h / 2f, pen)
@@ -119,9 +131,5 @@ class DirectionPointerView(
             330,
             345
         )
-    }
-
-    init {
-        onCreate()
     }
 }

@@ -1,8 +1,9 @@
 package com.stho.nyota.ui.finder
 
 import android.os.SystemClock
+import com.stho.nyota.sky.utilities.Angle
 
-internal class Acceleration {
+internal class Acceleration(private val factorInSeconds: Double = 1.1) {
     // s(t) = a * t^3 + b * t^2 + c * t + d
     // s(0) = s0
     // s(1) = s1
@@ -12,15 +13,19 @@ internal class Acceleration {
     //      b = 3 (s1 - s0) - 2 v0
     //      c = v0
     //      d = s0
-    private var v0: Double
-    private var s0: Double
-    private var s1: Double
+    private var v0: Double = 0.0
+    private var s0: Double = 0.0
+    private var s1: Double = 0.0
     private var a = 0.0
     private var b = 0.0
     private var c = 0.0
     private var d = 0.0
-    private var t0: Long
-    private val factor: Double
+    private var t0: Long = SystemClock.elapsedRealtimeNanos()
+    private val factor: Double = factorInSeconds / NANOSECONDS_PER_SECOND
+
+    init {
+        calculateFormula()
+    }
 
     val position: Double
         get() {
@@ -39,6 +44,9 @@ internal class Acceleration {
         t0 = elapsedRealtimeNanos
         calculateFormula()
     }
+
+    fun rotateTo(targetAngle: Double) =
+        update(Angle.normalize(targetAngle))
 
     private fun getTime(elapsedRealtimeNanos: Long): Double {
         val nanos = elapsedRealtimeNanos - t0
@@ -70,14 +78,5 @@ internal class Acceleration {
 
     companion object {
         private const val NANOSECONDS_PER_SECOND = 1000000000.0
-    }
-
-    init {
-        factor = 1.1 / NANOSECONDS_PER_SECOND
-        v0 = 0.0
-        s0 = 0.0
-        s1 = 0.0
-        t0 = SystemClock.elapsedRealtimeNanos()
-        calculateFormula()
     }
 }

@@ -12,22 +12,27 @@ import com.stho.nyota.sky.utilities.*
 import java.util.*
 import java.util.concurrent.Semaphore
 
+// TODO: this class is too big...
+
 class Repository private constructor() {
 
     private val lock = Semaphore(1)
 
     var universe: Universe = Universe()
+    var orientation: AverageOrientation = AverageOrientation()
 
     private val settingsLiveData = MutableLiveData<Settings>()
     private val citiesLiveData = MutableLiveData<Cities>()
     private val momentLiveData = MutableLiveData<Moment>()
     private val currentAutomaticMomentLiveData = MutableLiveData<Moment>()
+    private val currentOrientationLiveData = MutableLiveData<Orientation>()
 
     init {
         settingsLiveData.value = Settings()
         citiesLiveData.value = Cities()
         momentLiveData.value = Moment.forNow(defaultCity)
         currentAutomaticMomentLiveData.value = defaultAutomaticMoment
+        currentOrientationLiveData.value = Orientation.defaultOrientation
     }
 
     val momentLD: LiveData<Moment>

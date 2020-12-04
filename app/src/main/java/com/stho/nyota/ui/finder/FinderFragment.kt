@@ -1,35 +1,27 @@
 package com.stho.nyota.ui.finder
-import android.content.Context
-import android.hardware.Sensor
-import android.hardware.SensorEvent
-import android.hardware.SensorEventListener
-import android.hardware.SensorManager
 import android.os.Bundle
 import android.os.Handler
-import android.view.*
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import com.stho.nyota.AbstractFragment
 import com.stho.nyota.AbstractViewModel
 import com.stho.nyota.databinding.FragmentFinderBinding
 import com.stho.nyota.sky.universe.IElement
+import com.stho.nyota.sky.utilities.Angle
 import com.stho.nyota.sky.utilities.Moment
+import com.stho.nyota.sky.utilities.Orientation
 import com.stho.nyota.views.RotaryView
 
 
-class FinderFragment : AbstractFragment(), SensorEventListener {
+class FinderFragment : AbstractFragment() {
 
-    private lateinit var sensorManager: SensorManager
-    private lateinit var windowManager: WindowManager
-    private val accelerometerReading = FloatArray(3)
-    private val magnetometerReading = FloatArray(3)
-    private val rotationMatrix = FloatArray(9)
-    private val rotationMatrixAdjusted = FloatArray(9)
-    private val orientationAngles = FloatArray(3)
-    private val handler: Handler = Handler()
-    private var display: Display? = null
-
+    private lateinit var orientationFilter: IOrientationFilter
+    private lateinit var orientationSensorListener: OrientationSensorListener
     private lateinit var viewModel: FinderViewModel
     private var bindingReference: FragmentFinderBinding? = null
     private val binding: FragmentFinderBinding get() = bindingReference!!
+    private val handler: Handler = Handler()
 
     override val abstractViewModel: AbstractViewModel
         get() = viewModel
@@ -38,8 +30,8 @@ class FinderFragment : AbstractFragment(), SensorEventListener {
         super.onCreate(savedInstanceState)
         val elementName: String? = getElementNameFromArguments()
         viewModel = createFinderViewModel(elementName)
-        sensorManager = context?.getSystemService(Context.SENSOR_SERVICE) as SensorManager
-        windowManager = context?.getSystemService(Context.WINDOW_SERVICE) as WindowManager
+        orientationFilter = OrientationAccelerationFilter()
+        orientationSensorListener = OrientationSensorListener(requireContext(), orientationFilter)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
@@ -52,26 +44,18 @@ class FinderFragment : AbstractFragment(), SensorEventListener {
         })
         binding.compassRing.setOnDoubleTapListener(object : RotaryView.OnDoubleTapListener {
             override fun onDoubleTap() {
-                viewModel.reset()
+                viewModel.seek()
             }
         })
-
-        // TODO: Update on changes of orientation etc.
 
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel.ringAngleLD.observe(viewLifecycleOwner, {
-                alpha -> binding.compassRing.rotation = alpha
-        })
-        viewModel.northPointerPositionLD.observe(viewLifecycleOwner, {
-                angle -> binding.compassNorthPointer.rotation = -angle
-        })
-        viewModel.universeLD.observe(viewLifecycleOwner, {
-                universe -> onUpdateElement(universe.moment)
-        })
+        viewModel.orientationLD.observe(viewLifecycleOwner, { orientation -> onUpdateOrientation(orientation) })
+        viewModel.ringAngleLD.observe(viewLifecycleOwner, { alpha -> binding.compassRing.rotation = alpha.toFloat() })
+        viewModel.universeLD.observe(viewLifecycleOwner, { universe -> onUpdateElement(universe.moment) })
     }
 
     override fun onDestroyView() {
@@ -81,49 +65,28 @@ class FinderFragment : AbstractFragment(), SensorEventListener {
 
     override fun onResume() {
         super.onResume()
-        display = windowManager.defaultDisplay
         viewModel.reset()
-        initializeAccelerationSensor()
-        initializeMagneticFieldSensor()
+        orientationSensorListener.onResume()
         initializeHandler()
     }
 
     override fun onPause() {
         super.onPause()
-        removeSensorListeners()
         removeHandler()
-    }
-
-    private val HANDLER_DELAY = 100
-
-    private fun initializeAccelerationSensor() {
-        val accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)
-        if (accelerometer != null) {
-            sensorManager.registerListener(this, accelerometer, SensorManager.SENSOR_DELAY_GAME, SensorManager.SENSOR_DELAY_GAME)
-        }
-    }
-
-    private fun initializeMagneticFieldSensor() {
-        val magneticField = sensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD)
-        if (magneticField != null) {
-            sensorManager.registerListener(this, magneticField, SensorManager.SENSOR_DELAY_GAME, SensorManager.SENSOR_DELAY_GAME)
-        }
+        orientationSensorListener.onPause()
     }
 
     private fun initializeHandler() {
         handler.postDelayed(object : Runnable {
             override fun run() {
-                viewModel.updateNorthPointer()
-                handler.postDelayed(this, HANDLER_DELAY.toLong())
+                viewModel.updateOrientation(orientationFilter.orientation)
+                handler.postDelayed(this, FinderFragment.HANDLER_DELAY.toLong())
             }
-        }, HANDLER_DELAY.toLong())
+        }, FinderFragment.HANDLER_DELAY.toLong())
     }
 
     private fun removeHandler() =
         handler.removeCallbacksAndMessages(null)
-
-    private fun removeSensorListeners() =
-        sensorManager.unregisterListener(this)
 
     private fun onUpdateElement(moment: Moment) =
         bind(moment, viewModel.element)
@@ -131,73 +94,33 @@ class FinderFragment : AbstractFragment(), SensorEventListener {
     private fun bind(moment: Moment, element: IElement) {
         binding.timeVisibilityOverlay.currentTime.text = toLocalTimeString(moment)
         binding.timeVisibilityOverlay.currentVisibility.setImageResource(element.visibility)
+        binding.targetAzimuth.text = Angle.toString(element.position?.azimuth ?: 0.0, Angle.AngleType.AZIMUTH)
+        binding.targetAltitude.text = Angle.toString(element.position?.altitude ?: 0.0, Angle.AngleType.ALTITUDE)
+        binding.horizonView.targetAltitude = element.position?.altitude ?: 0.0
         updateActionBar(element.name, toLocalDateString(moment))
+    }
+
+    private fun onUpdateOrientation(orientation: Orientation) {
+        bind(orientation, viewModel.element)
+    }
+
+    private fun bind(orientation: Orientation, element: IElement) {
+        val north = orientation.azimuth
+        val target = element.position!!.azimuth
+        val targetRelativeRotation = Angle.normalizeTo180(target + north)
+        binding.compassNorthPointer.rotation = -north.toFloat()
+        binding.targetAzimuthPointer.rotation = targetRelativeRotation.toFloat()
+        binding.horizonView.currentDeviceOrientation = orientation
+        binding.currentDeviceAzimuth.text = Angle.toString(orientation.azimuth, Angle.AngleType.AZIMUTH)
+        binding.currentDevicePitch.text = Angle.toString(orientation.pitch, Angle.AngleType.PITCH)
     }
 
     private fun getElementNameFromArguments(): String? {
         return arguments?.getString("ELEMENT")
     }
 
-    override fun onAccuracyChanged(p0: Sensor?, p1: Int) {
-        // ignore
-    }
-
-    override fun onSensorChanged(event: SensorEvent?) {
-        when (event?.sensor?.type) {
-            Sensor.TYPE_ACCELEROMETER -> {
-                System.arraycopy(
-                    event.values,
-                    0,
-                    accelerometerReading,
-                    0,
-                    accelerometerReading.size
-                )
-                updateOrientationAngles()
-            }
-            Sensor.TYPE_MAGNETIC_FIELD -> {
-                System.arraycopy(
-                    event.values,
-                    0,
-                    magnetometerReading,
-                    0,
-                    magnetometerReading.size
-                )
-                updateOrientationAngles()
-            }
-        }
-    }
-
-    // Compute the three orientation angles based on the most recent readings from
-    // the device's accelerometer and magnetometer.
-    private fun updateOrientationAngles() {
-        if (SensorManager.getRotationMatrix(rotationMatrix, null, accelerometerReading, magnetometerReading)) {
-            SensorManager.getOrientation(getAdjustedRotationMatrix(), orientationAngles)
-            viewModel.update(orientationAngles)
-        }
-    }
-
-    /*
-      See the following training materials from google.
-      https://codelabs.developers.google.com/codelabs/advanced-android-training-sensor-orientation/index.html?index=..%2F..advanced-android-training#0
-     */
-    private fun getAdjustedRotationMatrix(): FloatArray {
-        when (display?.rotation) {
-            Surface.ROTATION_90 -> {
-                SensorManager.remapCoordinateSystem(rotationMatrix, SensorManager.AXIS_Y, SensorManager.AXIS_MINUS_X, rotationMatrixAdjusted)
-                return rotationMatrixAdjusted
-            }
-            Surface.ROTATION_180 -> {
-                SensorManager.remapCoordinateSystem(rotationMatrix, SensorManager.AXIS_MINUS_X, SensorManager.AXIS_MINUS_Y, rotationMatrixAdjusted)
-                return rotationMatrixAdjusted
-            }
-            Surface.ROTATION_270 -> {
-                SensorManager.remapCoordinateSystem(rotationMatrix, SensorManager.AXIS_MINUS_Y, SensorManager.AXIS_X, rotationMatrixAdjusted)
-                return rotationMatrixAdjusted
-            }
-            else -> {
-                return rotationMatrix
-            }
-        }
+    companion object {
+        private const val HANDLER_DELAY = 100
     }
 
     // TODO: compass sensor into main activity ??

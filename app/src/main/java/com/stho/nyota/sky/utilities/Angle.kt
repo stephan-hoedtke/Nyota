@@ -1,6 +1,7 @@
 package com.stho.nyota.sky.utilities
 
 import java.lang.Math.PI
+import kotlin.math.abs
 
 /**
  * Created by shoedtke on 28.08.2016.
@@ -12,11 +13,6 @@ object Angle {
 
     fun getAngleDifference(x: Double, y: Double): Double {
         return normalizeTo180(x - y)
-    }
-
-    fun rotateTo(from: Double, to: Double): Double {
-        val difference: Double = getAngleDifference(from, to)
-        return from + difference
     }
 
     fun normalize(angle: Float): Float {
@@ -53,23 +49,27 @@ object Angle {
         return when (angleType) {
             AngleType.AZIMUTH -> {
                 alpha = normalize(angle)
-                Formatter.df0.format(Math.abs(alpha)) + "° " + northEastSouthWest(alpha)
+                Formatter.df0.format(abs(alpha)) + "° " + northEastSouthWest(alpha)
             }
             AngleType.ALTITUDE -> {
                 alpha = normalizeTo180(angle)
-                sign(alpha) + Formatter.df0.format(Math.abs(alpha)) + "°"
+                sign(alpha) + Formatter.df0.format(abs(alpha)) + "°"
+            }
+            AngleType.PITCH -> {
+                alpha = normalizeTo180(angle)
+                sign(alpha) + Formatter.df0.format(abs(alpha)) + "°"
             }
             AngleType.LATITUDE -> {
                 alpha = normalizeTo180(angle)
-                Formatter.df2.format(Math.abs(alpha)) + "° " + if (angle >= 0) "N" else "S"
+                Formatter.df2.format(abs(alpha)) + "° " + if (angle >= 0) "N" else "S"
             }
             AngleType.LONGITUDE -> {
                 alpha = normalizeTo180(angle)
-                Formatter.df2.format(Math.abs(alpha)) + "° " + if (angle >= 0) "E" else "W"
+                Formatter.df2.format(abs(alpha)) + "° " + if (angle >= 0) "E" else "W"
             }
             AngleType.DEGREE_NORTH_EAST_SOUTH_WEST -> {
                 alpha = normalize(angle)
-                Formatter.df0.format(Math.abs(alpha)) + "° " + northEastSouthWest(alpha)
+                Formatter.df0.format(abs(alpha)) + "° " + northEastSouthWest(alpha)
             }
             else -> {
                 alpha = normalizeTo180(angle)
@@ -78,8 +78,8 @@ object Angle {
         }
     }
 
-    fun toDegree(angle: Double): Float {
-        return (angle * 180 / PI).toFloat()
+    fun toDegree(angle: Double): Double {
+        return (angle * 180 / PI)
     }
 
     private fun sign(x: Double): String {
@@ -93,6 +93,6 @@ object Angle {
     }
 
     enum class AngleType {
-        DEGREE_NORTH_EAST_SOUTH_WEST, AZIMUTH, ALTITUDE, LATITUDE, LONGITUDE
+        DEGREE_NORTH_EAST_SOUTH_WEST, AZIMUTH, ALTITUDE, LATITUDE, LONGITUDE, PITCH
     }
 }

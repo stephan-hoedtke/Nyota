@@ -27,7 +27,8 @@
     <com.stho.software.nyota.views.HorizonView
         android:id="@+id/horizonView"
         android:layout_width="0dp"
-        android:layout_height="240dp"
+        android:layout_height="0dp"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="@id/horizontal_guideline1"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -47,7 +48,7 @@
         android:scaleType="centerInside" />
 
     <TextView
-        android:id="@+id/horizontal"
+        android:id="@+id/currentDevicePitch"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintStart_toEndOf="@id/iconHorizontal"
@@ -55,9 +56,19 @@
         app:layout_constraintBottom_toBottomOf="@id/iconHorizontal"
         android:text="@string/label_default_orientation" />
 
+    <TextView
+        android:id="@+id/targetAltitude"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/iconHorizontal"
+        app:layout_constraintBottom_toBottomOf="@id/iconHorizontal"
+        android:text="@string/label_default_orientation" />
+
+
     <FrameLayout
         android:layout_width="0dp"
-        android:layout_height="170dp"
+        android:layout_height="0dp"
         app:layout_constraintTop_toTopOf="@id/horizontal_guideline1"
         app:layout_constraintBottom_toBottomOf="@id/horizontal_guideline2"
         app:layout_constraintStart_toStartOf="parent"
@@ -91,16 +102,16 @@
             android:scaleType="centerInside"
             android:src="@drawable/magnetic_compass_pointer"
             android:contentDescription="@string/label_empty"
-            android:rotation="30" />
+            android:rotation="60" />
 
         <ImageView
-            android:id="@+id/directionView"
+            android:id="@+id/target_azimuth_pointer"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scaleType="centerInside"
-            android:src="@drawable/magnetic_compass_pointer"
+            android:src="@drawable/magnetic_compass_target_pointer"
             android:contentDescription="@string/label_empty"
-            android:rotation="45" />
+            android:rotation="15" />
 
     </FrameLayout>
 
@@ -115,13 +126,21 @@
         android:scaleType="centerInside" />
 
     <TextView
-        android:id="@+id/direction"
+        android:id="@+id/currentDeviceAzimuth"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintStart_toEndOf="@id/iconDirection"
         app:layout_constraintTop_toTopOf="@id/iconDirection"
         app:layout_constraintBottom_toBottomOf="@id/iconDirection"
-        android:layout_gravity="center_vertical"
+        android:text="@string/label_default_orientation" />
+
+    <TextView
+        android:id="@+id/targetAzimuth"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/iconDirection"
+        app:layout_constraintBottom_toBottomOf="@id/iconDirection"
         android:text="@string/label_default_orientation" />
 
     <include android:id="@+id/time_visibility_overlay" layout="@layout/time_visibility_overlay" />
