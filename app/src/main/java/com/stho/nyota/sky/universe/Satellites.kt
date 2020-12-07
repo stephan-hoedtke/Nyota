@@ -13,7 +13,9 @@ class Satellites {
         get() = array.size
 
     fun addAll(collection: Collection<Satellite>) {
-        collection.forEach { add(it) }
+        for (satellite in collection) {
+            add(satellite)
+        }
     }
 
     fun add(satellite: Satellite) {

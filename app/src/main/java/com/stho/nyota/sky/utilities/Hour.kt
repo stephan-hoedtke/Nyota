@@ -40,15 +40,15 @@ class Hour {
     }
 
     companion object {
-        fun fromDegree(angleInDegree: Double): Hour {
+        internal fun fromDegree(angleInDegree: Double): Hour {
             return Hour(angleInDegree / 15)
         }
 
-        fun fromHour(angleInHours: Double): Hour {
+        internal fun fromHour(angleInHours: Double): Hour {
             return Hour(angleInHours)
         }
 
-        fun fromHour(hour: Int, minute: Int, seconds: Double): Hour {
+        internal fun fromHour(hour: Int, minute: Int, seconds: Double): Hour {
             return Hour(hour, minute, seconds)
         }
 

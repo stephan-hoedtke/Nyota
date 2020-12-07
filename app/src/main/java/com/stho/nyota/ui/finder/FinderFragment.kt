@@ -53,7 +53,7 @@ class FinderFragment : AbstractFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel.orientationLD.observe(viewLifecycleOwner, { orientation -> onUpdateOrientation(orientation) })
+        viewModel.orientationLD.observe(viewLifecycleOwner, { orientation -> onUpdateDeviceOrientation(orientation) })
         viewModel.ringAngleLD.observe(viewLifecycleOwner, { alpha -> binding.compassRing.rotation = alpha.toFloat() })
         viewModel.universeLD.observe(viewLifecycleOwner, { universe -> onUpdateElement(universe.moment) })
     }
@@ -79,7 +79,7 @@ class FinderFragment : AbstractFragment() {
     private fun initializeHandler() {
         handler.postDelayed(object : Runnable {
             override fun run() {
-                viewModel.updateOrientation(orientationFilter.orientation)
+                viewModel.updateDeviceOrientation(orientationFilter.orientation)
                 handler.postDelayed(this, FinderFragment.HANDLER_DELAY.toLong())
             }
         }, FinderFragment.HANDLER_DELAY.toLong())
@@ -100,16 +100,13 @@ class FinderFragment : AbstractFragment() {
         updateActionBar(element.name, toLocalDateString(moment))
     }
 
-    private fun onUpdateOrientation(orientation: Orientation) {
+    private fun onUpdateDeviceOrientation(orientation: Orientation) {
         bind(orientation, viewModel.element)
     }
 
     private fun bind(orientation: Orientation, element: IElement) {
-        val north = orientation.azimuth
-        val target = element.position!!.azimuth
-        val targetRelativeRotation = Angle.normalizeTo180(target + north)
-        binding.compassNorthPointer.rotation = -north.toFloat()
-        binding.targetAzimuthPointer.rotation = targetRelativeRotation.toFloat()
+        binding.compassNorthPointer.rotation = orientation.getRotationToNorth()
+        binding.targetAzimuthPointer.rotation = orientation.getRotationToTargetAt(element)
         binding.horizonView.currentDeviceOrientation = orientation
         binding.currentDeviceAzimuth.text = Angle.toString(orientation.azimuth, Angle.AngleType.AZIMUTH)
         binding.currentDevicePitch.text = Angle.toString(orientation.pitch, Angle.AngleType.PITCH)

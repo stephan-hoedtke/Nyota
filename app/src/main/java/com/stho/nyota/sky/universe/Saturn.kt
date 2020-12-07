@@ -33,19 +33,19 @@ class Saturn : AbstractPlanet() {
     fun applyPerturbations(jupiter: Jupiter) {
 
         // Add these terms to the longitude:
-        val lon_corr = (+0.812 * Degree.sinus(2 * jupiter.M - 5 * M - 67.6)
-                - 0.229 * Degree.cosines(2 * jupiter.M - 4 * M - 2)) + 0.119 * Degree.sinus(jupiter.M - 2 * M - 3) + 0.046 * Degree.sinus(2 * jupiter.M - 6 * M - 69) + 0.014 * Degree.sinus(jupiter.M - 3 * M + 32)
+        val lon_corr = (+0.812 * Degree.sin(2 * jupiter.M - 5 * M - 67.6)
+                - 0.229 * Degree.cos(2 * jupiter.M - 4 * M - 2)) + 0.119 * Degree.sin(jupiter.M - 2 * M - 3) + 0.046 * Degree.sin(2 * jupiter.M - 6 * M - 69) + 0.014 * Degree.sin(jupiter.M - 3 * M + 32)
 
         // For Saturn: also addHours these terms to the latitude:
-        val lat_corr = (-0.020 * Degree.cosines(2 * jupiter.M - 4 * M - 2)
-                + 0.018 * Degree.sinus(2 * jupiter.M - 6 * M - 49))
+        val lat_corr = (-0.020 * Degree.cos(2 * jupiter.M - 4 * M - 2)
+                + 0.018 * Degree.sin(2 * jupiter.M - 6 * M - 49))
         longitude += lon_corr
         latitude += lat_corr
     }
 
     override fun calculateMagnitude() {
-        val B = Degree.arcSin(Degree.sinus(latitude) * Degree.cosines(ir) - Degree.cosines(latitude) * Degree.sinus(ir) * Degree.sinus(longitude - Nr))
-        val ringMagn = -2.6 * Degree.sinus(Math.abs(B)) + 1.2 * Math.pow(Degree.sinus(B), 2.0)
+        val B = Degree.arcSin(Degree.sin(latitude) * Degree.cos(ir) - Degree.cos(latitude) * Degree.sin(ir) * Degree.sin(longitude - Nr))
+        val ringMagn = -2.6 * Degree.sin(Math.abs(B)) + 1.2 * Math.pow(Degree.sin(B), 2.0)
         magn = -9.0 + 5 * Math.log10(mr * R) + 0.044 * FV + ringMagn
     }
 

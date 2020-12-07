@@ -15,16 +15,12 @@ interface IMoment {
      * @param timeInMillis UTC in milliseconds
      * @return a new moment instance
      */
-    fun forUTC(timeInMillis: Long): IMoment {
-        return Moment(city, UTC(timeInMillis))
-    }
+    fun forUTC(timeInMillis: Long): IMoment
 
     /**
      * Keep current location and timezone, but set a new time
      * @param utc UTC
      * @return a new moment instance
      */
-    fun forUTC(newUtc: UTC): IMoment {
-        return Moment(city, newUtc)
-    }
+    fun forUTC(newUtc: UTC): IMoment
 }

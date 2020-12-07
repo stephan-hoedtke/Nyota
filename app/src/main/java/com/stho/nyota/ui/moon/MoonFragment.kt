@@ -1,8 +1,11 @@
 package com.stho.nyota.ui.moon
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
+import android.view.View.OnTouchListener
 import android.view.ViewGroup
 import androidx.core.os.bundleOf
 import androidx.navigation.fragment.findNavController
@@ -15,9 +18,9 @@ import com.stho.nyota.sky.universe.IElement
 import com.stho.nyota.sky.universe.Moon
 import com.stho.nyota.sky.utilities.Formatter
 import com.stho.nyota.sky.utilities.Moment
+import com.stho.nyota.sky.utilities.UTC
+import kotlin.math.abs
 
-
-// TODO: age view with touch events
 
 class MoonFragment : AbstractElementFragment() {
 
@@ -33,6 +36,7 @@ class MoonFragment : AbstractElementFragment() {
         viewModel = createViewModel(MoonViewModel::class.java)
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         bindingReference = FragmentMoonBinding.inflate(inflater, container, false)
 
@@ -44,7 +48,35 @@ class MoonFragment : AbstractElementFragment() {
         binding.timeIntervalFooter.buttonNext.setOnClickListener { viewModel.onNext() }
         binding.timeIntervalFooter.buttonPrevious.setOnClickListener { viewModel.onPrevious() }
         binding.timeIntervalFooter.interval.setOnClickListener { onPickInterval() }
-        // TODO: react on touch events on binding.age...
+
+        // TODO: solve the annotation issue with accessibility (I do not understand yet, what to do)
+        binding.age.setOnTouchListener(@SuppressLint("ClickableViewAccessibility")
+        object : OnTouchListener {
+            private var startX = 0f
+            private var previousX = 0f
+
+            override fun onTouch(v: View, event: MotionEvent): Boolean {
+                when (event.action) {
+                    MotionEvent.ACTION_DOWN -> startX = event.x
+                    MotionEvent.ACTION_MOVE -> viewModel.addHours(hoursToMove(event))
+                    MotionEvent.ACTION_UP -> if (isJustAClickOnlyNotAMove(event)) {
+                            when {
+                                event.x < 0.4 * v.width -> viewModel.previousFullMoon()
+                                event.x > 0.6 * v.width -> viewModel.nextFullMoon()
+                                else -> viewModel.forNow()
+                            }
+                        }
+                }
+                previousX = event.x
+                return true
+            }
+
+            private fun isJustAClickOnlyNotAMove(event: MotionEvent) =
+                abs(event.x - startX) < 3.0
+
+            private fun hoursToMove(event: MotionEvent) =
+                (event.x - previousX).toDouble()
+        })
 
         return binding.root
     }
@@ -68,12 +100,16 @@ class MoonFragment : AbstractElementFragment() {
     }
 
     private fun updateMoon(moment: Moment, moon: Moon) {
+
         basicsAdapter.updateProperties(moon.getBasics(moment))
         detailsAdapter.updateProperties(moon.getDetails(moment))
+
         bind(viewModel.moment, moon)
     }
 
     private fun bind(moment: Moment, moon: Moon) {
+
+        binding.timeVisibilityOverlay.currentTime.text = toLocalTimeString(moment)
         binding.timeVisibilityOverlay.currentVisibility.setImageResource(moon.visibility)
         binding.image.setPhase(moon)
         binding.age.setAge(moon)
@@ -81,6 +117,7 @@ class MoonFragment : AbstractElementFragment() {
         binding.prevNewMoon.text = Formatter.toString(moon.prevNewMoon!!, moment.timeZone, Formatter.TimeFormat.DATETIME)
         binding.fullMoon.text = Formatter.toString(moon.fullMoon!!, moment.timeZone, Formatter.TimeFormat.DATETIME)
         binding.nextNewMoon.text = Formatter.toString(moon.nextNewMoon!!, moment.timeZone, Formatter.TimeFormat.DATETIME)
+
         updateActionBar(moon.name, toLocalDateString(moment))
     }
 

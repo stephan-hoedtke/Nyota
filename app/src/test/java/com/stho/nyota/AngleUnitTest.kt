@@ -1,6 +1,7 @@
 package com.stho.nyota
 
 import com.stho.nyota.sky.utilities.Angle
+import com.stho.nyota.sky.utilities.Orientation
 import org.junit.Test
 
 import org.junit.Assert.*
@@ -33,7 +34,10 @@ class AngleUnitTest {
 
     private fun angle_normalizeTo180_isCorrect(a: Double, expected: Double) {
         val actual = Angle.normalizeTo180(a)
-        assertEquals(expected, actual, 0.000001)
+        assertEquals(expected, actual, DELTA)
     }
 
+    companion object {
+        private const val DELTA: Double = 0.00000001
+    }
 }

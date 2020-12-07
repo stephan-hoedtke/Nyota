@@ -38,9 +38,8 @@ class City internal constructor(var name: String, var location: Location, var ti
     val nameEx: String
         get() = if (isAutomatic) "$name*" else name
 
-    override fun toString(): String {
-        return "$name $location $timeZone"
-    }
+    override fun toString(): String =
+        "$name $location $timeZone"
 
     val imageId: Int by lazy {
         when {

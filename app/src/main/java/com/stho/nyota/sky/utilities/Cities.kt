@@ -15,7 +15,9 @@ class Cities {
         private set
 
     fun addAll(collection: Collection<City>) {
-        collection.forEach { add(it) }
+        for (city in collection) {
+            add(city)
+        }
     }
 
     fun add(city: City) {
@@ -37,12 +39,11 @@ class Cities {
     operator fun get(cityName: String): City? =
         map[cityName]
 
-    fun exists(cityName: String?): Boolean {
-        return if (cityName != null)
+    fun exists(cityName: String?): Boolean =
+        if (cityName != null)
             map.containsKey(cityName)
         else
             false
-    }
 
     fun findCityByIndex(index: Int): City? =
         if (0 <= index && index < array.size)
@@ -53,12 +54,11 @@ class Cities {
     fun findCityById(id: Long): City? =
         map.values.firstOrNull { it.id == id }
 
-    fun findCityByName(cityName: String?): City? {
-        return if (cityName != null)
+    fun findCityByName(cityName: String?): City? =
+        if (cityName != null)
             map[cityName]
         else
             null
-    }
 
     fun indexOf(city: City): Int =
         array.indexOf(city)

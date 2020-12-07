@@ -3,8 +3,8 @@ package com.stho.nyota.sky.universe
 import com.stho.nyota.sky.utilities.*
 import com.stho.nyota.sky.utilities.Degree
 import com.stho.nyota.sky.utilities.Degree.Companion.arcTan2
-import com.stho.nyota.sky.utilities.Degree.Companion.cosines
-import com.stho.nyota.sky.utilities.Degree.Companion.sinus
+import com.stho.nyota.sky.utilities.Degree.Companion.cos
+import com.stho.nyota.sky.utilities.Degree.Companion.sin
 import com.stho.nyota.sky.utilities.JulianDay.toUTC
 import kotlin.math.abs
 import kotlin.math.sign
@@ -51,20 +51,20 @@ class Moon : AbstractSolarSystemElement() {
         val F = Lm - N // Argument of latitude for the Moon
 
         // Add these terms to the Moon's longitude (degrees):
-        val lon_corr = (((-1.274 * sinus(M - 2 * D) // (the Evection)
-                + 0.658 * sinus(2 * D) // (the Variation)
-                ) - 0.186 * sinus(sun.M) // (the Yearly Equation)
-                - 0.059 * sinus(2 * M - 2 * D) - 0.057 * sinus(M - 2 * D + sun.M)
-                ) + 0.053 * sinus(M + 2 * D) + 0.046 * sinus(2 * D - sun.M) + 0.041 * sinus(M - sun.M) - 0.035 * sinus(D) // (the Parallactic Equation)
-                - 0.031 * sinus(M + sun.M) - 0.015 * sinus(2 * F - 2 * D)
-                + 0.011 * sinus(M - 4 * D))
+        val lon_corr = (((-1.274 * sin(M - 2 * D) // (the Evection)
+                + 0.658 * sin(2 * D) // (the Variation)
+                ) - 0.186 * sin(sun.M) // (the Yearly Equation)
+                - 0.059 * sin(2 * M - 2 * D) - 0.057 * sin(M - 2 * D + sun.M)
+                ) + 0.053 * sin(M + 2 * D) + 0.046 * sin(2 * D - sun.M) + 0.041 * sin(M - sun.M) - 0.035 * sin(D) // (the Parallactic Equation)
+                - 0.031 * sin(M + sun.M) - 0.015 * sin(2 * F - 2 * D)
+                + 0.011 * sin(M - 4 * D))
 
         // Add these terms to the Moon's latitude (degrees):
-        val lat_corr = -0.173 * sinus(F - 2 * D) - 0.055 * sinus(M - F - 2 * D) - 0.046 * sinus(M + F - 2 * D) + 0.033 * sinus(F + 2 * D) + 0.017 * sinus(2 * M + F)
+        val lat_corr = -0.173 * sin(F - 2 * D) - 0.055 * sin(M - F - 2 * D) - 0.046 * sin(M + F - 2 * D) + 0.033 * sin(F + 2 * D) + 0.017 * sin(2 * M + F)
 
         // Add these terms to the Moon's distance (Earth radii):
-        val r_corr = (-0.58 * cosines(M - 2 * D)
-                - 0.46 * cosines(2 * D))
+        val r_corr = (-0.58 * cos(M - 2 * D)
+                - 0.46 * cos(2 * D))
         longitude = Degree.normalize(longitude + lon_corr)
         latitude = Degree.normalizeTo180(latitude + lat_corr)
         mr += r_corr
@@ -75,13 +75,13 @@ class Moon : AbstractSolarSystemElement() {
         parallax = Degree.arcSin(1 / mr)
         diameter = 31.2283333333333 / mr
         val latitude = moment.location.latitude
-        val geocentricLatitude = latitude - 0.1924 * sinus(2 * latitude)
-        val rho = 0.99833 + 0.00167 * cosines(2 * latitude)
+        val geocentricLatitude = latitude - 0.1924 * sin(2 * latitude)
+        val rho = 0.99833 + 0.00167 * cos(2 * latitude)
         val HA = Degree.normalize(15 * moment.lst - RA)
-        val g = arcTan2(Degree.tangent(geocentricLatitude), cosines(HA))
+        val g = arcTan2(Degree.tan(geocentricLatitude), cos(HA))
         if (Math.abs(geocentricLatitude) > 0.001 && Math.abs(Decl) > 0.001) {
-            val RA_corr = -parallax * rho * cosines(geocentricLatitude) * sinus(HA) / cosines(Decl)
-            val Decl_corr = -parallax * rho * sinus(geocentricLatitude) * sinus(g - Decl) / sinus(g)
+            val RA_corr = -parallax * rho * cos(geocentricLatitude) * sin(HA) / cos(Decl)
+            val Decl_corr = -parallax * rho * sin(geocentricLatitude) * sin(g - Decl) / sin(g)
             RA = RA + RA_corr
             Decl = Decl + Decl_corr
         }
@@ -96,7 +96,6 @@ class Moon : AbstractSolarSystemElement() {
         val cos_LHA = getHourAngle(moment.location.latitude)
         position!!.inSouth = moment.utc.setHours(inSouth)
         position!!.culmination = getHeightFor(moment.forUTC(position!!.inSouth!!))
-
 
         // cos_LHA < 0 ---> always up and visible
         // cos_LHA > 0 ---> always down
@@ -179,7 +178,7 @@ class Moon : AbstractSolarSystemElement() {
 
     // The cos of the hour angle for sunrise and sunset
     private fun getHourAngle(observerLatitude: Double): Double {
-        return (sinus(H0()) - sinus(observerLatitude) * sinus(Decl)) / (cosines(observerLatitude) * cosines(Decl))
+        return (sin(H0()) - sin(observerLatitude) * sin(Decl)) / (cos(observerLatitude) * cos(Decl))
     }
 
     private enum class Phase {
@@ -188,7 +187,7 @@ class Moon : AbstractSolarSystemElement() {
 
     // Calculate the time (in UTC) when the sun will be in south at this position (longitude is defined by LST)
     private fun getTimeInSouth(moment: IMoment): Double {
-        return Hour.normalize(RA / 15 - moment.utc.gMST0 - moment.location.longitude / 15)
+        return Hour.normalize(RA / 15 - moment.utc.GMST0 - moment.location.longitude / 15)
     }
 
     // calculate RA and Decl for the moon at this time
@@ -213,8 +212,8 @@ class Moon : AbstractSolarSystemElement() {
         val r = Earth.RADIUS
         val D = sun.distanceInKm
         val d = distanceInKm
-        val x = d * cosines(FV)
-        val y = d * sinus(FV)
+        val x = d * cos(FV)
+        val y = d * sin(FV)
         if (FV < 45) {
             nuclearShadow = r - (R - r) * x / D
             halfShadow = (R + r) * (D + x) / D - R
@@ -335,36 +334,36 @@ class Moon : AbstractSolarSystemElement() {
             // JDE0=JDE0-58.184/(24*60*60);
             if (phase == Phase.NEW) {
                 JDE = (((((JDE
-                        - 0.40720 * sinus(MP)
-                        ) + 0.17241 * E * sinus(M) + 0.01608 * sinus(2 * MP) + 0.01039 * sinus(2 * F) + 0.00739 * E * sinus(MP - M)
-                        - 0.00514 * E * sinus(MP + M)
-                        + 0.00208 * E * E * sinus(2 * M)
-                        ) - 0.00111 * sinus(MP - 2 * F) - 0.00057 * sinus(MP + 2 * F)
-                        + 0.00056 * E * sinus(2 * MP + M)
-                        - 0.00042 * sinus(3 * MP)
-                        ) + 0.00042 * E * sinus(M + 2 * F) + 0.00038 * E * sinus(M - 2 * F) - 0.00024 * E * sinus(2 * MP - M) - 0.00017 * sinus(Omega) - 0.00007 * sinus(MP + 2 * M) + 0.00004 * sinus(2 * MP - 2 * F) + 0.00004 * sinus(3 * M) + 0.00003 * sinus(MP + M - 2 * F) + 0.00003 * sinus(2 * MP + 2 * F)
-                        - 0.00003 * sinus(MP + M + 2 * F)
-                        + 0.00003 * sinus(MP - M + 2 * F)
-                        ) - 0.00002 * sinus(MP - M - 2 * F) - 0.00002 * sinus(3 * MP + M)
-                        + 0.00002 * sinus(4 * MP))
+                        - 0.40720 * sin(MP)
+                        ) + 0.17241 * E * sin(M) + 0.01608 * sin(2 * MP) + 0.01039 * sin(2 * F) + 0.00739 * E * sin(MP - M)
+                        - 0.00514 * E * sin(MP + M)
+                        + 0.00208 * E * E * sin(2 * M)
+                        ) - 0.00111 * sin(MP - 2 * F) - 0.00057 * sin(MP + 2 * F)
+                        + 0.00056 * E * sin(2 * MP + M)
+                        - 0.00042 * sin(3 * MP)
+                        ) + 0.00042 * E * sin(M + 2 * F) + 0.00038 * E * sin(M - 2 * F) - 0.00024 * E * sin(2 * MP - M) - 0.00017 * sin(Omega) - 0.00007 * sin(MP + 2 * M) + 0.00004 * sin(2 * MP - 2 * F) + 0.00004 * sin(3 * M) + 0.00003 * sin(MP + M - 2 * F) + 0.00003 * sin(2 * MP + 2 * F)
+                        - 0.00003 * sin(MP + M + 2 * F)
+                        + 0.00003 * sin(MP - M + 2 * F)
+                        ) - 0.00002 * sin(MP - M - 2 * F) - 0.00002 * sin(3 * MP + M)
+                        + 0.00002 * sin(4 * MP))
             }
             if (phase == Phase.FULL) {
                 JDE = (((((JDE
-                        - 0.40614 * sinus(MP)
-                        ) + 0.17302 * E * sinus(M) + 0.01614 * sinus(2 * MP) + 0.01043 * sinus(2 * F) + 0.00734 * E * sinus(MP - M)
-                        - 0.00515 * E * sinus(MP + M)
-                        + 0.00209 * E * E * sinus(2 * M)
-                        ) - 0.00111 * sinus(MP - 2 * F) - 0.00057 * sinus(MP + 2 * F)
-                        + 0.00056 * E * sinus(2 * MP + M)
-                        - 0.00042 * sinus(3 * MP)
-                        ) + 0.00042 * E * sinus(M + 2 * F) + 0.00038 * E * sinus(M - 2 * F) - 0.00024 * E * sinus(2 * MP - M) - 0.00017 * sinus(Omega) - 0.00007 * sinus(MP + 2 * M) + 0.00004 * sinus(2 * MP - 2 * F) + 0.00004 * sinus(3 * M) + 0.00003 * sinus(MP + M - 2 * F) + 0.00003 * sinus(2 * MP + 2 * F)
-                        - 0.00003 * sinus(MP + M + 2 * F)
-                        + 0.00003 * sinus(MP - M + 2 * F)
-                        ) - 0.00002 * sinus(MP - M - 2 * F) - 0.00002 * sinus(3 * MP + M)
-                        + 0.00002 * sinus(4 * MP))
+                        - 0.40614 * sin(MP)
+                        ) + 0.17302 * E * sin(M) + 0.01614 * sin(2 * MP) + 0.01043 * sin(2 * F) + 0.00734 * E * sin(MP - M)
+                        - 0.00515 * E * sin(MP + M)
+                        + 0.00209 * E * E * sin(2 * M)
+                        ) - 0.00111 * sin(MP - 2 * F) - 0.00057 * sin(MP + 2 * F)
+                        + 0.00056 * E * sin(2 * MP + M)
+                        - 0.00042 * sin(3 * MP)
+                        ) + 0.00042 * E * sin(M + 2 * F) + 0.00038 * E * sin(M - 2 * F) - 0.00024 * E * sin(2 * MP - M) - 0.00017 * sin(Omega) - 0.00007 * sin(MP + 2 * M) + 0.00004 * sin(2 * MP - 2 * F) + 0.00004 * sin(3 * M) + 0.00003 * sin(MP + M - 2 * F) + 0.00003 * sin(2 * MP + 2 * F)
+                        - 0.00003 * sin(MP + M + 2 * F)
+                        + 0.00003 * sin(MP - M + 2 * F)
+                        ) - 0.00002 * sin(MP - M - 2 * F) - 0.00002 * sin(3 * MP + M)
+                        + 0.00002 * sin(4 * MP))
             }
             JDE = (JDE
-                    + 0.000325 * sinus(A1) + 0.000165 * sinus(A2) + 0.000164 * sinus(A3) + 0.000126 * sinus(A4) + 0.000110 * sinus(A5) + 0.000062 * sinus(A6) + 0.000060 * sinus(A7) + 0.000056 * sinus(A8) + 0.000047 * sinus(A9) + 0.000042 * sinus(A10) + 0.000040 * sinus(A11) + 0.000037 * sinus(A12) + 0.000035 * sinus(A13) + 0.000023 * sinus(A14))
+                    + 0.000325 * sin(A1) + 0.000165 * sin(A2) + 0.000164 * sin(A3) + 0.000126 * sin(A4) + 0.000110 * sin(A5) + 0.000062 * sin(A6) + 0.000060 * sin(A7) + 0.000056 * sin(A8) + 0.000047 * sin(A9) + 0.000042 * sin(A10) + 0.000040 * sin(A11) + 0.000037 * sin(A12) + 0.000035 * sin(A13) + 0.000023 * sin(A14))
             return JDE
         }
     }

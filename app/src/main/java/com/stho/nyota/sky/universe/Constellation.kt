@@ -15,13 +15,19 @@ class Constellation internal constructor(override val name: String, override val
     override val largeImageId: Int
         get() = imageId
 
-    fun register(vararg stars: Star): Constellation {
-        for (star in stars) {
-            if (!this.stars.contains(star)) this.stars.add(star)
+    fun register(vararg newStars: Star): Constellation {
+        for (star in newStars) {
+            if (!stars.contains(star)) {
+                stars.add(star)
+            }
         }
-        if (stars.size > 1) {
-            lines.add(stars)
+        if (newStars.size > 1) {
+            lines.add(newStars)
         }
+        return this
+    }
+
+    fun build(): Constellation {
         calculateAveragePosition()
         return this
     }

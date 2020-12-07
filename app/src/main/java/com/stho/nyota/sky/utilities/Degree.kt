@@ -80,28 +80,28 @@ class Degree {
         /* convert from radian to degree */
         internal const val RADEG = 180.0 / Math.PI
 
-        fun sinus(degree: Double): Double {
-            return sin(degree * DEGRAD)
+        fun sin(degree: Double): Double {
+            return kotlin.math.sin(degree * DEGRAD)
         }
 
-        fun tangent(degree: Double): Double {
-            return tan(degree * DEGRAD)
+        fun tan(degree: Double): Double {
+            return kotlin.math.tan(degree * DEGRAD)
         }
 
-        fun cosines(degree: Double): Double {
-            return cos(degree * DEGRAD)
+        fun cos(degree: Double): Double {
+            return kotlin.math.cos(degree * DEGRAD)
         }
 
         fun arcTan2(y: Double, x: Double): Double {
-            return RADEG * atan2(y, x)
+            return RADEG * kotlin.math.atan2(y, x)
         }
 
         fun arcSin(x: Double): Double {
-            return RADEG * asin(x)
+            return RADEG * kotlin.math.asin(x)
         }
 
         fun arcCos(x: Double): Double {
-            return RADEG * acos(x)
+            return RADEG * kotlin.math.acos(x)
         }
 
         fun normalize(degree: Double): Double {
@@ -110,7 +110,7 @@ class Degree {
             return a
         }
 
-        public fun normalizeTo180(degree: Double): Double {
+        fun normalizeTo180(degree: Double): Double {
             var a = Math.IEEEremainder(degree, 360.0)
             if (a > 180) a -= 360.0
             if (a < -180) a += 360.0

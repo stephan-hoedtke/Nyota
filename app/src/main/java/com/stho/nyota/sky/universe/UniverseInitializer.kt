@@ -95,6 +95,7 @@ internal class UniverseInitializer(universe: Universe) : AbstractUniverseInitial
             .register(alpha, gamma)
             .register(beta, delta)
             .register(epsilon)
+            .build()
     }
 
     // https://en.wikipedia.org/wiki/Triangulum_Australe
@@ -105,6 +106,7 @@ internal class UniverseInitializer(universe: Universe) : AbstractUniverseInitial
         val epsilon = newStar("Epsilon Trianguli Australis", EPSILON, "15h 36m 43.22223", "−66° 19′ 01.3334", 4.11)
         newConstellation("Triangulum Australe", com.stho.nyota.R.drawable.constellation_triangulum_australe)
             .register(alpha, gamma, epsilon, beta, alpha)
+            .build()
     }
 
     // https://en.wikipedia.org/wiki/Saiph
@@ -122,6 +124,7 @@ internal class UniverseInitializer(universe: Universe) : AbstractUniverseInitial
             .register(kappa, zeta, alpha, gamma, delta, beta)
             .register(zeta, epsilon, delta)
             .register(lambda)
+            .build()
     }
 
     // https://en.wikipedia.org/wiki/Ursa_Major
@@ -135,6 +138,7 @@ internal class UniverseInitializer(universe: Universe) : AbstractUniverseInitial
         val alpha = newStar("Dubhe", ALPHA, "11h 03m 43.67152", "+61° 45′ 03.7249", 1.79)
         newConstellation("Urs Major", com.stho.nyota.R.drawable.constellation_urs_major)
             .register(eta, zeta, epsilon, delta, gamma, beta, alpha, delta)
+            .build()
     }
 
     // https://en.wikipedia.org/wiki/Ursa_Minor
@@ -148,6 +152,7 @@ internal class UniverseInitializer(universe: Universe) : AbstractUniverseInitial
         val eta = newStar("Anwar Al Farkadain", ETA, "16h 17m 30.28696", "+75° 45′ 19.1885", 4.95)
         newConstellation("Urs Minor", com.stho.nyota.R.drawable.constellation_urs_minor)
             .register(polaris!!, delta, epsilon, zeta, beta, gamma, eta, zeta)
+            .build()
     }
 
     private fun registerCassiopeiae() {
@@ -159,7 +164,8 @@ internal class UniverseInitializer(universe: Universe) : AbstractUniverseInitial
         val delta = newStar("Ruchbah", DELTA, "01h 25m 48.95147", "+60° 14′ 07.0225", 2.68)
         val epsilon = newStar("Segin", EPSILON, "01h 54m 23.72567", "+63° 40′ 12.3628", 3.37)
         newConstellation("Cassiopeia", com.stho.nyota.R.drawable.constellation_cassiopeia)
-                .register(beta, alpha, gamma, delta, epsilon)
+            .register(beta, alpha, gamma, delta, epsilon)
+            .build()
     }
 
     // seven sisters,
@@ -184,6 +190,7 @@ internal class UniverseInitializer(universe: Universe) : AbstractUniverseInitial
             .register(celaeno)
             .register(pleione)
             .register(sterope)
+            .build()
     }
 
     // https://en.wikipedia.org/wiki/Pegasus_(constellation)
@@ -210,6 +217,7 @@ internal class UniverseInitializer(universe: Universe) : AbstractUniverseInitial
             .register(alpha, beta)
             .register(tau)
             .register(upsilon)
+            .build()
     }
 
     // https://en.wikipedia.org/wiki/Andromeda_(constellation)
@@ -228,6 +236,7 @@ internal class UniverseInitializer(universe: Universe) : AbstractUniverseInitial
         newConstellation("Andromeda", com.stho.nyota.R.drawable.constellation_andromeda)
             .register(andromeda, delta, beta, gamma)
             .register(eta, zeta, epsilon, delta, pi, iota, kappa, lambda)
+            .build()
     }
 
     // https://en.wikipedia.org/wiki/List_of_stars_in_Aquila
@@ -245,6 +254,7 @@ internal class UniverseInitializer(universe: Universe) : AbstractUniverseInitial
             .register(altair, zeta, delta, altair, theta, eta, delta, lambda)
             .register(beta)
             .register(gamma)
+            .build()
     }
 
     // Schwan (Cygnus)
@@ -264,6 +274,7 @@ internal class UniverseInitializer(universe: Universe) : AbstractUniverseInitial
             .register(alpha, gamma, eta, beta)
             .register(zeta, epsilon, gamma, delta, iota, kappa)
             .register(beta)
+            .build()
     }
 
     // Eidechse, Lacerta
@@ -290,6 +301,7 @@ internal class UniverseInitializer(universe: Universe) : AbstractUniverseInitial
             .register(beta, alpha, _4, _5, _2, _6, xx, _1)
             .register(_6, _11, _5)
             .register()
+            .build()
     }
 
     // Ara, Altar, southern
@@ -305,6 +317,7 @@ internal class UniverseInitializer(universe: Universe) : AbstractUniverseInitial
         val eta = newStar("Eta Arae", ETA, "16h 49m 47.15653", "–59° 02′ 28.9575", 3.76)
         newConstellation("Ara", com.stho.nyota.R.drawable.constellation_ara)
             .register(alpha, beta, gamma, delta, eta, zeta, epsilon, alpha)
+            .build()
     }
 
     // Wasserschlange (hydra)
@@ -342,6 +355,7 @@ internal class UniverseInitializer(universe: Universe) : AbstractUniverseInitial
             .register(omicron)
             .register(psi)
             .register(beta)
+            .build()
     }
 
     // Widder, Aries
@@ -364,6 +378,7 @@ internal class UniverseInitializer(universe: Universe) : AbstractUniverseInitial
             .register(epsilon, _41, alpha, beta, gamma)
             .register(delta)
             .register(zeta)
+            .build()
     }
 
     // Stier, Taurus
@@ -391,6 +406,7 @@ internal class UniverseInitializer(universe: Universe) : AbstractUniverseInitial
             .register(zeta, alpha, theta, gamma, delta, epsilon, beta)
             .register(gamma, lambda, xi, omicron)
             .register(tau)
+            .build()
     }
 
     // Zwilling, Gemini
@@ -425,6 +441,7 @@ internal class UniverseInitializer(universe: Universe) : AbstractUniverseInitial
             .register(delta, lambda, xi)
             .register(alpha!!, tau, epsilon, nu)
             .register(epsilon, mu, eta)
+            .build()
     }
 
     // Krebs, Cancer
@@ -446,6 +463,7 @@ internal class UniverseInitializer(universe: Universe) : AbstractUniverseInitial
             .register(iota, gamma, delta, beta)
             .register(delta, alpha)
             .register(epsilon)
+            .build()
     }
 
     // Löwe, Leo
@@ -482,6 +500,7 @@ internal class UniverseInitializer(universe: Universe) : AbstractUniverseInitial
             .register(kappa)
             .register(omicron)
             .register(rho)
+            .build()
     }
 
     // Jungfrau, Virgo
@@ -506,6 +525,7 @@ internal class UniverseInitializer(universe: Universe) : AbstractUniverseInitial
             .register(spica, theta, gamma, eta, beta, nu)
             .register(epsilon, delta, gamma)
             .register(zeta, theta)
+            .build()
     }
 
     // Waage (Libra)
@@ -528,6 +548,7 @@ internal class UniverseInitializer(universe: Universe) : AbstractUniverseInitial
             .register(sigma, alpha, beta, gamma, tau, upsilon)
             .register(alpha, gamma)
             .register(delta)
+            .build()
     }
 
     // Skorpion (Scorpius)
@@ -564,6 +585,7 @@ internal class UniverseInitializer(universe: Universe) : AbstractUniverseInitial
             .register(sigma, rho)
             .register(sigma, antares, tau, epsilon, mu, zeta, eta, theta, iota, kappa, lambda)
             .register(kappa, upsilon)
+            .build()
     }
 
     // Schütze / Archer / "Teapot" (Sagittarius)
@@ -590,10 +612,12 @@ internal class UniverseInitializer(universe: Universe) : AbstractUniverseInitial
         val mu = newStar("Mu Sagittarii", MU, "18h 13m 45.8", "−21° 03′ 32", 3.85)
         newConstellation("Teapot", com.stho.nyota.R.drawable.constellation_teapot)
             .register(epsilon, delta, gamma, epsilon, zeta, phi, delta, lambda, phi, sigma, tau, zeta)
+            .build()
         newConstellation("Sagittarius", com.stho.nyota.R.drawable.constellation_sagittarius)
             .register(eta, epsilon, delta, lambda, mu)
             .register(lambda, phi, sigma)
             .register(xi, pi, sigma, tau, zeta)
+            .build()
     }
 
     // Steinbock, The Sea-Goat (englisch)
@@ -621,6 +645,7 @@ internal class UniverseInitializer(universe: Universe) : AbstractUniverseInitial
         newConstellation("Capricornus", com.stho.nyota.R.drawable.constellation_capricornus)
             .register(alpha, beta, psi, omega, zeta, epsilon, delta, gamma, theta, alpha)
             .register(omicron)
+            .build()
     }
 
     // Wassermann
@@ -653,6 +678,7 @@ internal class UniverseInitializer(universe: Universe) : AbstractUniverseInitial
             .register(zeta, gamma, alpha)
             .register(beta, iota)
             .register(alpha, theta, lambda, tau, delta, psi, chi, phi, lambda)
+            .build()
     }
 
     // Fische (Pisces)
@@ -694,6 +720,7 @@ internal class UniverseInitializer(universe: Universe) : AbstractUniverseInitial
             .register(sigma)
             .register(chi)
             .register(psi)
+            .build()
     }
 
     // https://en.wikipedia.org/wiki/Auriga_(constellation)
@@ -710,6 +737,7 @@ internal class UniverseInitializer(universe: Universe) : AbstractUniverseInitial
             .register(iota, epsilon, alpha!!, beta, theta, iota)
             .register(eta)
             .register(delta)
+            .build()
     }
 
     private fun registerPerseus() {
@@ -745,6 +773,7 @@ internal class UniverseInitializer(universe: Universe) : AbstractUniverseInitial
         val epsilon = newStar("Epsilon Pavonis", EPSILON, "20h 00m 35.39", "−72° 54′ 36.7", 3.97)
         newConstellation("Pavo", com.stho.nyota.R.drawable.constellation_pavo)
             .register(alpha, beta, delta, lambda, eta, zeta, epsilon, beta)
+            .build()
     }
 
     // https://de.wikipedia.org/wiki/Eridanus_(Sternbild)

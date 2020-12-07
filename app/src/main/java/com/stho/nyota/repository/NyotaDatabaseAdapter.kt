@@ -34,7 +34,9 @@ class NyotaDatabaseAdapter(private val db: SQLiteDatabase) {
 
     fun saveCities(cities: Collection<City>) {
         val contract = CitiesContract(db)
-        cities.forEach { contract.write(it) }
+        for (city in cities) {
+            contract.write(city)
+        }
     }
 
     fun saveCity(city: City) {
@@ -49,7 +51,9 @@ class NyotaDatabaseAdapter(private val db: SQLiteDatabase) {
 
     fun saveSatellites(satellites: Collection<Satellite>) {
         val contract = SatellitesContract(db)
-        satellites.forEach { contract.write(it) }
+        for (satellite in satellites) {
+            contract.write(satellite)
+        }
     }
 
     fun saveSatellite(satellite: Satellite) {
@@ -64,7 +68,9 @@ class NyotaDatabaseAdapter(private val db: SQLiteDatabase) {
 
     fun saveTargets(targets: Collection<Target>) {
         val contract = TargetContract(db)
-        targets.forEach { contract.write(it) }
+        for (target in targets) {
+            contract.write(target)
+        }
     }
 
     fun saveTarget(target: Target) {

@@ -29,7 +29,7 @@ class FinderViewModel(application: Application, repository: Repository, val elem
     val orientationLD: LiveData<Orientation>
         get() = orientationLiveData
 
-    fun updateOrientation(orientation: Orientation) =
+    fun updateDeviceOrientation(orientation: Orientation) =
         orientationLiveData.postValue(orientation)
 
     fun rotate(delta: Double) {

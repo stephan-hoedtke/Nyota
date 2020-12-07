@@ -10,7 +10,9 @@ class Constellations {
         get() = map.size
 
     fun addAll(collection: Collection<Constellation>) {
-        collection.forEach { add(it) }
+        for (constellation in collection) {
+            add(constellation)
+        }
     }
 
     fun add(constellation: Constellation) {

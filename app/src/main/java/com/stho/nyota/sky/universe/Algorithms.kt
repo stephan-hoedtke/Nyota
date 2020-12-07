@@ -23,7 +23,8 @@ object Algorithms {
         val H = utc[Calendar.HOUR_OF_DAY]
         val M = utc[Calendar.MINUTE]
         val S = utc[Calendar.SECOND]
-        return H + M / 60.0 + S / 3600.0
+        val X = utc[Calendar.MILLISECOND]
+        return H + M / 60.0 + S / 3600.0 + X / 3600000.0
     }
 
     /**
@@ -33,7 +34,7 @@ object Algorithms {
      */
     @JvmStatic
     fun UT(JD: Double): Double {
-        return 24.0 * getDecimals(JD - 0.5)
+        return 24.0 * decimals(JD - 0.5)
     }
 
     /**
@@ -46,15 +47,14 @@ object Algorithms {
         return truncate(JD - 0.5) + 0.5
     }
 
+    // TODO: remove @JvmStatic
     @JvmStatic
-    fun truncate(value: Double): Double {
-        return if (value >= 0) Math.floor(value) else -Math.floor(Math.abs(value))
-    }
+    fun truncate(value: Double): Double =
+        kotlin.math.truncate(value)
 
     @JvmStatic
-    fun getDecimals(value: Double): Double {
-        return if (value >= 0) value - Math.floor(value) else value + Math.floor(Math.abs(value))
-    }
+    fun decimals(value: Double): Double =
+        value - truncate(value)
 
     /**
      * Sidereal Time at Greenwich /saɪˈdɪə.ri.əl ˌtaɪm
@@ -108,7 +108,7 @@ object Algorithms {
     /// <returns>Greenwich Mean Sidereal Time (in hours)</returns>
     private fun GMST_RummelPeters(julianDay: Double): Double {
         val omega = 1.00273790935
-        val UT1 = getDecimals(julianDay - 0.5)
+        val UT1 = decimals(julianDay - 0.5)
         val r = (julianDay - UT1 - 2451545.0) / 36525
         val s = 24110.54841 + r * (8640184.812866 + r * (0.093104 + r * 0.0000062))
         return Hour.normalize(s / SECONDS_PER_HOUR + 24 * UT1 * omega)

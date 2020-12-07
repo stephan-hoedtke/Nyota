@@ -57,7 +57,7 @@ class Repository private constructor() {
 
     val moonLD: LiveData<Moon>
         get() = Transformations.map(momentLiveData) { moment ->
-            universe.updateFor(moment, true).calculateNewFullMoon().solarSystem.moon
+            universe.updateFor(moment, true).solarSystem.moon.also { it.calculateNewFullMoon(moment) }
         }
 
     val cities: List<City>
@@ -162,6 +162,16 @@ class Repository private constructor() {
         }
     }
 
+    internal fun addHours(hours: Double) {
+        try {
+            lock.acquire()
+            addHoursSynchronized(hours)
+        }
+        finally {
+            lock.release()
+        }
+    }
+
     internal fun next(interval: Interval) {
         try {
             lock.acquire()
@@ -221,6 +231,17 @@ class Repository private constructor() {
         }
     }
 
+    internal fun setTime(utc: UTC) {
+        try {
+            lock.acquire()
+            setTimeSynchronized(utc)
+        }
+        finally {
+            lock.release()
+        }
+    }
+
+
     private fun updateAutomaticMomentForNow(location: Location?) {
         var auto = currentAutomaticMomentLiveData.value!!
         if (location != null) {
@@ -239,6 +260,11 @@ class Repository private constructor() {
         if (settings.updateTimeAutomatically) {
             moment = moment.forNow()
         }
+        momentLiveData.postValue(moment);
+    }
+
+    private fun addHoursSynchronized(hours: Double) {
+        val moment: Moment = momentLiveData.value!!.addHours(hours)
         momentLiveData.postValue(moment);
     }
 
@@ -269,6 +295,11 @@ class Repository private constructor() {
 
     private fun setTimeSynchronized(hourOfDay: Int, minute: Int) {
         val moment = momentLiveData.value!!.forThisTime(hourOfDay, minute)
+        momentLiveData.postValue(moment)
+    }
+
+    private fun setTimeSynchronized(utc: UTC) {
+        val moment = momentLiveData.value!!.forUTC(utc)
         momentLiveData.postValue(moment)
     }
 

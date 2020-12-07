@@ -12,7 +12,9 @@ class Targets {
         get() = array.size
 
     fun addAll(collection: Collection<Target>) {
-        collection.forEach { add(it) }
+        for (target in collection) {
+            add(target)
+        }
     }
 
     fun add(target: Target) {

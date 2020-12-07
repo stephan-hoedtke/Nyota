@@ -22,10 +22,11 @@ import java.util.*
 class UTC : ITime {
 
     private val JD: Double
-    override val timeInMillis: Long
     private var gmt: Calendar? = null
 
-    constructor(timeInMillis: Long) {
+    override val timeInMillis: Long
+
+    private constructor(timeInMillis: Long) {
         val utc = createCalendarGMT(timeInMillis)
         this.gmt = utc
         this.JD = JulianDay.fromGMT(utc)
@@ -66,13 +67,16 @@ class UTC : ITime {
     val dayNumber: Double
         get() = JD - 2451543.5
 
-    val gMST0: Double
+    @Suppress("PropertyName")
+    val GMST0: Double
         get() = GMST0(JD)
 
-    val gMST: Double
+    @Suppress("PropertyName")
+    val GMST: Double
         get() = GMST(JD)
 
-    val uT: Double
+    @Suppress("PropertyName")
+    val UT: Double
         get() = UT(JD)
 
     /**
@@ -113,9 +117,8 @@ class UTC : ITime {
         return UTC(timeInMillis - ut.toLong() + millis.toLong(), JD0(JD) + days)
     }
 
-    override fun toString(): String {
-        return Formatter.formatDateTime.format(time) + Formatter.SPACE + "GMT"
-    }
+    override fun toString(): String =
+        Formatter.toString(time, TimeZone.getTimeZone("GMT"), Formatter.TimeFormat.DATETIME_SEC_TIMEZONE)
 
     fun isGreaterThan(that: UTC): Boolean {
         return JD > that.JD
@@ -138,6 +141,10 @@ class UTC : ITime {
         fun forUTC(year: Int, month: Int, day: Int, hour: Int, minute: Int, seconds: Int): UTC {
             val calendar = createCalendarGMT(year, month, day, hour, minute, seconds)
             return UTC(calendar)
+        }
+
+        fun forTimeInMillis(timeInMillis: Long): UTC {
+            return UTC(timeInMillis)
         }
 
         fun forCalendar(calendar: Calendar): UTC {

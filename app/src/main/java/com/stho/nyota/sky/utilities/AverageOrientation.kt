@@ -4,6 +4,7 @@ import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorManager
 
+@Suppress("LocalVariableName")
 class AverageOrientation {
     private val averageAzimuth: IAverage = Average()
     private val averagePitch: IAverage = Average()
@@ -18,16 +19,16 @@ class AverageOrientation {
 
     private val sensorValues = SensorValues()
 
-    val azimuth: Double
+    private val azimuth: Double
         get() = averageAzimuth.currentAngle
 
-    val pitch: Double
+    private val pitch: Double
         get() = averagePitch.currentAngle
 
-    val direction: Double
+    private val direction: Double
         get() = averageDirection.currentAngle
 
-    val roll: Double
+    private val roll: Double
         get() = averageRoll.currentAngle
 
     val orientation: Orientation
@@ -53,7 +54,6 @@ class AverageOrientation {
         SensorManager.getRotationMatrixFromVector(R, sensorValues.rotation.values)
         SensorManager.getOrientation(R, O)
         update(O)
-        // setAzimuth((float)Math.toDegrees(O[0]), Angle.normalizeTo180((float)Math.toDegrees(O[2])));
     }
 
     private fun updateByGravityGeomagnetic() {
@@ -81,16 +81,15 @@ class AverageOrientation {
         }
     }
 
-    override fun toString(): String {
-        return (Angle.toString(azimuth, Angle.AngleType.DEGREE_NORTH_EAST_SOUTH_WEST)
+    override fun toString(): String =
+        (Angle.toString(azimuth, Angle.AngleType.DEGREE_NORTH_EAST_SOUTH_WEST)
                 + Formatter.SPACE
                 + Angle.toString(pitch, Angle.AngleType.ALTITUDE))
-    }
 
-    fun toString(flat: Boolean): String {
-        return (Angle.toString(azimuth, Angle.AngleType.DEGREE_NORTH_EAST_SOUTH_WEST)
+    fun toString(flat: Boolean): String =
+        (Angle.toString(azimuth, Angle.AngleType.DEGREE_NORTH_EAST_SOUTH_WEST)
                 + Formatter.SPACE
                 + Angle.toString(if (flat) direction else pitch, Angle.AngleType.ALTITUDE))
-    }
 }
+
 

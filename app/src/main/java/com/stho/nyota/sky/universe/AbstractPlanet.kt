@@ -1,7 +1,7 @@
 package com.stho.nyota.sky.universe
 
 import com.stho.nyota.sky.utilities.*
-import com.stho.nyota.sky.utilities.Degree.Companion.cosines
+import com.stho.nyota.sky.utilities.Degree.Companion.cos
 
 /**
  * Created by shoedtke on 31.08.2016.
@@ -13,7 +13,7 @@ abstract class AbstractPlanet : AbstractSolarSystemElement() {
     override fun calculatePhase(sun: Sun) {
         elongation = Degree.arcCos((sun.R * sun.R + R * R - mr * mr) / (2 * sun.R * R))
         FV = Degree.arcCos((mr * mr + R * R - sun.R * sun.R) / (2 * mr * R))
-        phase = (1 + cosines(FV)) / 2
+        phase = (1 + cos(FV)) / 2
     }
 
     abstract fun calculateMagnitude()

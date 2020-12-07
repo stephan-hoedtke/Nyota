@@ -31,7 +31,6 @@ class Average : IAverage {
         return getCircularAverage(array, length)
     }
 
-    @Synchronized
     private fun registerNewValue(degree: Double) {
         if (length > 0) {
             pos++
@@ -58,8 +57,8 @@ class Average : IAverage {
             var cos = 0.0
             if (length > 0) {
                 for (i in 0 until length) {
-                    sin += Degree.sinus(array[i])
-                    cos += Degree.cosines(array[i])
+                    sin += Degree.sin(array[i])
+                    cos += Degree.cos(array[i])
                 }
                 sin = sin / length
                 cos = cos / length

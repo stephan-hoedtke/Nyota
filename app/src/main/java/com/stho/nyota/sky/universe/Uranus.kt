@@ -1,7 +1,7 @@
 package com.stho.nyota.sky.universe
 
 import com.stho.nyota.sky.utilities.Degree
-import com.stho.nyota.sky.utilities.Degree.Companion.sinus
+import com.stho.nyota.sky.utilities.Degree.Companion.sin
 import com.stho.nyota.sky.utilities.IMoment
 
 /**
@@ -29,9 +29,9 @@ class Uranus : AbstractPlanet() {
     fun applyPerturbations(jupiter: Jupiter, saturn: Saturn) {
 
         // Add these terms to the longitude:
-        val lon_corr = (+0.040 * sinus(saturn.M - 2 * M + 6)
-                + 0.035 * sinus(saturn.M - 3 * M + 33)
-                - 0.015 * sinus(jupiter.M - M + 20))
+        val lon_corr = (+0.040 * sin(saturn.M - 2 * M + 6)
+                + 0.035 * sin(saturn.M - 3 * M + 33)
+                - 0.015 * sin(jupiter.M - M + 20))
         longitude += lon_corr
     }
 

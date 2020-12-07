@@ -20,12 +20,12 @@ abstract class AbstractElement : IElement {
     // forUTC the position (azimuth and altitude) for a given location and Local Sidereal Time (in angleInHours)
     fun updateAzimuthAltitude(moment: IMoment) {
         val HA = Degree.normalizeTo180(15 * moment.lst - RA) // Hour Angle (HA) is usually given in the interval -12 to +12 angleInHours, or -180 to +180 degrees
-        val x = Degree.cosines(HA) * Degree.cosines(Decl)
-        val y = Degree.sinus(HA) * Degree.cosines(Decl)
-        val z = Degree.sinus(Decl)
+        val x = Degree.cos(HA) * Degree.cos(Decl)
+        val y = Degree.sin(HA) * Degree.cos(Decl)
+        val z = Degree.sin(Decl)
         val latitude = moment.location.latitude
-        val xhor = x * Degree.sinus(latitude) - z * Degree.cosines(latitude)
-        val zhor = x * Degree.cosines(latitude) + z * Degree.sinus(latitude)
+        val xhor = x * Degree.sin(latitude) - z * Degree.cos(latitude)
+        val zhor = x * Degree.cos(latitude) + z * Degree.sin(latitude)
         val azimuth = Degree.arcTan2(y, xhor) + 180 // measure from north eastward
         val altitude = Degree.arcTan2(zhor, Math.sqrt(xhor * xhor + y * y))
 

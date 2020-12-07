@@ -26,13 +26,17 @@ class Moment(override val city: City, override val utc: UTC) : IMoment {
             return calendar
         }
 
-    override fun toString(): String {
-        return Formatter.toString(utc.time, city.timeZone, Formatter.TimeFormat.DATETIME_SEC_TIMEZONE)
-    }
+    override fun toString(): String =
+        Formatter.toString(utc.time, city.timeZone, Formatter.TimeFormat.DATETIME_SEC_TIMEZONE)
 
-    fun forNow(): Moment {
-        return Moment(city, UTC.forNow())
-    }
+    fun forNow(): Moment =
+        Moment(city, UTC.forNow())
+
+    override fun forUTC(timeInMillis: Long): IMoment =
+        Moment(city, UTC.forTimeInMillis(timeInMillis))
+
+    override fun forUTC(newUtc: UTC): Moment =
+        Moment(city, newUtc)
 
     fun forThisDate(year: Int, month: Int, dayOfMonth: Int): Moment {
         val calendar = localTime
@@ -55,7 +59,7 @@ class Moment(override val city: City, override val utc: UTC) : IMoment {
      * @param millis
      * @return
      */
-    private fun addMillis(millis: Long): Moment {
+    internal fun addMillis(millis: Long): Moment {
         return Moment(city, utc.addMillis(millis))
     }
 
@@ -64,7 +68,7 @@ class Moment(override val city: City, override val utc: UTC) : IMoment {
      * @param hours any time difference in hours
      * @return a new moment instance
      */
-    private fun addHours(hours: Double): Moment {
+    internal fun addHours(hours: Double): Moment {
         return Moment(city, utc.addHours(hours))
     }
 
@@ -73,7 +77,7 @@ class Moment(override val city: City, override val utc: UTC) : IMoment {
      * @param months
      * @return
      */
-    private fun addMonths(months: Int): Moment {
+    internal fun addMonths(months: Int): Moment {
         val calendar = localTime
         calendar.add(Calendar.MONTH, months)
         return Moment(city, UTC.forCalendar(calendar))
@@ -84,7 +88,7 @@ class Moment(override val city: City, override val utc: UTC) : IMoment {
      * @param years
      * @return
      */
-    private fun addYears(years: Int): Moment {
+    internal fun addYears(years: Int): Moment {
         val calendar = localTime
         calendar.add(Calendar.YEAR, years)
         return Moment(city, UTC.forCalendar(calendar))
@@ -116,7 +120,7 @@ class Moment(override val city: City, override val utc: UTC) : IMoment {
             Moment(city, utc)
 
         fun forUTC(city: City, timeInMillis: Long): Moment =
-            Moment(city, UTC(timeInMillis))
+            Moment(city, UTC.forTimeInMillis(timeInMillis))
 
         fun forNow(city: City): Moment =
             Moment(city, UTC.forNow())

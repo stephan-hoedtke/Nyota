@@ -30,9 +30,9 @@ class Sun : AbstractSolarSystemElement() {
 
     override fun updateHeliocentricLatitudeLongitude(d: Double) {
         ecl = 23.4393 - 3.563E-7 * d
-        E = Degree.normalize(M + e * Degree.RADEG * Degree.sinus(M) * (1.0 + e * Degree.cosines(M)))
-        val xv = a * (Degree.cosines(E) - e)
-        val yv = a * (Math.sqrt(1.0 - e * e) * Degree.sinus(E))
+        EA = Degree.normalize(M + e * Degree.RADEG * Degree.sin(M) * (1.0 + e * Degree.cos(M)))
+        val xv = a * (Degree.cos(EA) - e)
+        val yv = a * (Math.sqrt(1.0 - e * e) * Degree.sin(EA))
         v = Degree.arcTan2(yv, xv)
         mr = Math.sqrt(xv * xv + yv * yv)
 
@@ -47,14 +47,14 @@ class Sun : AbstractSolarSystemElement() {
     fun updateGeocentricAscensionDeclination() {
 
         // ecliptic rectangular geocentric coordinates
-        x = mr * Degree.cosines(longitude)
-        y = mr * Degree.sinus(longitude)
+        x = mr * Degree.cos(longitude)
+        y = mr * Degree.sin(longitude)
         z = 0.0
 
         // equatorial rectangular geocentric coordinates
         val xe = x
-        val ye = y * Degree.cosines(ecl)
-        val ze = y * Degree.sinus(ecl)
+        val ye = y * Degree.cos(ecl)
+        val ze = y * Degree.sin(ecl)
 
         // Sun's right ascension and declination
         RA = Degree.normalize(Degree.arcTan2(ye, xe))

@@ -6,9 +6,9 @@ import com.stho.nyota.sky.utilities.Degree.Companion.arcCos
 import com.stho.nyota.sky.utilities.Degree.Companion.arcTan2
 import com.stho.nyota.sky.utilities.Degree.Companion.normalize
 import com.stho.nyota.sky.utilities.Degree.Companion.normalizeTo180
-import com.stho.nyota.sky.utilities.Degree.Companion.sinus
-import com.stho.nyota.sky.utilities.Degree.Companion.cosines
-import com.stho.nyota.sky.utilities.Degree.Companion.tangent
+import com.stho.nyota.sky.utilities.Degree.Companion.sin
+import com.stho.nyota.sky.utilities.Degree.Companion.cos
+import com.stho.nyota.sky.utilities.Degree.Companion.tan
 import java.util.concurrent.TimeUnit
 
 /**
@@ -22,28 +22,28 @@ abstract class AbstractSolarSystemElement : AbstractElement() {
     internal var a = 0.0 // semi-major axis or mean distance from the Sun = 0.0
     internal var e = 0.0 // eccentricity = 0.0
     internal var M = 0.0 // mean anomaly (0 at perihelion) = 0.0
-    protected var mr = 0.0 // mean radius = 0.0
-    protected var w1 = 0.0 // longitude of perihelion = 0.0
-    protected var pq = 0.0 // perihelion distance = 0.0
-    protected var Q = 0.0 // aphelion distance = 0.0
-    protected var P = 0.0 // orbital period (years of a is in AU) = 0.0
-    protected var T = 0.0 // time of perihelion = 0.0
-    protected var v = 0.0 // true anomaly (angle between position and perihelion) = 0.0
-    protected var ecl = 0.0 // obliquity of the ecliptic, i.e. the "tilt" of the earths axis of rotation = 0.0
-    var R = 0.0 // geocentric distance = 0.0
-    protected var L = 0.0 // mean longitude = 0.0
-    protected var E: Double = 0.0 // eccentric anomaly = 0.0
-    protected var longitude = 0.0 // elliptic heliocentric longitude = 0.0
-    protected var latitude = 0.0 // elliptic heliocentric latitude = 0.0
-    protected var x = 0.0
-    protected var y = 0.0
-    protected var z = 0.0
-    protected var elongation = 0.0 // the apparent angular distance of the planet from the sun = 0.0
-    protected var FV = 0.0
-    var phase = 0.0
-    var phaseAngle = 0.0
-    var parallacticAngle = 0.0
-    var zenithAngle = 0.0
+    internal var mr = 0.0 // mean radius = 0.0
+    internal var w1 = 0.0 // longitude of perihelion = 0.0
+    internal var pq = 0.0 // perihelion distance = 0.0
+    internal var Q = 0.0 // aphelion distance = 0.0
+    internal var P = 0.0 // orbital period (years of a is in AU) = 0.0
+    internal var T = 0.0 // time of perihelion = 0.0
+    internal var v = 0.0 // true anomaly (angle between position and perihelion) = 0.0
+    internal var ecl = 0.0 // obliquity of the ecliptic, i.e. the "tilt" of the earths axis of rotation = 0.0
+    internal var R = 0.0 // geocentric distance = 0.0
+    internal var L = 0.0 // mean longitude = 0.0
+    internal var EA: Double = 0.0 // eccentric anomaly = 0.0
+    internal var longitude = 0.0 // elliptic heliocentric longitude = 0.0
+    internal var latitude = 0.0 // elliptic heliocentric latitude = 0.0
+    internal var x = 0.0
+    internal var y = 0.0
+    internal var z = 0.0
+    internal var elongation = 0.0 // the apparent angular distance of the planet from the sun = 0.0
+    internal var FV = 0.0
+    internal var phase = 0.0
+    internal var phaseAngle = 0.0
+    internal var parallacticAngle = 0.0
+    internal var zenithAngle = 0.0
 
     abstract fun updateBasics(d: Double)
 
@@ -65,19 +65,19 @@ abstract class AbstractSolarSystemElement : AbstractElement() {
         L = normalize(M + w + N)
 
         // eccentric anomaly with iteration for "larger" eccentric
-        var E0 = M + Degree.RADEG * e * sinus(M) * (1.0 + e * cosines(M))
-        var E1 = E0 - (E0 - Degree.RADEG * e * sinus(E0) - M) / (1 - e * cosines(E0))
+        var E0 = M + Degree.RADEG * e * sin(M) * (1.0 + e * cos(M))
+        var E1 = E0 - (E0 - Degree.RADEG * e * sin(E0) - M) / (1 - e * cos(E0))
         run {
             var x = 0
             while (x < 10 && Math.abs(E1 - E0) > 0.001) {
                 E0 = E1
-                E1 = E0 - (E0 - Degree.RADEG * e * sinus(E0) - M) / (1 - e * cosines(E0))
+                E1 = E0 - (E0 - Degree.RADEG * e * sin(E0) - M) / (1 - e * cos(E0))
                 x++
             }
         }
-        E = normalize(E1)
-        val xv = a * (cosines(E) - e)
-        val yv = a * (Math.sqrt(1.0 - e * e) * sinus(E))
+        EA = normalize(E1)
+        val xv = a * (cos(EA) - e)
+        val yv = a * (Math.sqrt(1.0 - e * e) * sin(EA))
         v = normalize(arcTan2(yv, xv))
         mr = Math.sqrt(xv * xv + yv * yv)
 
@@ -87,9 +87,9 @@ abstract class AbstractSolarSystemElement : AbstractElement() {
         // position int the 3 dimensional space
         // for the moon: geocentric position in the ecliptic coordinate system
         // for planets: heliocentric position in the ecliptic coordinate system
-        val xh = mr * (cosines(N) * cosines(lon) - sinus(N) * sinus(lon) * cosines(i))
-        val yh = mr * (sinus(N) * cosines(lon) + cosines(N) * sinus(lon) * cosines(i))
-        val zh = mr * (sinus(lon) * sinus(i))
+        val xh = mr * (cos(N) * cos(lon) - sin(N) * sin(lon) * cos(i))
+        val yh = mr * (sin(N) * cos(lon) + cos(N) * sin(lon) * cos(i))
+        val zh = mr * (sin(lon) * sin(i))
 
         // ecliptic longitude, latitude
         longitude = normalize(arcTan2(yh, xh))
@@ -105,9 +105,9 @@ abstract class AbstractSolarSystemElement : AbstractElement() {
 
         // we may ignore precession! (all values are calculated for the moment of d)
         // ecliptic rectangular geocentric coordinates
-        x = mr * cosines(longitude) * cosines(latitude)
-        y = mr * sinus(longitude) * cosines(latitude)
-        z = mr * sinus(latitude)
+        x = mr * cos(longitude) * cos(latitude)
+        y = mr * sin(longitude) * cos(latitude)
+        z = mr * sin(latitude)
 
         // equatorial rectangular geocentric coordinates
         var xg = x
@@ -119,8 +119,8 @@ abstract class AbstractSolarSystemElement : AbstractElement() {
             zg += sun.z
         }
         val xe = xg
-        val ye = yg * cosines(ecl) - zg * sinus(ecl)
-        val ze = yg * sinus(ecl) + zg * cosines(ecl)
+        val ye = yg * cos(ecl) - zg * sin(ecl)
+        val ze = yg * sin(ecl) + zg * cos(ecl)
 
         // Finally, compute the planet's Right Ascension (RA) and Declination (Decl):
         RA = normalize(arcTan2(ye, xe))
@@ -131,9 +131,9 @@ abstract class AbstractSolarSystemElement : AbstractElement() {
     }
 
     open fun calculatePhase(sun: Sun) {
-        elongation = arcCos(cosines(sun.longitude - longitude) * cosines(latitude))
+        elongation = arcCos(cos(sun.longitude - longitude) * cos(latitude))
         FV = 180 - elongation
-        phase = (1 + cosines(FV)) / 2
+        phase = (1 + cos(FV)) / 2
         phaseAngle = getPhaseAngle(sun)
     }
 
@@ -146,16 +146,16 @@ abstract class AbstractSolarSystemElement : AbstractElement() {
         // Meeus pp.347
         // Further correction: zenith-angle := phase-angle - parallactic-angle
         return arcTan2(
-                cosines(sun.Decl) * sinus(sun.RA - RA),
-                sinus(sun.Decl) * cosines(Decl) - cosines(sun.Decl) * sinus(Decl) * cosines(sun.RA - RA))
+                cos(sun.Decl) * sin(sun.RA - RA),
+                sin(sun.Decl) * cos(Decl) - cos(sun.Decl) * sin(Decl) * cos(sun.RA - RA))
     }
 
     protected fun getZenithAngle(sun: Sun): Double {
         // Calculation from altitude doesn't require correction by the parallactic-angle, but the current altitude and azimuth
         return if (sun.position != null) {
             arcTan2(
-                    cosines(sun.position!!.altitude) * sinus(position!!.azimuth - sun.position!!.azimuth),
-                    sinus(sun.position!!.altitude) * cosines(position!!.altitude) - cosines(sun.position!!.altitude) * sinus(position!!.altitude) * cosines(position!!.azimuth - sun.position!!.azimuth))
+                    cos(sun.position!!.altitude) * sin(position!!.azimuth - sun.position!!.azimuth),
+                    sin(sun.position!!.altitude) * cos(position!!.altitude) - cos(sun.position!!.altitude) * sin(position!!.altitude) * cos(position!!.azimuth - sun.position!!.azimuth))
         } else {
             0.0
         }
@@ -163,7 +163,7 @@ abstract class AbstractSolarSystemElement : AbstractElement() {
 
     protected fun getParallacticAngle(moment: IMoment): Double {
         val HA = normalize(15 * moment.lst - RA)
-        return arcTan2(sinus(HA), tangent(moment.location.latitude) * cosines(Decl) - sinus(Decl) * cosines(HA))
+        return arcTan2(sin(HA), tan(moment.location.latitude) * cos(Decl) - sin(Decl) * cos(HA))
     }
 
     open val distanceInKm: Double
@@ -240,17 +240,20 @@ abstract class AbstractSolarSystemElement : AbstractElement() {
 
     // The cos of the hour angle for sunrise and sunset
     private fun getHourAngle(observerLatitude: Double): Double {
-        return (sinus(H0()) - sinus(observerLatitude) * sinus(Decl)) / (cosines(observerLatitude) * cosines(Decl))
+        return (sin(H0()) - sin(observerLatitude) * sin(Decl)) / (cos(observerLatitude) * cos(Decl))
     }
 
     // Calculate the time (in UTC) when the sun will be in south at this position (longitude is defined by LST)
     private fun getTimeInSouth(moment: IMoment): Double {
-        var hour = Hour.normalize(RA / 15 - moment.utc.gMST0 - moment.location.longitude / 15)
-        val offsetInHours = TimeUnit.HOURS.convert(moment.timeZone.getOffset(moment.utc.timeInMillis).toLong(), TimeUnit.MILLISECONDS).toDouble()
-        val ut: Double = moment.utc.uT
+        val hour = Hour.normalize(RA / 15 - moment.utc.GMST0 - moment.location.longitude / 15)
+        val offsetInHours = moment.timeZone.getOffset(moment.utc.timeInMillis) / MILLISECONDS_PER_HOUR
+        val ut: Double = moment.utc.UT
         val lt = ut + offsetInHours
-        if (lt > 24) hour += 24.0 else if (lt < 0) hour -= 24.0
-        return hour
+        return when {
+            lt > 24 -> hour + 24.0
+            lt < 0 -> hour - 24.0
+            else -> hour
+        }
     }
 
     protected abstract fun H0(): Double
@@ -258,5 +261,6 @@ abstract class AbstractSolarSystemElement : AbstractElement() {
 
     companion object {
         private const val TOLERANCE = 0.001
+        private const val MILLISECONDS_PER_HOUR = 3600000.0
     }
 }

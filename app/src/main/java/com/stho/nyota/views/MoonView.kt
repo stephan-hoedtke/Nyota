@@ -3,6 +3,7 @@ package com.stho.software.nyota.views
 import android.content.Context
 import android.graphics.*
 import android.util.AttributeSet
+import android.view.MotionEvent
 import com.stho.nyota.sky.universe.Moon
 import kotlin.math.abs
 import kotlin.math.min

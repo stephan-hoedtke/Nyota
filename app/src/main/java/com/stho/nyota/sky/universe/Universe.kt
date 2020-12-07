@@ -67,11 +67,6 @@ class Universe {
         return this
     }
 
-    fun calculateNewFullMoon(): Universe {
-        solarSystem.moon.calculateNewFullMoon(moment)
-        return this
-    }
-
     fun findStarByName(name: String?): Star? {
         if (name != null && stars.exists(name)) {
             return stars[name]

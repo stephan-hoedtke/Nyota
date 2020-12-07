@@ -6,16 +6,16 @@ class SphereProjection {
     private var sin = 0.0
     fun setCenter(centerAzimuth: Double, centerAltitude: Double) {
         this.centerAzimuth = centerAzimuth
-        cos = Degree.cosines(centerAltitude)
-        sin = Degree.sinus(centerAltitude)
+        cos = Degree.cos(centerAltitude)
+        sin = Degree.sin(centerAltitude)
     }
 
     fun getImagePoint(pointAzimuth: Double, pointAltitude: Double): Point? {
         val deltaAzimuth = pointAzimuth - centerAzimuth
-        val z = Degree.sinus(pointAltitude)
-        val L = Degree.cosines(pointAltitude)
-        val x = L * Degree.sinus(deltaAzimuth)
-        val y = L * Degree.cosines(deltaAzimuth)
+        val z = Degree.sin(pointAltitude)
+        val L = Degree.cos(pointAltitude)
+        val x = L * Degree.sin(deltaAzimuth)
+        val y = L * Degree.cos(deltaAzimuth)
         val y1 = z * cos - y * sin
         val z1 = y * cos + z * sin
         if (isExcluded(z1)) return null
@@ -30,6 +30,6 @@ class SphereProjection {
     }
 
     companion object {
-        private val TOLERANCE = Degree.cosines(75.0)
+        private val TOLERANCE = Degree.cos(75.0)
     }
 }

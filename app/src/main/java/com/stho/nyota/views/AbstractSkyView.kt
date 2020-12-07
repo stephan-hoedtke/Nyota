@@ -206,7 +206,7 @@ abstract class AbstractSkyView(context: Context?, attrs: AttributeSet?): View(co
 
     protected fun getZoom(): Double {
         val w = width
-        return 0.5 * w / Degree.tangent(0.5 * zoomAngle)
+        return 0.5 * w / Degree.tan(0.5 * zoomAngle)
     }
 
     protected fun drawStar(canvas: Canvas, zoom: Double, star: Star) {

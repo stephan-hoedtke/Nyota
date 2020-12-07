@@ -19,7 +19,7 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            tools:context="com.stho.nyota.ui.moon.MoonFragment">
+            tools:context=".ui.moon.MoonFragment">
 
             <androidx.constraintlayout.widget.Guideline
                 android:id="@+id/horizontal_guideline1"
