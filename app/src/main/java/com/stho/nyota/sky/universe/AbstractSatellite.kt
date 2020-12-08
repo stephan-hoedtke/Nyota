@@ -2,6 +2,9 @@ package com.stho.nyota.sky.universe
 
 import com.stho.nyota.sky.utilities.*
 import com.stho.nyota.sky.utilities.Angle
+import com.stho.nyota.sky.utilities.Formatter
+import com.stho.nyota.sky.utilities.Vector
+import java.util.*
 
 /**
  * Created by shoedtke on 24.01.2017.
@@ -43,7 +46,7 @@ abstract class AbstractSatellite : IElement {
             add(com.stho.nyota.R.drawable.equatorial, "Latitude", Degree.fromDegree(location.latitude))
             add(com.stho.nyota.R.drawable.equatorial, "Longitude", Degree.fromDegree(location.longitude))
             add(com.stho.nyota.R.drawable.compass, "NORAD", tle.noradSatelliteNumber.toString())
-            add(com.stho.nyota.R.drawable.empty, "TLE", Formatter.formatDate.format(tle.date))
+            add(com.stho.nyota.R.drawable.empty, "TLE", Formatter.toString(tle.date, Formatter.timeZoneGMT, Formatter.TimeFormat.DATETIME_TIMEZONE))
             add(com.stho.nyota.R.drawable.empty, "Mean Distance", Formatter.df0.format(tle.meanDistanceFromEarth) + " km")
             add(com.stho.nyota.R.drawable.empty, "Revolutions", Formatter.df2.format(tle.revolutionsPerDay))
         }

@@ -5,13 +5,14 @@ import com.stho.nyota.sky.utilities.Degree
 import com.stho.nyota.sky.utilities.Degree.Companion.arcTan2
 import com.stho.nyota.sky.utilities.Degree.Companion.cos
 import com.stho.nyota.sky.utilities.Degree.Companion.sin
-import com.stho.nyota.sky.utilities.JulianDay.toUTC
 import kotlin.math.abs
+import kotlin.math.floor
 import kotlin.math.sign
 
 /**
  * Created by shoedtke on 30.08.2016.
  */
+@Suppress("LocalVariableName")
 class Moon : AbstractSolarSystemElement() {
     var parallax = 0.0 // lunar parallax
     var diameter = 0.0 // apparent  diameter of the moon
@@ -92,33 +93,72 @@ class Moon : AbstractSolarSystemElement() {
     }
 
     override fun calculateSetRiseTimes(moment: IMoment) {
-        val inSouth = getTimeInSouth(moment)
-        val cos_LHA = getHourAngle(moment.location.latitude)
-        position!!.inSouth = moment.utc.setHours(inSouth)
-        position!!.culmination = getHeightFor(moment.forUTC(position!!.inSouth!!))
+        position?.also {
+            val inSouth = getTimeInSouth(moment)
+            val cos_LHA = getHourAngle(moment.location.latitude)
+            it.inSouth = moment.utc.setHours(inSouth)
+            it.culmination = getHeightFor(moment.forUTC(it.inSouth!!))
 
-        // cos_LHA < 0 ---> always up and visible
-        // cos_LHA > 0 ---> always down
-        if (cos_LHA > -1 && cos_LHA < 1) {
-            val LHA = Degree.arcCos(cos_LHA) / 15
-            val tolerance = moment.location.longitude / 15 + 1.5 // current timezone with potential daylight savings?
-            position!!.riseTime = iterate(moment, moment.utc.setHours(inSouth - LHA), true)
-            position!!.setTime = iterate(moment, moment.utc.setHours(inSouth + LHA), false)
-            if (inSouth - LHA < 0.0 + tolerance) position!!.nextRiseTime = iterate(moment, position!!.riseTime!!.addHours(24.45), true)
-            if (inSouth + LHA > 24.0 - tolerance) position!!.prevSetTime = iterate(moment, position!!.setTime!!.addHours(-24.45), false)
+            // cos_LHA < 0 ---> always up and visible
+            // cos_LHA > 0 ---> always down
+            if (cos_LHA > -1 && cos_LHA < 1) {
+                val LHA = Degree.arcCos(cos_LHA) / 15
+                val riseTime0 = iterate(moment, moment.utc.setHours(inSouth - LHA), true)
+                val setTime0 = iterate(moment, moment.utc.setHours(inSouth + LHA), false)
+                when {
+                    moment.utc.isLessThan(riseTime0) -> {
+                        it.prevRiseTime = iterate(moment, moment.utc.setHours(inSouth - LHA - 24.45),true)
+                        it.prevSetTime = iterate(moment, moment.utc.setHours(inSouth + LHA - 24.45), false)
+                        it.riseTime = riseTime0
+                        it.setTime = setTime0
+                    }
+                    moment.utc.isGreaterThan(setTime0) -> {
+                        it.riseTime = riseTime0
+                        it.setTime = setTime0
+                        it.nextRiseTime = iterate(moment, moment.utc.setHours(inSouth - LHA + 24.45),true)
+                        it.nextSetTime = iterate(moment, moment.utc.setHours(inSouth + LHA + 24.45), false)
+                    }
+                    else -> {
+                        it.prevSetTime = iterate(moment, moment.utc.setHours(inSouth + LHA - 24.45), false)
+                        it.riseTime = riseTime0
+                        it.setTime = setTime0
+                        it.nextRiseTime = iterate(moment, moment.utc.setHours(inSouth - LHA + 24.45),true)
+                    }
+                }
+            }
         }
     }
 
-    fun calculateNewFullMoon(moment: IMoment) {
-        val shift = getCurrentShift(moment)
-        prevNewMoon = getNewMoon(moment, shift)
-        fullMoon = getFullMoon(moment, shift)
-        nextNewMoon = getNewMoon(moment, shift + 1)
-        age = (moment.utc.julianDay - prevNewMoon!!.julianDay) / (nextNewMoon!!.julianDay - prevNewMoon!!.julianDay)
+    fun calculateNewFullMoon(utc: UTC) {
+        val newMoon0 = getNewMoon(utc, 0)
+        val newMoon1 = getNewMoon(utc, 1)
+        when {
+            utc.isLessThan(newMoon0) -> {
+                // CURRENT SHIFT = -1
+                prevNewMoon = getNewMoon(utc, -1)
+                fullMoon = getFullMoon(utc, -1)
+                nextNewMoon = newMoon0
+            }
+            utc.isGreaterThan(newMoon1) -> {
+                // CURRENT SHIFT = 1
+                prevNewMoon = newMoon1
+                fullMoon = getFullMoon(utc, 1)
+                nextNewMoon = getNewMoon(utc, 2)
+            }
+            else -> {
+                // CURRENT SHIFT = 0
+                prevNewMoon = newMoon0
+                fullMoon = getFullMoon(utc, 0)
+                nextNewMoon = newMoon1
+            }
+        }
+        age = (utc.julianDay - prevNewMoon!!.julianDay) / (nextNewMoon!!.julianDay - prevNewMoon!!.julianDay)
     }
 
     private fun iterate(moment: IMoment, x: UTC?, isRise: Boolean): UTC? {
-        if (x == null) return null
+        if (x == null) {
+            return null
+        }
         val f = getHeightFor(moment.forUTC(x))
         val x1: UTC
         val x2: UTC
@@ -237,10 +277,12 @@ class Moon : AbstractSolarSystemElement() {
 
     override fun getDetails(moment: Moment): PropertyList =
         super.getDetails(moment).apply {
+            add(com.stho.nyota.R.drawable.sunrise, "Previous Rise", position?.prevRiseTime, moment.timeZone)
             add(com.stho.nyota.R.drawable.sunset, "Previous Set", position?.prevSetTime, moment.timeZone)
             add(com.stho.nyota.R.drawable.sunrise, "Rise", position?.riseTime, moment.timeZone)
             add(com.stho.nyota.R.drawable.sunset, "Set ", position?.setTime, moment.timeZone)
             add(com.stho.nyota.R.drawable.sunrise, "Next Rise", position?.nextRiseTime, moment.timeZone)
+            add(com.stho.nyota.R.drawable.sunset, "Next Set", position?.nextSetTime, moment.timeZone)
             add(com.stho.nyota.R.drawable.empty, "Age", Formatter.df2.format(age))
             add(com.stho.nyota.R.drawable.angle, "Diameter", Degree.fromDegree(diameter))
             add(com.stho.nyota.R.drawable.empty, "Magnitude", Formatter.df2.format(magn))
@@ -263,36 +305,31 @@ class Moon : AbstractSolarSystemElement() {
 
         private const val TOLERANCE = 0.001
 
-        fun getCurrentShift(moment: IMoment): Int {
-            return if (moment.utc.julianDay < getTimeFor(moment, Phase.NEW, 0)) -1 else if (moment.utc.julianDay > getTimeFor(moment, Phase.NEW, 1)) 1 else 0
-        }
+        // TODO better usage of "getTimeFor(), store values in a dictionary ??
 
-        fun getNewMoon(moment: IMoment, shift: Int): UTC {
-            val julianDay = getTimeFor(moment, Phase.NEW, shift)
-            return toUTC(julianDay)
-        }
+        fun getNewMoon(utc: UTC, shift: Int): UTC =
+            UTC.forJulianDay(getJulianDayFor(utc, Phase.NEW, shift))
 
-        fun getFullMoon(moment: IMoment, shift: Int): UTC {
-            val julianDay = getTimeFor(moment, Phase.FULL, shift)
-            return toUTC(julianDay)
-        }
+        fun getFullMoon(utc: UTC, shift: Int): UTC =
+            UTC.forJulianDay(getJulianDayFor(utc, Phase.FULL, shift))
 
         private const val HALF_A_MONTH = 0.5 / 12.3685
 
         /**
          * Julian Days for the new moon or full moon, Meeus chapter 47
-         * @param moment current time and location
+         * @param utc current time and location
          * @param phase FULL or NEW
          * @param shift Phases before (shift < 0) or after (shift > 0)
          * @return Julian (Ephemeris) Day (in Dynamic Time)
          */
-        private fun getTimeFor(moment: IMoment, phase: Phase, shift: Int): Double {
+        private fun getJulianDayFor(utc: UTC, phase: Phase, shift: Int): Double {
             // Meeus chapter 47
             // k is an integer for new moon incremented by 0.25 for first quarter 0.5 for full moon. k=0 corresponds to the New Moon 2000 Jan 6th.
-            val years: Double = moment.utc.yearsSince2000 - HALF_A_MONTH
-            var k = Math.floor(years * 12.3685)
-            k += shift.toDouble()
-            if (phase == Phase.FULL) k += 0.5
+            val years: Double = utc.yearsSince2000 - HALF_A_MONTH
+            var k = floor(years * 12.3685) + shift
+            if (phase == Phase.FULL) {
+                k += 0.5
+            }
             val T = k / 1236.85
             val T2 = T * T
             val T3 = T * T2

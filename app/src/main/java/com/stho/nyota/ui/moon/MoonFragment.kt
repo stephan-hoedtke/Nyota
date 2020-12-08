@@ -50,7 +50,7 @@ class MoonFragment : AbstractElementFragment() {
         binding.timeIntervalFooter.interval.setOnClickListener { onPickInterval() }
 
         // TODO: solve the annotation issue with accessibility (I do not understand yet, what to do)
-        binding.age.setOnTouchListener(@SuppressLint("ClickableViewAccessibility")
+        binding.moonAgeLayout.age.setOnTouchListener(@SuppressLint("ClickableViewAccessibility")
         object : OnTouchListener {
             private var startX = 0f
             private var previousX = 0f
@@ -112,11 +112,10 @@ class MoonFragment : AbstractElementFragment() {
         binding.timeVisibilityOverlay.currentTime.text = toLocalTimeString(moment)
         binding.timeVisibilityOverlay.currentVisibility.setImageResource(moon.visibility)
         binding.image.setPhase(moon)
-        binding.age.setAge(moon)
-        binding.title.text = moon.name
-        binding.prevNewMoon.text = Formatter.toString(moon.prevNewMoon!!, moment.timeZone, Formatter.TimeFormat.DATETIME)
-        binding.fullMoon.text = Formatter.toString(moon.fullMoon!!, moment.timeZone, Formatter.TimeFormat.DATETIME)
-        binding.nextNewMoon.text = Formatter.toString(moon.nextNewMoon!!, moment.timeZone, Formatter.TimeFormat.DATETIME)
+        binding.moonAgeLayout.age.setAge(moon)
+        binding.moonAgeLayout.prevNewMoon.text = Formatter.toString(moon.prevNewMoon!!, moment.timeZone, Formatter.TimeFormat.DATETIME)
+        binding.moonAgeLayout.fullMoon.text = Formatter.toString(moon.fullMoon!!, moment.timeZone, Formatter.TimeFormat.DATETIME)
+        binding.moonAgeLayout.nextNewMoon.text = Formatter.toString(moon.nextNewMoon!!, moment.timeZone, Formatter.TimeFormat.DATETIME)
 
         updateActionBar(moon.name, toLocalDateString(moment))
     }

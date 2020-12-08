@@ -1,10 +1,8 @@
 package com.stho.nyota.sky.universe
 
 import com.stho.nyota.sky.utilities.Formatter
-import com.stho.nyota.sky.utilities.JulianDay.toUTC
 import com.stho.nyota.sky.utilities.Radian.toDegrees
 import com.stho.nyota.sky.utilities.UTC
-import com.stho.nyota.sky.utilities.UTC.Companion.forNow
 import java.security.InvalidParameterException
 import java.util.*
 
@@ -34,14 +32,14 @@ data class TLE(
     fun serialize(): String = elements
 
     val date: Date
-        get() = toUTC(Epoch).time
+        get() = UTC.forJulianDay(Epoch).time
 
     override fun toString(): String {
         val difference = eo * (meanDistanceFromEarth + Algorithms.EARTH_RADIUS)
         val sb = StringBuilder()
         sb.append(String.format("NORAD = %d", noradSatelliteNumber))
         sb.append(EOL)
-        sb.append(String.format("Epoch (UTC) = %s", Formatter.formatDateTime.format(toUTC(Epoch))))
+        sb.append(String.format("Epoch (UTC) = %s", Formatter.toString(date, Formatter.timeZoneGMT, Formatter.TimeFormat.DATETIME_TIMEZONE)))
         sb.append(EOL)
         sb.append(String.format("Eccentricity = %.3f", eo))
         sb.append(EOL)
@@ -78,7 +76,7 @@ data class TLE(
         private const val EOL: String = "\n"
 
         private fun isOutdated(tle: TLE): Boolean {
-            val now: UTC = forNow()
+            val now: UTC = UTC.forNow()
             return (now.julianDay - tle.Epoch) > DAYS_TLE_KEEP_VALID
         }
 

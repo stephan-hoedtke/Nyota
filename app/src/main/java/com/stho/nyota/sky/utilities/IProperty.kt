@@ -6,6 +6,6 @@ package com.stho.nyota.sky.utilities
 interface IProperty {
     val key: Int
     val imageId: Int
-    val name: String?
-    val value: String?
+    val name: String
+    val value: String
 }

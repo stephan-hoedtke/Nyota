@@ -118,47 +118,47 @@ class UTC : ITime {
     }
 
     override fun toString(): String =
-        Formatter.toString(time, TimeZone.getTimeZone("GMT"), Formatter.TimeFormat.DATETIME_SEC_TIMEZONE)
+        Formatter.toString(time, Formatter.timeZoneGMT, Formatter.TimeFormat.DATETIME_SEC_TIMEZONE)
 
-    fun isGreaterThan(that: UTC): Boolean {
-        return JD > that.JD
-    }
+    fun isGreaterThan(that: UTC?): Boolean =
+        this.JD > that?.JD ?: 0.0
 
-    fun isLessThan(that: UTC): Boolean {
-        return JD < that.JD
-    }
+    fun isLessThan(that: UTC?): Boolean =
+        this.JD < that?.JD ?: 0.0
 
     fun serialize(): String {
-        return java.lang.Long.toString(timeInMillis)
+        return timeInMillis.toString()
     }
 
     companion object {
-        fun forUTC(year: Int, month: Int, day: Int, hour: Int, minute: Int): UTC {
-            val calendar = createCalendarGMT(year, month, day, hour, minute, 0)
-            return UTC(calendar)
-        }
+        private val timeZoneGMT: TimeZone by lazy { TimeZone.getTimeZone("GMT") }
 
-        fun forUTC(year: Int, month: Int, day: Int, hour: Int, minute: Int, seconds: Int): UTC {
-            val calendar = createCalendarGMT(year, month, day, hour, minute, seconds)
-            return UTC(calendar)
-        }
+        fun forUTC(year: Int, month: Int, day: Int, hour: Int, minute: Int): UTC =
+            UTC(createCalendarGMT(year, month, day, hour, minute, 0))
 
-        fun forTimeInMillis(timeInMillis: Long): UTC {
-            return UTC(timeInMillis)
-        }
+        fun forUTC(year: Int, month: Int, day: Int, hour: Int, minute: Int, seconds: Int): UTC =
+            UTC(createCalendarGMT(year, month, day, hour, minute, seconds))
 
-        fun forCalendar(calendar: Calendar): UTC {
-            return UTC(calendar.timeInMillis) // as calendar may belong to another timeZone
+        fun forTimeInMillis(timeInMillis: Long): UTC =
+            UTC(timeInMillis)
+
+        fun forCalendar(calendar: Calendar): UTC =
+            UTC(calendar.timeInMillis) // as calendar may belong to another timeZone
+
+        fun forJulianDay(julianDay: Double): UTC {
+            val days = julianDay - JULIAN_DAY_2000_JAN_FIRST
+            val timeInMillis = JANUARY_FIRST_2000_IN_MILLIS + days * MILLIS_PER_DAY
+            return UTC(timeInMillis.toLong())
         }
 
         private fun createCalendarGMT(timeInMillis: Long): Calendar {
-            val calendar = Calendar.getInstance(TimeZone.getTimeZone("GMT"))
+            val calendar = Calendar.getInstance(timeZoneGMT)
             calendar.timeInMillis = timeInMillis
             return calendar
         }
 
         private fun createCalendarGMT(year: Int, month: Int, day: Int, hour: Int, minute: Int, seconds: Int): Calendar {
-            val calendar = Calendar.getInstance(TimeZone.getTimeZone("GMT"))
+            val calendar = Calendar.getInstance(timeZoneGMT)
             calendar[year, month, day, hour, minute] = seconds
             calendar[Calendar.MILLISECOND] = 0
             return calendar
@@ -170,6 +170,7 @@ class UTC : ITime {
         private const val MILLIS_PER_MINUTE = 60000.0
         private const val JULIAN_DAY_2000_JAN_FIRST = 2451544.5000
         private const val JULIAN_DAYS_PER_YEAR = 365.25
+        private const val JANUARY_FIRST_2000_IN_MILLIS = 946684800000L
 
         fun forNow(): UTC {
             return UTC(System.currentTimeMillis())

@@ -57,7 +57,7 @@ class Repository private constructor() {
 
     val moonLD: LiveData<Moon>
         get() = Transformations.map(momentLiveData) { moment ->
-            universe.updateFor(moment, true).solarSystem.moon.also { it.calculateNewFullMoon(moment) }
+            universe.updateFor(moment, true).solarSystem.moon.also { it.calculateNewFullMoon(moment.utc) }
         }
 
     val cities: List<City>

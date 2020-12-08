@@ -77,7 +77,7 @@ class Satellite(override val name: String, val displayName: String, val noradSat
         }
 
     val updated: Calendar
-        get() = JulianDay.toUTC(tle.Epoch).getGmt()
+        get() = UTC.forJulianDay(tle.Epoch).getGmt()
 
     fun updateFor(moment: Moment) {
         val julianDay: Double = moment.utc.julianDay

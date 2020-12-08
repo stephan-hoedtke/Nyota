@@ -12,34 +12,18 @@ object Formatter {
     private val formatDateTimeSecTimeZone = SimpleDateFormat("d MMM yyyy HH:mm:ss Z", Locale.ENGLISH)
     private val formatDateTimeSec = SimpleDateFormat("d MMM HH:mm:ss", Locale.ENGLISH)
     private val formatDateTimeTimeZone = SimpleDateFormat("d MMM yyyy HH:mm Z", Locale.ENGLISH)
-    val formatDateTime = SimpleDateFormat("d MMM HH:mm", Locale.ENGLISH)
+    private val formatDateTime = SimpleDateFormat("d MMM HH:mm", Locale.ENGLISH)
     private val formatTime = SimpleDateFormat("HH:mm", Locale.ENGLISH)
     private val formatTimeSec = SimpleDateFormat("HH:mm::ss", Locale.ENGLISH)
     private val formatDateTimeZone = SimpleDateFormat("d MMM yyyy Z", Locale.ENGLISH)
-    val formatDate: SimpleDateFormat = SimpleDateFormat("d MMM yyyy", Locale.ENGLISH)
+    private val formatDate: SimpleDateFormat = SimpleDateFormat("d MMM yyyy", Locale.ENGLISH)
     private val formatTimeZone = SimpleDateFormat("Z", Locale.ENGLISH)
     val df0: DecimalFormat = DecimalFormat.getNumberInstance(Locale.ENGLISH) as DecimalFormat
     val df2: DecimalFormat = DecimalFormat.getNumberInstance(Locale.ENGLISH) as DecimalFormat
     val df3: DecimalFormat = DecimalFormat.getNumberInstance(Locale.ENGLISH) as DecimalFormat
-    const val SPACE = "  "
+    internal const val SPACE = "  "
     private const val UNICODE_THIN_SPACE = '\u2009'
-
-
-    fun parseInt(s: String): Int {
-        return s.trim().toInt()
-    }
-
-    fun parseDouble(s: String): Double {
-        return s.trim().toDouble()
-    }
-
-    fun parseString(s: String): String {
-        return s.trim()
-    }
-
-    fun parseTimeZone(s: String): TimeZone {
-        return TimeZone.getTimeZone(s.trim())
-    }
+    internal val timeZoneGMT: TimeZone by lazy { TimeZone.getTimeZone("GMT") }
 
     fun toString(utc: UTC, timeZone: TimeZone, timeFormat: TimeFormat): String {
         return toString(utc.time, timeZone, timeFormat)

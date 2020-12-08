@@ -9,9 +9,6 @@ import java.util.*
  * Created by shoedtke on 20.01.2017.
  */
 object JulianDay {
-    private const val MILLIS_PER_DAY = 86400000.0
-    private const val JULIAN_DAY_2000_JAN_FIRST = 2451544.5000
-    private const val JANUARY_FIRST_2000_IN_MILLIS = 946684800000L
 
     /**
      * Julian Day Number
@@ -39,19 +36,6 @@ object JulianDay {
         val JD = Algorithms.truncate(365.25 * (Y + 4716)) + Algorithms.truncate(30.6001 * (M + 1)) + D + B - 1524.5
         val UT = Algorithms.UT(utc)
         return JD + UT / 24.0
-    }
-
-    //TODO use this here...
-    fun toUTC(julianDay: Double): UTC {
-        val millis = toTimeInMillis(julianDay)
-        return UTC.forTimeInMillis(millis)
-    }
-
-    //TODO: replace
-    fun toTimeInMillis(julianDay: Double): Long {
-        val days = julianDay - JULIAN_DAY_2000_JAN_FIRST
-        val millis = JANUARY_FIRST_2000_IN_MILLIS + days * MILLIS_PER_DAY
-        return millis.toLong()
     }
 
     /**

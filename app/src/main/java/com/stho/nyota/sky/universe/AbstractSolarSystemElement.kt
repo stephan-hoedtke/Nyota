@@ -180,20 +180,39 @@ abstract class AbstractSolarSystemElement : AbstractElement() {
         }
 
     open fun calculateSetRiseTimes(moment: IMoment) {
-        val inSouth = getTimeInSouth(moment)
-        val cos_LHA = getHourAngle(moment.location.latitude)
-        position!!.inSouth = moment.utc.setHours(inSouth)
-        position!!.culmination = getHeightFor(moment.forUTC(position!!.inSouth!!))
+        position?.also {
+            val inSouth = getTimeInSouth(moment)
+            val cos_LHA = getHourAngle(moment.location.latitude)
+            it.inSouth = moment.utc.setHours(inSouth)
+            it.culmination = getHeightFor(moment.forUTC(position!!.inSouth!!))
 
-        // cos_LHA < 0 ---> always up and visible
-        // cos_LHA > 0 ---> always down
-        if (cos_LHA > -1 && cos_LHA < 1) {
-            val LHA = arcCos(cos_LHA) / 15
-            val tolerance = moment.location.longitude / 15 + 1.5 // current timezone with potential daylight savings?
-            position!!.riseTime = iterate(moment, moment.utc.setHours(inSouth - LHA), true)
-            position!!.setTime = iterate(moment, moment.utc.setHours(inSouth + LHA), false)
-            if (inSouth - LHA < 0.0 + tolerance || position!!.riseTime!!.isLessThan(position!!.setTime!!) && position!!.setTime!!.isLessThan(moment.utc)) position!!.nextRiseTime = iterate(moment, position!!.riseTime!!.addHours(24.45), true)
-            if (inSouth + LHA > 24.0 - tolerance || position!!.riseTime!!.isGreaterThan(moment.utc) && position!!.setTime!!.isGreaterThan(position!!.riseTime!!)) position!!.prevSetTime = iterate(moment, position!!.setTime!!.addHours(-24.45), false)
+            // cos_LHA < 0 ---> always up and visible
+            // cos_LHA > 0 ---> always down
+            if (cos_LHA > -1 && cos_LHA < 1) {
+                val LHA = arcCos(cos_LHA) / 15
+                val riseTime0 = iterate(moment, moment.utc.setHours(inSouth - LHA), true)
+                val setTime0 = iterate(moment, moment.utc.setHours(inSouth + LHA), false)
+                when {
+                    moment.utc.isLessThan(riseTime0) -> {
+                        it.prevRiseTime = iterate(moment, moment.utc.setHours(inSouth - LHA - 24.0), true)
+                        it.prevSetTime = iterate(moment, moment.utc.setHours(inSouth + LHA - 24.0), false)
+                        it.riseTime = riseTime0
+                        it.setTime = setTime0
+                    }
+                    moment.utc.isGreaterThan(setTime0) -> {
+                        it.riseTime = riseTime0
+                        it.setTime = setTime0
+                        it.nextRiseTime = iterate(moment, moment.utc.setHours(inSouth - LHA + 24.0), true)
+                        it.nextSetTime = iterate(moment, moment.utc.setHours(inSouth + LHA + 24.0), false)
+                    }
+                    else -> {
+                        it.prevSetTime = iterate(moment, moment.utc.setHours(inSouth + LHA - 24.0), false)
+                        it.riseTime = riseTime0
+                        it.setTime = setTime0
+                        it.nextRiseTime = iterate(moment, moment.utc.setHours(inSouth - LHA + 24.0), true)
+                    }
+                }
+            }
         }
     }
 

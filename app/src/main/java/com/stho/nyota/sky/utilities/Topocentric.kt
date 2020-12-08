@@ -12,10 +12,12 @@ import java.io.Serializable
  * horizontal coordinates, from North (0°) through East (90°), South (180°), West (270°) and back to North.
 */
 class Topocentric(var azimuth: Double, var altitude: Double, var distance: Double = 0.0) : Serializable {
+    var nextSetTime: UTC? = null
     var nextRiseTime: UTC? = null
-    var riseTime: UTC? = null
     var setTime: UTC? = null
+    var riseTime: UTC? = null
     var prevSetTime: UTC? = null
+    var prevRiseTime: UTC? = null
     var inSouth: UTC? = null
     var culmination = 0.0
 
