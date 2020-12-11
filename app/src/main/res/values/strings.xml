@@ -8,6 +8,7 @@
     <string name="action_moment">Moment</string>
     <string name="action_settings">Settings</string>
     <string name="action_cities">Cities</string>
+    <string name="action_display">Display</string>
     <string name="menu_home">Home</string>
     <string name="menu_stars">Stars</string>
     <string name="menu_satellite">Satellite</string>
@@ -114,4 +115,6 @@
     <string name="default_altitude">0.483</string>
     <string name="label_update_location_automatically">Update location automatically</string>
     <string name="default_geo_location">13.4°E 52.64° N</string>
+    <string name="label_default_pitch">+23°</string>
+    <string name="label_default_roll">-3°</string>
 </resources>

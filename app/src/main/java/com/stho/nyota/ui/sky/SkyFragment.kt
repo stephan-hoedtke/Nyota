@@ -1,9 +1,7 @@
 package com.stho.nyota.ui.sky
 
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import com.stho.nyota.AbstractFragment
 import com.stho.nyota.AbstractViewModel
 import com.stho.nyota.R
@@ -26,6 +24,7 @@ class SkyFragment : AbstractFragment() {
         super.onCreate(savedInstanceState)
         val elementName = getElementNameFromArguments()
         viewModel = createSkyViewModel(elementName)
+        setHasOptionsMenu(true)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
@@ -34,6 +33,8 @@ class SkyFragment : AbstractFragment() {
         binding.sky.setUniverse(viewModel.universe)
         binding.sky.setReferenceElement(viewModel.element)
         binding.sky.loadSettings(viewModel.skyViewSettings)
+        binding.buttonZoomIn.setOnClickListener { onZoomIn() }
+        binding.buttonZoomOut.setOnClickListener { onZoomOut() }
 
         return binding.root
     }
@@ -48,6 +49,19 @@ class SkyFragment : AbstractFragment() {
         bindingReference = null
     }
 
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        super.onCreateOptionsMenu(menu, inflater)
+        inflater.inflate(R.menu.menu_sky, menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.itemId == R.id.action_display) {
+            // TODO: Show dialog to set otions... https://guides.codepath.com/android/using-dialogfragment
+            snack(binding.sky, "Show Display Option Dialog here...")
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
     private fun updateMoment(moment: Moment) {
         bind(moment)
     }
@@ -56,6 +70,14 @@ class SkyFragment : AbstractFragment() {
         binding.timeOverlay.currentTime.text = toLocalTimeString(moment)
         binding.sky.notifyDataSetChanged()
         updateActionBar(R.string.label_nyota, toLocalDateString(moment))
+    }
+
+    private fun onZoomIn() {
+        binding.sky.zoomAngle /= 1.1
+    }
+
+    private fun onZoomOut() {
+        binding.sky.zoomAngle *= 1.1
     }
 
     private fun getElementNameFromArguments(): String? {

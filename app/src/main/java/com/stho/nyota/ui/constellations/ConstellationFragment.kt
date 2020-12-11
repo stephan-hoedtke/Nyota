@@ -1,11 +1,10 @@
 package com.stho.nyota.ui.constellations
 
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import com.stho.nyota.AbstractElementFragment
 import com.stho.nyota.AbstractViewModel
+import com.stho.nyota.R
 import com.stho.nyota.databinding.FragmentConstellationBinding
 import com.stho.nyota.sky.universe.Constellation
 import com.stho.nyota.sky.universe.IElement
@@ -26,6 +25,7 @@ class ConstellationFragment : AbstractElementFragment() {
         super.onCreate(savedInstanceState)
         val constellationName: String? = getConstellationNameFromArguments()
         viewModel = createConstellationViewModel(constellationName)
+        setHasOptionsMenu(true)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
@@ -36,6 +36,11 @@ class ConstellationFragment : AbstractElementFragment() {
 
         binding.buttonSkyView.setOnClickListener { onSkyView() }
         binding.buttonFinderView.setOnClickListener { onFinderView() }
+        binding.timeVisibilityOverlay.currentVisibility.setOnClickListener { onToggleImage() }
+        binding.buttonZoomIn.setOnClickListener { onZoomIn() }
+        binding.buttonZoomOut.setOnClickListener { onZoomOut() }
+        binding.sky.setReferenceElement(viewModel.constellation)
+        binding.image.alpha = 0f
 
         return binding.root
     }
@@ -48,6 +53,19 @@ class ConstellationFragment : AbstractElementFragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         bindingReference = null
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        super.onCreateOptionsMenu(menu, inflater)
+        inflater.inflate(R.menu.menu_constellation, menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.itemId == R.id.action_display) {
+            // TODO: Show dialog to set otions... https://guides.codepath.com/android/using-dialogfragment
+            snack(binding.basics, "Show Display Option Dialog here...")
+        }
+        return super.onOptionsItemSelected(item)
     }
 
     override val element: IElement
@@ -67,6 +85,26 @@ class ConstellationFragment : AbstractElementFragment() {
         binding.image.setImageResource(constellation.largeImageId)
         binding.title.text = constellation.name
         updateActionBar(constellation.name, toLocalDateString(moment))
+    }
+
+    private fun onToggleImage() {
+
+        // TODO: Use animation...
+        if (binding.image.alpha < 1f) {
+            binding.image.alpha = 1f
+            binding.sky.visibility = View.INVISIBLE
+        } else {
+            binding.image.alpha = 0f
+            binding.sky.visibility = View.VISIBLE
+        }
+    }
+
+    private fun onZoomIn() {
+        binding.sky.zoomAngle /= 1.1
+    }
+
+    private fun onZoomOut() {
+        binding.sky.zoomAngle *= 1.1
     }
 
     private fun getConstellationNameFromArguments(): String? =

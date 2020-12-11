@@ -4,10 +4,7 @@ import android.content.Context
 import android.graphics.*
 import android.util.AttributeSet
 import android.view.View
-import com.stho.nyota.sky.utilities.Angle
-import com.stho.nyota.sky.utilities.AverageOrientation
-import com.stho.nyota.sky.utilities.Orientation
-import com.stho.nyota.sky.utilities.Topocentric
+import com.stho.nyota.sky.utilities.*
 import kotlin.math.cos
 import kotlin.math.sin
 
@@ -30,7 +27,7 @@ class HorizonView(context: Context?, attrs: AttributeSet?) : View(context, attrs
             }
         }
 
-    var currentDeviceOrientation: Orientation = Orientation.defaultOrientation
+    var currentDeviceOrientation: Orientation = Orientation(35.0, 5.0, -85.0, 12.0) // Orientation.defaultOrientation
         set(value) {
             if (field != value) {
                 field = value
@@ -84,8 +81,8 @@ class HorizonView(context: Context?, attrs: AttributeSet?) : View(context, attrs
         val middle = t / 2.6f
         val outer = t / 2.2f
         val alpha: Float = 0 - currentDeviceOrientation.roll.toFloat()
-        val beta: Float = if (flat) currentDeviceOrientation.direction.toFloat() else currentDeviceOrientation.pitch.toFloat()
-        var phi: Float = Angle.getAngleDifference(targetAltitude.toFloat(), beta)
+        val beta: Float = if (flat) currentDeviceOrientation.pitch.toFloat() else currentDeviceOrientation.direction.toFloat()
+        var phi: Float = Degree.getAngleDifference(targetAltitude, beta.toDouble()).toFloat()
         if (phi > 90) phi = 90f
         if (phi < -90) phi = -90f
         canvas.translate(w / 2.toFloat(), h / 2.toFloat())

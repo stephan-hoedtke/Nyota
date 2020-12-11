@@ -6,27 +6,27 @@ import kotlin.math.IEEErem
  * Created by shoedtke on 20.01.2017.
  */
 object Radian {
-    private const val TWO_PI = Math.PI * 2
-    @JvmStatic
-    fun fromDegrees(degree: Double): Double {
-        return Math.toRadians(degree)
-    }
 
-    fun toDegrees(radian: Double): Double {
-        return Math.toDegrees(radian)
-    }
+    fun fromDegrees(angleInDegree: Double): Double =
+        Math.toRadians(angleInDegree)
 
-    fun toDegrees180(radian: Double): Double {
-        return Degree.normalizeTo180(Math.toDegrees(radian))
-    }
+    fun toDegrees(angleInRadian: Double): Double =
+        Math.toDegrees(angleInRadian)
 
-    fun fromHour(hour: Double): Double {
-        return hour * Math.PI / 12
-    }
+    fun toDegrees180(angleInRadian: Double): Double =
+        Degree.normalizeTo180(Math.toDegrees(angleInRadian))
 
-    fun normalize(radian: Double): Double {
-        var r = radian.IEEErem(TWO_PI)
-        if (r < 0) r += TWO_PI
-        return r
-    }
+    fun fromHour(hour: Double): Double =
+        hour * HOUR_IN_RADIAN
+
+    fun normalize(radian: Double): Double =
+        radian.IEEErem(TWO_PI).let {
+            when {
+                it < 0 -> it + TWO_PI
+                else -> it
+            }
+        }
+
+    private const val TWO_PI = 2 * Math.PI
+    private const val HOUR_IN_RADIAN = Math.PI / 12
 }

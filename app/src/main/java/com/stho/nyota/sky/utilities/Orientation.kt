@@ -20,16 +20,18 @@ import com.stho.nyota.sky.universe.IElement
     Roll:
     - [-180 -- +180] positive: to the left (it's not [-90 -- +90])
  *****************************************************************************************************/
-
-class Orientation(val azimuth: Double, val pitch: Double, val direction: Double, val roll: Double) {
+/*
+    Orientation: azimuth, pitch and roll in Degree
+ */
+data class Orientation(val azimuth: Double, val pitch: Double, val direction: Double, val roll: Double) {
 
     fun getRotationToTargetAt(element: IElement): Float {
         val targetAzimuth = element.position?.azimuth ?: 0.0
-        return Angle.getAngleDifference(x = targetAzimuth, y = azimuth).toFloat()
+        return Degree.getAngleDifference(x = targetAzimuth, y = azimuth).toFloat()
     }
 
     fun getRotationToNorth(): Float =
-        Angle.normalizeTo180(-azimuth).toFloat()
+        Degree.normalizeTo180(-azimuth).toFloat()
 
     companion object {
         val defaultOrientation: Orientation

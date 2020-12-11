@@ -17,6 +17,7 @@
     <dimen name="bottom_space">50dp</dimen>
     <dimen name="list_entry_space">7dp</dimen>
     <dimen name="image_size">200dp</dimen>
+    <dimen name="sky_size">400dp</dimen>
     <dimen name="home_image_size">100dp</dimen>
     <dimen name="image_margin">12dp</dimen>
     <dimen name="card_view_margin">12dp</dimen>

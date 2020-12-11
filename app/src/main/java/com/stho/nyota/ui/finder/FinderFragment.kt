@@ -1,4 +1,6 @@
 package com.stho.nyota.ui.finder
+
+
 import android.os.Bundle
 import android.os.Handler
 import android.view.LayoutInflater
@@ -16,8 +18,6 @@ import com.stho.nyota.views.RotaryView
 
 class FinderFragment : AbstractFragment() {
 
-    private lateinit var orientationFilter: IOrientationFilter
-    private lateinit var orientationSensorListener: OrientationSensorListener
     private lateinit var viewModel: FinderViewModel
     private var bindingReference: FragmentFinderBinding? = null
     private val binding: FragmentFinderBinding get() = bindingReference!!
@@ -30,8 +30,6 @@ class FinderFragment : AbstractFragment() {
         super.onCreate(savedInstanceState)
         val elementName: String? = getElementNameFromArguments()
         viewModel = createFinderViewModel(elementName)
-        orientationFilter = OrientationAccelerationFilter()
-        orientationSensorListener = OrientationSensorListener(requireContext(), orientationFilter)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
@@ -66,27 +64,7 @@ class FinderFragment : AbstractFragment() {
     override fun onResume() {
         super.onResume()
         viewModel.reset()
-        orientationSensorListener.onResume()
-        initializeHandler()
     }
-
-    override fun onPause() {
-        super.onPause()
-        removeHandler()
-        orientationSensorListener.onPause()
-    }
-
-    private fun initializeHandler() {
-        handler.postDelayed(object : Runnable {
-            override fun run() {
-                viewModel.updateDeviceOrientation(orientationFilter.orientation)
-                handler.postDelayed(this, FinderFragment.HANDLER_DELAY.toLong())
-            }
-        }, FinderFragment.HANDLER_DELAY.toLong())
-    }
-
-    private fun removeHandler() =
-        handler.removeCallbacksAndMessages(null)
 
     private fun onUpdateElement(moment: Moment) =
         bind(moment, viewModel.element)
@@ -100,9 +78,8 @@ class FinderFragment : AbstractFragment() {
         updateActionBar(element.name, toLocalDateString(moment))
     }
 
-    private fun onUpdateDeviceOrientation(orientation: Orientation) {
+    private fun onUpdateDeviceOrientation(orientation: Orientation) =
         bind(orientation, viewModel.element)
-    }
 
     private fun bind(orientation: Orientation, element: IElement) {
         binding.compassNorthPointer.rotation = orientation.getRotationToNorth()
@@ -110,16 +87,14 @@ class FinderFragment : AbstractFragment() {
         binding.horizonView.currentDeviceOrientation = orientation
         binding.currentDeviceAzimuth.text = Angle.toString(orientation.azimuth, Angle.AngleType.AZIMUTH)
         binding.currentDevicePitch.text = Angle.toString(orientation.pitch, Angle.AngleType.PITCH)
+        binding.currentDeviceRoll.text = Angle.toString(orientation.roll, Angle.AngleType.PITCH)
     }
 
-    private fun getElementNameFromArguments(): String? {
-        return arguments?.getString("ELEMENT")
-    }
+    private fun getElementNameFromArguments(): String? =
+        arguments?.getString("ELEMENT")
 
     companion object {
         private const val HANDLER_DELAY = 100
     }
-
-    // TODO: compass sensor into main activity ??
 }
 

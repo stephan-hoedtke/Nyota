@@ -1,8 +1,11 @@
+@file:Suppress("FunctionName", "LocalVariableName")
+
 package com.stho.nyota.sky.universe
 
 import com.stho.nyota.sky.utilities.*
 import com.stho.nyota.sky.utilities.Vector
 import java.util.*
+import kotlin.math.*
 
 /**
  * Jean Meeus: Astronomical Algorithms
@@ -18,7 +21,6 @@ object Algorithms {
      * @param utc a date in UTC
      * @return Universal Time
      */
-    @JvmStatic
     fun UT(utc: Calendar): Double {
         val H = utc[Calendar.HOUR_OF_DAY]
         val M = utc[Calendar.MINUTE]
@@ -32,27 +34,20 @@ object Algorithms {
      * @param JD Julian Day
      * @return Universal Time
      */
-    @JvmStatic
-    fun UT(JD: Double): Double {
-        return 24.0 * decimals(JD - 0.5)
-    }
+    fun UT(JD: Double): Double =
+        24.0 * decimals(JD - 0.5)
 
     /**
      * Julian Day from the beginning of the day 0:00 GMT
      * @param JD Julian Day
      * @return Julian Day
      */
-    @JvmStatic
-    fun JD0(JD: Double): Double {
-        return truncate(JD - 0.5) + 0.5
-    }
+    fun JD0(JD: Double): Double =
+        truncate(JD - 0.5) + 0.5
 
-    // TODO: remove @JvmStatic
-    @JvmStatic
     fun truncate(value: Double): Double =
         kotlin.math.truncate(value)
 
-    @JvmStatic
     fun decimals(value: Double): Double =
         value - truncate(value)
 
@@ -62,7 +57,6 @@ object Algorithms {
      * @param JD Julian Day
      * @return Sidereal Time at Greenwich [0 .. 24]
      */
-    @JvmStatic
     fun GMST0(JD: Double): Double {
         // (2) Paul Schlyter, Computing planetary positions
         // Sun's position
@@ -73,6 +67,29 @@ object Algorithms {
         val d = JD - 2451543.5
         val L = 278.9874 + 0.985647352 * d
         return Hour.normalize(L / 15 + 12)
+    }
+
+    /// <summary>
+    /// Greenwich Mean Sideral Time, the Local Sidereal Time at Greenwich - The time based on the rotation of the earth in relation to the stars (vernal equinox crosses greenwich meridian).
+    /// </summary>
+    /// <param name="julianDay">Julian Day</param>
+    /// <returns>[G]reenwich [M]ean [S]ideral [T]ime in hours</returns>
+    fun GMST(julianDay: Double): Double =
+        GMST_RummelPeters(julianDay)
+
+    /// <summary>
+    /// Greenwich Mean Sidereal time = Right ascension of the sun at the given Julian Day.
+    /// Following the explanation of Rummel and Peters
+    /// https://de.wikipedia.org/wiki/Sternzeit
+    /// </summary>
+    /// <param name="julianDay">Julian Day</param>
+    /// <returns>Greenwich Mean Sidereal Time (in hours)</returns>
+    private fun GMST_RummelPeters(julianDay: Double): Double {
+        val omega = 1.00273790935
+        val UT1 = decimals(julianDay - 0.5)
+        val r = (julianDay - UT1 - 2451545.0) / 36525
+        val s = 24110.54841 + r * (8640184.812866 + r * (0.093104 + r * 0.0000062))
+        return Hour.normalize(s / SECONDS_PER_HOUR + 24 * UT1 * omega)
     }
 
     private fun GMST_JeanMeeus(JD: Double): Double {
@@ -90,41 +107,13 @@ object Algorithms {
     }
 
     /// <summary>
-    /// Greenwich Mean Sideral Time, the Local Sidereal Time at Greenwich - The time based on the rotation of the earth in relation to the stars (vernal equinox crosses greenwich meridian).
-    /// </summary>
-    /// <param name="julianDay">Julian Day</param>
-    /// <returns>[G]reenwich [M]ean [S]ideral [T]ime in hours</returns>
-    @JvmStatic
-    fun GMST(julianDay: Double): Double {
-        return GMST_RummelPeters(julianDay)
-    }
-
-    /// <summary>
-    /// Greenwich Mean Sidereal time = Right ascension of the sun at the given Julian Day.
-    /// Following the explanation of Rummel and Peters
-    /// https://de.wikipedia.org/wiki/Sternzeit
-    /// </summary>
-    /// <param name="julianDay">Julian Day</param>
-    /// <returns>Greenwich Mean Sidereal Time (in hours)</returns>
-    private fun GMST_RummelPeters(julianDay: Double): Double {
-        val omega = 1.00273790935
-        val UT1 = decimals(julianDay - 0.5)
-        val r = (julianDay - UT1 - 2451545.0) / 36525
-        val s = 24110.54841 + r * (8640184.812866 + r * (0.093104 + r * 0.0000062))
-        return Hour.normalize(s / SECONDS_PER_HOUR + 24 * UT1 * omega)
-    }
-
-    /// <summary>
     /// Local Sidereal Time = Greenwich Mean Siderial Time + Longitude = The time based on the rotation of the earth in relation to the stars (vernal equinox crosses local meridian).
     /// </summary>
     /// <param name="JD">Julian Day</param>
     /// <param name="observerLongitude">Observer's longitude in degree</param>
     /// <returns>[L]ocal [S]idereal [T]ime in hours</returns>
-    @JvmStatic
-    fun LST(julianDay: Double, observerLongitude: Double): Double {
-        val GMST = GMST(julianDay)
-        return Hour.normalize(GMST + observerLongitude / 15)
-    }
+    fun LST(julianDay: Double, observerLongitude: Double): Double =
+        Hour.normalize(GMST(julianDay) + observerLongitude / 15)
 
     /// <summary>
     /// Calculates the epoch time in days since 1950 Jan 0.0 UTC, and returns the right ascension of Greenwich at epoch.
@@ -133,20 +122,16 @@ object Algorithms {
     /// </summary>
     /// <param name="jd">Epoch as Julian Day</param>
     /// <returns>Right ascension of Greenwich at this epoch in radian</returns>
-    @JvmStatic
-    fun ThetaG(julianDay: Double): Double {
-        val GMST = GMST(julianDay)
-        return Radian.fromHour(GMST)
-    }
+    fun getThetaG(julianDay: Double): Double =
+        Radian.fromHour(GMST(julianDay))
 
     /// <summary>
     /// Return ECI (Earth centered coordinates), Reference: The 1992 Astronomical Almanac, page K11.
     /// </summary>
-    @JvmStatic
     fun getECI(location: Location, julianDay: Double): Vector {
         val latitude = Radian.fromDegrees(location.latitude)
         val longitude = Radian.fromDegrees(location.longitude)
-        val thetaG = ThetaG(julianDay)
+        val thetaG = getThetaG(julianDay)
         val theta = Radian.normalize(thetaG + longitude)
         return getECI_EllipticalEarth(latitude, theta, location.altitude)
     }
@@ -154,21 +139,18 @@ object Algorithms {
     private fun getECI_EllipticalEarth(phi: Double, theta: Double, altitude: Double): Vector {
         val a = EARTH_RADIUS + altitude
         val f = EARTH_FLATTENING
-        val C = 1 / Math.sqrt(1 + f * (f - 2) * Math.sin(phi) * Math.sin(phi))
+        val C = 1 / sqrt(1 + f * (f - 2) * sin(phi) * sin(phi))
         val S = (1 - f) * (1 - f) * C
         return Vector(
-                a * C * Math.cos(phi) * Math.cos(theta),
-                a * C * Math.cos(phi) * Math.sin(theta),
-                a * S * Math.sin(phi)
+                a * C * cos(phi) * cos(theta),
+                a * C * cos(phi) * sin(theta),
+                a * S * sin(phi)
         )
     }
 
-    @JvmStatic
-    fun getTopocentricFromPosition(moment: Moment, position: Vector): Topocentric {
-        return getTopocentricFromPosition(moment.location, moment.utc.julianDay, position)
-    }
+    fun getTopocentricFromPosition(moment: Moment, position: Vector): Topocentric =
+        getTopocentricFromPosition(moment.location, moment.utc.julianDay, position)
 
-    @JvmStatic
     fun getTopocentricFromPosition(observer: Location, julianDay: Double, position: Vector): Topocentric {
         val base = getECI(observer, julianDay)
         val difference = position.minus(base)
@@ -178,7 +160,7 @@ object Algorithms {
     private fun getTopocentricFromRelativeECI(observer: Location, julianDay: Double, difference: Vector): Topocentric {
         val latitude = Radian.fromDegrees(observer.latitude)
         val longitude = Radian.fromDegrees(observer.longitude)
-        val thetaG = ThetaG(julianDay)
+        val thetaG = getThetaG(julianDay)
         val theta = Radian.normalize(thetaG + longitude)
         return getTopocentricFromRelativeECI(latitude, theta, difference)
     }
@@ -189,38 +171,35 @@ object Algorithms {
     /// <param name="eci">Earth centered cartesian coordinates in km</param>
     /// <returns>Topocentric coordinates (azimuth, altitude, distance)
     private fun getTopocentricFromRelativeECI(phi: Double, theta: Double, eci: Vector): Topocentric {
-        val S = Math.sin(phi) * Math.cos(theta) * eci.x + Math.sin(phi) * Math.sin(theta) * eci.y - Math.cos(phi) * eci.z
-        val Z = Math.cos(phi) * Math.cos(theta) * eci.x + Math.cos(phi) * Math.sin(theta) * eci.y + Math.sin(phi) * eci.z
-        val E = Math.cos(theta) * eci.y - Math.sin(theta) * eci.x
-        val distance = Math.sqrt(S * S + Z * Z + E * E)
-        val altitude = Radian.toDegrees180(Math.asin(Z / distance))
-        val azimuth = Radian.toDegrees180(Math.PI - Math.atan2(E, S))
+        val S = sin(phi) * cos(theta) * eci.x + sin(phi) * sin(theta) * eci.y - cos(phi) * eci.z
+        val Z = cos(phi) * cos(theta) * eci.x + cos(phi) * sin(theta) * eci.y + sin(phi) * eci.z
+        val E = cos(theta) * eci.y - sin(theta) * eci.x
+        val distance = sqrt(S * S + Z * Z + E * E)
+        val altitude = Radian.toDegrees180(asin(Z / distance))
+        val azimuth = Radian.toDegrees180(Math.PI - atan2(E, S))
         return Topocentric(azimuth, altitude, distance)
     }
 
     /// <summary>
     /// Get the geographic location from an ECI
     /// </summary>
-    @JvmStatic
-    fun getLocationForECI(eci: Vector, julianDay: Double): Location {
-        val thetaG = ThetaG(julianDay)
-        return getLocationForECI_EllipticalEarth(eci, thetaG)
-    }
+    fun getLocationForECI(eci: Vector, julianDay: Double): Location =
+        getLocationForECI_EllipticalEarth(eci, getThetaG(julianDay))
 
     private fun getLocationForECI_EllipticalEarth(eci: Vector, thetaG: Double): Location {
         val TOLERANCE = 0.001
         val a = EARTH_RADIUS
         val f = EARTH_FLATTENING
-        val R = Math.sqrt(eci.x * eci.x + eci.y * eci.y)
+        val R = sqrt(eci.x * eci.x + eci.y * eci.y)
         val e2 = f * (2 - f)
-        var phi1 = Math.atan2(eci.z, R)
+        var phi1 = atan2(eci.z, R)
         while (true) {
-            val sinphi = Math.sin(phi1)
-            val C = 1 / Math.sqrt(1 - e2 * sinphi * sinphi)
-            val phi = Math.atan2(eci.z + a * C * e2 * sinphi, R)
-            if (Math.abs(phi - phi1) < TOLERANCE) {
-                val lambda = Math.atan2(eci.y, eci.x) - thetaG
-                val height = R / Math.cos(phi) - a * C
+            val sinPhi = sin(phi1)
+            val C = 1 / sqrt(1 - e2 * sinPhi * sinPhi)
+            val phi = atan2(eci.z + a * C * e2 * sinPhi, R)
+            if (abs(phi - phi1) < TOLERANCE) {
+                val lambda = atan2(eci.y, eci.x) - thetaG
+                val height = R / cos(phi) - a * C
                 return Location(Radian.toDegrees180(phi), Radian.toDegrees180(lambda), height)
             }
             phi1 = phi
@@ -233,11 +212,10 @@ object Algorithms {
     /// <param name="altitude">Height of the satellite in km</param>
     /// <param name="elevation">Minimal elevation in degree</param>
     /// <returns>Radius of visibility in km</returns>
-    @JvmStatic
     fun getVisibilityRadius(height: Double, elevation: Double): Double {
         // SINUSSATZ --> R / cos(alpha + elevation) = (R+H) / cos(elevation)
         val beta = Radian.fromDegrees(elevation)
-        val alpha = Math.acos(Math.cos(beta) * EARTH_RADIUS / (EARTH_RADIUS + height)) - beta
+        val alpha = acos(cos(beta) * EARTH_RADIUS / (EARTH_RADIUS + height)) - beta
         return alpha * EARTH_RADIUS
     }
 
@@ -253,8 +231,9 @@ object Algorithms {
         val longitude = Radian.fromDegrees(location.longitude)
         val angle = Radian.fromDegrees(bearing)
         val ratio = distance / EARTH_RADIUS
-        val newLatitude = Math.asin(Math.sin(latitude) * Math.cos(ratio) + Math.cos(latitude) * Math.sin(ratio) * Math.cos(angle))
-        val newLongitude = Math.atan2(Math.sin(angle) * Math.sin(ratio) * Math.cos(latitude), Math.cos(ratio) - Math.sin(latitude) * Math.sin(newLatitude))
+        val newLatitude = asin(sin(latitude) * cos(ratio) + cos(latitude) * sin(ratio) * cos(angle))
+        val newLongitude = atan2(sin(angle) * sin(ratio) * cos(latitude), cos(ratio) - sin(latitude) * sin(newLatitude))
         return Location(Radian.toDegrees180(newLatitude), Radian.toDegrees180(longitude + newLongitude), location.altitude)
     }
 }
+

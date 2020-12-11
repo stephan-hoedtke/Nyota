@@ -1,6 +1,6 @@
 package com.stho.nyota.sky.universe
 
-import com.stho.nyota.sky.universe.Algorithms.ThetaG
+import com.stho.nyota.sky.universe.Algorithms.getThetaG
 import com.stho.nyota.sky.utilities.Vector
 
 /**
@@ -322,7 +322,7 @@ object SatelliteAlgorithms {
         var zcosh = cosq
         var sl = 0.0
         var iteration: Int
-        Params.thgr = ThetaG(tle.Epoch)
+        Params.thgr = getThetaG(tle.Epoch)
         Params.xnq = Params.xnodp
         Params.xqncl = tle.xincl
         Params.omegaq = tle.omegao

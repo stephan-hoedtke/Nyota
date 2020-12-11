@@ -3,8 +3,7 @@ package com.stho.software.nyota.views
 import android.content.Context
 import android.graphics.Canvas
 import android.util.AttributeSet
-import com.stho.nyota.sky.universe.IElement
-import com.stho.nyota.sky.universe.Universe
+import com.stho.nyota.sky.universe.*
 import com.stho.nyota.sky.utilities.Topocentric
 import com.stho.nyota.views.AbstractSkyView
 import java.text.FieldPosition
@@ -34,9 +33,12 @@ class SkyView(context: Context?, attrs: AttributeSet?) : AbstractSkyView(context
     override val referencePosition: Topocentric?
         get() = referenceElement?.position
 
-    protected override fun onDrawElements(canvas: Canvas, zoom: Double) {
-        if (universe != null) {
-            drawUniverse(canvas, zoom, universe!!)
+    override fun onDrawElements(canvas: Canvas, zoom: Double) {
+        universe?.also {
+            drawUniverse(canvas, zoom, it)
+        }
+        referenceElement?.also {
+            drawReferencedElement(canvas, zoom, it)
         }
     }
 
@@ -69,4 +71,12 @@ class SkyView(context: Context?, attrs: AttributeSet?) : AbstractSkyView(context
         super.drawSun(canvas, zoom, universe.solarSystem.sun)
         super.drawName(canvas, zoom, universe.zenit, "Z")
     }
+
+    private fun drawReferencedElement(canvas: Canvas, zoom: Double, element: IElement) {
+        when (element) {
+            is Constellation -> super.drawConstellation(canvas, zoom, element)
+            is AbstractPlanet -> super.drawPlanet(canvas, zoom, element)
+        }
+    }
 }
+

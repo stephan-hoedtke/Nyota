@@ -19,7 +19,7 @@ class JulianDayUnitTest {
     fun julianDay_isCorrect() {
         val a = UTC.forCalendar(thisDate)
         val JD = a.julianDay
-        val b  = JulianDay.toUTC(JD)
+        val b  = UTC.forJulianDay(JD)
         val difference = abs(a.timeInMillis.toDouble() - b.timeInMillis)
 
         Assert.assertTrue("UTC -> JD -> UTC", difference < 3)

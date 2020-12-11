@@ -1,42 +1,8 @@
 package com.stho.nyota.sky.utilities
 
-import java.lang.Math.PI
 import kotlin.math.abs
 
 object Angle {
-    fun getAngleDifference(x: Float, y: Float): Float =
-        normalizeTo180(x - y)
-
-    fun getAngleDifference(x: Double, y: Double): Double =
-        normalizeTo180(x - y)
-
-    fun normalize(angle: Float): Float =
-        when {
-            angle > 360 -> normalize(angle - 360)
-            angle < 0 -> normalize(angle + 360)
-            else -> angle
-        }
-
-    fun normalize(angle: Double): Double =
-        when {
-            angle > 360 -> normalize(angle - 360)
-            angle < 0 -> normalize(angle + 360)
-            else -> angle
-        }
-
-    fun normalizeTo180(angle: Float): Float =
-        when {
-            angle > 180 -> normalizeTo180(angle - 360)
-            angle <= -180 -> normalizeTo180(angle + 360)
-            else -> angle
-        }
-
-    fun normalizeTo180(angle: Double): Double =
-        when {
-            angle > 180 -> normalizeTo180(angle - 360)
-            angle <= -180 -> normalizeTo180(angle + 360)
-            else -> angle
-        }
 
     fun toString(angle: Double, angleType: AngleType?): String =
         when (angleType) {
@@ -45,10 +11,6 @@ object Angle {
                 Formatter.df0.format(abs(alpha)) + "° " + northEastSouthWest(alpha)
             }
             AngleType.ALTITUDE -> {
-                val alpha = normalizeTo180(angle)
-                sign(alpha) + Formatter.df0.format(abs(alpha)) + "°"
-            }
-            AngleType.PITCH -> {
                 val alpha = normalizeTo180(angle)
                 sign(alpha) + Formatter.df0.format(abs(alpha)) + "°"
             }
@@ -66,12 +28,9 @@ object Angle {
             }
             else -> {
                 val alpha = normalizeTo180(angle)
-                sign(alpha) + Formatter.df2.format(Math.abs(alpha)) + "°"
+                sign(alpha) + Formatter.df2.format(abs(alpha)) + "°"
             }
         }
-
-    fun toDegree(angle: Double): Double =
-        angle * RADIANT_TO_DEGREE
 
     private fun sign(x: Double): String =
         if (x < 0) "-" else "+"
@@ -91,11 +50,16 @@ object Angle {
     private fun northEastSouthWest(angle: Double): String =
         DIRECTION[((angle + 22.5) / 45.0).toInt()]
 
+    private fun normalize(angle: Double): Double =
+        Degree.normalize(angle)
+
+    private fun normalizeTo180(angle: Double): Double =
+        Degree.normalizeTo180(angle)
+
     enum class AngleType {
-        DEGREE_NORTH_EAST_SOUTH_WEST, AZIMUTH, ALTITUDE, LATITUDE, LONGITUDE, PITCH
+        DEGREE_NORTH_EAST_SOUTH_WEST, AZIMUTH, ALTITUDE, LATITUDE, LONGITUDE, PITCH, ROLL
     }
 
-    private const val RADIANT_TO_DEGREE = 180.0 / PI
     private val DIRECTION = arrayOf("N", "NE", "E", "SE", "S", "SW", "W", "NW", "N")
 
 }

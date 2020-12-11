@@ -19,7 +19,6 @@ class Repository private constructor() {
     private val lock = Semaphore(1)
 
     var universe: Universe = Universe()
-    var orientation: AverageOrientation = AverageOrientation()
 
     private val settingsLiveData = MutableLiveData<Settings>()
     private val citiesLiveData = MutableLiveData<Cities>()
@@ -44,8 +43,11 @@ class Repository private constructor() {
     val currentAutomaticLocation: Location
         get() = currentAutomaticMomentLiveData.value!!.city.location
 
-    val currentAutomaticMoment: Moment
-        get() = currentAutomaticMomentLiveData.value!!
+    val currentOrientationLD: LiveData<Orientation>
+        get() = currentOrientationLiveData
+
+    val currentOrientation: Orientation
+        get() = currentOrientationLiveData.value ?: Orientation.defaultOrientation
 
     val citiesLD: LiveData<Cities>
         get() = citiesLiveData
@@ -145,6 +147,10 @@ class Repository private constructor() {
             return true
         }
         return false
+    }
+
+    internal fun updateOrientation(orientation: Orientation) {
+        currentOrientationLiveData.postValue(orientation)
     }
 
     internal fun updateForNow(location: Location?) {

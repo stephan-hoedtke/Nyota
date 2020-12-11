@@ -54,7 +54,18 @@
         app:layout_constraintStart_toEndOf="@id/iconHorizontal"
         app:layout_constraintTop_toTopOf="@id/iconHorizontal"
         app:layout_constraintBottom_toBottomOf="@id/iconHorizontal"
-        android:text="@string/label_default_orientation" />
+        android:text="@string/label_default_pitch" />
+
+    <TextView
+        android:id="@+id/currentDeviceRoll"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toEndOf="@id/currentDevicePitch"
+        app:layout_constraintTop_toTopOf="@id/currentDevicePitch"
+        app:layout_constraintBottom_toBottomOf="@id/currentDevicePitch"
+        android:layout_marginHorizontal="@dimen/element_margin"
+        android:text="@string/label_default_roll" />
+
 
     <TextView
         android:id="@+id/targetAltitude"

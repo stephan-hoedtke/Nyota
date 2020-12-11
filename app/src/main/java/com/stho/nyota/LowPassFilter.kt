@@ -9,7 +9,7 @@ internal class LowPassFilter {
     private var count: Long = 0
 
     fun setAcceleration(acceleration: FloatArray): Vector {
-        val dt = averageTimeDifferenceInSeconds
+        val dt: Double = averageTimeDifferenceInSeconds
         lowPassFilter(acceleration, dt)
         return gravity
     }
@@ -21,7 +21,7 @@ internal class LowPassFilter {
         count = 0
     }
 
-    private fun lowPassFilter(acceleration: FloatArray, dt: Float) {
+    private fun lowPassFilter(acceleration: FloatArray, dt: Double) {
         if (dt > 0) {
             val alpha = dt / (TIME_CONSTANT + dt)
             gravity.x += alpha * (acceleration[0] - gravity.x)
@@ -34,19 +34,29 @@ internal class LowPassFilter {
         }
     }
 
-    private val averageTimeDifferenceInSeconds: Float
-        get() = if (count == 0L) {
-            startTimeNanos = SystemClock.elapsedRealtimeNanos()
-            count++
-            0f
-        } else {
-            val averageNanos = (SystemClock.elapsedRealtimeNanos() - startTimeNanos) / count++
-            averageNanos / NANOS_PER_SECOND
+    private val averageTimeDifferenceInSeconds: Double
+        get() = when {
+            count < 2 -> {
+                startTimeNanos = SystemClock.elapsedRealtimeNanos()
+                count = 2
+                0.0
+            }
+            count > 1000000 -> {
+                val averageNanos = (SystemClock.elapsedRealtimeNanos() - startTimeNanos) / count++
+                startTimeNanos = SystemClock.elapsedRealtimeNanos()
+                count = 2
+                averageNanos / NANOS_PER_SECOND
+            }
+            else -> {
+                val averageNanos = (SystemClock.elapsedRealtimeNanos() - startTimeNanos) / count++
+                averageNanos / NANOS_PER_SECOND
+            }
         }
 
     companion object {
-        private const val TIME_CONSTANT = 0.2f
-        private const val NANOS_PER_SECOND = 1000000000f
+        private const val TIME_CONSTANT = 0.2
+        private const val NANOS_PER_SECOND = 1000000000.0
     }
 }
+
 

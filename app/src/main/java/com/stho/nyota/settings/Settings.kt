@@ -11,6 +11,7 @@ class Settings: AbstractSkyView.ISkyViewSettings {
     private val intervalLiveData: MutableLiveData<Interval> = MutableLiveData()
     private val updateTimeAutomaticallyLiveData: MutableLiveData<Boolean> = MutableLiveData()
     private val updateLocationAutomaticallyLiveData: MutableLiveData<Boolean> = MutableLiveData()
+    private val updateOrientationAutomaticallyLiveData: MutableLiveData<Boolean> = MutableLiveData()
 
     val updateLocationAutomaticallyLD: LiveData<Boolean>
         get() = updateLocationAutomaticallyLiveData
@@ -31,6 +32,17 @@ class Settings: AbstractSkyView.ISkyViewSettings {
         set(value) {
             if (updateTimeAutomaticallyLiveData.value != value) {
                 updateTimeAutomaticallyLiveData.postValue(value)
+            }
+        }
+
+    val updateOrientationAutomaticallyLD: LiveData<Boolean>
+        get() = updateOrientationAutomaticallyLiveData
+
+    var updateOrientationAutomatically: Boolean
+        get() = updateOrientationAutomaticallyLiveData.value ?: true
+        set(value) {
+            if (updateOrientationAutomaticallyLiveData.value != value) {
+                updateLocationAutomaticallyLiveData.postValue(value)
             }
         }
 

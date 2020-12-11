@@ -15,7 +15,7 @@ internal abstract class AbstractUniverseInitializer(protected var universe: Univ
     private fun newStar(name: String, symbol: String, ascension: Hour, declination: Degree, brightness: Double): Star {
         var star = getStar(name);
         if (star == null) {
-            star = Star(name, symbol, ascension.toDegree(), declination.toDegree(), brightness).also {
+            star = Star(name, symbol, ascension.angleInDegree, declination.angleInDegree, brightness).also {
                 universe.stars.add(it)
             }
         }
@@ -47,7 +47,7 @@ internal abstract class AbstractUniverseInitializer(protected var universe: Univ
     }
 
     fun newSpecialElement(name: String, ascension: Hour, declination: Degree): SpecialElement =
-        SpecialElement(name, ascension.toDegree(), declination.toDegree()).also {
+        SpecialElement(name, ascension.angleInDegree, declination.angleInDegree).also {
             universe.specials.add(it)
         }
 

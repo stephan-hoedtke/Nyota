@@ -49,7 +49,7 @@ class Target(override val name: String, ra: Double, decl: Double) : AbstractElem
         }
 
         fun create(name: String, ascension: String, declination: String): Target {
-            return Target.create(name, Hour.fromHour(ascension).toDegree(), Degree.fromDegree(declination).toDegree())
+            return Target.create(name, Hour.fromHour(ascension).angleInDegree, Degree.fromDegree(declination).angleInDegree)
         }
 
         fun createDefaultNeowise(): Target {

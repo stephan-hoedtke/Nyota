@@ -2,6 +2,7 @@ package com.stho.nyota.sky.utilities
 
 import java.security.InvalidParameterException
 import java.util.regex.Pattern
+import kotlin.jvm.internal.Intrinsics
 import kotlin.math.*
 
 /**
@@ -9,10 +10,10 @@ import kotlin.math.*
  */
 class Degree {
     val angleInDegree: Double
-    val sign: Int
-    val degree: Int
-    val minute: Int
-    val seconds: Double
+    private val sign: Int
+    private val degree: Int
+    private val minute: Int
+    private val seconds: Double
 
     private constructor(angleInDegree: Double) {
         this.angleInDegree = normalizeTo180(angleInDegree)
@@ -32,30 +33,21 @@ class Degree {
         angleInDegree = this.sign * (this.degree + this.minute / 60.0 + this.seconds / 3600.0)
     }
 
-    override fun toString(): String {
-        return (if (sign < 0) "-" else "") + degree + "° " + minute + "' " + Formatter.df0.format(seconds) + "''"
-    }
+    override fun toString(): String =
+        (if (sign < 0) "-" else "") + degree + "° " + minute + "' " + Formatter.df0.format(seconds) + "''"
 
-    fun toShortString(): String {
-        return (if (sign < 0) "-" else "") + degree + "° " + minute + "'"
-    }
-
-    fun toDegree(): Double {
-        return angleInDegree
-    }
+    fun toShortString(): String =
+        (if (sign < 0) "-" else "") + degree + "° " + minute + "'"
 
     companion object {
-        fun fromDegree(angleInDegree: Double): Degree {
-            return Degree(angleInDegree)
-        }
+        fun fromDegree(angleInDegree: Double): Degree =
+            Degree(angleInDegree)
 
-        fun fromPositive(degree: Int, minute: Int, seconds: Double): Degree {
-            return Degree(1, abs(degree), minute, seconds)
-        }
+        fun fromPositive(degree: Int, minute: Int, seconds: Double): Degree =
+            Degree(1, abs(degree), minute, seconds)
 
-        fun fromNegative(degree: Int, minute: Int, seconds: Double): Degree {
-            return Degree(-1, abs(degree), minute, seconds)
-        }
+        fun fromNegative(degree: Int, minute: Int, seconds: Double): Degree =
+            Degree(-1, abs(degree), minute, seconds)
 
         private val pattern = Pattern.compile("^([+|−|-|–|-])(\\d+)[°]\\s(\\d+)[′|']\\s(\\d+[.]*\\d*)$") // for:  −11° 09′ 40.5
 
@@ -74,8 +66,14 @@ class Degree {
             throw InvalidParameterException("Invalid degree $str")
         }
 
+        fun fromRadian(angleInRadian: Double): Degree =
+            Degree(Math.toDegrees(angleInRadian))
+
+        fun toRadian(angleInDegree: Double): Double =
+            Math.toRadians(angleInDegree)
+
         /* convert from degree to radian */
-        private const val DEGRAD = Math.PI / 180.0
+        internal const val DEGRAD = Math.PI / 180.0
 
         /* convert from radian to degree */
         internal const val RADEG = 180.0 / Math.PI
@@ -104,17 +102,25 @@ class Degree {
             return RADEG * kotlin.math.acos(x)
         }
 
-        fun normalize(degree: Double): Double {
-            var a = Math.IEEEremainder(degree, 360.0)
-            if (a < 0) a += 360.0
-            return a
-        }
+        fun normalize(degree: Double): Double =
+            degree.IEEErem(360.0).let {
+                when {
+                    it < 0 -> it + 360.0
+                    else -> it
+                }
+            }
 
-        fun normalizeTo180(degree: Double): Double {
-            var a = Math.IEEEremainder(degree, 360.0)
-            if (a > 180) a -= 360.0
-            if (a < -180) a += 360.0
-            return a
-        }
+        fun normalizeTo180(degree: Double): Double =
+            degree.IEEErem(360.0).let {
+                when {
+                    it > 180 -> it - 360.0
+                    it < -180 -> it + 360.0
+                    else -> it
+                }
+            }
+
+        fun getAngleDifference(x: Double, y: Double): Double =
+            normalizeTo180(x - y)
+
     }
 }

@@ -18,6 +18,8 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.navigation.NavigationView
 import com.stho.nyota.repository.Repository
+import com.stho.nyota.ui.finder.IOrientationFilter
+import com.stho.nyota.ui.finder.OrientationAccelerationFilter
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers.Default
 import kotlinx.coroutines.launch
@@ -29,14 +31,17 @@ class MainActivity : AppCompatActivity(), LocationListener {
     private lateinit var handler: Handler
     private lateinit var locationManager: LocationManager
     private var currentLocation: com.stho.nyota.sky.utilities.Location? = null
-
-    // TODO: implement location listener here, and post it to repository from here... using a private location variable which updates the repository
+    private lateinit var orientationFilter: IOrientationFilter
+    private lateinit var orientationSensorListener: OrientationSensorListener
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         val toolbar: Toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
+
+        orientationFilter = OrientationAccelerationFilter()
+        orientationSensorListener = OrientationSensorListener(this, orientationFilter)
 
 //  TODO: cleanup code or comment
 //        val fab: FloatingActionButton = findViewById(R.id.fab)
@@ -61,13 +66,13 @@ class MainActivity : AppCompatActivity(), LocationListener {
 
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
-        repository = Repository.requireRepository(this)
         handler = Handler()
+        repository = Repository.requireRepository(this)
         locationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        menuInflater.inflate(R.menu.main, menu)
+        menuInflater.inflate(R.menu.menu_main, menu)
         return true
     }
 
@@ -84,6 +89,7 @@ class MainActivity : AppCompatActivity(), LocationListener {
         findNavController().navigate(R.id.action_global_nav_moment)
         return true
     }
+
     private fun openCities(): Boolean {
         findNavController().navigate(R.id.action_global_nav_city_picker)
         return true
@@ -102,13 +108,17 @@ class MainActivity : AppCompatActivity(), LocationListener {
 
     override fun onResume() {
         super.onResume()
-        executeHandler()
+        executeHandlerToUpdateUniverse()
+        executeHandlerToUpdateOrientation()
         enableLocationListener()
+        orientationSensorListener.onResume()
     }
 
     override fun onPause() {
         super.onPause()
         disableLocationListener()
+        orientationSensorListener.onPause()
+        stopHandler()
     }
 
     private fun enableLocationListener() {
@@ -127,11 +137,25 @@ class MainActivity : AppCompatActivity(), LocationListener {
         }
     }
 
-    private fun executeHandler() {
+    private fun executeHandlerToUpdateUniverse() {
         val runnableCode: Runnable = object : Runnable {
             override fun run() {
-                CoroutineScope(Default).launch { repository.updateForNow(currentLocation) }
+                CoroutineScope(Default).launch {
+                    repository.updateForNow(currentLocation)
+                }
                 handler.postDelayed(this, 3000)
+            }
+        }
+        handler.postDelayed(runnableCode, 200)
+    }
+
+    private fun executeHandlerToUpdateOrientation() {
+        val runnableCode: Runnable = object : Runnable {
+            override fun run() {
+                CoroutineScope(Default).launch {
+                    repository.updateOrientation(orientationFilter.orientation)
+                }
+                handler.postDelayed(this, 200)
             }
         }
         handler.postDelayed(runnableCode, 200)
@@ -161,3 +185,4 @@ class MainActivity : AppCompatActivity(), LocationListener {
         // Do nothing
     }
 }
+

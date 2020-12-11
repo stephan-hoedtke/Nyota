@@ -1,6 +1,6 @@
 package com.stho.nyota.sky.universe
 
-import com.stho.nyota.sky.utilities.Average
+import com.stho.nyota.sky.utilities.CircularAverage
 import com.stho.nyota.sky.utilities.Moment
 import com.stho.nyota.sky.utilities.PropertyList
 import java.util.*
@@ -45,8 +45,8 @@ class Constellation internal constructor(override val name: String, override val
             decl[i] = star.Decl
             ra[i] = star.RA
         }
-        Decl = Average.getCircularAverage(decl, length)
-        RA = Average.getCircularAverage(ra, length)
+        Decl = CircularAverage.getCircularAverage(decl, length)
+        RA = CircularAverage.getCircularAverage(ra, length)
     }
 
     override fun getDetails(moment: Moment): PropertyList {
