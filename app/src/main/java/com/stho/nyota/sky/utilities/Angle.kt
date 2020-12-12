@@ -26,6 +26,14 @@ object Angle {
                 val alpha = normalize(angle)
                 Formatter.df0.format(abs(alpha)) + "° " + northEastSouthWest(alpha)
             }
+            AngleType.PITCH -> {
+                val alpha = normalizeTo180(angle)
+                sign(alpha) + Formatter.df0.format(abs(alpha)) + "°"
+            }
+            AngleType.ROLL -> {
+                val alpha = normalizeTo180(angle)
+                sign(alpha) + Formatter.df0.format(abs(alpha)) + "°"
+            }
             else -> {
                 val alpha = normalizeTo180(angle)
                 sign(alpha) + Formatter.df2.format(abs(alpha)) + "°"

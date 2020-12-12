@@ -54,6 +54,7 @@
         app:layout_constraintStart_toEndOf="@id/iconHorizontal"
         app:layout_constraintTop_toTopOf="@id/iconHorizontal"
         app:layout_constraintBottom_toBottomOf="@id/iconHorizontal"
+        android:layout_marginStart="@dimen/element_margin"
         android:text="@string/label_default_pitch" />
 
     <TextView
@@ -63,7 +64,7 @@
         app:layout_constraintStart_toEndOf="@id/currentDevicePitch"
         app:layout_constraintTop_toTopOf="@id/currentDevicePitch"
         app:layout_constraintBottom_toBottomOf="@id/currentDevicePitch"
-        android:layout_marginHorizontal="@dimen/element_margin"
+        android:layout_marginStart="@dimen/element_margin"
         android:text="@string/label_default_roll" />
 
 
@@ -74,6 +75,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@id/iconHorizontal"
         app:layout_constraintBottom_toBottomOf="@id/iconHorizontal"
+        android:layout_marginEnd="@dimen/element_margin"
         android:text="@string/label_default_orientation" />
 
 
@@ -143,6 +145,7 @@
         app:layout_constraintStart_toEndOf="@id/iconDirection"
         app:layout_constraintTop_toTopOf="@id/iconDirection"
         app:layout_constraintBottom_toBottomOf="@id/iconDirection"
+        android:layout_marginStart="@dimen/element_margin"
         android:text="@string/label_default_orientation" />
 
     <TextView
@@ -152,6 +155,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@id/iconDirection"
         app:layout_constraintBottom_toBottomOf="@id/iconDirection"
+        android:layout_marginEnd="@dimen/element_margin"
         android:text="@string/label_default_orientation" />
 
     <include android:id="@+id/time_visibility_overlay" layout="@layout/time_visibility_overlay" />

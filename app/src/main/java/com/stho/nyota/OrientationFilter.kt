@@ -17,9 +17,9 @@ interface IOrientationFilter {
  */
 class OrientationAccelerationFilter: IOrientationFilter {
 
-    private val azimuthAcceleration: Acceleration = Acceleration(0.5)
-    private val pitchAcceleration: Acceleration = Acceleration(0.5)
-    private val rollAcceleration: Acceleration = Acceleration(0.5)
+    private val azimuthAcceleration: Acceleration = Acceleration(1.2)
+    private val pitchAcceleration: Acceleration = Acceleration(0.7)
+    private val rollAcceleration: Acceleration = Acceleration(0.7)
     private val lowPassFilter: LowPassFilter = LowPassFilter()
 
     override val orientation: Orientation

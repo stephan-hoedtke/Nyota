@@ -12,20 +12,54 @@ import com.stho.nyota.sky.utilities.Orientation
 class FinderViewModel(application: Application, repository: Repository, val element: IElement) : RepositoryViewModelArgs(application, repository) {
 
     private val ringAngleLiveData = MutableLiveData<Double>()
+    private val refreshAutomaticallyLiveData = MutableLiveData<Boolean>()
 
     init {
-         ringAngleLiveData.value = 0.0
+        ringAngleLiveData.value = 0.0
+        refreshAutomaticallyLiveData.value = true
     }
 
     val ringAngleLD: LiveData<Double>
         get() = ringAngleLiveData
 
+    val ringAngle: Double
+        get() = ringAngleLiveData.value ?: 0.0
+
     val orientationLD: LiveData<Orientation>
         get() = repository.currentOrientationLD
+
+    val orientation: Orientation
+        get() = repository.currentOrientation
+
+    val refreshAutomaticallyLD: LiveData<Boolean>
+        get() = refreshAutomaticallyLiveData
 
     fun rotate(delta: Double) {
         val angle: Double = Degree.normalize(ringAngleLiveData.value!! + delta)
         ringAngleLiveData.postValue(angle)
+    }
+
+    fun getRotationToTargetFor(thisRingAngle: Double): Float =
+        orientation.getRotationToTargetAt(element) + thisRingAngle.toFloat()
+
+    fun getRotationToTargetFor(thisOrientation: Orientation): Float =
+        thisOrientation.getRotationToTargetAt(element)
+
+    fun getRotationToTarget(): Float =
+        when {
+            refreshAutomatically -> orientation.getRotationToTargetAt(element)
+            else -> orientation.getRotationToTargetAt(element) + ringAngle.toFloat()
+        }
+
+    var refreshAutomatically: Boolean
+        get() = refreshAutomaticallyLiveData.value ?: true
+        set(value) {
+            if (refreshAutomaticallyLiveData.value != value)
+                refreshAutomaticallyLiveData.postValue(value)
+        }
+
+    fun toggleRefreshAutomatically() {
+        refreshAutomatically = !refreshAutomatically
     }
 
     fun reset() =

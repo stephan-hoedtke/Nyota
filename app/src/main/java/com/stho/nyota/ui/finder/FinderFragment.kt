@@ -45,6 +45,7 @@ class FinderFragment : AbstractFragment() {
                 viewModel.seek()
             }
         })
+        binding.buttonRefresh.setOnClickListener{ viewModel.toggleRefreshAutomatically() }
 
         return binding.root
     }
@@ -52,8 +53,9 @@ class FinderFragment : AbstractFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel.orientationLD.observe(viewLifecycleOwner, { orientation -> onUpdateDeviceOrientation(orientation) })
-        viewModel.ringAngleLD.observe(viewLifecycleOwner, { alpha -> binding.compassRing.rotation = alpha.toFloat() })
+        viewModel.ringAngleLD.observe(viewLifecycleOwner, { angle -> onUpdateRingAngle(angle) })
         viewModel.universeLD.observe(viewLifecycleOwner, { universe -> onUpdateElement(universe.moment) })
+        viewModel.refreshAutomaticallyLD.observe(viewLifecycleOwner, { refresh -> onUpdateRefreshAutomatically(refresh) })
     }
 
     override fun onDestroyView() {
@@ -75,19 +77,31 @@ class FinderFragment : AbstractFragment() {
         binding.targetAzimuth.text = Angle.toString(element.position?.azimuth ?: 0.0, Angle.AngleType.AZIMUTH)
         binding.targetAltitude.text = Angle.toString(element.position?.altitude ?: 0.0, Angle.AngleType.ALTITUDE)
         binding.horizonView.targetAltitude = element.position?.altitude ?: 0.0
+        binding.targetAzimuthPointer.rotation = viewModel.getRotationToTarget()
         updateActionBar(element.name, toLocalDateString(moment))
     }
 
-    private fun onUpdateDeviceOrientation(orientation: Orientation) =
-        bind(orientation, viewModel.element)
+    private fun onUpdateRingAngle(angle: Double) {
+        binding.compassRing.rotation = angle.toFloat()
+        if (!viewModel.refreshAutomatically) {
+            binding.targetAzimuthPointer.rotation = viewModel.getRotationToTargetFor(angle)
+        }
+    }
 
-    private fun bind(orientation: Orientation, element: IElement) {
+    private fun onUpdateDeviceOrientation(orientation: Orientation) {
         binding.compassNorthPointer.rotation = orientation.getRotationToNorth()
-        binding.targetAzimuthPointer.rotation = orientation.getRotationToTargetAt(element)
         binding.horizonView.currentDeviceOrientation = orientation
         binding.currentDeviceAzimuth.text = Angle.toString(orientation.azimuth, Angle.AngleType.AZIMUTH)
         binding.currentDevicePitch.text = Angle.toString(orientation.pitch, Angle.AngleType.PITCH)
-        binding.currentDeviceRoll.text = Angle.toString(orientation.roll, Angle.AngleType.PITCH)
+        binding.currentDeviceRoll.text = Angle.toString(orientation.roll, Angle.AngleType.ROLL)
+        if (viewModel.refreshAutomatically) {
+            binding.targetAzimuthPointer.rotation = viewModel.getRotationToTargetFor(orientation)
+        }
+    }
+
+    // TODO text variables---
+    private fun onUpdateRefreshAutomatically(refresh: Boolean) {
+        binding.buttonRefresh.text = if (refresh) "Stop" else "Auto Refresh"
     }
 
     private fun getElementNameFromArguments(): String? =

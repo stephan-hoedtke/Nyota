@@ -80,13 +80,13 @@ class HorizonView(context: Context?, attrs: AttributeSet?) : View(context, attrs
         val b = t / 9.5f
         val middle = t / 2.6f
         val outer = t / 2.2f
-        val alpha: Float = 0 - currentDeviceOrientation.roll.toFloat()
-        val beta: Float = if (flat) currentDeviceOrientation.pitch.toFloat() else currentDeviceOrientation.direction.toFloat()
-        var phi: Float = Degree.getAngleDifference(targetAltitude, beta.toDouble()).toFloat()
+        val alpha = 0 - currentDeviceOrientation.roll
+        val beta = 0 - if (flat) currentDeviceOrientation.pitch else currentDeviceOrientation.direction
+        var phi: Float = Degree.getAngleDifference(targetAltitude, beta).toFloat()
         if (phi > 90) phi = 90f
         if (phi < -90) phi = -90f
         canvas.translate(w / 2.toFloat(), h / 2.toFloat())
-        canvas.rotate(alpha)
+        canvas.rotate(alpha.toFloat())
         rect[-r, -r, r] = r
         path.reset()
         path.addArc(rect, 180 + phi, 180 - 2 * phi)
@@ -108,7 +108,7 @@ class HorizonView(context: Context?, attrs: AttributeSet?) : View(context, attrs
         path.moveTo(0f, -middle)
         path.lineTo(0f, -outer)
         canvas.drawPath(path, scale)
-        canvas.rotate(0 - alpha)
+        canvas.rotate(0 - alpha.toFloat())
         rect[-b, -b, b] = b
         path.reset()
         path.moveTo(-a, 0f)
