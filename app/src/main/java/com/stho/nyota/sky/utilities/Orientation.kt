@@ -25,10 +25,8 @@ import com.stho.nyota.sky.universe.IElement
  */
 data class Orientation(val azimuth: Double, val pitch: Double, val direction: Double, val roll: Double) {
 
-    fun getRotationToTargetAt(element: IElement): Float {
-        val targetAzimuth = element.position?.azimuth ?: 0.0
-        return Degree.getAngleDifference(x = targetAzimuth, y = azimuth).toFloat()
-    }
+    fun getRotationToTargetAt(targetAzimuth: Double): Float =
+        Degree.getAngleDifference(x = targetAzimuth, y = azimuth).toFloat()
 
     fun getRotationToNorth(): Float =
         Degree.normalizeTo180(-azimuth).toFloat()

@@ -1,16 +1,9 @@
 package com.stho.nyota
 
-import com.stho.nyota.sky.universe.IElement
 import com.stho.nyota.sky.utilities.Orientation
-import com.stho.nyota.sky.utilities.Topocentric
 import org.junit.Assert.assertEquals
 import org.junit.Test
-import org.junit.runner.RunWith
-import org.mockito.Mockito.`when`
-import org.mockito.Mockito.mock
-import org.mockito.runners.MockitoJUnitRunner
 
-@RunWith(MockitoJUnitRunner::class)
 class OrientationUnitTest {
 
     @Test
@@ -41,12 +34,9 @@ class OrientationUnitTest {
     private fun orientation_rotationToTarget_isCorrect(deviceAzimuth: Double, targetAzimuth: Double, expected: Float) {
         // Arrange
         val orientation: Orientation = Orientation(deviceAzimuth, 1.0, -89.0, 3.0)
-        val position: Topocentric = Topocentric(targetAzimuth, 4.0)
-        val element: IElement = mock(IElement::class.java)
-        `when`(element.position).thenReturn(position)
 
         // Execute
-        val actual = orientation.getRotationToTargetAt(element)
+        val actual = orientation.getRotationToTargetAt(targetAzimuth)
 
         // Assert
         assertEquals(expected, actual, DELTA_FLOAT)
@@ -54,6 +44,5 @@ class OrientationUnitTest {
 
     companion object {
         private const val DELTA_FLOAT: Float = 1.0E-7F
-        private const val DELTA_DOUBLE: Double = 1.0E-7
     }
 }

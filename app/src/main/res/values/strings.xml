@@ -1,4 +1,4 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
     <string name="app_name">Nyota</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
@@ -117,4 +117,6 @@
     <string name="default_geo_location">13.4°E 52.64° N</string>
     <string name="label_default_pitch">+23°</string>
     <string name="label_default_roll">-3°</string>
+    <string name="label_freeze">Freeze</string>
+    <string name="label_unfreeze">Unfreeze</string>
 </resources>

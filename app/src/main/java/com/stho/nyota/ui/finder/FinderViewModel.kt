@@ -39,17 +39,14 @@ class FinderViewModel(application: Application, repository: Repository, val elem
         ringAngleLiveData.postValue(angle)
     }
 
-    fun getRotationToTargetFor(thisRingAngle: Double): Float =
-        orientation.getRotationToTargetAt(element) + thisRingAngle.toFloat()
+    fun getRotationToTargetManuallyFor(ringAngle: Double): Float =
+        getRotationToTargetManuallyFor(ringAngle, element)
 
-    fun getRotationToTargetFor(thisOrientation: Orientation): Float =
-        thisOrientation.getRotationToTargetAt(element)
+    fun getRotationToTargetAutomaticallyFor(orientation: Orientation): Float =
+        getRotationToTargetAutomaticallyFor(orientation, element)
 
     fun getRotationToTarget(): Float =
-        when {
-            refreshAutomatically -> orientation.getRotationToTargetAt(element)
-            else -> orientation.getRotationToTargetAt(element) + ringAngle.toFloat()
-        }
+        if (refreshAutomatically) getRotationToTargetAutomaticallyFor(orientation) else getRotationToTargetManuallyFor(ringAngle)
 
     var refreshAutomatically: Boolean
         get() = refreshAutomaticallyLiveData.value ?: true
@@ -67,5 +64,17 @@ class FinderViewModel(application: Application, repository: Repository, val elem
 
     fun seek() =
         ringAngleLiveData.postValue(-repository.currentOrientation.azimuth)
+
+    companion object {
+        private fun getRotationToTargetManuallyFor(ringAngle: Double, element: IElement): Float =
+            (ringAngle + targetAzimuth(element)).toFloat()
+
+        private fun getRotationToTargetAutomaticallyFor(orientation: Orientation, element: IElement): Float =
+            orientation.getRotationToTargetAt(targetAzimuth(element))
+
+        private fun targetAzimuth(element: IElement): Double =
+            element.position?.azimuth ?: 0.0
+
+    }
 }
 

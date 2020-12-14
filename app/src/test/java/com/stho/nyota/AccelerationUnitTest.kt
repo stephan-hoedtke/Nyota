@@ -5,8 +5,8 @@ import org.junit.Test
 
 class AccelerationUnitTest {
 
-    class FakeTimeSource(var time: Double = 0.0) : Acceleration.TimeSource {
-        override val seconds: Double
+    class FakeTimeSource(var time: Double = 0.0) : TimeSource {
+        override val elapsedRealtimeSeconds: Double
             get() = time
     }
 
@@ -19,7 +19,7 @@ class AccelerationUnitTest {
         val timeSource = FakeTimeSource()
 
         timeSource.time = 100.0
-        val acceleration: Acceleration = Acceleration(factor, timeSource)
+        val acceleration = Acceleration(factor, timeSource)
         acceleration.rotateTo(targetValue)
         val x0 = acceleration.position
         Assert.assertEquals("Position after 0 second", startValue, x0, EPS)
@@ -58,7 +58,7 @@ class AccelerationUnitTest {
         val timeSource = FakeTimeSource()
 
         timeSource.time = 100.0
-        val acceleration: Acceleration = Acceleration(factor, timeSource)
+        val acceleration = Acceleration(factor, timeSource)
         acceleration.rotateTo(firstTargetValue)
         val x0 = acceleration.position
         Assert.assertEquals("Position after 0 second", startValue, x0, EPS)
@@ -100,7 +100,7 @@ class AccelerationUnitTest {
         val timeSource = FakeTimeSource()
 
         timeSource.time = 100.0
-        val acceleration: Acceleration = Acceleration(factor, timeSource)
+        val acceleration = Acceleration(factor, timeSource)
         acceleration.rotateTo(firstTargetValue)
         val x0 = acceleration.position
         Assert.assertEquals("Position after 0 second", x0, startValue, EPS)
@@ -145,7 +145,7 @@ class AccelerationUnitTest {
         val timeSource = FakeTimeSource()
 
         timeSource.time = 100.0
-        val acceleration: Acceleration = Acceleration(factor, timeSource)
+        val acceleration = Acceleration(factor, timeSource)
         acceleration.rotateTo(firstTargetValue)
         val x0 = acceleration.position
         Assert.assertEquals("Position after 0 second", adjustedStartValue, x0, EPS)

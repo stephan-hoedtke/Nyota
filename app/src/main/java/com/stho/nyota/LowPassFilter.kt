@@ -1,15 +1,16 @@
 package com.stho.nyota
 
-import android.os.SystemClock
 import com.stho.nyota.sky.utilities.Vector
 
-internal class LowPassFilter(private val timeConstant: Double = 0.2, private val timeSource: Acceleration.TimeSource = Acceleration.SystemClockTimeSource()) {
+internal class LowPassFilter(private val timeConstant: Double = 0.2, private val timeSource: TimeSource = SystemClockTimeSource()) {
 
     private val gravity: Vector = Vector(0.0, 0.0, 9.78)
-    private var t1: Double = timeSource.seconds
+    private var startTime: Double = 0.0
+    private var count: Long = 0L
 
     fun setAcceleration(acceleration: FloatArray): Vector {
-        lowPassFilter(acceleration, timeDifferenceInSeconds())
+        val dt: Double = getAverageTimeDifferenceInSeconds()
+        lowPassFilter(acceleration, dt)
         return gravity
     }
 
@@ -32,11 +33,18 @@ internal class LowPassFilter(private val timeConstant: Double = 0.2, private val
         }
     }
 
-    private fun timeDifferenceInSeconds(): Double {
-        val t0 = t1
-        t1 = timeSource.seconds
-        return t1 - t0
-    }
+    private fun getAverageTimeDifferenceInSeconds(): Double =
+        when {
+            count < 1 -> {
+                startTime = timeSource.elapsedRealtimeSeconds
+                count = 1L
+                0.0
+            }
+            else -> {
+                (timeSource.elapsedRealtimeSeconds - startTime) / count++
+            }
+        }
+
 }
 
 

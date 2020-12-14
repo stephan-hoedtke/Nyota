@@ -1,22 +1,8 @@
 package com.stho.nyota
 
-import android.os.SystemClock
 import com.stho.nyota.sky.utilities.Degree
 
-class Acceleration(private val factorInSeconds: Double = 0.8, private val timeSource: TimeSource = SystemClockTimeSource()) {
-
-    interface TimeSource {
-        val seconds: Double
-    }
-
-    class SystemClockTimeSource: TimeSource {
-        override val seconds
-            get() = SystemClock.elapsedRealtimeNanos() * NANOSECONDS_PER_SECOND
-
-        companion object {
-            private const val NANOSECONDS_PER_SECOND = 1000000000.0
-        }
-    }
+internal class Acceleration(factorInSeconds: Double = 0.8, private val timeSource: TimeSource = SystemClockTimeSource()) {
 
 /*
     // s(t) = a * t^3 + b * t^2 + c * t + d
@@ -37,7 +23,7 @@ class Acceleration(private val factorInSeconds: Double = 0.8, private val timeSo
     private var b = 0.0
     private var c = 0.0
     private var d = 0.0
-    private var t0: Double = timeSource.seconds
+    private var t0: Double = timeSource.elapsedRealtimeSeconds
     private val factor = 1 / factorInSeconds
 
     init {
@@ -46,19 +32,19 @@ class Acceleration(private val factorInSeconds: Double = 0.8, private val timeSo
 
     val position: Double
         get() {
-            val t = getTime(timeSource.seconds)
+            val t = getTime(timeSource.elapsedRealtimeSeconds)
             return getPosition(t)
         }
 
     fun updateLinearTo(targetPosition: Double) {
-        val elapsedTimeInSeconds = timeSource.seconds
-        val t = getTime(elapsedTimeInSeconds)
+        val t1 = timeSource.elapsedRealtimeSeconds
+        val t = getTime(t1)
         val v = getSpeed(t)
         val s = getPosition(t)
         v0 = v
         s0 = s
         s1 = targetPosition
-        t0 = elapsedTimeInSeconds
+        t0 = t1
         calculateFormula()
     }
 
@@ -71,15 +57,15 @@ class Acceleration(private val factorInSeconds: Double = 0.8, private val timeSo
         //      instead of 350° to 10° we will move from -10° to 10°
         //      instead of 10° to 350° we will move from 10° to -20°
 
-        val elapsedTimeInSeconds = timeSource.seconds
-        val t = getTime(elapsedTimeInSeconds)
+        val t1 = timeSource.elapsedRealtimeSeconds
+        val t = getTime(t1)
         val v = getSpeed(t)
         val s = getPosition(t)
         val angle = Degree.getAngleDifference(targetAngle, s)
         v0 = v
         s0 = s
         s1 = s + angle
-        t0 = elapsedTimeInSeconds
+        t0 = t1
 
         when {
             angle > 0 && s1 > 360 -> {
@@ -95,8 +81,8 @@ class Acceleration(private val factorInSeconds: Double = 0.8, private val timeSo
         calculateFormula()
     }
 
-    private fun getTime(elapsedTimeInSeconds: Double): Double =
-        factor * (elapsedTimeInSeconds - t0)
+    private fun getTime(t1: Double): Double =
+        factor * (t1 - t0)
 
     private fun calculateFormula() {
         a = v0 - 2 * (s1 - s0)

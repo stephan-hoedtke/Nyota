@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.stho.nyota.AbstractFragment
 import com.stho.nyota.AbstractViewModel
+import com.stho.nyota.R
 import com.stho.nyota.databinding.FragmentFinderBinding
 import com.stho.nyota.sky.universe.IElement
 import com.stho.nyota.sky.utilities.Angle
@@ -15,6 +16,7 @@ import com.stho.nyota.sky.utilities.Moment
 import com.stho.nyota.sky.utilities.Orientation
 import com.stho.nyota.views.RotaryView
 
+// TODO: keep current parameters (ringAngle, freeze, ... ) when Orientation changes or other apps go to foreground...
 
 class FinderFragment : AbstractFragment() {
 
@@ -84,7 +86,7 @@ class FinderFragment : AbstractFragment() {
     private fun onUpdateRingAngle(angle: Double) {
         binding.compassRing.rotation = angle.toFloat()
         if (!viewModel.refreshAutomatically) {
-            binding.targetAzimuthPointer.rotation = viewModel.getRotationToTargetFor(angle)
+            binding.targetAzimuthPointer.rotation = viewModel.getRotationToTargetManuallyFor(angle)
         }
     }
 
@@ -95,13 +97,12 @@ class FinderFragment : AbstractFragment() {
         binding.currentDevicePitch.text = Angle.toString(orientation.pitch, Angle.AngleType.PITCH)
         binding.currentDeviceRoll.text = Angle.toString(orientation.roll, Angle.AngleType.ROLL)
         if (viewModel.refreshAutomatically) {
-            binding.targetAzimuthPointer.rotation = viewModel.getRotationToTargetFor(orientation)
+            binding.targetAzimuthPointer.rotation = viewModel.getRotationToTargetAutomaticallyFor(orientation)
         }
     }
 
-    // TODO text variables---
     private fun onUpdateRefreshAutomatically(refresh: Boolean) {
-        binding.buttonRefresh.text = if (refresh) "Stop" else "Auto Refresh"
+        binding.buttonRefresh.text = getString(if (refresh) R.string.label_freeze else R.string.label_unfreeze)
     }
 
     private fun getElementNameFromArguments(): String? =

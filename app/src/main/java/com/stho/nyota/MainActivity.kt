@@ -24,6 +24,9 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers.Default
 import kotlinx.coroutines.launch
 
+// TODO play protect doesnt recognize app's developer ...
+// TODO Play Protect hasnt seen this app before... security scan...
+
 class MainActivity : AppCompatActivity(), LocationListener {
 
     private lateinit var appBarConfiguration: AppBarConfiguration

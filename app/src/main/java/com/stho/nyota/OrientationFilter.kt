@@ -40,7 +40,7 @@ class OrientationAccelerationFilter: IOrientationFilter {
         val gravity: Vector = lowPassFilter.setAcceleration(orientationAngles)
 
         val roll = normalizeRoll(Radian.toDegrees(gravity.z))
-        val pitch = normalizePitch(Radian.toDegrees(gravity.y))
+        val pitch = normalizePitch(0 - Radian.toDegrees(gravity.y))
         val azimuth = normalizeAzimuth(Radian.toDegrees(gravity.x), roll)
 
         rollAcceleration.rotateTo(roll)
