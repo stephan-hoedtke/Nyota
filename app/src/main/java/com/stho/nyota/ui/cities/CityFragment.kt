@@ -3,10 +3,7 @@ package com.stho.nyota.ui.cities
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.Menu
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import androidx.navigation.fragment.findNavController
 import com.stho.nyota.AbstractFragment
 import com.stho.nyota.R
@@ -45,7 +42,7 @@ class CityFragment : AbstractFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         updateCity(viewModel.city)
-        updateActionBar(getString(R.string.title_city), "")
+        updateActionBar(viewModel.city.name, "")
         viewModel.repository.currentAutomaticMomentLD.observe(viewLifecycleOwner, { moment -> updateAutomaticMoment(moment) })
     }
 
@@ -90,7 +87,7 @@ class CityFragment : AbstractFragment() {
                 binding.editLongitude.text.toString().toDouble(),
                 binding.editAltitude.text.toString().toDouble()
             )
-            viewModel.repository.updateCity(requireContext(), city)
+            viewModel.updateCity(city)
             findNavController().popBackStack()
         }
         catch (ex: Exception) {

@@ -125,29 +125,32 @@ class Repository private constructor() {
     fun touchMoment() =
         momentLiveData.postValue(momentLiveData.value)
 
-    private fun ensureDefaultCities(cities: Cities): Boolean {
-        if (cities.size == 0) {
-            cities.addAll(City.createCities())
-            return true
+    private fun ensureDefaultCities(cities: Cities): Boolean =
+        when (cities.size) {
+            0 -> {
+                cities.createDefaultCities(true)
+                true
+            }
+            else -> false
         }
-        return false
-    }
 
-    private fun ensureDefaultSettings(settings: Settings): Boolean {
-        if (settings.currentLocation.isNullOrEmpty()) {
-            settings.currentLocation = "Berlin"
-            return true
+    private fun ensureDefaultSettings(settings: Settings): Boolean =
+        when {
+            settings.currentLocation.isNullOrEmpty() -> {
+                settings.currentLocation = "Berlin"
+                true
+            }
+            else -> false
         }
-        return false
-    }
 
-    private fun ensureDefaultTargets(targets: Targets): Boolean {
-        if (targets.size == 0) {
-            targets.add(Target.createDefaultNeowise())
-            return true
+    private fun ensureDefaultTargets(targets: Targets): Boolean =
+        when (targets.size) {
+            0 -> {
+                targets.add(Target.createDefaultNeowise())
+                true
+            }
+            else -> false
         }
-        return false
-    }
 
     internal fun updateOrientation(orientation: Orientation) {
         currentOrientationLiveData.postValue(orientation)
@@ -266,17 +269,17 @@ class Repository private constructor() {
         if (settings.updateTimeAutomatically) {
             moment = moment.forNow()
         }
-        momentLiveData.postValue(moment);
+        momentLiveData.postValue(moment)
     }
 
     private fun addHoursSynchronized(hours: Double) {
         val moment: Moment = momentLiveData.value!!.addHours(hours)
-        momentLiveData.postValue(moment);
+        momentLiveData.postValue(moment)
     }
 
     private fun nextSynchronized(interval: Interval) {
         val moment = momentLiveData.value!!.next(interval)
-        momentLiveData.postValue(moment);
+        momentLiveData.postValue(moment)
     }
 
     private fun previousSynchronized(interval: Interval) {
@@ -327,6 +330,17 @@ class Repository private constructor() {
     internal fun getCityOrNewCity(cityName: String?): City =
         citiesLiveData.value?.findCityByName(cityName) ?: City.createNewCity()
 
+    internal fun createDefaultCities(context: Context) {
+        val helper = NyotaDatabaseHelper(context)
+        val adapter = NyotaDatabaseAdapter(helper.writableDatabase)
+
+        citiesLiveData.value?.also {
+            it.createDefaultCities(false)
+            adapter.saveCities(it.values)
+            citiesLiveData.postValue(it)
+        }
+    }
+
     companion object {
         private var singleton: Repository? = null
         private var lockObject: Any = Any()
@@ -375,7 +389,7 @@ class Repository private constructor() {
 
     fun updateCity(context: Context, city: City) {
         citiesLiveData.value?.also {
-            it.add(city)
+            it.addOrUpdate(city)
             saveCity(context, city)
             citiesLiveData.postValue(it)
         }

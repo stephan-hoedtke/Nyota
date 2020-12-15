@@ -13,4 +13,7 @@ import com.stho.nyota.sky.utilities.createDefaultBerlin
 import org.osmdroid.api.IGeoPoint
 
 class CityViewModel(application: Application, repository: Repository, val city: City) : RepositoryViewModelArgs(application, repository) {
+
+    fun updateCity(city: City) =
+        repository.updateCity(getApplication(), city)
 }

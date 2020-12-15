@@ -152,6 +152,7 @@ class City internal constructor(var name: String, var location: Location, var ti
         internal const val BERLIN_LATITUDE = 52.6425
         internal const val BERLIN_LONGITUDE = 13.4925
         internal const val BERLIN_ALTITUDE = 0.1037 // in km
+        internal const val NEW = "New City"
 
         internal fun createNewAutomaticCity(): City =
             createNewCity("You", true)
@@ -178,9 +179,9 @@ class City internal constructor(var name: String, var location: Location, var ti
                 }
             }
 
-        internal val berlinAsLocation: com.stho.nyota.sky.utilities.Location
+        internal val berlinAsLocation: Location
             get() {
-                return com.stho.nyota.sky.utilities.Location(BERLIN_LATITUDE, BERLIN_LONGITUDE, BERLIN_ALTITUDE)
+                return Location(BERLIN_LATITUDE, BERLIN_LONGITUDE, BERLIN_ALTITUDE)
             }
 
         fun create(id: Long, name: String, location: Location, timeZone: TimeZone, isAutomatic: Boolean): City {

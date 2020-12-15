@@ -11,6 +11,7 @@ import com.stho.nyota.repository.Repository
 import com.stho.nyota.sky.universe.AbstractPlanet
 import com.stho.nyota.sky.utilities.Cities
 import com.stho.nyota.sky.utilities.City
+import com.stho.nyota.sky.utilities.createCities
 
 class CityPickerViewModel(application: Application, repository: Repository) : RepositoryViewModelNoArgs(application, repository) {
 
@@ -19,4 +20,13 @@ class CityPickerViewModel(application: Application, repository: Repository) : Re
 
     val selectedCityLC: LiveData<City>
         get() = Transformations.map(repository.momentLD) { moment -> moment.city }
+
+    fun createDefaultCities() =
+        repository.createDefaultCities(getApplication())
+
+    fun deleteCity(city: City) =
+        repository.deleteCity(getApplication(), city)
+
+    fun undoDeleteCity(position: Int, city: City) =
+        repository.undoDeleteCity(getApplication(), position, city)
 }

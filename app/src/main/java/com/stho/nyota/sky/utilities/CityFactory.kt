@@ -1,7 +1,11 @@
 package com.stho.nyota.sky.utilities
 
-import com.stho.nyota.R
 import java.util.*
+
+// TODO: create city with image
+// TODO: store city image in DB
+// TODO: let use choose the image for a city
+// TODO: restore city data in "edit city"
 
 internal fun City.Companion.createCities(): List<City> {
     return listOf(

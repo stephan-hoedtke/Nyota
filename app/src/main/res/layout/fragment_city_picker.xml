@@ -32,4 +32,14 @@
         android:layout_margin="@dimen/text_margin"
         android:text="@string/label_done" />
 
+    <ImageView
+        android:id="@+id/buttonNew"
+        android:layout_width="@dimen/button_size"
+        android:layout_height="@dimen/button_size"
+        app:layout_constraintBottom_toTopOf="@id/buttonDone"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_margin="@dimen/button_margin"
+        android:src="@drawable/add"
+        android:contentDescription="@string/label_empty" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -26,6 +26,8 @@
     <string name="menu_city">City</string>
     <string name="menu_moment">Moment</string>
     <string name="menu_settings">Settings</string>
+    <string name="action_new">New</string>
+    <string name="action_default_cities">Add Default Cities</string>
     <string name="default_satellite_name">ISS</string>
     <string name="default_satellite_number">83928</string>
     <string name="default_satellite_display_name">International Space Station</string>

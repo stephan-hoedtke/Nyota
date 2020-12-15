@@ -14,22 +14,36 @@ class Cities {
     var selectedCity: City? = null
         private set
 
-    fun addAll(collection: Collection<City>) {
+    fun addAll(collection: Collection<City>, overwrite: Boolean = false) {
         for (city in collection) {
-            add(city)
+            add(city, overwrite)
         }
     }
 
-    fun add(city: City) {
+    fun add(city: City) =
+        add(city, false)
+
+    fun addOrUpdate(city: City) =
+        add(city, true)
+
+    private fun add(city: City, overwrite: Boolean): Boolean {
         val cityName = city.name
         val existingCity = map[cityName]
-        if (existingCity != null) {
-            val index = array.indexOf(existingCity)
-            array[index] = city
-            map[cityName] = city
-        } else {
-            array.add(city)
-            map[cityName] = city
+        return when {
+            existingCity == null -> {
+                array.add(city)
+                map[cityName] = city
+                true
+            }
+            overwrite -> {
+                val index = array.indexOf(existingCity)
+                array[index] = city
+                map[cityName] = city
+                true
+            }
+            else -> {
+                false
+            }
         }
     }
 
@@ -66,6 +80,11 @@ class Cities {
     fun findMatchingCity(cityToFind: City): City? =
         map.values.firstOrNull { it.matches(cityToFind) }
 
+    fun createDefaultCities(overwrite: Boolean) {
+        val defaultCities = City.createCities()
+        addAll(defaultCities, overwrite)
+    }
+
     private fun getCityForCurrentLocation(locationManager: LocationManager): City =
         defaultAutomaticCity.also {
             val location = City.getLastKnownAndroidLocationFromLocationManager(locationManager)
@@ -87,12 +106,10 @@ class Cities {
     val values: List<City>
         get() = array
 
-    fun delete(city: City): Boolean {
+    fun delete(city: City) {
         if (map.remove(city.name, city)) {
             array.remove(city)
-            return true
         }
-        return false
     }
 
     fun undoDelete(position: Int, city: City) {

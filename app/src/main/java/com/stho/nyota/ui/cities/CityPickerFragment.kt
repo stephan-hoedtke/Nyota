@@ -1,10 +1,7 @@
 package com.stho.nyota.ui.cities
 
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.Menu
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
@@ -46,6 +43,9 @@ class CityPickerFragment : AbstractFragment() {
         binding.list.adapter = adapter
         binding.list.addItemDecoration(RecyclerViewItemDivider(requireContext()))
         binding.buttonDone.setOnClickListener { onDone() }
+        binding.buttonNew.setOnClickListener { onNew() }
+
+        registerForContextMenu(binding.buttonNew)
 
         return binding.root
     }
@@ -62,9 +62,33 @@ class CityPickerFragment : AbstractFragment() {
         bindingReference = null
     }
 
-    override fun onPrepareOptionsMenu(menu: Menu) {
-        super.onPrepareOptionsMenu(menu)
-        menu.clear()
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        // super.onCreateOptionsMenu(menu, inflater)
+        inflater.inflate(R.menu.context_menu_city_picker, menu)
+    }
+
+    override fun onCreateContextMenu(menu: ContextMenu, v: View, menuInfo: ContextMenu.ContextMenuInfo?) {
+        super.onCreateContextMenu(menu, v, menuInfo)
+        when (v.id) {
+            R.id.buttonNew -> requireActivity().menuInflater.inflate(R.menu.context_menu_city_picker, menu)
+        }
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.action_new -> onNew()
+            R.id.action_default -> onDefault()
+        }
+        return super.onOptionsItemSelected(item)
+
+    }
+
+    override fun onContextItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.action_new -> onNew()
+            R.id.action_default -> onDefault()
+        }
+        return super.onContextItemSelected(item)
     }
 
     private fun updateCities(cities: Cities) =
@@ -82,9 +106,17 @@ class CityPickerFragment : AbstractFragment() {
         findNavController().navigate(CityPickerFragmentDirections.actionNavCityPickerToNavCity(city.name))
 
     private fun onDelete(position: Int, city: City) {
-        viewModel.repository.deleteCity(requireContext(), city)
+        viewModel.deleteCity(city)
         adapter.updateDelete(position)
         showUndoSnackBar(position, city)
+    }
+
+    private fun onNew() {
+        findNavController().navigate(CityPickerFragmentDirections.actionNavCityPickerToNavCity(City.NEW))
+    }
+
+    private fun onDefault() {
+        viewModel.createDefaultCities()
     }
 
     private fun onDone() {
@@ -104,7 +136,7 @@ class CityPickerFragment : AbstractFragment() {
     }
 
     private fun undoDelete(position: Int, city: City) {
-        viewModel.repository.undoDeleteCity(requireContext(), position, city)
+        viewModel.undoDeleteCity(position, city)
         adapter.updateUndoDelete(position)
     }
 }

@@ -47,13 +47,6 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="@dimen/text_margin"
-                android:textAlignment="center"
-                android:text="@string/hint_city" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
                 android:text="@string/label_name_colon" />
 
             <EditText
@@ -62,7 +55,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/default_city"
                 android:inputType="text"
-                android:layout_marginHorizontal="@dimen/button_margin"
+                android:layout_marginHorizontal="@dimen/text_margin"
                 android:autofillHints="@string/label_empty"
                 android:hint="@string/label_empty" />
 
@@ -77,7 +70,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/default_latitude"
                 android:inputType="numberDecimal"
-                android:layout_marginHorizontal="@dimen/button_margin"
+                android:layout_marginHorizontal="@dimen/text_margin"
                 android:autofillHints="@string/label_empty"
                 android:hint="@string/label_empty" />
 
@@ -93,7 +86,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/default_longitude"
                 android:inputType="numberDecimal"
-                android:layout_marginHorizontal="@dimen/button_margin"
+                android:layout_marginHorizontal="@dimen/text_margin"
                 android:autofillHints="@string/label_empty"
                 android:hint="@string/label_empty" />
 
@@ -109,7 +102,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/default_altitude"
                 android:inputType="numberDecimal"
-                android:layout_marginHorizontal="@dimen/button_margin"
+                android:layout_marginHorizontal="@dimen/text_margin"
                 android:autofillHints="@string/label_empty"
                 android:hint="@string/label_empty" />
 
