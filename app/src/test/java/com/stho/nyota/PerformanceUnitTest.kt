@@ -4,7 +4,7 @@ import com.stho.nyota.sky.universe.Satellite
 import com.stho.nyota.sky.universe.Universe
 import com.stho.nyota.sky.utilities.City
 import com.stho.nyota.sky.utilities.Moment
-import com.stho.nyota.sky.utilities.createDefaultBerlin
+import com.stho.nyota.sky.utilities.createDefaultBerlinBuch
 import org.junit.Assert
 import org.junit.Test
 
@@ -15,7 +15,7 @@ class PerformanceUnitTest {
 
     private val universe: Universe
         get() {
-            val city: City = City.createDefaultBerlin()
+            val city: City = City.createDefaultBerlinBuch()
             val moment: Moment = Moment.forNow(city)
             return Universe().apply { updateFor(moment, false) }
         }

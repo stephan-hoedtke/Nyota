@@ -171,7 +171,7 @@ abstract class AbstractSolarSystemElement : AbstractElement() {
 
     override fun getBasics(moment: Moment): PropertyList =
         super.getBasics(moment).apply {
-            add(com.stho.nyota.R.drawable.distance, "Distance", Formatter.df0.format(distanceInKm) + " km")
+            add(com.stho.nyota.R.drawable.distance, "Distance", Formatter.toDistanceString(distanceInKm))
         }
 
     override fun getDetails(moment: Moment): PropertyList =

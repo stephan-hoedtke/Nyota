@@ -52,6 +52,7 @@ class CityPickerFragment : AbstractFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        viewModel.repository.updateCityDistances()
         viewModel.citiesLD.observe(viewLifecycleOwner, { cities -> updateCities(cities) })
         viewModel.selectedCityLC.observe(viewLifecycleOwner, { city -> updateSelectedCity(city) })
         updateActionBar(getString(R.string.title_choose_city), "")
@@ -63,8 +64,8 @@ class CityPickerFragment : AbstractFragment() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        // super.onCreateOptionsMenu(menu, inflater)
         inflater.inflate(R.menu.context_menu_city_picker, menu)
+        super.onCreateOptionsMenu(menu, inflater)
     }
 
     override fun onCreateContextMenu(menu: ContextMenu, v: View, menuInfo: ContextMenu.ContextMenuInfo?) {
@@ -112,7 +113,7 @@ class CityPickerFragment : AbstractFragment() {
     }
 
     private fun onNew() {
-        findNavController().navigate(CityPickerFragmentDirections.actionNavCityPickerToNavCity(City.NEW))
+        findNavController().navigate(CityPickerFragmentDirections.actionNavCityPickerToNavCity(City.NEW_CITY))
     }
 
     private fun onDefault() {
@@ -124,15 +125,15 @@ class CityPickerFragment : AbstractFragment() {
     }
 
     private fun showUndoSnackBar(position: Int, city: City) {
-        val container: View = requireActivity().findViewById<View>(R.id.drawer_layout)
-        val snackbar = Snackbar.make(container, "City was deleted", Snackbar.LENGTH_LONG)
-        snackbar.setAction("Undo") {
-            undoDelete(position, city)
+        val message = getString(R.string.message_city_was_deleted)
+        view?.also {
+            Snackbar.make(it, message, Snackbar.LENGTH_LONG)
+                .setAction(getString(R.string.label_undo)) { undoDelete(position, city) }
+                .setActionTextColor(getColor(R.color.colorPrimaryText))
+                .setBackgroundTint(getColor(R.color.colorSignalBackground))
+                .setTextColor(getColor(R.color.colorSecondaryText))
+                .show()
         }
-        snackbar.setActionTextColor(getColor(R.color.colorPrimaryText))
-        snackbar.setBackgroundTint(getColor(R.color.colorSignalBackground))
-        snackbar.setTextColor(getColor(R.color.colorSecondaryText))
-        snackbar.show()
     }
 
     private fun undoDelete(position: Int, city: City) {

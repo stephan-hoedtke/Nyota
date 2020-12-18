@@ -1,21 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-     <item
-        android:id="@+id/action_cities"
+    <item
+        android:id="@+id/action_time"
         android:orderInCategory="100"
+        android:title="@string/action_time"
+        android:icon="@drawable/menu_clock"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/action_location"
+        android:orderInCategory="200"
+        android:title="@string/action_location"
+        android:icon="@drawable/menu_navigation"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/action_cities"
+        android:orderInCategory="300"
         android:title="@string/action_cities"
         android:icon="@drawable/menu_navigation"
         app:showAsAction="never" />
     <item
-        android:id="@+id/action_moment"
-        android:orderInCategory="200"
-        android:title="@string/action_moment"
-        android:icon="@drawable/menu_clock"
-        app:showAsAction="never" />
-    <item
         android:id="@+id/action_settings"
-        android:orderInCategory="300"
+        android:orderInCategory="400"
         android:title="@string/action_settings"
         android:icon="@drawable/menu_settings"
         app:showAsAction="never" />

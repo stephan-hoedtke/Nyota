@@ -11,6 +11,7 @@ import com.stho.nyota.repository.Repository
 import com.stho.nyota.sky.universe.AbstractPlanet
 import com.stho.nyota.sky.utilities.Cities
 import com.stho.nyota.sky.utilities.City
+import com.stho.nyota.sky.utilities.ILocation
 import com.stho.nyota.sky.utilities.createCities
 
 class CityPickerViewModel(application: Application, repository: Repository) : RepositoryViewModelNoArgs(application, repository) {
@@ -29,4 +30,5 @@ class CityPickerViewModel(application: Application, repository: Repository) : Re
 
     fun undoDeleteCity(position: Int, city: City) =
         repository.undoDeleteCity(getApplication(), position, city)
-}
+
+ }

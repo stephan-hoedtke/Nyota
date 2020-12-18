@@ -5,14 +5,12 @@
         android:id="@+id/action_new"
         android:orderInCategory="100"
         android:title="@string/action_new"
-        android:icon="@drawable/menu_navigation"
         app:showAsAction="never" />
 
      <item
          android:id="@+id/action_default"
-         android:orderInCategory="100"
+         android:orderInCategory="200"
          android:title="@string/action_default_cities"
-         android:icon="@drawable/menu_navigation"
          app:showAsAction="never" />
 
 </menu>

@@ -119,8 +119,14 @@ class Cities {
     }
 
     val defaultCity: City =
-        findCityByName(City.BERLIN) ?: array.firstOrNull() ?: City.createDefaultBerlin().also { add(it) }
+        findCityByName(City.BERLIN) ?: array.firstOrNull() ?: City.createDefaultBerlinBuch().also { add(it) }
 
     val defaultAutomaticCity: City =
         array.firstOrNull { city -> city.isAutomatic } ?: City.createNewAutomaticCity().also { add(it) }
+
+    fun updateDistances(referenceLocation: ILocation) {
+        for (city in values) {
+            city.updateDistance(referenceLocation)
+        }
+    }
 }

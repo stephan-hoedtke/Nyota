@@ -23,6 +23,7 @@ import com.stho.nyota.sky.universe.IElement
 import com.stho.nyota.sky.universe.Satellite
 import com.stho.nyota.sky.universe.SatellitePreview
 import com.stho.nyota.sky.utilities.City
+import com.stho.nyota.sky.utilities.Location
 import com.stho.nyota.sky.utilities.Moment
 import org.osmdroid.config.Configuration
 import org.osmdroid.events.MapListener
@@ -69,7 +70,7 @@ class SatelliteEarthFragment : AbstractFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel.universeLD.observe(viewLifecycleOwner, { universe -> onUpdateSatellite(universe.moment) })
-        viewModel.currentLocationLD.observe(viewLifecycleOwner, { city -> onUpdateCurrentLocation(city) })
+        viewModel.currentAutomaticLocationLD.observe(viewLifecycleOwner, { location -> onUpdateCurrentAutomaticLocation(location) })
         viewModel.zoomLD.observe(viewLifecycleOwner, { zoom -> onUpdateZoom(zoom) })
     }
 
@@ -176,9 +177,8 @@ class SatelliteEarthFragment : AbstractFragment() {
         binding.zoomInfo.text = viewModel.zoom.toString()
     }
 
-    private fun onUpdateCurrentLocation(city: City) {
-        updateCurrentLocationMarker(city.location.toGeoPoint())
-    }
+    private fun onUpdateCurrentAutomaticLocation(location: Location) =
+        updateCurrentLocationMarker(location.toGeoPoint())
 
     private fun updateCityMarker(city: City) {
         var marker = findMarkerById(cityMarkerId)

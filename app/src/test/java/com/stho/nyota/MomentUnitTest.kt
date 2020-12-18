@@ -11,7 +11,7 @@ class MomentUnitTest : AbstractAstronomicUnitTest() {
 
     @Test
     fun moment_setHours_isCorrect() {
-        val berlin: City = City.createDefaultBerlin()
+        val berlin: City = City.createDefaultBerlinBuch()
         val utc: UTC = getCESTasUTC(2017, Calendar.JUNE, 20, 9, 7)
         val moment: IMoment = Moment(berlin, utc)
         val UT: Double = 11.122707

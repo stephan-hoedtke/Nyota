@@ -206,10 +206,23 @@
     </fragment>
 
     <fragment
-        android:id="@+id/nav_moment"
-        android:name="com.stho.nyota.ui.moment.MomentFragment"
+        android:id="@+id/nav_moment_time"
+        android:name="com.stho.nyota.ui.moment.MomentTimeFragment"
         android:label="@string/menu_moment"
-        tools:layout="@layout/fragment_moment">
+        tools:layout="@layout/fragment_moment_time">
+        <action
+            android:id="@+id/action_nav_moment_time_to_nav_city"
+            app:destination="@id/nav_city" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_moment_location"
+        android:name="com.stho.nyota.ui.moment.MomentLocationFragment"
+        android:label="@string/menu_moment"
+        tools:layout="@layout/fragment_moment_time">
+        <action
+            android:id="@+id/action_nav_moment_location_to_nav_city"
+            app:destination="@id/nav_city" />
     </fragment>
 
     <fragment
@@ -254,6 +267,7 @@
     <action android:id="@+id/action_global_nav_finder" app:destination="@id/nav_finder"/>
     <action android:id="@+id/action_global_nav_sky" app:destination="@id/nav_sky"/>
     <action android:id="@+id/action_global_nav_stars" app:destination="@id/nav_stars"/>
-    <action android:id="@+id/action_global_nav_moment" app:destination="@id/nav_moment"/>
+    <action android:id="@+id/action_global_nav_moment_time" app:destination="@id/nav_moment_time"/>
+    <action android:id="@+id/action_global_nav_moment_location" app:destination="@id/nav_moment_location"/>
 
 </navigation>

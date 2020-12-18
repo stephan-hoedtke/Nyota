@@ -7,7 +7,8 @@ import com.stho.nyota.sky.utilities.*
 
 interface IOrientationFilter {
     fun onOrientationAnglesChanged(orientationAngles: FloatArray)
-    val orientation: Orientation
+    val currentOrientation: Orientation
+    val updateCounter: Long
 }
 
 /*
@@ -17,12 +18,15 @@ interface IOrientationFilter {
  */
 class OrientationAccelerationFilter: IOrientationFilter {
 
+    override var updateCounter: Long = 0L
+        private set
+
     private val azimuthAcceleration: Acceleration = Acceleration(1.2)
     private val pitchAcceleration: Acceleration = Acceleration(0.7)
     private val rollAcceleration: Acceleration = Acceleration(0.7)
     private val lowPassFilter: LowPassFilter = LowPassFilter()
 
-    override val orientation: Orientation
+    override val currentOrientation: Orientation
         get() {
             val azimuth = azimuthAcceleration.position
             val pitch = pitchAcceleration.position
@@ -46,6 +50,8 @@ class OrientationAccelerationFilter: IOrientationFilter {
         rollAcceleration.rotateTo(roll)
         pitchAcceleration.rotateTo(pitch)
         azimuthAcceleration.rotateTo(azimuth)
+
+        updateCounter++
     }
 
     private fun normalizeRoll(roll: Double) =

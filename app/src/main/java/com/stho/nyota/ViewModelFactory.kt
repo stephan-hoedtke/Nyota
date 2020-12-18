@@ -1,7 +1,9 @@
 package com.stho.nyota
 
+import android.app.Activity
 import android.app.Application
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.stho.nyota.repository.Repository
@@ -31,6 +33,7 @@ class ViewModelFactory(private val application: Application, private val reposit
             modelClass.isAssignableFrom(IntervalPickerViewModel::class.java) -> IntervalPickerViewModel(application, repository)
             modelClass.isAssignableFrom(CityPickerViewModel::class.java) -> CityPickerViewModel(application, repository)
             modelClass.isAssignableFrom(MomentViewModel::class.java) -> MomentViewModel(application, repository)
+            modelClass.isAssignableFrom(MainViewModel::class.java) -> MainViewModel(application, repository)
             else -> super.create(modelClass)
         }
         @Suppress("UNCHECKED_CAST")
@@ -44,4 +47,10 @@ fun <T: RepositoryViewModelNoArgs?> Fragment.createViewModel(modelClass: Class<T
     val application = activity.application
     val viewModelFactory = ViewModelFactory(application, repository)
     return ViewModelProvider(activity, viewModelFactory).get(modelClass)
+}
+
+fun <T: RepositoryViewModelNoArgs?> FragmentActivity.createViewModel(modelClass: Class<T>): T {
+    val repository = Repository.requireRepository(this)
+    val viewModelFactory = ViewModelFactory(this.application, repository)
+    return ViewModelProvider(this, viewModelFactory).get(modelClass)
 }

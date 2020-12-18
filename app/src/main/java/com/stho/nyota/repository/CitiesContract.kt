@@ -36,7 +36,7 @@ internal class CitiesContract(private val db: SQLiteDatabase) : BaseContract() {
             val altitude = getDouble(cursor, 4)
             val timeZone: TimeZone = getTimeZone(cursor, 5)
             val isAutomatic: Boolean = getBoolean(cursor, 6)
-            val location = Location(longitude, latitude, altitude)
+            val location = Location(latitude = latitude, longitude = longitude, altitude = altitude)
             val city = City.create(id, name, location, timeZone, isAutomatic)
             cities.add(city)
         }

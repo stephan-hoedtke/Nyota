@@ -8,9 +8,11 @@ import androidx.navigation.fragment.findNavController
 import com.stho.nyota.AbstractFragment
 import com.stho.nyota.R
 import com.stho.nyota.databinding.FragmentCityBinding
-import com.stho.nyota.sky.utilities.City
-import com.stho.nyota.sky.utilities.Formatter
-import com.stho.nyota.sky.utilities.Moment
+import com.stho.nyota.sky.utilities.*
+
+// TODO: get location on button click
+// TODO: choose location using a map
+// TODO: helper to select a time zone for the city
 
 class CityFragment : AbstractFragment() {
 
@@ -31,19 +33,24 @@ class CityFragment : AbstractFragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         bindingReference = FragmentCityBinding.inflate(inflater, container, false)
 
+        binding.buttonUseCurrentLocation.setOnClickListener { onUseCurrentLocation() }
+
         binding.buttonSave.setOnClickListener { onSave() }
         binding.buttonEarthView.setOnClickListener { onEarthView() }
         binding.buttonFinderView.setOnClickListener { onFinderView() }
         binding.buttonReset.setOnClickListener { onReset() }
+
+        registerForContextMenu(binding.buttonReset)
 
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        viewModel.repository.updateCityDistances()
+        viewModel.repository.currentAutomaticLocationLD.observe(viewLifecycleOwner, { utc -> updateAutomaticLocation(utc) })
         updateCity(viewModel.city)
         updateActionBar(viewModel.city.name, "")
-        viewModel.repository.currentAutomaticMomentLD.observe(viewLifecycleOwner, { moment -> updateAutomaticMoment(moment) })
     }
 
     override fun onDestroyView() {
@@ -56,12 +63,28 @@ class CityFragment : AbstractFragment() {
         menu.clear()
     }
 
+    override fun onCreateContextMenu(menu: ContextMenu, v: View, menuInfo: ContextMenu.ContextMenuInfo?) {
+        super.onCreateContextMenu(menu, v, menuInfo)
+        when (v.id) {
+            R.id.buttonReset -> requireActivity().menuInflater.inflate(R.menu.context_menu_city_reset, menu)
+        }
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.action_reset -> onReset()
+            R.id.action_default -> onDefault()
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
     private fun updateCity(city: City) {
         binding.checkBoxAutomatic.isChecked = city.isAutomatic
         binding.editName.setText(city.name)
         binding.editLatitude.setText(Formatter.toString(city.latitude))
         binding.editLongitude.setText(Formatter.toString(city.longitude))
         binding.editAltitude.setText(Formatter.toString(city.altitude))
+        binding.textViewDistance.text =  Formatter.toDistanceString(city.distanceInKm)
         binding.image.setImageResource(city.imageId)
         binding.copyright.text = city.copyright.text
         binding.copyright.setOnClickListener {
@@ -70,14 +93,32 @@ class CityFragment : AbstractFragment() {
         }
     }
 
-    private fun updateAutomaticMoment(moment: Moment) {
+    private fun updateAutomaticLocation(location: Location) {
         if (binding.checkBoxAutomatic.isChecked) {
-            binding.editLatitude.setText(Formatter.toString(moment.city.latitude))
-            binding.editLongitude.setText(Formatter.toString(moment.city.longitude))
-            binding.editAltitude.setText(Formatter.toString(moment.city.altitude))
+            bindToLocation(location)
         }
     }
 
+    private fun onUseCurrentLocation() {
+        if (!binding.checkBoxAutomatic.isChecked) {
+            val location = viewModel.repository.currentAutomaticLocation
+            bindToLocation(location)
+        }
+    }
+
+    /*
+        don't use Angle.toString(..., LATITUDE) below, as we want to be able editing numbers...
+     */
+    private fun bindToLocation(location: Location) {
+        binding.editLatitude.setText(Formatter.toString(location.latitude))
+        binding.editLongitude.setText(Formatter.toString(location.longitude))
+        binding.editAltitude.setText(Formatter.toString(location.altitude))
+        binding.textViewDistance.text = getString(R.string.label_empty)
+    }
+
+    /*
+        don't change if the city location is updated automatically
+     */
     private fun onSave() {
         val city = viewModel.city
         try {
@@ -100,6 +141,10 @@ class CityFragment : AbstractFragment() {
 
     private fun onReset() {
         updateCity(viewModel.city)
+    }
+
+    private fun onDefault() {
+        updateCity(viewModel.city.createDefault())
     }
 
     private fun onFinderView() {

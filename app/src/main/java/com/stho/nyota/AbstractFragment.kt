@@ -85,11 +85,14 @@ abstract class AbstractFragment : Fragment() {
     }
 
     protected fun openProperty(property: IProperty) =
-        snack(view,"Display property ${property.name} with value ${property.value} for key ${property.key}")
+        showSnackBar("Display property ${property.name} with value ${property.value} for key ${property.key}")
 
-    protected fun snack(view: View?, message: String) {
+    fun showSnackBar(message: String) {
         view?.also {
-            Snackbar.make(it, message, Snackbar.LENGTH_LONG).show()
+            Snackbar.make(it, message, Snackbar.LENGTH_LONG)
+                .setBackgroundTint(getColor(R.color.colorSignalBackground))
+                .setTextColor(getColor(R.color.colorSecondaryText))
+                .show()
         }
     }
 

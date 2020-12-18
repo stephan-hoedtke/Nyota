@@ -235,5 +235,14 @@ object Algorithms {
         val newLongitude = atan2(sin(angle) * sin(ratio) * cos(latitude), cos(ratio) - sin(latitude) * sin(newLatitude))
         return Location(Radian.toDegrees180(newLatitude), Radian.toDegrees180(longitude + newLongitude), location.altitude)
     }
+
+    fun getHorizontalDistanceInKmTo(latitude: Double, longitude: Double, otherLatitude: Double, otherLongitude: Double): Double {
+        val sinDeltaPhi = sin(Radian.fromDegrees(otherLatitude - latitude) / 2)
+        val sinDeltaLambda = sin(Radian.fromDegrees(otherLongitude - longitude) / 2)
+        val a = sinDeltaPhi * sinDeltaPhi + cos(Radian.fromDegrees(latitude)) * cos(Radian.fromDegrees(otherLatitude)) * sinDeltaLambda * sinDeltaLambda
+        val c = 2 * atan2(sqrt(a), sqrt(1 - a))
+        return Earth.RADIUS * c
+    }
+
 }
 

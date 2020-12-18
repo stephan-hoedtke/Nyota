@@ -114,7 +114,7 @@ class HomeFragment : AbstractFragment() {
             is Star -> openStar(element)
         }
         findNavController()
-        snack(view, "See: ${element.name}")
+        showSnackBar("See: ${element.name}")
     }
 
     private fun openPlanet(planet: AbstractPlanet) =

@@ -5,11 +5,15 @@ import android.location.LocationListener
 import android.location.LocationManager
 import android.os.Bundle
 import android.os.Handler
+import android.os.PersistableBundle
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import androidx.core.app.ActivityCompat
 import androidx.drawerlayout.widget.DrawerLayout
+import androidx.lifecycle.Observer
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
@@ -17,7 +21,9 @@ import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.navigation.NavigationView
+import com.google.android.material.snackbar.Snackbar
 import com.stho.nyota.repository.Repository
+import com.stho.nyota.sky.utilities.City
 import com.stho.nyota.ui.finder.IOrientationFilter
 import com.stho.nyota.ui.finder.OrientationAccelerationFilter
 import kotlinx.coroutines.CoroutineScope
@@ -30,16 +36,25 @@ import kotlinx.coroutines.launch
 // TODO Settings: automatic: location, compass, time --> 3 options can be stopped anytime
 // TODO Click on star
 // Star View...
+// TODO currentLocation, repository, ... --> ViewModel
+// TODO locationManager, ... --> LocationSensorListener
 
-class MainActivity : AppCompatActivity(), LocationListener {
+
+// TODO: Request for Permission to access location, if permission wasn't granted. And tell the user
+// TODO: Review calculation of distance for cities
+// TODO: Constellation Sky View: Update for the moment
+// TODO: Automatic city: select automatic city or (last) non automatic city
+//
+
+class MainActivity : AppCompatActivity(), ActivityCompat.OnRequestPermissionsResultCallback {
 
     private lateinit var appBarConfiguration: AppBarConfiguration
-    private lateinit var repository: Repository
     private lateinit var handler: Handler
-    private lateinit var locationManager: LocationManager
-    private var currentLocation: com.stho.nyota.sky.utilities.Location? = null
+    private lateinit var viewModel: MainViewModel
     private lateinit var orientationFilter: IOrientationFilter
     private lateinit var orientationSensorListener: OrientationSensorListener
+    private lateinit var locationFilter: ILocationFilter
+    private lateinit var locationServiceListener: LocationServiceListener
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,8 +62,15 @@ class MainActivity : AppCompatActivity(), LocationListener {
         val toolbar: Toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
 
+        handler = Handler()
+        viewModel = createViewModel(MainViewModel::class.java)
+
         orientationFilter = OrientationAccelerationFilter()
         orientationSensorListener = OrientationSensorListener(this, orientationFilter)
+
+        locationFilter = SimpleLocationFilter()
+        locationServiceListener = LocationServiceListener(this, locationFilter)
+
 
 //  TODO: cleanup code or comment
 //        val fab: FloatingActionButton = findViewById(R.id.fab)
@@ -73,9 +95,6 @@ class MainActivity : AppCompatActivity(), LocationListener {
 
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
-        handler = Handler()
-        repository = Repository.requireRepository(this)
-        locationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -87,13 +106,19 @@ class MainActivity : AppCompatActivity(), LocationListener {
         return when (item.itemId) {
             R.id.action_settings -> openSettings()
             R.id.action_cities -> openCities()
-            R.id.action_moment -> openMoment()
+            R.id.action_time -> openMomentTime()
+            R.id.action_location-> openMomentLocation()
             else -> super.onOptionsItemSelected(item)
         }
     }
 
-    private fun openMoment(): Boolean {
-        findNavController().navigate(R.id.action_global_nav_moment)
+    private fun openMomentTime(): Boolean {
+        findNavController().navigate(R.id.action_global_nav_moment_time)
+        return true
+    }
+
+    private fun openMomentLocation(): Boolean {
+        findNavController().navigate(R.id.action_global_nav_moment_location)
         return true
     }
 
@@ -117,38 +142,35 @@ class MainActivity : AppCompatActivity(), LocationListener {
         super.onResume()
         executeHandlerToUpdateUniverse()
         executeHandlerToUpdateOrientation()
-        enableLocationListener()
-        orientationSensorListener.onResume()
+
+        if (viewModel.updateOrientationAutomatically) {
+            orientationSensorListener.onResume()
+        }
+
+        if (viewModel.updateLocationAutomatically) {
+            locationServiceListener.onError = { viewModel.disableAutomaticLocation() }
+            locationServiceListener.onResume()
+        }
     }
 
     override fun onPause() {
         super.onPause()
-        disableLocationListener()
-        orientationSensorListener.onPause()
         stopHandler()
+        orientationSensorListener.onPause()
+        locationServiceListener.onPause()
     }
 
-    private fun enableLocationListener() {
-        try {
-            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 0f, this)
-        } catch (ex: SecurityException) {
-            //ignore
-        }
-    }
-
-    private fun disableLocationListener() {
-        try {
-            locationManager.removeUpdates(this)
-        } catch (ex: SecurityException) {
-            //ignore
-        }
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        val permissionManager = PermissionManager(this)
+        permissionManager.onMessage = { message -> showSnackBar(message) }
+        permissionManager.onRequestPermissionsResult(requestCode, permissions, grantResults)
     }
 
     private fun executeHandlerToUpdateUniverse() {
         val runnableCode: Runnable = object : Runnable {
             override fun run() {
                 CoroutineScope(Default).launch {
-                    repository.updateForNow(currentLocation)
+                    viewModel.updateForNow(locationFilter.currentLocation)
                 }
                 handler.postDelayed(this, 3000)
             }
@@ -160,7 +182,7 @@ class MainActivity : AppCompatActivity(), LocationListener {
         val runnableCode: Runnable = object : Runnable {
             override fun run() {
                 CoroutineScope(Default).launch {
-                    repository.updateOrientation(orientationFilter.orientation)
+                    viewModel.updateOrientation(orientationFilter.currentOrientation)
                 }
                 handler.postDelayed(this, 200)
             }
@@ -176,20 +198,12 @@ class MainActivity : AppCompatActivity(), LocationListener {
     private fun stopHandler() =
         handler.removeCallbacksAndMessages(null)
 
-    override fun onLocationChanged(location: android.location.Location) {
-        currentLocation = com.stho.nyota.sky.utilities.Location.fromAndroidLocation(location)
-    }
-
-    override fun onStatusChanged(provider: String?, status: Int, extras: Bundle?) {
-        // Do nothing
-    }
-
-    override fun onProviderEnabled(provider: String?) {
-        // Do nothing
-    }
-
-    override fun onProviderDisabled(provider: String?) {
-        // Do nothing
+    private fun showSnackBar(message: String) {
+        val container: View = findViewById<View>(R.id.drawer_layout)
+        Snackbar.make(container, message, Snackbar.LENGTH_LONG)
+            .setBackgroundTint(getColor(R.color.colorSignalBackground))
+            .setTextColor(getColor(R.color.colorSecondaryText))
+            .show()
     }
 }
 

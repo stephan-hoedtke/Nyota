@@ -9,39 +9,56 @@ import com.stho.nyota.settings.Settings
 import com.stho.nyota.sky.universe.*
 import com.stho.nyota.sky.universe.Target
 import com.stho.nyota.sky.utilities.*
-import java.util.*
-import java.util.concurrent.Semaphore
 
 // TODO: this class is too big...
+// TODO: remove the lock (its nonsense!)
 
 class Repository private constructor() {
-
-    private val lock = Semaphore(1)
 
     var universe: Universe = Universe()
 
     private val settingsLiveData = MutableLiveData<Settings>()
     private val citiesLiveData = MutableLiveData<Cities>()
     private val momentLiveData = MutableLiveData<Moment>()
-    private val currentAutomaticMomentLiveData = MutableLiveData<Moment>()
+    private val currentAutomaticTimeLiveData = MutableLiveData<UTC>()
+    private val currentAutomaticLocationLiveData = MutableLiveData<Location>()
     private val currentOrientationLiveData = MutableLiveData<Orientation>()
 
     init {
         settingsLiveData.value = Settings()
         citiesLiveData.value = Cities()
         momentLiveData.value = Moment.forNow(defaultCity)
-        currentAutomaticMomentLiveData.value = defaultAutomaticMoment
+        currentAutomaticTimeLiveData.value = defaultAutomaticTime
+        currentAutomaticLocationLiveData.value = defaultAutomaticLocation
         currentOrientationLiveData.value = Orientation.defaultOrientation
     }
 
     val momentLD: LiveData<Moment>
         get() = momentLiveData
 
-    val currentAutomaticMomentLD: LiveData<Moment>
-        get() = currentAutomaticMomentLiveData
+    val currentAutomaticTimeLD: LiveData<UTC>
+        get() = currentAutomaticTimeLiveData
 
-    val currentAutomaticLocation: Location
-        get() = currentAutomaticMomentLiveData.value!!.city.location
+    internal var currentAutomaticTime: UTC
+        get() = currentAutomaticTimeLiveData.value ?: UTC.forNow()
+        private set(value) {
+            val currentValue = currentAutomaticTimeLiveData.value
+            if (currentValue == null || currentValue.timeInMillis != value.timeInMillis) {
+                currentAutomaticTimeLiveData.postValue(value)
+            }
+        }
+
+    val currentAutomaticLocationLD: LiveData<Location>
+        get() = currentAutomaticLocationLiveData
+
+    internal var currentAutomaticLocation: Location
+        get() = currentAutomaticLocationLiveData.value ?: City.defaultLocationBerlinBuch
+        private set(value) {
+            val currentLocation = currentAutomaticLocationLiveData.value
+            if (currentLocation == null || !currentLocation.isNearTo(value)) {
+                currentAutomaticLocationLiveData.postValue(value)
+            }
+        }
 
     val currentOrientationLD: LiveData<Orientation>
         get() = currentOrientationLiveData
@@ -156,113 +173,20 @@ class Repository private constructor() {
         currentOrientationLiveData.postValue(orientation)
     }
 
-    internal fun updateForNow(location: Location?) {
+    internal fun updateForNow(location: Location) {
         updateMomentForNow(location)
         updateAutomaticMomentForNow(location)
     }
 
+    private fun updateAutomaticMomentForNow(location: Location) {
+        currentAutomaticLocation = location
+        currentAutomaticTime = UTC.forNow()
+    }
+
+    // TODO: decouple Moment and City: assign City -> Moment.Location, Moment.Name, ...
+
     private fun updateMomentForNow(location: Location?) {
-        try {
-            lock.acquire()
-            updateMomentForNowSynchronized(location)
-         }
-        finally {
-            lock.release()
-        }
-    }
-
-    internal fun addHours(hours: Double) {
-        try {
-            lock.acquire()
-            addHoursSynchronized(hours)
-        }
-        finally {
-            lock.release()
-        }
-    }
-
-    internal fun next(interval: Interval) {
-        try {
-            lock.acquire()
-            nextSynchronized(interval)
-         }
-        finally {
-            lock.release()
-        }
-    }
-
-    internal fun previous(interval: Interval) {
-        try {
-            lock.acquire()
-            previousSynchronized(interval)
-        }
-        finally {
-            lock.release()
-        }
-    }
-
-    internal fun reset() {
-        try {
-            lock.acquire()
-            resetSynchronized()
-        } finally {
-            lock.release()
-        }
-    }
-
-    internal fun setCity(city: City) {
-        try {
-            lock.acquire()
-            setCitySynchronized(city)
-        }
-        finally {
-            lock.release()
-        }
-    }
-
-    internal fun setDate(year: Int, month: Int, dayOfMonth: Int) {
-        try {
-            lock.acquire()
-            setDateSynchronized(year, month, dayOfMonth)
-        }
-        finally {
-            lock.release()
-        }
-    }
-
-    internal fun setTime(hourOfDay: Int, minute: Int) {
-        try {
-            lock.acquire()
-            setTimeSynchronized(hourOfDay, minute)
-        }
-        finally {
-            lock.release()
-        }
-    }
-
-    internal fun setTime(utc: UTC) {
-        try {
-            lock.acquire()
-            setTimeSynchronized(utc)
-        }
-        finally {
-            lock.release()
-        }
-    }
-
-
-    private fun updateAutomaticMomentForNow(location: Location?) {
-        var auto = currentAutomaticMomentLiveData.value!!
-        if (location != null) {
-            auto.city.location = location
-        }
-        auto.city.timeZone = TimeZone.getDefault()
-        auto = auto.forNow()
-        currentAutomaticMomentLiveData.postValue(auto)
-    }
-
-    private fun updateMomentForNowSynchronized(location: Location?) {
-        var moment: Moment = momentLiveData.value!!
+        var moment: Moment = liveMoment
         if (settings.updateLocationAutomatically && moment.city.isAutomatic && location != null) {
             moment.city.location = location
         }
@@ -272,44 +196,50 @@ class Repository private constructor() {
         momentLiveData.postValue(moment)
     }
 
-    private fun addHoursSynchronized(hours: Double) {
-        val moment: Moment = momentLiveData.value!!.addHours(hours)
+    fun addHours(hours: Double) {
+        val moment: Moment = liveMoment.addHours(hours)
+        momentLiveData.postValue(moment)
+        updateTimeAutomatically = false
+    }
+
+    fun next(interval: Interval) {
+        val moment = liveMoment.next(interval)
+        momentLiveData.postValue(moment)
+        updateTimeAutomatically = false
+    }
+
+    fun previous(interval: Interval) {
+        val moment = liveMoment.previous(interval)
+        momentLiveData.postValue(moment)
+        updateTimeAutomatically = false
+    }
+
+    fun reset() {
+        val moment = liveMoment.forNow()
         momentLiveData.postValue(moment)
     }
 
-    private fun nextSynchronized(interval: Interval) {
-        val moment = momentLiveData.value!!.next(interval)
+    fun setCity(city: City) {
+        val moment = Moment(city, liveMoment.utc)
         momentLiveData.postValue(moment)
     }
 
-    private fun previousSynchronized(interval: Interval) {
-        val moment = momentLiveData.value!!.previous(interval)
+    fun setDate(year: Int, month: Int, dayOfMonth: Int) {
+        val moment = liveMoment.forThisDate(year, month, dayOfMonth)
         momentLiveData.postValue(moment)
+        updateTimeAutomatically = false
     }
 
-    private fun resetSynchronized() {
-        val moment = momentLiveData.value!!.forNow()
+    fun setTime(hourOfDay: Int, minute: Int) {
+        val moment = liveMoment.forThisTime(hourOfDay, minute)
         momentLiveData.postValue(moment)
+        updateTimeAutomatically = false
     }
 
-    private fun setCitySynchronized(city: City) {
-        val moment = Moment(city, momentLiveData.value!!.utc)
+    fun setTime(utc: UTC) {
+        val moment = liveMoment.forUTC(utc)
         momentLiveData.postValue(moment)
-    }
-
-    private fun setDateSynchronized(year: Int, month: Int, dayOfMonth: Int) {
-        val moment = momentLiveData.value!!.forThisDate(year, month, dayOfMonth)
-        momentLiveData.postValue(moment)
-    }
-
-    private fun setTimeSynchronized(hourOfDay: Int, minute: Int) {
-        val moment = momentLiveData.value!!.forThisTime(hourOfDay, minute)
-        momentLiveData.postValue(moment)
-    }
-
-    private fun setTimeSynchronized(utc: UTC) {
-        val moment = momentLiveData.value!!.forUTC(utc)
-        momentLiveData.postValue(moment)
+        updateTimeAutomatically = false
     }
 
     internal fun getSatelliteOrDefault(satelliteName: String?): Satellite =
@@ -328,18 +258,21 @@ class Repository private constructor() {
         universe.findElementByName(elementName) ?: solarSystem.moon
 
     internal fun getCityOrNewCity(cityName: String?): City =
-        citiesLiveData.value?.findCityByName(cityName) ?: City.createNewCity()
+        liveCities.findCityByName(cityName) ?: City.createNewCity(cityName ?: City.NEW_CITY)
 
     internal fun createDefaultCities(context: Context) {
         val helper = NyotaDatabaseHelper(context)
         val adapter = NyotaDatabaseAdapter(helper.writableDatabase)
 
-        citiesLiveData.value?.also {
+        liveCities.also {
             it.createDefaultCities(false)
             adapter.saveCities(it.values)
             citiesLiveData.postValue(it)
         }
     }
+
+    internal fun updateCityDistances() =
+        liveCities.updateDistances(referenceLocation = currentAutomaticLocation)
 
     companion object {
         private var singleton: Repository? = null
@@ -370,7 +303,7 @@ class Repository private constructor() {
     }
 
     fun deleteCity(context: Context, city: City) {
-        citiesLiveData.value?.also {
+        liveCities.also {
             city.markAsDeleted()
             it.delete(city)
             saveCity(context, city)
@@ -379,7 +312,7 @@ class Repository private constructor() {
     }
 
     fun undoDeleteCity(context: Context, position: Int, city: City) {
-        citiesLiveData.value?.also {
+        liveCities.also {
             city.markAsNew()
             it.undoDelete(position, city)
             saveCity(context, city)
@@ -388,11 +321,50 @@ class Repository private constructor() {
     }
 
     fun updateCity(context: Context, city: City) {
-        citiesLiveData.value?.also {
+        liveCities.also {
             it.addOrUpdate(city)
             saveCity(context, city)
             citiesLiveData.postValue(it)
         }
+    }
+
+    var updateOrientationAutomatically: Boolean
+        get() = settings.updateOrientationAutomatically
+        private set(value) {
+            settings.updateOrientationAutomatically = value
+        }
+
+    var updateTimeAutomatically: Boolean
+        get() = settings.updateTimeAutomatically
+        private set(value) {
+            settings.updateTimeAutomatically = value
+        }
+
+    var updateLocationAutomatically: Boolean
+        get() = settings.updateLocationAutomatically
+        private set(value) {
+            settings.updateLocationAutomatically = value
+            if (value) {
+                ensureAutomaticCity()
+            }
+        }
+
+    private fun ensureAutomaticCity() {
+        if (!liveMoment.city.isAutomatic) {
+            momentLiveData.postValue(Moment.forNow(defaultAutomaticCity))
+        }
+    }
+
+    fun toggleAutomaticTime() {
+        updateTimeAutomatically = !updateTimeAutomatically
+    }
+
+    fun toggleAutomaticLocation() {
+        updateLocationAutomatically = !updateLocationAutomatically
+    }
+
+    fun disableAutomaticLocation() {
+        updateLocationAutomatically = false
     }
 
     private val defaultCity: City
@@ -401,9 +373,17 @@ class Repository private constructor() {
     private val defaultAutomaticCity: City
         get() = citiesLiveData.value!!.defaultAutomaticCity
 
-    private val defaultAutomaticMoment: Moment
-        get() = Moment.forNow(defaultAutomaticCity)
+    private val defaultAutomaticTime: UTC
+        get() = UTC.forNow()
 
+    private val defaultAutomaticLocation: Location
+        get() = City.defaultLocationBerlinBuch
+
+    private val liveMoment: Moment
+        get() = momentLiveData.value!!
+
+    private val liveCities: Cities
+        get() = citiesLiveData.value!!
 }
 
 

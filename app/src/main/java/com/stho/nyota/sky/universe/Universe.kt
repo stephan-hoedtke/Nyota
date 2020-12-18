@@ -3,7 +3,7 @@ package com.stho.nyota.sky.universe
 import com.stho.nyota.sky.utilities.City
 import com.stho.nyota.sky.utilities.Moment
 import com.stho.nyota.sky.utilities.Topocentric
-import com.stho.nyota.sky.utilities.createDefaultBerlin
+import com.stho.nyota.sky.utilities.createDefaultBerlinBuch
 import java.util.*
 
 // Implemented as static singleton. There is just one universe!
@@ -32,7 +32,7 @@ class Universe {
      * @return
      */
     // The moment (time + location
-    var moment: Moment = Moment.forNow(City.createDefaultBerlin())
+    var moment: Moment = Moment.forNow(City.createDefaultBerlinBuch())
         private set
 
     fun updateForNow(): Universe {

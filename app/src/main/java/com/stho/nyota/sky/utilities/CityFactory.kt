@@ -9,7 +9,7 @@ import java.util.*
 
 internal fun City.Companion.createCities(): List<City> {
     return listOf(
-        createDefaultBerlin(),
+        createDefaultBerlinBuch(),
         createDefaultLusaka(),
         createDefaultMonrovia(),
         createDefaultKigali(),
@@ -21,15 +21,19 @@ internal fun City.Companion.createCities(): List<City> {
         createDefaultParis(),
         createDefaultHamburg(),
         createDefaultEichstaett(),
-        createNewCity("You", true)
+        createNewAutomaticCity()
     )
 }
 
-internal fun City.Companion.createDefaultBerlin(): City {
-    val location = Location(BERLIN_LATITUDE, BERLIN_LONGITUDE, BERLIN_ALTITUDE)
-    val timeZone = TimeZone.getTimeZone("CET") // Central European Time, GMT+1
-    return City(BERLIN, location, timeZone)
-}
+
+internal val City.Companion.defaultLocationBerlinBuch: Location
+    get() = Location(BERLIN_BUCH_LATITUDE, BERLIN_BUCH_LONGITUDE, BERLIN_BUCH_ALTITUDE)
+
+internal val City.Companion.defaultTimeZoneCET: TimeZone
+    get() = TimeZone.getTimeZone("CET") // Central European Time, GMT+1
+
+internal fun City.Companion.createDefaultBerlinBuch(): City =
+    City(BERLIN, defaultLocationBerlinBuch, defaultTimeZoneCET)
 
 private fun City.Companion.createDefaultLusaka(): City {
     val location = Location(-15.3875, 28.3228, 1.279)
@@ -61,7 +65,7 @@ private fun City.Companion.createDefaultLagos(): City {
     return City("Lagos", location, timeZone)
 }
 
-private fun City.Companion.createDefaultMunich(): City {
+internal fun City.Companion.createDefaultMunich(): City {
     val location = Location(48.1351, 11.5820, 0.519)
     val timeZone = TimeZone.getTimeZone("CET") // Central European Standard Time
     return City("München", location, timeZone)

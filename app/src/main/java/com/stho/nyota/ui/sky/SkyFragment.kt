@@ -50,14 +50,14 @@ class SkyFragment : AbstractFragment() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        super.onCreateOptionsMenu(menu, inflater)
         inflater.inflate(R.menu.menu_sky, menu)
+        super.onCreateOptionsMenu(menu, inflater)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (item.itemId == R.id.action_display) {
             // TODO: Show dialog to set otions... https://guides.codepath.com/android/using-dialogfragment
-            snack(binding.sky, "Show Display Option Dialog here...")
+            showSnackBar("Show Display Option Dialog here...")
         }
         return super.onOptionsItemSelected(item)
     }

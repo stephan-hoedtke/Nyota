@@ -23,28 +23,32 @@ object Formatter {
     val df3: DecimalFormat = DecimalFormat.getNumberInstance(Locale.ENGLISH) as DecimalFormat
     internal const val SPACE = "  "
     private const val UNICODE_THIN_SPACE = '\u2009'
-    internal val timeZoneGMT: TimeZone by lazy { TimeZone.getTimeZone("GMT") }
-
-    fun toString(utc: UTC, timeZone: TimeZone, timeFormat: TimeFormat): String {
-        return toString(utc.time, timeZone, timeFormat)
+    internal val timeZoneGMT: TimeZone by lazy {
+        TimeZone.getTimeZone("GMT")
     }
 
-    fun toString(calendar: Calendar, timeFormat: TimeFormat): String {
-        return toString(calendar.time, calendar.timeZone, timeFormat)
-    }
+    fun toString(utc: UTC, timeZone: TimeZone, timeFormat: TimeFormat): String =
+        toString(utc.time, timeZone, timeFormat)
 
-    fun toString(value: Double): String {
-        return String.format(Locale.ENGLISH, "%.4f", value)
-    }
+    fun toString(calendar: Calendar, timeFormat: TimeFormat): String =
+        toString(calendar.time, calendar.timeZone, timeFormat)
+
+    fun toString(value: Double): String =
+        String.format(Locale.ENGLISH, "%.4f", value)
+
+    fun toDistanceString(distance: Double): String =
+        df0.format(distance) + " km"
+
+    fun toSpeedString(speed: Double): String =
+        df0.format(speed) + " km/h"
 
     private const val HALF_A_MINUTE_IN_MILLISECONDS: Long = 29000
 
-    private fun toNearestWholeMinute(utc: Date): Date {
-        return Date(utc.time + HALF_A_MINUTE_IN_MILLISECONDS)
-    }
+    private fun toNearestWholeMinute(utc: Date): Date =
+        Date(utc.time + HALF_A_MINUTE_IN_MILLISECONDS)
 
-    fun toString(utc: Date, timeZone: TimeZone, timeFormat: TimeFormat): String {
-        return when (timeFormat) {
+    fun toString(utc: Date, timeZone: TimeZone, timeFormat: TimeFormat): String =
+        when (timeFormat) {
             TimeFormat.TIME -> {
                 formatTime.timeZone = timeZone
                 formatTime.format(utc)
@@ -82,7 +86,6 @@ object Formatter {
                 formatTimeSec.format(utc)
             }
         }
-    }
 
     enum class TimeFormat {
         DATE, DATE_TIMEZONE, TIME, DATETIME, DATETIME_TIMEZONE, DATETIME_SEC, DATETIME_SEC_TIMEZONE, TIMEZONE, TIME_SEC
@@ -101,3 +104,4 @@ object Formatter {
         df3.minimumIntegerDigits = 1
     }
 }
+

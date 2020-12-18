@@ -1,14 +1,63 @@
 <resources>
     <string name="app_name">Nyota</string>
-    <string name="navigation_drawer_open">Open navigation drawer</string>
-    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <!-- Navigation -->
     <string name="nav_header_title">Nyota</string>
     <string name="nav_header_subtitle">Planets, constellations and satellites</string>
     <string name="nav_header_desc">Navigation header</string>
-    <string name="action_moment">Moment</string>
+    <!-- Labels -->
+    <string name="label_satellite">Satellite</string>
+    <string name="label_satellites">Satellites</string>
+    <string name="label_constellations">Constellations</string>
+    <string name="label_star">Star</string>
+    <string name="label_stars">Stars</string>
+    <string name="label_planets">Planets</string>
+    <string name="label_empty" />
+    <string name="label_nyota">Nyota</string>
+    <string name="label_moon">Moon</string>
+    <string name="label_ok">OK</string>
+    <string name="label_done">Done</string>
+    <string name="label_default_orientation">115°</string>
+    <string name="label_refresh">Refresh</string>
+    <string name="label_city_colon">City:</string>
+    <string name="label_date_colon">Date:</string>
+    <string name="label_time_colon">Time:</string>
+    <string name="label_distance">Distance</string>
+    <string name="label_tle">TLE</string>
+    <string name="label_outdated">Outdated</string>
+    <string name="label_default_cities">Create default cities</string>
+    <string name="label_show_details">…</string>
+    <string name="label_hide_details">(hide)</string>
+    <string name="label_delete">Delete</string>
+    <string name="label_options">Options:</string>
+    <string name="label_show_targets">Show Targets</string>
+    <string name="label_show_invisible_elements">Show Invisible Elements</string>
+    <string name="label_show_stars">Show Stars</string>
+    <string name="label_show_planets">Show Planets</string>
+    <string name="label_show_satellites">Show Satellites</string>
+    <string name="label_current_location_and_time">Current Device Location and Time:</string>
+    <string name="label_reference_time">Reference Time:</string>
+    <string name="label_reference_location">Reference Location:</string>
+    <string name="label_update_time_automatically">Update time automatic</string>
+    <string name="label_name_colon">Name:</string>
+    <string name="label_latitude_colon">Latitude (in °):</string>
+    <string name="label_longitude_colon">Longitude (in °):</string>
+    <string name="label_altitude_colon">Altitude (in km):</string>
+    <string name="label_distance_colon">Distance (in km):</string>
+    <string name="label_update_location_automatically">Update location automatically</string>
+    <string name="label_default_pitch">+23°</string>
+    <string name="label_default_roll">-3°</string>
+    <string name="label_freeze">Freeze</string>
+    <string name="label_unfreeze">Unfreeze</string>
+    <string name="label_undo">Undo</string>
+    <!-- Actions -->
+    <string name="action_time">Date and Time</string>
+    <string name="action_location">Location</string>
     <string name="action_settings">Settings</string>
     <string name="action_cities">Cities</string>
     <string name="action_display">Display</string>
+    <string name="action_new">New</string>
+    <string name="action_default_cities">Add Default Cities</string>
+    <!-- Menu -->
     <string name="menu_home">Home</string>
     <string name="menu_stars">Stars</string>
     <string name="menu_satellite">Satellite</string>
@@ -26,8 +75,7 @@
     <string name="menu_city">City</string>
     <string name="menu_moment">Moment</string>
     <string name="menu_settings">Settings</string>
-    <string name="action_new">New</string>
-    <string name="action_default_cities">Add Default Cities</string>
+    <!-- Defaults -->
     <string name="default_satellite_name">ISS</string>
     <string name="default_satellite_number">83928</string>
     <string name="default_satellite_display_name">International Space Station</string>
@@ -36,42 +84,13 @@
     <string name="default_planet_name">Jupiter</string>
     <string name="default_constellation_name">Virgo</string>
     <string name="default_planet_position">37° E 37°</string>
-    <string name="label_satellite">Satellite</string>
-    <string name="label_satellites">Satellites</string>
-    <string name="label_constellations">Constellations</string>
-    <string name="label_star">Star</string>
-    <string name="label_stars">Stars</string>
-    <string name="label_planets">Planets</string>
-    <string name="label_empty" />
-    <string name="label_nyota">Nyota</string>
-    <string name="label_moon">Moon</string>
     <string name="default_time">23:32</string>
     <string name="default_time_seconds">23:32:57</string>
     <string name="default_date_time">8 Dec 20:00</string>
     <string name="default_date">8 Dec 2020</string>
     <string name="default_timezone">+0100</string>
     <string name="default_interval">HOUR</string>
-    <string name="title_city">Reference Location</string>
-    <string name="title_choose_interval">Interval</string>
-    <string name="title_choose_city">Reference location</string>
-    <string name="title_choose_time">Reference date and time</string>
-    <string name="hint_choose_interval">Select an interval</string>
-    <string name="hint_choose_city">Select the reference location</string>
-    <string name="hint_choose_time">Select the reference date and time</string>
-    <string name="hint_city">Specify the details of the reference location</string>
-    <string name="label_ok">OK</string>
-    <string name="label_done">Done</string>
     <string name="default_text">Default Text</string>
-    <string name="label_default_orientation">115°</string>
-    <string name="label_refresh">Refresh</string>
-    <string name="label_city_colon">City:</string>
-    <string name="label_date_colon">Date:</string>
-    <string name="label_time_colon">Time:</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="label_distance">Distance</string>
-    <string name="label_tle">TLE</string>
-    <string name="label_outdated">Outdated</string>
     <string name="default_tle_date_time">2020–10–30 13:27</string>
     <string name="default_tle_summary">Height 8888 – 9999 km<br />Revolutions per Day 13.2</string>
     <string name="default_tle_status">o.k.</string>
@@ -79,46 +98,40 @@
     <string name="default_error_message">Sample error message visible of if present</string>
     <string name="default_processing_status">…</string>
     <string name="default_zoom">5.0</string>
-    <string name="label_default_cities">Create default cities</string>
     <string name="default_copyright">Copyright ©</string>
-    <string name="label_show_details">…</string>
-    <string name="label_hide_details">(hide)</string>
-    <string name="label_delete">Delete</string>
-    <!-- Preference Titles -->
+    <string name="default_longitude">13.1234</string>
+    <string name="default_city">Berlin</string>
+    <string name="default_date_time_timezone">29 Dec 2020 21:23:00 +0200</string>
+    <string name="default_latitude">52.3234</string>
+    <string name="default_altitude">0.483</string>
+    <string name="default_geo_location">13.4°E 52.64° N</string>
+    <!-- Title -->
+    <string name="title_city">Reference Location</string>
+    <string name="title_choose_interval">Interval</string>
+    <string name="title_choose_city">Reference location</string>
+    <string name="title_choose_time">Reference date and time</string>
+    <string name="title_permission_request">Permission Request</string>
+    <!-- Hints -->
+    <string name="hint_choose_interval">Select an interval</string>
+    <string name="hint_choose_city">Select the reference location</string>
+    <string name="hint_choose_time">Select the reference date and time</string>
+    <string name="hint_city">Specify the details of the reference location</string>
+
+    <!-- Preferences - Remove when Preferences are refactored....-->
     <string name="messages_header">Messages</string>
     <string name="sync_header">Sync</string>
-
-    <!-- Messages Preferences -->
     <string name="signature_title">Your signature</string>
     <string name="reply_title">Default reply action</string>
-
-    <!-- Sync Preferences -->
     <string name="sync_title">Sync email periodically</string>
     <string name="attachment_title">Download incoming attachments</string>
     <string name="attachment_summary_on">Automatically download attachments for incoming emails</string>
     <string name="attachment_summary_off">Only download attachments when manually requested</string>
-    <string name="label_options">Options:</string>
-    <string name="label_show_targets">Show Targets</string>
-    <string name="label_show_invisible_elements">Show Invisible Elements</string>
-    <string name="label_show_stars">Show Stars</string>
-    <string name="label_show_planets">Show Planets</string>
-    <string name="label_show_satellites">Show Satellites</string>
-    <string name="label_current_location_and_time">Current location and time:</string>
-    <string name="default_city">Berlin</string>
-    <string name="default_date_time_timezone">29 Dec 2020 21:23:00 +0200</string>
-    <string name="label_location_and_time_selected">Reference location and time:</string>
-    <string name="label_update_time_automatically">Update time automatic</string>
-    <string name="label_name_colon">Name:</string>
-    <string name="label_latitude_colon">Latitude (in °):</string>
-    <string name="default_latitude">52.3234</string>
-    <string name="label_longitude_colon">Longitude (in °):</string>
-    <string name="default_longitude">13.1234</string>
-    <string name="label_altitude_colon">Altitude (in km):</string>
-    <string name="default_altitude">0.483</string>
-    <string name="label_update_location_automatically">Update location automatically</string>
-    <string name="default_geo_location">13.4°E 52.64° N</string>
-    <string name="label_default_pitch">+23°</string>
-    <string name="label_default_roll">-3°</string>
-    <string name="label_freeze">Freeze</string>
-    <string name="label_unfreeze">Unfreeze</string>
+
+    <!-- Messages -->
+    <string name="message_permission_is_required">The permission to access your %s is required to use this function.</string>
+    <string name="message_permission_was_granted">The permission: %s was granted.</string>
+    <string name="message_permission_was_refused">The permission: %s was rejected.</string>
+    <string name="message_city_was_deleted">City was deleted</string>
+    <string name="label_reset">Reset</string>
+    <string name="label_reset_to_default">Reset to Default</string>
 </resources>

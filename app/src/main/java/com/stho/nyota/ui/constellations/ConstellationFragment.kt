@@ -56,14 +56,14 @@ class ConstellationFragment : AbstractElementFragment() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        super.onCreateOptionsMenu(menu, inflater)
         inflater.inflate(R.menu.menu_constellation, menu)
+        super.onCreateOptionsMenu(menu, inflater)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (item.itemId == R.id.action_display) {
             // TODO: Show dialog to set otions... https://guides.codepath.com/android/using-dialogfragment
-            snack(binding.basics, "Show Display Option Dialog here...")
+            showSnackBar("Show Display Option Dialog here...")
         }
         return super.onOptionsItemSelected(item)
     }
@@ -84,6 +84,7 @@ class ConstellationFragment : AbstractElementFragment() {
         binding.timeVisibilityOverlay.currentVisibility.setImageResource(constellation.visibility)
         binding.image.setImageResource(constellation.largeImageId)
         binding.title.text = constellation.name
+        binding.sky.notifyDataSetChanged()
         updateActionBar(constellation.name, toLocalDateString(moment))
     }
 

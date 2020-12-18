@@ -9,8 +9,10 @@ import com.stho.nyota.R
 import com.stho.nyota.databinding.FragmentCityPickerListItemBinding
 import com.stho.nyota.sky.utilities.Cities
 import com.stho.nyota.sky.utilities.City
-import com.stho.nyota.sky.utilities.createDefaultBerlin
+import com.stho.nyota.sky.utilities.Formatter
+import com.stho.nyota.sky.utilities.createDefaultBerlinBuch
 
+// TODO: onTouchLister without PerformClick
 
 class CityPickerRecyclerViewAdapter(fragment: CityPickerFragment) : RecyclerView.Adapter<CityPickerRecyclerViewAdapter.ViewHolder>(), ISwipeToDeleteAdapter {
 
@@ -18,7 +20,7 @@ class CityPickerRecyclerViewAdapter(fragment: CityPickerFragment) : RecyclerView
     private var gestureDetector: GestureDetector
     private var cities: Cities = Cities()
 
-    var selectedCity: City = City.createDefaultBerlin()
+    var selectedCity: City = City.createDefaultBerlinBuch()
         set(value) {
             if (field != value) {
                 field = value
@@ -63,7 +65,8 @@ class CityPickerRecyclerViewAdapter(fragment: CityPickerFragment) : RecyclerView
             val isSelected = isSelected(city)
             binding.radioButton.isChecked = isSelected
             binding.radioButton.setOnClickListener { cities.findCityByIndex(adapterPosition)?.also { onSelectionChanged?.invoke(it) } }
-            binding.textView.text = city.nameEx
+            binding.textViewName.text = city.nameEx
+            binding.textViewDistance.text = Formatter.toDistanceString(city.distanceInKm)
             binding.root.isSelected = isSelected
             binding.root.setOnLongClickListener {
                 onEdit?.invoke(city)

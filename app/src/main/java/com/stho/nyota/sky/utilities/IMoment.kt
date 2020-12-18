@@ -4,7 +4,7 @@ import java.util.*
 
 interface IMoment {
     val utc: UTC
-    val city: City
+    // val city: City
     val location: ILocation
     val timeZone: TimeZone
     val lst: Double
@@ -19,7 +19,7 @@ interface IMoment {
 
     /**
      * Keep current location and timezone, but set a new time
-     * @param utc UTC
+     * @param newUtc UTC
      * @return a new moment instance
      */
     fun forUTC(newUtc: UTC): IMoment

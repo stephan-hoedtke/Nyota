@@ -6,7 +6,7 @@ import java.util.*
 /**
  * Created by shoedtke on 16.09.2016.
  */
-class Moment(override val city: City, override val utc: UTC) : IMoment {
+class Moment(val city: City, override val utc: UTC) : IMoment {
 
     override val lst: Double = utc.getLST(city.longitude) // in hours [0 ; 24]
     override val d: Double = utc.dayNumber

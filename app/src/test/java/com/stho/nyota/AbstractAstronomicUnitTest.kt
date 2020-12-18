@@ -58,11 +58,11 @@ abstract class AbstractAstronomicUnitTest {
         }
 
         internal fun getCity(latitude: Double, longitude: Double): City {
-            return City("Test", Location(latitude, longitude), TimeZone.getDefault())
+            return City("Test", Location(latitude = latitude, longitude = longitude), TimeZone.getDefault())
         }
 
         internal fun getCity(latitude: Double, longitude: Double, altitude: Double, timeZone: String?): City {
-            return City("Test", Location(latitude, longitude, altitude), TimeZone.getTimeZone(timeZone))
+            return City("Test", Location(latitude = latitude, longitude = longitude, altitude = altitude), TimeZone.getTimeZone(timeZone))
         }
 
         internal fun getCity(location: Location): City {

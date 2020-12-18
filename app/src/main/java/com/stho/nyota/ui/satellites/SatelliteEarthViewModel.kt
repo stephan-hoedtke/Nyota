@@ -2,20 +2,18 @@ package com.stho.nyota.ui.satellites
 
 import android.app.Application
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.Transformations
 import com.stho.nyota.RepositoryViewModelArgs
 import com.stho.nyota.repository.Repository
 import com.stho.nyota.sky.universe.Satellite
-import com.stho.nyota.sky.utilities.City
-import com.stho.nyota.sky.utilities.createDefaultBerlin
+import com.stho.nyota.sky.utilities.Location
 import org.osmdroid.api.IGeoPoint
 import kotlin.math.max
 import kotlin.math.min
 
 class SatelliteEarthViewModel(application: Application, repository: Repository, val satellite: Satellite) : RepositoryViewModelArgs(application, repository) {
 
-    val currentLocationLD: LiveData<City>
-        get() = Transformations.map(repository.currentAutomaticMomentLD) { moment -> moment.city }
+    val currentAutomaticLocationLD: LiveData<Location>
+        get() = repository.currentAutomaticLocationLD
 
     val zoomLD: LiveData<Double>
         get() = repository.settings.zoomLD
