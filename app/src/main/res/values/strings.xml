@@ -37,13 +37,14 @@
     <string name="label_current_location_and_time">Current Device Location and Time:</string>
     <string name="label_reference_time">Reference Time:</string>
     <string name="label_reference_location">Reference Location:</string>
-    <string name="label_update_time_automatically">Update time automatic</string>
+    <string name="label_update_time_automatically">Update Time Automatically</string>
     <string name="label_name_colon">Name:</string>
     <string name="label_latitude_colon">Latitude (in °):</string>
     <string name="label_longitude_colon">Longitude (in °):</string>
     <string name="label_altitude_colon">Altitude (in km):</string>
     <string name="label_distance_colon">Distance (in km):</string>
-    <string name="label_update_location_automatically">Update location automatically</string>
+    <string name="label_update_location_automatically">Update Location Automatically</string>
+    <string name="label_automatic_city_location">Use Current Device Location</string>
     <string name="label_default_pitch">+23°</string>
     <string name="label_default_roll">-3°</string>
     <string name="label_freeze">Freeze</string>

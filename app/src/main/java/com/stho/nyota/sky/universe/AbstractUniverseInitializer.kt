@@ -4,16 +4,16 @@ import com.stho.nyota.sky.utilities.Degree
 import com.stho.nyota.sky.utilities.Hour
 
 
-internal abstract class AbstractUniverseInitializer(protected var universe: Universe) {
+abstract class AbstractUniverseInitializer(protected var universe: Universe) {
 
-    fun newStar(name: String, symbol: String, ascension: String, declination: String, brightness: Double): Star =
+    fun newStar(name: String, symbol: UniverseInitializer.Symbol, ascension: String, declination: String, brightness: Double): Star =
         newStar(name, symbol, Hour.fromHour(ascension), Degree.fromDegree(declination), brightness)
 
     fun getStar(name: String): Star? =
         universe.stars.findStarByName(name)
 
-    private fun newStar(name: String, symbol: String, ascension: Hour, declination: Degree, brightness: Double): Star {
-        var star = getStar(name);
+    private fun newStar(name: String, symbol: UniverseInitializer.Symbol, ascension: Hour, declination: Degree, brightness: Double): Star {
+        var star = universe.stars.findStarByName(name)
         if (star == null) {
             star = Star(name, symbol, ascension.angleInDegree, declination.angleInDegree, brightness).also {
                 universe.stars.add(it)
@@ -32,14 +32,10 @@ internal abstract class AbstractUniverseInitializer(protected var universe: Univ
         return constellation
     }
 
-    private fun getSatellite(name: String): Satellite? {
-        return universe.satellites.findSatelliteByName(name)
-    }
-
     fun newSatellite(name: String, displayName: String, noradSatelliteNumber: Int, elements: String): Satellite {
         var satellite = universe.satellites.findSatelliteByName(name)
         if (satellite == null) {
-            satellite = Satellite(name, displayName, noradSatelliteNumber, elements).also {
+            satellite = Satellite.createNewSatellite(name, displayName, noradSatelliteNumber, elements).also {
                 universe.satellites.add(it)
             }
         }

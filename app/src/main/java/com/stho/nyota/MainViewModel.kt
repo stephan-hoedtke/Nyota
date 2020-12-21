@@ -9,14 +9,14 @@ import com.stho.nyota.sky.utilities.Orientation
 
 class MainViewModel(application: Application, repository: Repository) : RepositoryViewModelNoArgs(application, repository) {
 
-    val updateOrientationAutomatically: Boolean
+     val updateOrientationAutomatically: Boolean
         get() = repository.updateOrientationAutomatically
 
     val updateLocationAutomatically: Boolean
         get() = repository.updateLocationAutomatically
 
-    fun disableAutomaticLocation() =
-        repository.disableAutomaticLocation()
+    fun updateForNow() =
+        repository.updateForNow()
 
     fun updateForNow(location: Location) =
         repository.updateForNow(location)

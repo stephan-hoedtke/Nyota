@@ -1,11 +1,7 @@
 package com.stho.nyota
 
-import android.content.Context
-import android.location.LocationListener
-import android.location.LocationManager
 import android.os.Bundle
 import android.os.Handler
-import android.os.PersistableBundle
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -13,7 +9,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.app.ActivityCompat
 import androidx.drawerlayout.widget.DrawerLayout
-import androidx.lifecycle.Observer
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
@@ -22,9 +17,7 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.navigation.NavigationView
 import com.google.android.material.snackbar.Snackbar
-import com.stho.nyota.repository.Repository
-import com.stho.nyota.sky.utilities.City
-import com.stho.nyota.ui.finder.IOrientationFilter
+import com.stho.nyota.ui.finder.OrientationFilter
 import com.stho.nyota.ui.finder.OrientationAccelerationFilter
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers.Default
@@ -51,9 +44,9 @@ class MainActivity : AppCompatActivity(), ActivityCompat.OnRequestPermissionsRes
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var handler: Handler
     private lateinit var viewModel: MainViewModel
-    private lateinit var orientationFilter: IOrientationFilter
+    private lateinit var orientationFilter: OrientationFilter
     private lateinit var orientationSensorListener: OrientationSensorListener
-    private lateinit var locationFilter: ILocationFilter
+    private lateinit var locationFilter: LocationFilter
     private lateinit var locationServiceListener: LocationServiceListener
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -148,7 +141,6 @@ class MainActivity : AppCompatActivity(), ActivityCompat.OnRequestPermissionsRes
         }
 
         if (viewModel.updateLocationAutomatically) {
-            locationServiceListener.onError = { viewModel.disableAutomaticLocation() }
             locationServiceListener.onResume()
         }
     }
@@ -161,22 +153,42 @@ class MainActivity : AppCompatActivity(), ActivityCompat.OnRequestPermissionsRes
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
-        val permissionManager = PermissionManager(this)
-        permissionManager.onMessage = { message -> showSnackBar(message) }
-        permissionManager.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        PermissionManager(this).onRequestPermissionsResult(requestCode, permissions, grantResults)
+    }
+
+    internal fun enableLocationServiceListener() {
+        PermissionManager(this).checkPermissionToObtainLocation()
+        if (!locationListerIsActive) {
+            locationServiceListener.onResume()
+        }
     }
 
     private fun executeHandlerToUpdateUniverse() {
         val runnableCode: Runnable = object : Runnable {
             override fun run() {
                 CoroutineScope(Default).launch {
-                    viewModel.updateForNow(locationFilter.currentLocation)
+                    if (locationFilter.updateCounter > 0) {
+                        viewModel.updateForNow(locationFilter.currentLocation)
+                        disableLocationListenerWhenCurrentLocationIsSure()
+                    }
+                    else {
+                        viewModel.updateForNow()
+                    }
                 }
                 handler.postDelayed(this, 3000)
             }
         }
         handler.postDelayed(runnableCode, 200)
     }
+
+    private fun disableLocationListenerWhenCurrentLocationIsSure() {
+        if (locationFilter.updateCounter > 100) {
+            locationServiceListener.onPause()
+        }
+    }
+
+    internal val locationListerIsActive: Boolean
+        get() = locationServiceListener.isActive
 
     private fun executeHandlerToUpdateOrientation() {
         val runnableCode: Runnable = object : Runnable {
@@ -198,7 +210,7 @@ class MainActivity : AppCompatActivity(), ActivityCompat.OnRequestPermissionsRes
     private fun stopHandler() =
         handler.removeCallbacksAndMessages(null)
 
-    private fun showSnackBar(message: String) {
+    internal fun showSnackBar(message: String) {
         val container: View = findViewById<View>(R.id.drawer_layout)
         Snackbar.make(container, message, Snackbar.LENGTH_LONG)
             .setBackgroundTint(getColor(R.color.colorSignalBackground))

@@ -6,6 +6,8 @@ import android.os.Bundle
 import android.view.*
 import androidx.navigation.fragment.findNavController
 import com.stho.nyota.AbstractFragment
+import com.stho.nyota.MainActivity
+import com.stho.nyota.PermissionManager
 import com.stho.nyota.R
 import com.stho.nyota.databinding.FragmentCityBinding
 import com.stho.nyota.sky.utilities.*
@@ -13,6 +15,10 @@ import com.stho.nyota.sky.utilities.*
 // TODO: get location on button click
 // TODO: choose location using a map
 // TODO: helper to select a time zone for the city
+// TODO: fading action bar:
+//      --> https://material.io/components/app-bars-top/android#regular-top-app-bar
+//      --> https://cyrilmottier.com/2013/05/24/pushing-the-actionbar-to-the-next-level/
+//      --> https://guides.codepath.com/android/handling-scrolls-with-coordinatorlayout
 
 class CityFragment : AbstractFragment() {
 
@@ -34,7 +40,6 @@ class CityFragment : AbstractFragment() {
         bindingReference = FragmentCityBinding.inflate(inflater, container, false)
 
         binding.buttonUseCurrentLocation.setOnClickListener { onUseCurrentLocation() }
-
         binding.buttonSave.setOnClickListener { onSave() }
         binding.buttonEarthView.setOnClickListener { onEarthView() }
         binding.buttonFinderView.setOnClickListener { onFinderView() }
@@ -79,7 +84,10 @@ class CityFragment : AbstractFragment() {
     }
 
     private fun updateCity(city: City) {
-        binding.checkBoxAutomatic.isChecked = city.isAutomatic
+        binding.checkBoxAutomaticCityLocation.isChecked = city.isAutomatic
+        binding.checkBoxAutomaticCityLocation.isEnabled = false
+        binding.checkBoxAutomaticLocation.isChecked = viewModel.repository.updateLocationAutomatically
+        binding.checkBoxAutomaticLocation.isEnabled = false
         binding.editName.setText(city.name)
         binding.editLatitude.setText(Formatter.toString(city.latitude))
         binding.editLongitude.setText(Formatter.toString(city.longitude))
@@ -94,17 +102,21 @@ class CityFragment : AbstractFragment() {
     }
 
     private fun updateAutomaticLocation(location: Location) {
-        if (binding.checkBoxAutomatic.isChecked) {
+        if (binding.checkBoxAutomaticCityLocation.isChecked) {
             bindToLocation(location)
         }
     }
 
     private fun onUseCurrentLocation() {
-        if (!binding.checkBoxAutomatic.isChecked) {
-            val location = viewModel.repository.currentAutomaticLocation
-            bindToLocation(location)
-        }
+        enableLocationServiceListener()
+        bindToCurrentLocation()
     }
+
+    private fun enableLocationServiceListener() =
+        (requireActivity() as MainActivity).enableLocationServiceListener()
+
+    private fun bindToCurrentLocation() =
+        bindToLocation(viewModel.repository.currentAutomaticLocation)
 
     /*
         don't use Angle.toString(..., LATITUDE) below, as we want to be able editing numbers...

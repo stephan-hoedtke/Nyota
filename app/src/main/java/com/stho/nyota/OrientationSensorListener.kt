@@ -8,9 +8,9 @@ import android.hardware.SensorManager
 import android.view.Display
 import android.view.Surface
 import android.view.WindowManager
-import com.stho.nyota.ui.finder.IOrientationFilter
+import com.stho.nyota.ui.finder.OrientationFilter
 
-class OrientationSensorListener(private val context: Context, private val filter: IOrientationFilter) : SensorEventListener {
+class OrientationSensorListener(private val context: Context, private val filter: OrientationFilter) : SensorEventListener {
 
     private val sensorManager: SensorManager = context.getSystemService(Context.SENSOR_SERVICE) as SensorManager
     private val windowManager: WindowManager = context.getSystemService(Context.WINDOW_SERVICE) as WindowManager

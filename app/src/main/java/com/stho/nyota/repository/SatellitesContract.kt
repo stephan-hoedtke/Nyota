@@ -25,8 +25,7 @@ internal class SatellitesContract(private val db: SQLiteDatabase) : BaseContract
         }
     }
 
-    fun read(): Collection<Satellite> {
-        val satellites = ArrayList<Satellite>()
+    fun read(satellites: Satellites) {
         val cursor = db.rawQuery(SQL_QUERY_ALL, null)
         while (cursor.moveToNext()) {
             val id = getLong(cursor, 0)
@@ -34,11 +33,9 @@ internal class SatellitesContract(private val db: SQLiteDatabase) : BaseContract
             val displayName = getString(cursor, 2)
             val noradSatelliteNumber = getInt(cursor, 3)
             val elements = getString(cursor, 4)
-            val satellite = Satellite.create(id, name, displayName, noradSatelliteNumber, elements)
-            satellites.add(satellite)
+            satellites.createWithId(id, name, displayName, noradSatelliteNumber, elements)
         }
         cursor.close()
-        return satellites
     }
 
     private fun delete(id: Long) {
@@ -51,9 +48,8 @@ internal class SatellitesContract(private val db: SQLiteDatabase) : BaseContract
         db.update(TABLE_NAME, values, whereClause, getQueryArgs(id))
     }
 
-    private fun create(values: ContentValues): Long {
-        return db.insert(TABLE_NAME, null, values)
-    }
+    private fun create(values: ContentValues): Long =
+        db.insert(TABLE_NAME, null, values)
 
     private fun getContentValues(satellite: Satellite): ContentValues {
         val values = ContentValues()

@@ -5,7 +5,7 @@ import com.stho.nyota.LowPassFilter
 import com.stho.nyota.sky.utilities.*
 
 
-interface IOrientationFilter {
+interface OrientationFilter {
     fun onOrientationAnglesChanged(orientationAngles: FloatArray)
     val currentOrientation: Orientation
     val updateCounter: Long
@@ -16,7 +16,7 @@ interface IOrientationFilter {
     The values will be stored and smoothed with acceleration.
     A handler will regularly read the updated smoothed orientation
  */
-class OrientationAccelerationFilter: IOrientationFilter {
+class OrientationAccelerationFilter: OrientationFilter {
 
     override var updateCounter: Long = 0L
         private set

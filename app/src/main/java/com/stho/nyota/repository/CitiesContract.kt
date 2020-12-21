@@ -25,8 +25,7 @@ internal class CitiesContract(private val db: SQLiteDatabase) : BaseContract() {
         }
     }
 
-    fun read(): Collection<City> {
-        val cities = ArrayList<City>()
+    fun read(cities: Cities) {
         val cursor = db.rawQuery(SQL_QUERY_ALL, null)
         while (cursor.moveToNext()) {
             val id = getLong(cursor, 0)
@@ -37,11 +36,9 @@ internal class CitiesContract(private val db: SQLiteDatabase) : BaseContract() {
             val timeZone: TimeZone = getTimeZone(cursor, 5)
             val isAutomatic: Boolean = getBoolean(cursor, 6)
             val location = Location(latitude = latitude, longitude = longitude, altitude = altitude)
-            val city = City.create(id, name, location, timeZone, isAutomatic)
-            cities.add(city)
+            cities.createCityWithId(id, name, location, timeZone, isAutomatic)
         }
         cursor.close()
-        return cities
     }
 
     private fun delete(id: Long) {

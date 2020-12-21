@@ -3,7 +3,10 @@ package com.stho.nyota.repository
 import android.database.sqlite.SQLiteDatabase
 import com.stho.nyota.settings.Settings
 import com.stho.nyota.sky.universe.Satellite
+import com.stho.nyota.sky.universe.Satellites
 import com.stho.nyota.sky.universe.Target
+import com.stho.nyota.sky.universe.Targets
+import com.stho.nyota.sky.utilities.Cities
 import com.stho.nyota.sky.utilities.City
 
 
@@ -43,56 +46,44 @@ class NyotaDatabaseAdapter(private val db: SQLiteDatabase) {
         private const val DisplayMagnitude = "DisplayMagnitude"
     }
 
-    fun saveCities(cities: Collection<City>) {
+    fun saveCities(cities: Cities) {
         val contract = CitiesContract(db)
-        for (city in cities) {
+        for (city in cities.values) {
             contract.write(city)
         }
     }
 
-    fun saveCity(city: City) {
-        val contract = CitiesContract(db)
-        contract.write(city)
-    }
+    fun saveCity(city: City) =
+        CitiesContract(db).write(city)
 
-    fun readLocations(): Collection<City> {
-        val contract = CitiesContract(db)
-        return contract.read()
-    }
+    fun readCities(cities: Cities) =
+        CitiesContract(db).read(cities)
 
-    fun saveSatellites(satellites: Collection<Satellite>) {
+    fun saveSatellites(satellites: Satellites) {
         val contract = SatellitesContract(db)
-        for (satellite in satellites) {
+        for (satellite in satellites.values) {
             contract.write(satellite)
         }
     }
 
-    fun saveSatellite(satellite: Satellite) {
-        val contract = SatellitesContract(db)
-        contract.write(satellite)
-    }
+    fun saveSatellite(satellite: Satellite) =
+        SatellitesContract(db).write(satellite)
 
-    fun readSatellites(): Collection<Satellite> {
-        val contract = SatellitesContract(db)
-        return contract.read()
-    }
+    fun readSatellites(satellites: Satellites) =
+        SatellitesContract(db).read(satellites)
 
-    fun saveTargets(targets: Collection<Target>) {
+    fun saveTargets(targets: Targets) {
         val contract = TargetContract(db)
-        for (target in targets) {
+        for (target in targets.values) {
             contract.write(target)
         }
     }
 
-    fun saveTarget(target: Target) {
-        val contract = TargetContract(db)
-        contract.write(target)
-    }
+    fun saveTarget(target: Target) =
+        TargetContract(db).write(target)
 
-    fun readTargets(): Collection<Target> {
-        val contract = TargetContract(db)
-        return contract.read()
-    }
+    fun readTargets(targets: Targets) =
+        TargetContract(db).read(targets)
 }
 
 

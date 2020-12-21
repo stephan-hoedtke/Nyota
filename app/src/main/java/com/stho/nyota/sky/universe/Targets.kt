@@ -60,4 +60,7 @@ class Targets {
 
     val values: List<Target>
         get() = array
+
+    internal fun createWithId(id: Long, name: String, ra: Double, decl: Double) =
+        Target.createWithId(id, name, ra, decl).also { add(it) }
 }

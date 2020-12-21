@@ -52,7 +52,7 @@ class Constellation internal constructor(override val name: String, override val
     override fun getDetails(moment: Moment): PropertyList {
         val list = super.getDetails(moment)
         for (star in stars) {
-            list.add(com.stho.nyota.R.drawable.star, star.name, star.position.toString())
+            list.add(UniverseInitializer.greekSymbolImageId(star.symbol), star.name, star.position.toString())
         }
         return list
     }

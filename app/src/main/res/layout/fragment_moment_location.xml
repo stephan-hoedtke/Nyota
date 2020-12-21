@@ -57,7 +57,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    android:layout_marginVertical="@dimen/text_margin"
+                    android:layout_marginTop="@dimen/text_margin"
                     android:layout_marginHorizontal="@dimen/button_margin">
 
                     <TextView
@@ -79,10 +79,21 @@
                 </LinearLayout>
 
                 <CheckBox
-                    android:id="@+id/checkBoxAutomatic"
+                    android:id="@+id/checkBoxAutomaticCityLocation"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="@dimen/text_margin"
+                    android:layout_marginTop="@dimen/text_margin"
+                    android:checked="true"
+                    android:text="@string/label_update_location_automatically"
+                    style="@style/MyTheme.CheckBox"/>
+
+                <CheckBox
+                    android:id="@+id/checkBoxAutomaticLocation"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="@dimen/text_margin"
+                    android:layout_marginTop="@dimen/text_margin"
                     android:checked="true"
                     android:text="@string/label_update_location_automatically"
                     style="@style/MyTheme.CheckBox"/>

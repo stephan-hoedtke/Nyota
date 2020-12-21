@@ -41,7 +41,7 @@ class MomentTimeFragment : AbstractFragment(),  DatePickerDialog.OnDateSetListen
         // Inflate the layout for this fragment
         bindingReference = FragmentMomentTimeBinding.inflate(inflater, container, false)
 
-        binding.checkBoxAutomatic.setOnClickListener { viewModel.toggleAutomaticTime() }
+        binding.checkBoxAutomaticTime.setOnClickListener { viewModel.toggleAutomaticTime() }
         binding.timeIntervalFooter.buttonNext.setOnClickListener { viewModel.onNext() }
         binding.timeIntervalFooter.buttonPrevious.setOnClickListener { viewModel.onPrevious() }
         binding.timeIntervalFooter.interval.setOnClickListener { onPickInterval() }
@@ -117,7 +117,7 @@ class MomentTimeFragment : AbstractFragment(),  DatePickerDialog.OnDateSetListen
     }
 
     private fun updateTimeAutomatically(auto: Boolean) {
-        binding.checkBoxAutomatic.isChecked = auto
+        binding.checkBoxAutomaticTime.isChecked = auto
     }
 
     private fun onPickInterval() {

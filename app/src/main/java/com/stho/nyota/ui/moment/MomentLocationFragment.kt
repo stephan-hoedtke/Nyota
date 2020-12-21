@@ -11,10 +11,7 @@ import android.widget.DatePicker
 import android.widget.TimePicker
 import androidx.core.os.bundleOf
 import androidx.navigation.fragment.findNavController
-import com.stho.nyota.AbstractFragment
-import com.stho.nyota.PermissionManager
-import com.stho.nyota.R
-import com.stho.nyota.createViewModel
+import com.stho.nyota.*
 import com.stho.nyota.databinding.FragmentMomentLocationBinding
 import com.stho.nyota.sky.utilities.*
 import com.stho.nyota.sky.utilities.Formatter
@@ -40,7 +37,7 @@ class MomentLocationFragment : AbstractFragment(),  DatePickerDialog.OnDateSetLi
         // Inflate the layout for this fragment
         bindingReference = FragmentMomentLocationBinding.inflate(inflater, container, false)
 
-        binding.checkBoxAutomatic.setOnClickListener { viewModel.toggleAutomaticLocation() }
+        binding.checkBoxAutomaticLocation.setOnClickListener { viewModel.toggleAutomaticLocation() }
         binding.timeIntervalFooter.buttonNext.setOnClickListener { viewModel.onNext() }
         binding.timeIntervalFooter.buttonPrevious.setOnClickListener { viewModel.onPrevious() }
         binding.timeIntervalFooter.interval.setOnClickListener { onPickInterval() }
@@ -74,19 +71,6 @@ class MomentLocationFragment : AbstractFragment(),  DatePickerDialog.OnDateSetLi
         //  menu.getItem(R.id.action_licenses).setVisible(false);
     }
 
-    private fun showDatePickerDialog(calendar: Calendar, listener: DatePickerDialog.OnDateSetListener) {
-        val year = calendar[Calendar.YEAR]
-        val month = calendar[Calendar.MONTH]
-        val dayOfMonth = calendar[Calendar.DAY_OF_MONTH]
-        DatePickerDialog(requireContext(), listener, year, month, dayOfMonth).show()
-    }
-
-    private fun showTimePickerDialog(calendar: Calendar, listener: TimePickerDialog.OnTimeSetListener) {
-        val hour = calendar[Calendar.HOUR_OF_DAY]
-        val minute = calendar[Calendar.MINUTE]
-        TimePickerDialog(requireContext(), listener, hour, minute, true).show()
-    }
-
     private fun updateAutomaticTime(utc: UTC) {
         binding.currentDateTime.text = Formatter.toString(utc, TimeZone.getDefault(), Formatter.TimeFormat.DATETIME_SEC_TIMEZONE)
     }
@@ -108,17 +92,14 @@ class MomentLocationFragment : AbstractFragment(),  DatePickerDialog.OnDateSetLi
     }
 
     private fun updateLocationAutomatically(auto: Boolean) {
-        binding.checkBoxAutomatic.isChecked = auto
+        binding.checkBoxAutomaticLocation.isChecked = auto
         if (auto) {
-            checkPermissionToObtainLocation()
+            enableLocationServiceListener()
         }
     }
 
-    private fun checkPermissionToObtainLocation() {
-        val permissionManager = PermissionManager(requireActivity())
-        permissionManager.onMessage = { message -> showSnackBar(message) }
-        permissionManager.checkPermissionToObtainLocation()
-    }
+    private fun enableLocationServiceListener() =
+        (requireActivity() as MainActivity).enableLocationServiceListener()
 
     private fun onPickInterval() {
         val bundle = bundleOf("INTERVAL" to viewModel.interval.toString())

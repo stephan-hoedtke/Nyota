@@ -3,6 +3,7 @@ package com.stho.nyota.repository
 import android.content.ContentValues
 import android.database.sqlite.SQLiteDatabase
 import com.stho.nyota.sky.universe.Target
+import com.stho.nyota.sky.universe.Targets
 
 internal class TargetContract(private val db: SQLiteDatabase) : BaseContract() {
     fun createTable() {
@@ -21,19 +22,16 @@ internal class TargetContract(private val db: SQLiteDatabase) : BaseContract() {
         }
     }
 
-    fun read(): Collection<Target> {
-        val targets = ArrayList<Target>()
+    fun read(targets: Targets) {
         val cursor = db.rawQuery(SQL_QUERY_ALL, null)
         while (cursor.moveToNext()) {
             val id = getLong(cursor, 0)
             val name = getString(cursor, 1)
             val ra = getDouble(cursor, 2)
             val decl = getDouble(cursor, 3)
-            val target = Target.create(id, name, ra, decl)
-            targets.add(target)
+            targets.createWithId(id, name, ra, decl)
         }
         cursor.close()
-        return targets
     }
 
     private fun delete(id: Long) {
@@ -46,9 +44,8 @@ internal class TargetContract(private val db: SQLiteDatabase) : BaseContract() {
         db.update(TABLE_NAME, values, whereClause, getQueryArgs(id))
     }
 
-    private fun create(values: ContentValues): Long {
-        return db.insert(TABLE_NAME, null, values)
-    }
+    private fun create(values: ContentValues): Long =
+        db.insert(TABLE_NAME, null, values)
 
     private fun getContentValues(target: Target): ContentValues {
         val values = ContentValues()
@@ -58,9 +55,8 @@ internal class TargetContract(private val db: SQLiteDatabase) : BaseContract() {
         return values
     }
 
-    private fun getQueryArgs(id: Long): Array<String> {
-        return arrayOf(id.toString())
-    }
+    private fun getQueryArgs(id: Long): Array<String> =
+        arrayOf(id.toString())
 
     companion object {
         private const val TABLE_NAME = "targets"

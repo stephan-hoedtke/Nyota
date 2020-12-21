@@ -11,8 +11,6 @@ import androidx.fragment.app.FragmentActivity
 
 class PermissionManager(val activity: FragmentActivity) : ActivityCompat.OnRequestPermissionsResultCallback {
 
-    var onMessage: ((String) -> Unit)? = null
-
     fun checkPermissionToObtainLocation() =
         checkPermission(ACCESS_COARSE_LOCATION, LOCATION_PERMISSION_NAME, LOCATION_PERMISSION_RQ)
 
@@ -59,15 +57,20 @@ class PermissionManager(val activity: FragmentActivity) : ActivityCompat.OnReque
 
         fun innerCheck(name: String) {
             if (grantResults.isEmpty() || grantResults[0] != PackageManager.PERMISSION_GRANTED)
-                onMessage?.invoke(activity.getString(R.string.message_permission_was_refused, name))
+                showMessage(activity.getString(R.string.message_permission_was_refused, name))
             else
-                onMessage?.invoke(activity.getString(R.string.message_permission_was_granted, name))
+                showMessage(activity.getString(R.string.message_permission_was_granted, name))
         }
 
         when (requestCode) {
             LOCATION_PERMISSION_RQ -> innerCheck(LOCATION_PERMISSION_NAME)
             INTERNET_PERMISSION_RQ -> innerCheck(INTERNET_PERMISSION_NAME)
         }
+    }
+
+    private fun showMessage(message: String) {
+        val mainActivity: MainActivity = activity as MainActivity
+        mainActivity.showSnackBar(message)
     }
 
     companion object {

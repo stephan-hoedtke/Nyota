@@ -10,9 +10,7 @@ import java.util.*
                 String region,
                 Integer rawOffset)
  */
-class City internal constructor(var name: String, var location: Location, var timeZone: TimeZone) : ILocation, IDBObject {
-
-    override var id: Long = 0
+class City private constructor(override var id: Long, var name: String, var location: Location, var timeZone: TimeZone, isAutomatic: Boolean = false) : ILocation, IDBObject {
 
     override val uniqueTransientId: Long by lazy {
         System.nanoTime()
@@ -29,8 +27,7 @@ class City internal constructor(var name: String, var location: Location, var ti
     override val isPersistent
         get() = IDBObject.isPersistent(status)
 
-    var isAutomatic: Boolean = false
-        private set
+    val isAutomatic: Boolean = false
 
     val nameEx: String
         get() = if (isAutomatic) "$name*" else name
@@ -122,14 +119,13 @@ class City internal constructor(var name: String, var location: Location, var ti
     override val altitude: Double
         get() = location.altitude
 
-    fun matches(otherCity: City): Boolean {
-        return when {
+    fun matches(otherCity: City): Boolean =
+        when {
             (name.compareTo(otherCity.name, ignoreCase = true) == 0) -> true
             (isAutomatic && otherCity.isAutomatic) -> true
             (isNearTo(otherCity.location)) -> true
             else -> false
         }
-    }
 
     var distanceInKm: Double = 0.0
         private set
@@ -149,31 +145,20 @@ class City internal constructor(var name: String, var location: Location, var ti
         internal const val BERLIN_BUCH_ALTITUDE = 0.1037 // in km
         internal const val NEW_CITY = "New City"
 
-        internal fun createNewAutomaticCity(): City {
-            val cityName = "You"
-            val location = Location(0.0, 0.0)
-            val timeZone = TimeZone.getDefault()
-            return City(cityName, location, timeZone).apply {
-                this.isAutomatic = true
-            }
-        }
+        internal fun createNewAutomaticCity(): City =
+            City(id = 0L, name = "You", location = Location.getDefault(), timeZone = TimeZone.getDefault(), isAutomatic = true)
 
-        internal fun createNewCity(cityName: String): City {
-            val location = Location(0.0, 0.0)
-            val timeZone = TimeZone.getDefault()
-            return City(cityName, location, timeZone).apply {
-                this.isAutomatic = true
-            }
-        }
+        internal fun createNewCity(cityName: String): City =
+            City(id = 0L, name = cityName, location = Location.getDefault(), timeZone = TimeZone.getDefault())
 
-        fun create(id: Long, name: String, location: Location, timeZone: TimeZone, isAutomatic: Boolean): City =
-            City(name, location, timeZone).apply {
-                this.isAutomatic = isAutomatic
-                this.id = id
-            }
+        internal fun createNewCity(cityName: String, location: Location, timeZone: TimeZone): City =
+            City(id = 0L, name = cityName, location = location, timeZone = timeZone)
 
-        fun create(location: Location, timeZone: TimeZone): City =
-            City("Anywhere", location, timeZone)
+        internal fun createNewCityFor(location: Location): City =
+            City(id = 0L, name = "-", location = location, timeZone = TimeZone.getDefault())
+
+        internal fun createCityWithId(id: Long, name: String, location: Location, timeZone: TimeZone): City =
+            City(id, name, location, timeZone, false)
 
         internal fun getLastKnownAndroidLocationFromLocationManager(locationManager: LocationManager): android.location.Location? {
             var location: android.location.Location? = null

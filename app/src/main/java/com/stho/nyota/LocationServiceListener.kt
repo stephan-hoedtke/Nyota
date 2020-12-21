@@ -1,15 +1,15 @@
 package com.stho.nyota
 
 import android.content.Context
-import android.hardware.SensorManager
 import android.location.LocationManager
 import android.os.Bundle
 
-class LocationServiceListener(context: Context, private val filter: ILocationFilter) : android.location.LocationListener {
+class LocationServiceListener(context: Context, private val filter: LocationFilter) : android.location.LocationListener {
 
     private var locationManager: LocationManager = context.getSystemService(Context.LOCATION_SERVICE) as LocationManager
 
-    var onError: (() -> Unit)? = null
+    internal val isActive: Boolean
+        get() = filter.updateCounter > 1
 
     internal fun onResume() =
         enableLocationListener()
@@ -21,7 +21,8 @@ class LocationServiceListener(context: Context, private val filter: ILocationFil
         try {
             locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 0f, this)
         } catch (ex: SecurityException) {
-            onError?.invoke()
+            // Ignore for now...
+            // We implicitly check for success using locationFilter.updateCounter
         }
     }
 

@@ -11,7 +11,6 @@ import com.stho.nyota.sky.universe.Target
 import com.stho.nyota.sky.utilities.*
 
 // TODO: this class is too big...
-// TODO: remove the lock (its nonsense!)
 
 class Repository private constructor() {
 
@@ -27,7 +26,7 @@ class Repository private constructor() {
     init {
         settingsLiveData.value = Settings()
         citiesLiveData.value = Cities()
-        momentLiveData.value = Moment.forNow(defaultCity)
+        momentLiveData.value = Moment.forNow(defaultAutomaticCity)
         currentAutomaticTimeLiveData.value = defaultAutomaticTime
         currentAutomaticLocationLiveData.value = defaultAutomaticLocation
         currentOrientationLiveData.value = Orientation.defaultOrientation
@@ -98,22 +97,21 @@ class Repository private constructor() {
         val helper = NyotaDatabaseHelper(context)
         val adapter = NyotaDatabaseAdapter(helper.writableDatabase)
 
+        // TODO: make it unique: read(referenceToMutableList)
+
         Cities().also {
-            it.addAll(adapter.readLocations())
-            if (ensureDefaultCities(it)) {
-                adapter.saveCities(it.values)
-            }
+            adapter.readCities(it)
             citiesLiveData.postValue(it)
         }
 
         universe.satellites.also {
-            it.addAll(adapter.readSatellites())
+            adapter.readSatellites(it)
         }
 
         universe.targets.also {
-            it.addAll(adapter.readTargets())
+            adapter.readTargets(it)
             if (ensureDefaultTargets(it)) {
-                adapter.saveTargets(it.values)
+                adapter.saveTargets(it)
             }
         }
 
@@ -173,9 +171,18 @@ class Repository private constructor() {
         currentOrientationLiveData.postValue(orientation)
     }
 
+    internal fun updateForNow() {
+        updateMomentForNow()
+        updateAutomaticMomentForNow()
+    }
+
     internal fun updateForNow(location: Location) {
         updateMomentForNow(location)
         updateAutomaticMomentForNow(location)
+    }
+
+    private fun updateAutomaticMomentForNow() {
+        currentAutomaticTime = UTC.forNow()
     }
 
     private fun updateAutomaticMomentForNow(location: Location) {
@@ -185,9 +192,18 @@ class Repository private constructor() {
 
     // TODO: decouple Moment and City: assign City -> Moment.Location, Moment.Name, ...
 
-    private fun updateMomentForNow(location: Location?) {
+    private fun updateMomentForNow() {
+        if (settings.updateTimeAutomatically) {
+            val moment = liveMoment.forNow()
+            momentLiveData.postValue(moment)
+        }
+    }
+
+    // TODO: make it better with Moment = Moment(Location, UTC, cityName, useAutomaticLocation)
+
+    private fun updateMomentForNow(location: Location) {
         var moment: Moment = liveMoment
-        if (settings.updateLocationAutomatically && moment.city.isAutomatic && location != null) {
+        if (settings.updateLocationAutomatically && moment.city.isAutomatic) {
             moment.city.location = location
         }
         if (settings.updateTimeAutomatically) {
@@ -266,7 +282,7 @@ class Repository private constructor() {
 
         liveCities.also {
             it.createDefaultCities(false)
-            adapter.saveCities(it.values)
+            adapter.saveCities(it)
             citiesLiveData.postValue(it)
         }
     }
@@ -344,16 +360,7 @@ class Repository private constructor() {
         get() = settings.updateLocationAutomatically
         private set(value) {
             settings.updateLocationAutomatically = value
-            if (value) {
-                ensureAutomaticCity()
-            }
         }
-
-    private fun ensureAutomaticCity() {
-        if (!liveMoment.city.isAutomatic) {
-            momentLiveData.postValue(Moment.forNow(defaultAutomaticCity))
-        }
-    }
 
     fun toggleAutomaticTime() {
         updateTimeAutomatically = !updateTimeAutomatically
@@ -363,21 +370,14 @@ class Repository private constructor() {
         updateLocationAutomatically = !updateLocationAutomatically
     }
 
-    fun disableAutomaticLocation() {
-        updateLocationAutomatically = false
-    }
-
-    private val defaultCity: City
-        get() = citiesLiveData.value!!.defaultCity
-
-    private val defaultAutomaticCity: City
-        get() = citiesLiveData.value!!.defaultAutomaticCity
-
     private val defaultAutomaticTime: UTC
         get() = UTC.forNow()
 
     private val defaultAutomaticLocation: Location
         get() = City.defaultLocationBerlinBuch
+
+    private val defaultAutomaticCity: City
+        get() = citiesLiveData.value!!.automaticCity
 
     private val liveMoment: Moment
         get() = momentLiveData.value!!

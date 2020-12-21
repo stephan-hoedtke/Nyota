@@ -38,7 +38,7 @@ class Target(override val name: String, ra: Double, decl: Double) : AbstractElem
 
     companion object {
 
-        fun create(id: Long, name: String, ra: Double, decl: Double): Target {
+        fun createWithId(id: Long, name: String, ra: Double, decl: Double): Target {
             return Target(name, ra, decl).apply {
                 this.id = id
             }

@@ -59,7 +59,7 @@ class SatellitePreview {
 
 
         private fun getSunFor(location: Location, utc: UTC): Sun {
-            val city: City = City.create(location, TimeZone.getDefault())
+            val city: City = City.createNewCityFor(location)
             val moment = Moment.forUTC(city, utc)
             return getSunFor(moment)
         }

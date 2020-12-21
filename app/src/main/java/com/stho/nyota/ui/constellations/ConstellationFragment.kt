@@ -11,6 +11,8 @@ import com.stho.nyota.sky.universe.IElement
 import com.stho.nyota.sky.utilities.Moment
 
 // TODO: show constellation in "real sky view", not just the Icon
+// see: https://en.wikipedia.org/wiki/Greek_alphabet (modern print)
+
 
 class ConstellationFragment : AbstractElementFragment() {
 

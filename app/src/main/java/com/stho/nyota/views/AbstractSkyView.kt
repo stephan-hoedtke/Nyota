@@ -7,9 +7,7 @@ import android.view.*
 import android.view.GestureDetector.SimpleOnGestureListener
 import android.view.ScaleGestureDetector.SimpleOnScaleGestureListener
 import com.stho.nyota.ISkyViewListener
-import com.stho.nyota.sky.universe.Constellation
-import com.stho.nyota.sky.universe.IElement
-import com.stho.nyota.sky.universe.Star
+import com.stho.nyota.sky.universe.*
 import com.stho.nyota.sky.universe.Target
 import com.stho.nyota.sky.utilities.Degree
 import com.stho.nyota.sky.utilities.SphereProjection
@@ -335,7 +333,7 @@ abstract class AbstractSkyView(context: Context?, attrs: AttributeSet?): View(co
             }
             canvas.drawCircle(p.x, p.y, r, color);
             if (displaySymbols) {
-                canvas.drawText(star.symbol, p.x, p.y, gray);
+                canvas.drawText(UniverseInitializer.greekSymbolToString(star.symbol), p.x, p.y, gray);
             }
         }
     }

@@ -8,6 +8,8 @@ class Cities {
     private val map: HashMap<String, City> = HashMap<String, City>()
     private val array: ArrayList<City> = ArrayList<City>()
 
+    val automaticCity: City by lazy { createDefaultAutomaticCity() }
+
     val size: Int
         get() = map.size
 
@@ -25,6 +27,25 @@ class Cities {
 
     fun addOrUpdate(city: City) =
         add(city, true)
+
+    fun createCityWithId(id: Long, name: String, location: Location, timeZone: TimeZone, isAutomatic: Boolean): City =
+        if (isAutomatic) {
+            // overwrite the only automatic city with DB values
+            automaticCity.also {
+                it.id = id
+                it.name = name
+                it.location = location
+                it.timeZone = timeZone
+
+            }
+        } else {
+            // overwrite the existing city, it it is existing
+            findCityById(id)?.also {
+                it.name = name
+                it.location = location
+                it.timeZone = timeZone
+            } ?: City.createCityWithId(id, name, location, timeZone).also { add(it) }
+        }
 
     private fun add(city: City, overwrite: Boolean): Boolean {
         val cityName = city.name
@@ -85,13 +106,9 @@ class Cities {
         addAll(defaultCities, overwrite)
     }
 
-    private fun getCityForCurrentLocation(locationManager: LocationManager): City =
-        defaultAutomaticCity.also {
-            val location = City.getLastKnownAndroidLocationFromLocationManager(locationManager)
-            if (location != null) {
-                it.location
-            }
-        }
+    private fun createDefaultAutomaticCity(): City =
+        values.firstOrNull { city -> city.isAutomatic } ?: City.createNewAutomaticCity().also { add(it) }
+
 
     private fun selectCityByName(cityName: String) {
         selectedCity = findCityByName(cityName)
@@ -117,12 +134,6 @@ class Cities {
         map[cityName] = city
         array.add(position, city)
     }
-
-    val defaultCity: City =
-        findCityByName(City.BERLIN) ?: array.firstOrNull() ?: City.createDefaultBerlinBuch().also { add(it) }
-
-    val defaultAutomaticCity: City =
-        array.firstOrNull { city -> city.isAutomatic } ?: City.createNewAutomaticCity().also { add(it) }
 
     fun updateDistances(referenceLocation: ILocation) {
         for (city in values) {

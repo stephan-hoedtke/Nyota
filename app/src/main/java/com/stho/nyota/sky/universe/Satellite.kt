@@ -23,13 +23,11 @@ import java.util.*
  *  noradSatelliteNumber = 20580
  *  description = Hubble Space Telescope
  */
-class Satellite(override val name: String, val displayName: String, val noradSatelliteNumber: Int, var elements: String) : AbstractSatellite(), IDBObject {
+class Satellite private constructor(override var id: Long, override val name: String, val displayName: String, val noradSatelliteNumber: Int, var elements: String) : AbstractSatellite(), IDBObject {
 
     init {
         updateElements(elements)
     }
-
-    override var id: Long = 0
 
     override val uniqueTransientId: Long by lazy { System.nanoTime() }
 
@@ -98,10 +96,10 @@ class Satellite(override val name: String, val displayName: String, val noradSat
         private const val HST: Int = 20580
         private const val CHEOPS: Int = 44874
 
-        fun create(id: Long, name: String, displayName: String, noradSatelliteNumber: Int, elements: String): Satellite {
-            return Satellite(name, displayName, noradSatelliteNumber, elements).apply {
-                this.id = id
-            }
-        }
+        fun createNewSatellite(name: String, displayName: String, noradSatelliteNumber: Int, elements: String): Satellite =
+            Satellite(id = 0L, name, displayName, noradSatelliteNumber, elements)
+
+        fun createSatelliteWithId(id: Long, name: String, displayName: String, noradSatelliteNumber: Int, elements: String): Satellite =
+            Satellite(id, name, displayName, noradSatelliteNumber, elements)
     }
 }

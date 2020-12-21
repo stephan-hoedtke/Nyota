@@ -152,12 +152,21 @@
                 style="@style/MyTheme.LargeText" />
 
             <CheckBox
-                android:id="@+id/checkBoxAutomatic"
+                android:id="@+id/checkBoxAutomaticCityLocation"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="true"
+                android:layout_marginTop="@dimen/text_margin"
+                android:text="@string/label_automatic_city_location" />
+
+            <CheckBox
+                android:id="@+id/checkBoxAutomaticLocation"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:checked="true"
                 android:layout_marginTop="@dimen/text_margin"
                 android:text="@string/label_update_location_automatically" />
+
 
             <Space
                 android:layout_width="match_parent"

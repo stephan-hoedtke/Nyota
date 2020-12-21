@@ -38,12 +38,11 @@ class Satellites {
     operator fun get(satelliteName: String): Satellite? =
         map[satelliteName]
 
-    fun exists(satelliteName: String?): Boolean {
-        return if (satelliteName != null)
+    fun exists(satelliteName: String?): Boolean =
+        if (satelliteName != null)
             map.containsKey(satelliteName)
         else
             false
-    }
 
     fun findSatelliteByIndex(index: Int): Satellite? =
         if (0 <= index && index < array.size)
@@ -51,16 +50,18 @@ class Satellites {
         else
             null
 
-    fun findSatelliteByName(satelliteName: String?): Satellite? {
-        return if (satelliteName != null)
+    fun findSatelliteByName(satelliteName: String?): Satellite? =
+        if (satelliteName != null)
             map[satelliteName]
         else
             null
-    }
 
     fun first(): Satellite =
         array.first()
 
     val values: List<Satellite>
         get() = array
+
+    internal fun createWithId(id: Long, name: String, displayName: String, noradSatelliteNumber: Int, elements: String) =
+        Satellite.createSatelliteWithId(id, name, displayName, noradSatelliteNumber, elements).also { add(it) }
  }
