@@ -65,7 +65,7 @@ class ConstellationFragment : AbstractElementFragment() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (item.itemId == R.id.action_display) {
             // TODO: Show dialog to set otions... https://guides.codepath.com/android/using-dialogfragment
-            showSnackBar("Show Display Option Dialog here...")
+            showSnackbar("Show Display Option Dialog here...")
         }
         return super.onOptionsItemSelected(item)
     }

@@ -210,7 +210,7 @@ class MainActivity : AppCompatActivity(), ActivityCompat.OnRequestPermissionsRes
     private fun stopHandler() =
         handler.removeCallbacksAndMessages(null)
 
-    internal fun showSnackBar(message: String) {
+    internal fun showSnackbar(message: String) {
         val container: View = findViewById<View>(R.id.drawer_layout)
         Snackbar.make(container, message, Snackbar.LENGTH_LONG)
             .setBackgroundTint(getColor(R.color.colorSignalBackground))

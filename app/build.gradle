@@ -10,7 +10,7 @@ android {
         minSdkVersion 24
         targetSdkVersion 29
         versionCode 1
-        versionName "1.0"
+        versionName "1.0.2"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -34,15 +34,7 @@ android {
     kotlinOptions {
         jvmTarget = '1.8'
     }
-
-    sourceSets {
-        main {
-            res {
-                srcDirs 'src/main/res', 'src/main/res/planets'
-            }
-        }
-    }
-
+    
     android.applicationVariants.all { variant ->
         variant.outputs.all {
             outputFileName = "NyotaKTL.apk"

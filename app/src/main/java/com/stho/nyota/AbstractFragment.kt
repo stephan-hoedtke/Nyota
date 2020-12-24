@@ -85,9 +85,9 @@ abstract class AbstractFragment : Fragment() {
     }
 
     protected fun openProperty(property: IProperty) =
-        showSnackBar("Display property ${property.name} with value ${property.value} for key ${property.key}")
+        showSnackbar("Display property ${property.name} with value ${property.value} for key ${property.key}")
 
-    fun showSnackBar(message: String) {
+    fun showSnackbar(message: String) {
         view?.also {
             Snackbar.make(it, message, Snackbar.LENGTH_LONG)
                 .setBackgroundTint(getColor(R.color.colorSignalBackground))

@@ -70,7 +70,7 @@ class PermissionManager(val activity: FragmentActivity) : ActivityCompat.OnReque
 
     private fun showMessage(message: String) {
         val mainActivity: MainActivity = activity as MainActivity
-        mainActivity.showSnackBar(message)
+        mainActivity.showSnackbar(message)
     }
 
     companion object {
