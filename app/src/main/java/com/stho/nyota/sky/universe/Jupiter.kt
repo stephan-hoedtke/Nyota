@@ -4,6 +4,7 @@ import com.stho.nyota.sky.utilities.Degree
 import com.stho.nyota.sky.utilities.Degree.Companion.cos
 import com.stho.nyota.sky.utilities.Degree.Companion.sin
 import com.stho.nyota.sky.utilities.IMoment
+import kotlin.math.log10
 
 /**
  * Created by shoedtke on 30.08.2016.
@@ -30,17 +31,18 @@ class Jupiter : AbstractPlanet() {
     fun applyPerturbations(saturn: Saturn) {
 
         // Add these terms to the longitude
-        val lon_corr = ((-0.332 * sin(2 * M - 5 * saturn.M - 67.6)
+        val lonCorr = ((-0.332 * sin(2 * M - 5 * saturn.M - 67.6)
                 - 0.056 * sin(2 * M - 2 * saturn.M + 21)
                 + 0.042 * sin(3 * M - 5 * saturn.M + 21)
                 - 0.036 * sin(M - 2 * saturn.M)
                 ) + 0.022 * cos(M - saturn.M) + 0.023 * sin(2 * M - 3 * saturn.M + 52)
                 - 0.016 * sin(M - 5 * saturn.M - 69))
-        longitude += lon_corr
+
+        longitude += lonCorr
     }
 
     override fun calculateMagnitude() {
-        magn = -9.25 + 5 * Math.log10(mr * R) + 0.014 * FV
+        magn = -9.25 + 5 * log10(mr * R) + 0.014 * FV
     }
 
     override fun getPlanetFor(moment: IMoment): AbstractPlanet {

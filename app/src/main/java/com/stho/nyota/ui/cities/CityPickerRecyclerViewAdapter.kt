@@ -1,6 +1,7 @@
 package com.stho.nyota.ui.cities
 
 import android.content.Context
+import android.util.Log
 import android.view.*
 import android.view.GestureDetector.SimpleOnGestureListener
 import androidx.core.content.ContextCompat
@@ -14,7 +15,7 @@ import com.stho.nyota.sky.utilities.createDefaultBerlinBuch
 
 // TODO: onTouchLister without PerformClick
 
-class CityPickerRecyclerViewAdapter(fragment: CityPickerFragment) : RecyclerView.Adapter<CityPickerRecyclerViewAdapter.ViewHolder>(), ISwipeToDeleteAdapter {
+class CityPickerRecyclerViewAdapter(private val fragment: CityPickerFragment, private val recyclerView: RecyclerView) : RecyclerView.Adapter<CityPickerRecyclerViewAdapter.ViewHolder>(), ISwipeToDeleteAdapter {
 
     private val context: Context = fragment.requireContext()
     private var gestureDetector: GestureDetector
@@ -35,6 +36,42 @@ class CityPickerRecyclerViewAdapter(fragment: CityPickerFragment) : RecyclerView
     init {
         setHasStableIds(true) // to avoid flicker on update during swipe: See also getItemId
         gestureDetector = GestureDetector(context, SimpleOnGestureListener())
+        gestureDetector.setIsLongpressEnabled(true)
+        gestureDetector.setOnDoubleTapListener(object : GestureDetector.OnDoubleTapListener {
+            override fun onSingleTapConfirmed(motionEvent: MotionEvent): Boolean {
+                val childView = recyclerView.findChildViewUnder(motionEvent.x, motionEvent.y)
+                if (childView != null) {
+                    val position = recyclerView.getChildAdapterPosition(childView)
+                    onSelect(position)
+                    return true
+                }
+                return false
+            }
+            override fun onDoubleTap(motionEvent: MotionEvent): Boolean {
+                val childView = recyclerView.findChildViewUnder(motionEvent.x, motionEvent.y)
+                if (childView != null) {
+                    val position = recyclerView.getChildAdapterPosition(childView)
+                    onEdit(position)
+                    return true
+                }
+                return false
+            }
+            override fun onDoubleTapEvent(motionEvent: MotionEvent): Boolean {
+                return false
+            }
+        })
+        recyclerView.addOnItemTouchListener(object: RecyclerView.OnItemTouchListener {
+            override fun onInterceptTouchEvent(rv: RecyclerView, e: MotionEvent): Boolean {
+                gestureDetector.onTouchEvent(e)
+                return false
+            }
+            override fun onTouchEvent(rv: RecyclerView, e: MotionEvent) {
+                // Nothing
+            }
+            override fun onRequestDisallowInterceptTouchEvent(disallowIntercept: Boolean) {
+                // Nothing
+            }
+        })
     }
 
     override fun getItemId(position: Int): Long =
@@ -64,32 +101,14 @@ class CityPickerRecyclerViewAdapter(fragment: CityPickerFragment) : RecyclerView
         fun bind(city: City) {
             val isSelected = isSelected(city)
             binding.radioButton.isChecked = isSelected
-            binding.radioButton.setOnClickListener { cities.findCityByIndex(adapterPosition)?.also { onSelectionChanged?.invoke(it) } }
+            binding.radioButton.setOnClickListener { onSelect(adapterPosition) }
             binding.textViewName.text = city.nameEx
             binding.textViewDistance.text = Formatter.toDistanceString(city.distanceInKm)
             binding.root.isSelected = isSelected
             binding.root.setOnLongClickListener {
-                onEdit?.invoke(city)
+                onEdit(adapterPosition)
                 true
             }
-            binding.root.setOnTouchListener { view: View, motionEvent: MotionEvent? ->
-                gestureDetector.onTouchEvent(motionEvent)
-                view.performClick()
-                false
-            }
-            gestureDetector.setIsLongpressEnabled(true)
-            gestureDetector.setOnDoubleTapListener(object : GestureDetector.OnDoubleTapListener {
-                override fun onSingleTapConfirmed(motionEvent: MotionEvent): Boolean {
-                    return false
-                }
-                override fun onDoubleTap(motionEvent: MotionEvent): Boolean {
-                    onEdit?.invoke(city)
-                    return false
-                }
-                override fun onDoubleTapEvent(motionEvent: MotionEvent): Boolean {
-                    return false
-                }
-            })
         }
 
         internal val foregroundLayer: View = binding.foregroundLayer
@@ -100,6 +119,12 @@ class CityPickerRecyclerViewAdapter(fragment: CityPickerFragment) : RecyclerView
 
     override fun getBackgroundColor(isCurrentlyActive: Boolean): Int =
         ContextCompat.getColor(context, if (isCurrentlyActive) R.color.colorSelectedBackground else R.color.colorBackground)
+
+    private fun onSelect(position: Int) =
+        cities.findCityByIndex(position)?.also { onSelectionChanged?.invoke(it) }
+
+    private fun onEdit(position: Int) =
+        cities.findCityByIndex(position)?.also { onEdit?.invoke(it) }
 
     fun select(city: City) {
         if (selectedCity != city) {

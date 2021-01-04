@@ -18,6 +18,7 @@ class Topocentric(var azimuth: Double, var altitude: Double, var distance: Doubl
     var riseTime: UTC? = null
     var prevSetTime: UTC? = null
     var prevRiseTime: UTC? = null
+    var isUp: Boolean = false
     var inSouth: UTC? = null
     var culmination = 0.0
 

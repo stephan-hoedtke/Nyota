@@ -23,6 +23,7 @@ class NyotaDatabaseAdapter(private val db: SQLiteDatabase) {
         contract.write(DisplayNames, settings.displayNames)
         contract.write(DisplaySymbols, settings.displaySymbols)
         contract.write(DisplayMagnitude, settings.displayMagnitude)
+        contract.write(DisplayConstellations, settings.displayConstellations)
     }
 
     fun readSettings(settings: Settings) {
@@ -34,6 +35,7 @@ class NyotaDatabaseAdapter(private val db: SQLiteDatabase) {
         settings.displayNames = contract.readBoolean(DisplayNames, settings.displayNames)
         settings.displaySymbols = contract.readBoolean(DisplaySymbols, settings.displaySymbols)
         settings.displayMagnitude = contract.readBoolean(DisplayMagnitude, settings.displayMagnitude)
+        settings.displayConstellations = contract.readBoolean(DisplayConstellations, settings.displayConstellations)
     }
 
     companion object {
@@ -44,6 +46,7 @@ class NyotaDatabaseAdapter(private val db: SQLiteDatabase) {
         private const val DisplayNames = "DisplayNames"
         private const val DisplaySymbols = "DisplaySymbols"
         private const val DisplayMagnitude = "DisplayMagnitude"
+        private const val DisplayConstellations = "DisplayConstellations"
     }
 
     fun saveCities(cities: Cities) {

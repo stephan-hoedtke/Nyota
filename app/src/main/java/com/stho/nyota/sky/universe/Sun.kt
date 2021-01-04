@@ -106,18 +106,28 @@ class Sun : AbstractSolarSystemElement() {
 
     override fun getBasics(moment: Moment): PropertyList =
         super.getBasics(moment).apply {
-            add(com.stho.nyota.R.drawable.sunrise, "Rise", position?.riseTime, moment.timeZone)
-            add(com.stho.nyota.R.drawable.sunset, "Set", position?.setTime, moment.timeZone)
+            if (position?.isUp == true) {
+                add(com.stho.nyota.R.drawable.sunrise, "Rise", position?.riseTime, moment.timeZone)
+                add(com.stho.nyota.R.drawable.sunset, "Set", position?.setTime, moment.timeZone)
+            } else {
+                add(com.stho.nyota.R.drawable.sunset, "Set", position?.setTime, moment.timeZone)
+                add(com.stho.nyota.R.drawable.sunrise, "Rise", position?.riseTime, moment.timeZone)
+            }
         }
 
     override fun getDetails(moment: Moment): PropertyList =
         super.getDetails(moment).apply {
-            add(com.stho.nyota.R.drawable.sunrise, "Previous Rise", position?.prevRiseTime, moment.timeZone)
-            add(com.stho.nyota.R.drawable.sunset, "Previous Set", position?.prevSetTime, moment.timeZone)
-            add(com.stho.nyota.R.drawable.sunrise, "Rise", position?.riseTime, moment.timeZone)
-            add(com.stho.nyota.R.drawable.sunset, "Set ", position?.setTime, moment.timeZone)
-            add(com.stho.nyota.R.drawable.sunrise, "Next Rise", position?.nextRiseTime, moment.timeZone)
-            add(com.stho.nyota.R.drawable.sunset, "Next Set", position?.nextSetTime, moment.timeZone)
+            if (position?.isUp == true) {
+                add(com.stho.nyota.R.drawable.sunset, "Previous Set", position?.prevSetTime, moment.timeZone)
+                add(com.stho.nyota.R.drawable.sunrise, "Rise", position?.riseTime, moment.timeZone)
+                add(com.stho.nyota.R.drawable.sunset, "Set ", position?.setTime, moment.timeZone)
+                add(com.stho.nyota.R.drawable.sunrise, "Next Rise", position?.nextRiseTime, moment.timeZone)
+            } else {
+                add(com.stho.nyota.R.drawable.sunrise, "Previous Rise", position?.prevRiseTime, moment.timeZone)
+                add(com.stho.nyota.R.drawable.sunset, "Set ", position?.setTime, moment.timeZone)
+                add(com.stho.nyota.R.drawable.sunrise, "Rise", position?.riseTime, moment.timeZone)
+                add(com.stho.nyota.R.drawable.sunset, "Next Set", position?.nextSetTime, moment.timeZone)
+            }
             add(com.stho.nyota.R.drawable.empty, "In south", position?.inSouth, moment.timeZone)
             add(com.stho.nyota.R.drawable.empty, "Culmination angle", Degree.fromDegree(position!!.culmination))
         }

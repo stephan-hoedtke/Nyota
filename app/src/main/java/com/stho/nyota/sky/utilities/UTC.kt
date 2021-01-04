@@ -120,15 +120,11 @@ class UTC : ITime {
     override fun toString(): String =
         Formatter.toString(time, Formatter.timeZoneGMT, Formatter.TimeFormat.DATETIME_SEC_TIMEZONE)
 
-    fun isGreaterThan(that: UTC?): Boolean =
+    fun isAfter(that: UTC?): Boolean =
         this.JD > that?.JD ?: 0.0
 
-    fun isLessThan(that: UTC?): Boolean =
+    fun isBefore(that: UTC?): Boolean =
         this.JD < that?.JD ?: 0.0
-
-    fun serialize(): String {
-        return timeInMillis.toString()
-    }
 
     companion object {
         private val timeZoneGMT: TimeZone by lazy { TimeZone.getTimeZone("GMT") }

@@ -5,6 +5,8 @@ import android.graphics.Canvas
 import android.util.AttributeSet
 import com.stho.nyota.sky.universe.*
 import com.stho.nyota.sky.utilities.Topocentric
+import com.stho.nyota.ui.sky.ISkyViewOptions
+import com.stho.nyota.ui.sky.SkyViewOptions
 import com.stho.nyota.views.AbstractSkyView
 import java.text.FieldPosition
 
@@ -13,8 +15,11 @@ import java.text.FieldPosition
  */
 class SkyView(context: Context?, attrs: AttributeSet?) : AbstractSkyView(context, attrs) {
 
+
     private var universe: Universe? = null
     private var referenceElement: IElement? = null
+
+    override val options: ISkyViewOptions = SkyViewOptions(this)
 
     fun notifyDataSetChanged() {
         invalidate()
@@ -52,19 +57,19 @@ class SkyView(context: Context?, attrs: AttributeSet?) : AbstractSkyView(context
             }
             for (constellation in it.constellations.values) {
                 super.drawConstellation(canvas, zoom, constellation)
-                if (super.displayNames) {
+                if (options.displayNames) {
                     super.drawName(canvas, zoom, constellation)
                 }
             }
             for (star in it.vip) {
                 super.drawStar(canvas, zoom, star)
-                if (super.displayNames) {
+                if (options.displayNames) {
                     super.drawName(canvas, zoom, star)
                 }
             }
             for (planet in it.solarSystem.planets) {
                 super.drawPlanet(canvas, zoom, planet)
-                if (super.displayNames) {
+                if (options.displayNames) {
                     super.drawName(canvas, zoom, planet)
                 }
             }

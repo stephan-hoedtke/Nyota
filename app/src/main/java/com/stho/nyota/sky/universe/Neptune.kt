@@ -2,7 +2,7 @@ package com.stho.nyota.sky.universe
 
 import com.stho.nyota.sky.utilities.Degree
 import com.stho.nyota.sky.utilities.IMoment
-import com.stho.nyota.sky.utilities.Moment
+import kotlin.math.log10
 
 /**
  * Created by shoedtke on 31.08.2016.
@@ -27,7 +27,7 @@ class Neptune : AbstractPlanet() {
     }
 
     override fun calculateMagnitude() {
-        magn = -6.90 + 5 * Math.log10(mr * R) + 0.001 * FV
+        magn = -6.90 + 5 * log10(mr * R) + 0.001 * FV
     }
 
     override fun getPlanetFor(moment: IMoment): AbstractPlanet {

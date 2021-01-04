@@ -2,6 +2,7 @@ package com.stho.nyota
 
 import android.os.Bundle
 import android.os.Handler
+import android.os.PersistableBundle
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -150,6 +151,7 @@ class MainActivity : AppCompatActivity(), ActivityCompat.OnRequestPermissionsRes
         stopHandler()
         orientationSensorListener.onPause()
         locationServiceListener.onPause()
+        viewModel.repository.saveSettings(this)
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {

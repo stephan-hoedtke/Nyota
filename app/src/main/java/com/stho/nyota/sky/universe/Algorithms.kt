@@ -243,6 +243,20 @@ object Algorithms {
         val c = 2 * atan2(sqrt(a), sqrt(1 - a))
         return Earth.RADIUS * c
     }
-
 }
+
+internal fun Double.polynomial(C0: Double, C1: Double, C2: Double) =
+    this * (this * C2 + C1) + C0
+
+internal fun Double.polynomial(C0: Double, C1: Double, C2: Double, C3: Double) =
+    this * (this * (this * C3 + C2) + C1) + C0
+
+internal fun Double.polynomial(C0: Double, C1: Double, C2: Double, C3: Double, C4: Double) =
+    this * (this * (this * (this * C4 + C3) + C2) + C1) + C0
+
+internal fun Double.polynomial(C0: Double, C1: Double, C2: Double, C3: Double, C4: Double, C5: Double) =
+    this * (this * (this * (this * (this * C5 + C4) + C3) + C2) + C1) + C0
+
+internal fun Double.polynomial(C0: Double, C1: Double, C2: Double, C3: Double, C4: Double, C5: Double, C6: Double) =
+    this * (this * (this * (this * (this * (this * C6 + C5) + C4) + C3) + C2) + C1) + C0
 

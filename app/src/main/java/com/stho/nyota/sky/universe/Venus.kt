@@ -2,7 +2,8 @@ package com.stho.nyota.sky.universe
 
 import com.stho.nyota.sky.utilities.Degree
 import com.stho.nyota.sky.utilities.IMoment
-import com.stho.nyota.sky.utilities.Moment
+import kotlin.math.log10
+import kotlin.math.pow
 
 /**
  * Created by shoedtke on 30.08.2016.
@@ -27,7 +28,7 @@ class Venus : AbstractPlanet() {
     }
 
     override fun calculateMagnitude() {
-        magn = -4.34 + 5 * Math.log10(mr * R) + 0.013 * FV + 4.2E-7 * Math.pow(FV, 3.0)
+        magn = -4.34 + 5 * log10(mr * R) + 0.013 * FV + 4.2E-7 * FV.pow(3.0)
     }
 
     override fun getPlanetFor(moment: IMoment): AbstractPlanet {

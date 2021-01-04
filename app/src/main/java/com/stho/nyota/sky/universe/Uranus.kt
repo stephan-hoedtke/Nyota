@@ -3,6 +3,7 @@ package com.stho.nyota.sky.universe
 import com.stho.nyota.sky.utilities.Degree
 import com.stho.nyota.sky.utilities.Degree.Companion.sin
 import com.stho.nyota.sky.utilities.IMoment
+import kotlin.math.log10
 
 /**
  * Created by shoedtke on 31.08.2016.
@@ -29,14 +30,15 @@ class Uranus : AbstractPlanet() {
     fun applyPerturbations(jupiter: Jupiter, saturn: Saturn) {
 
         // Add these terms to the longitude:
-        val lon_corr = (+0.040 * sin(saturn.M - 2 * M + 6)
+        val lonCorr = (+0.040 * sin(saturn.M - 2 * M + 6)
                 + 0.035 * sin(saturn.M - 3 * M + 33)
                 - 0.015 * sin(jupiter.M - M + 20))
-        longitude += lon_corr
+
+        longitude += lonCorr
     }
 
     override fun calculateMagnitude() {
-        magn = -7.15 + 5 * Math.log10(mr * R) + 0.001 * FV
+        magn = -7.15 + 5 * log10(mr * R) + 0.001 * FV
     }
 
     override fun getPlanetFor(moment: IMoment): AbstractPlanet {

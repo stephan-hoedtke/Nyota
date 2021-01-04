@@ -32,7 +32,7 @@ class CityPickerFragment : AbstractFragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         bindingReference = FragmentCityPickerBinding.inflate(inflater, container, false)
 
-        adapter = CityPickerRecyclerViewAdapter(this)
+        adapter = CityPickerRecyclerViewAdapter(this, binding.list)
         adapter.onSelectionChanged = { city -> onSelectionChanged(city) }
         adapter.onEdit = { city -> onEdit(city) }
         adapter.onDelete = { position, city -> onDelete(position, city) }
@@ -54,7 +54,7 @@ class CityPickerFragment : AbstractFragment() {
         super.onViewCreated(view, savedInstanceState)
         viewModel.repository.updateCityDistances()
         viewModel.citiesLD.observe(viewLifecycleOwner, { cities -> updateCities(cities) })
-        viewModel.selectedCityLC.observe(viewLifecycleOwner, { city -> updateSelectedCity(city) })
+        viewModel.selectedCityLD.observe(viewLifecycleOwner, { city -> updateSelectedCity(city) })
         updateActionBar(getString(R.string.title_choose_city), "")
     }
 
@@ -81,7 +81,6 @@ class CityPickerFragment : AbstractFragment() {
             R.id.action_default -> onDefault()
         }
         return super.onOptionsItemSelected(item)
-
     }
 
     override fun onContextItemSelected(item: MenuItem): Boolean {

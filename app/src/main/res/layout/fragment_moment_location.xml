@@ -85,7 +85,9 @@
                     android:layout_marginHorizontal="@dimen/text_margin"
                     android:layout_marginTop="@dimen/text_margin"
                     android:checked="true"
-                    android:text="@string/label_update_location_automatically"
+                    android:text="@string/label_automatic_city_location"
+                    android:enabled="false"
+                    android:textColor="@color/colorPrimaryDisabledText"
                     style="@style/MyTheme.CheckBox"/>
 
                 <CheckBox

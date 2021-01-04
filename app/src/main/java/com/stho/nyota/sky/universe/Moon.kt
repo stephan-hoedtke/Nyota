@@ -24,6 +24,8 @@ class Moon : AbstractSolarSystemElement() {
     var halfShadow = 0.0
     var far = 0.0
     var near = 0.0
+    val fullMoonBrightness = -12.7
+
     override val isMoon: Boolean
         get() = true
 
@@ -92,54 +94,73 @@ class Moon : AbstractSolarSystemElement() {
         magn = -21.62 + 5 * Math.log10(mr * R) + 0.026 * FV + 4.0E-9 * Math.pow(FV, 4.0)
     }
 
-    override fun calculateSetRiseTimes(moment: IMoment) {
-        position?.also {
-            val inSouth = getTimeInSouth(moment)
-            val cos_LHA = getHourAngle(moment.location.latitude)
-            it.inSouth = moment.utc.setHours(inSouth)
-            it.culmination = getHeightFor(moment.forUTC(it.inSouth!!))
+    // see also: AbstractSolarSystemElement.calculateSetRiseTimes
+    //           Moon.calculateSetRiseTimes
 
-            // cos_LHA < 0 ---> always up and visible
-            // cos_LHA > 0 ---> always down
-            if (cos_LHA > -1 && cos_LHA < 1) {
-                val LHA = Degree.arcCos(cos_LHA) / 15
-                val riseTime0 = iterate(moment, moment.utc.setHours(inSouth - LHA), true)
-                val setTime0 = iterate(moment, moment.utc.setHours(inSouth + LHA), false)
-                when {
-                    moment.utc.isLessThan(riseTime0) -> {
-                        it.prevRiseTime = iterate(moment, moment.utc.setHours(inSouth - LHA - 24.45),true)
-                        it.prevSetTime = iterate(moment, moment.utc.setHours(inSouth + LHA - 24.45), false)
-                        it.riseTime = riseTime0
-                        it.setTime = setTime0
-                    }
-                    moment.utc.isGreaterThan(setTime0) -> {
-                        it.riseTime = riseTime0
-                        it.setTime = setTime0
-                        it.nextRiseTime = iterate(moment, moment.utc.setHours(inSouth - LHA + 24.45),true)
-                        it.nextSetTime = iterate(moment, moment.utc.setHours(inSouth + LHA + 24.45), false)
-                    }
-                    else -> {
-                        it.prevSetTime = iterate(moment, moment.utc.setHours(inSouth + LHA - 24.45), false)
-                        it.riseTime = riseTime0
-                        it.setTime = setTime0
-                        it.nextRiseTime = iterate(moment, moment.utc.setHours(inSouth - LHA + 24.45),true)
-                    }
-                }
-            }
-        }
-    }
+    override fun calculateSetRiseTimes(moment: IMoment) =
+        calculateSetRiseTimes(moment, 24.45)
+
+
+//        position?.also {
+//            val inSouth = getTimeInSouth(moment)
+//            val cos_LHA = getHourAngle(moment.location.latitude)
+//            it.inSouth = moment.utc.setHours(inSouth)
+//            it.culmination = getHeightFor(moment.forUTC(it.inSouth!!))
+//
+//            // case 1 - ideal: rise0 (now) set0
+//            //                      --> previous set , rise0, (now), set0, next rise
+//            // case 2: (now) rise0 set0
+//            //      2.1: previous rise, previous set, (now), rise0, set0
+//            //      2.2: before set, previous rise, (now), previous set, rise0, set0
+//            // case 3: rise0 set0 (now)
+//            //      3.1 rise0, set0, (now), next rise, next set
+//            //      3.2 rise0, set0, next rise, (now), next set, after rise
+//            //
+//            //
+//            // cos_LHA < 0 ---> always up and visible
+//            // cos_LHA > 0 ---> always down
+//            if (cos_LHA > -1 && cos_LHA < 1) {
+//                val LHA = Degree.arcCos(cos_LHA) / 15
+//                val riseTime0 = iterate(moment, moment.utc.setHours(inSouth - LHA), true)
+//                val setTime0 = iterate(moment, moment.utc.setHours(inSouth + LHA), false)
+//                when {
+//                    moment.utc.isLessThan(riseTime0) -> {
+//                        Log.d("MOON", "utc: ${moment.utc} rise: $riseTime0 set: $setTime0")
+//                        val riseTime1 = iterate(moment, moment.utc.setHours(inSouth - LHA - 24.45),true)
+//                        val setTime1 = iterate(moment, moment.utc.setHours(inSouth + LHA - 24.45), false)
+//                        it.riseTime = riseTime0
+//                        it.setTime = setTime0
+//                    }
+//                    moment.utc.isGreaterThan(setTime0) -> {
+//                        Log.d("MOON", "rise: $riseTime0 set: $setTime0 utc: ${moment.utc}")
+//                        it.riseTime = riseTime0
+//                        it.setTime = setTime0
+//                        it.nextRiseTime = iterate(moment, moment.utc.setHours(inSouth - LHA + 24.45),true)
+//                        it.nextSetTime = iterate(moment, moment.utc.setHours(inSouth + LHA + 24.45), false)
+//                    }
+//                    else -> {
+//                        Log.d("MOON", "rise: $riseTime0 utc: ${moment.utc} set: $setTime0")
+//                        it.prevSetTime = iterate(moment, moment.utc.setHours(inSouth + LHA - 24.45), false)
+//                        it.riseTime = riseTime0
+//                        it.setTime = setTime0
+//                        it.nextRiseTime = iterate(moment, moment.utc.setHours(inSouth - LHA + 24.45),true)
+//                    }
+//                }
+//            }
+//        }
+//    }
 
     fun calculateNewFullMoon(utc: UTC) {
         val newMoon0 = getNewMoon(utc, 0)
         val newMoon1 = getNewMoon(utc, 1)
         when {
-            utc.isLessThan(newMoon0) -> {
+            utc.isBefore(newMoon0) -> {
                 // CURRENT SHIFT = -1
                 prevNewMoon = getNewMoon(utc, -1)
                 fullMoon = getFullMoon(utc, -1)
                 nextNewMoon = newMoon0
             }
-            utc.isGreaterThan(newMoon1) -> {
+            utc.isAfter(newMoon1) -> {
                 // CURRENT SHIFT = 1
                 prevNewMoon = newMoon1
                 fullMoon = getFullMoon(utc, 1)
@@ -270,19 +291,29 @@ class Moon : AbstractSolarSystemElement() {
 
     override fun getBasics(moment: Moment): PropertyList =
         super.getBasics(moment).apply {
-            add(com.stho.nyota.R.drawable.sunrise, "Rise", position?.riseTime, moment.timeZone)
-            add(com.stho.nyota.R.drawable.sunset, "Set", position?.setTime, moment.timeZone)
+            if (position?.isUp == true) {
+                add(com.stho.nyota.R.drawable.sunrise, "Rise", position?.riseTime, moment.timeZone)
+                add(com.stho.nyota.R.drawable.sunset, "Set", position?.setTime, moment.timeZone)
+            } else {
+                add(com.stho.nyota.R.drawable.sunset, "Set", position?.setTime, moment.timeZone)
+                add(com.stho.nyota.R.drawable.sunrise, "Rise", position?.riseTime, moment.timeZone)
+            }
             add(com.stho.nyota.R.drawable.angle, "Diameter", Degree.fromDegree(diameter))
         }
 
     override fun getDetails(moment: Moment): PropertyList =
         super.getDetails(moment).apply {
-            add(com.stho.nyota.R.drawable.sunrise, "Previous Rise", position?.prevRiseTime, moment.timeZone)
-            add(com.stho.nyota.R.drawable.sunset, "Previous Set", position?.prevSetTime, moment.timeZone)
-            add(com.stho.nyota.R.drawable.sunrise, "Rise", position?.riseTime, moment.timeZone)
-            add(com.stho.nyota.R.drawable.sunset, "Set ", position?.setTime, moment.timeZone)
-            add(com.stho.nyota.R.drawable.sunrise, "Next Rise", position?.nextRiseTime, moment.timeZone)
-            add(com.stho.nyota.R.drawable.sunset, "Next Set", position?.nextSetTime, moment.timeZone)
+            if (position?.isUp == true) {
+                add(com.stho.nyota.R.drawable.sunset, "Previous Set", position?.prevSetTime, moment.timeZone)
+                add(com.stho.nyota.R.drawable.sunrise, "Rise", position?.riseTime, moment.timeZone)
+                add(com.stho.nyota.R.drawable.sunset, "Set ", position?.setTime, moment.timeZone)
+                add(com.stho.nyota.R.drawable.sunrise, "Next Rise", position?.nextRiseTime, moment.timeZone)
+            } else {
+                add(com.stho.nyota.R.drawable.sunrise, "Previous Rise", position?.prevRiseTime, moment.timeZone)
+                add(com.stho.nyota.R.drawable.sunset, "Set ", position?.setTime, moment.timeZone)
+                add(com.stho.nyota.R.drawable.sunrise, "Rise", position?.riseTime, moment.timeZone)
+                add(com.stho.nyota.R.drawable.sunset, "Next Set", position?.nextSetTime, moment.timeZone)
+            }
             add(com.stho.nyota.R.drawable.empty, "Age", Formatter.df2.format(age))
             add(com.stho.nyota.R.drawable.angle, "Diameter", Degree.fromDegree(diameter))
             add(com.stho.nyota.R.drawable.empty, "Magnitude", Formatter.df2.format(magn))

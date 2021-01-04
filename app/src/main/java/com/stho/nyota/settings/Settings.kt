@@ -3,9 +3,9 @@ package com.stho.nyota.settings
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.stho.nyota.Interval
-import com.stho.nyota.views.AbstractSkyView
+import com.stho.nyota.ui.sky.ISkyViewSettings
 
-class Settings: AbstractSkyView.ISkyViewSettings {
+class Settings: ISkyViewSettings {
 
     private val zoomLiveData: MutableLiveData<Double> = MutableLiveData()
     private val intervalLiveData: MutableLiveData<Interval> = MutableLiveData()
@@ -51,6 +51,7 @@ class Settings: AbstractSkyView.ISkyViewSettings {
     override var displayNames: Boolean = true
     override var displaySymbols: Boolean = true
     override var displayMagnitude: Boolean = true
+    override var displayConstellations: Boolean = true
 
     val zoomLD: LiveData<Double>
         get() = zoomLiveData

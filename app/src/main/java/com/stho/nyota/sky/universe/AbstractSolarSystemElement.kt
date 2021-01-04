@@ -1,5 +1,6 @@
 package com.stho.nyota.sky.universe
 
+import android.util.Log
 import com.stho.nyota.sky.utilities.*
 import com.stho.nyota.sky.utilities.Degree
 import com.stho.nyota.sky.utilities.Degree.Companion.arcCos
@@ -9,12 +10,12 @@ import com.stho.nyota.sky.utilities.Degree.Companion.normalizeTo180
 import com.stho.nyota.sky.utilities.Degree.Companion.sin
 import com.stho.nyota.sky.utilities.Degree.Companion.cos
 import com.stho.nyota.sky.utilities.Degree.Companion.tan
-import java.util.concurrent.TimeUnit
 
 /**
  * Orbital SolarSystemElement
  * Created by shoedtke on 30.08.2016.
  */
+@Suppress("LocalVariableName", "FunctionName")
 abstract class AbstractSolarSystemElement : AbstractElement() {
     internal var N = 0.0 // longitude of the ascending node = 0.0
     internal var i = 0.0 // inclination to the ecliptic (plane of the Earth's orbit) = 0.0
@@ -179,38 +180,130 @@ abstract class AbstractSolarSystemElement : AbstractElement() {
             add(com.stho.nyota.R.drawable.angle, "Elongation", Degree.fromDegree(elongation))
         }
 
-    open fun calculateSetRiseTimes(moment: IMoment) {
+    open fun calculateSetRiseTimes(moment: IMoment) =
+        calculateSetRiseTimes(moment, 24.0)
+
+//
+//        --> remove...
+//        position?.also {
+//            val inSouth = getTimeInSouth(moment)
+//            val cos_LHA = getHourAngle(moment.location.latitude)
+//            it.inSouth = moment.utc.setHours(inSouth)
+//            it.culmination = getHeightFor(moment.forUTC(position!!.inSouth!!))
+//
+//            // cos_LHA < 0 ---> always up and visible
+//            // cos_LHA > 0 ---> always down
+//            if (cos_LHA > -1 && cos_LHA < 1) {
+//                val LHA = arcCos(cos_LHA) / 15
+//                val riseTime0 = iterate(moment, moment.utc.setHours(inSouth - LHA), true)
+//                val setTime0 = iterate(moment, moment.utc.setHours(inSouth + LHA), false)
+//                when {
+//                    moment.utc.isLessThan(riseTime0) -> {
+//                        it.prevRiseTime = iterate(moment, moment.utc.setHours(inSouth - LHA - 24.0), true)
+//                        it.prevSetTime = iterate(moment, moment.utc.setHours(inSouth + LHA - 24.0), false)
+//                        it.riseTime = riseTime0
+//                        it.setTime = setTime0
+//                    }
+//                    moment.utc.isGreaterThan(setTime0) -> {
+//                        it.riseTime = riseTime0
+//                        it.setTime = setTime0
+//                        it.nextRiseTime = iterate(moment, moment.utc.setHours(inSouth - LHA + 24.0), true)
+//                        it.nextSetTime = iterate(moment, moment.utc.setHours(inSouth + LHA + 24.0), false)
+//                    }
+//                    else -> {
+//                        it.prevSetTime = iterate(moment, moment.utc.setHours(inSouth + LHA - 24.0), false)
+//                        it.riseTime = riseTime0
+//                        it.setTime = setTime0
+//                        it.nextRiseTime = iterate(moment, moment.utc.setHours(inSouth - LHA + 24.0), true)
+//                    }
+//                }
+//            }
+//        }
+//    }
+//
+    protected fun calculateSetRiseTimes(moment: IMoment, hoursBetweenCulminations: Double) {
         position?.also {
             val inSouth = getTimeInSouth(moment)
-            val cos_LHA = getHourAngle(moment.location.latitude)
-            it.inSouth = moment.utc.setHours(inSouth)
-            it.culmination = getHeightFor(moment.forUTC(position!!.inSouth!!))
+            val cosLHA = getHourAngle(moment.location.latitude)
+            calculateSetRiseTimes(moment, hoursBetweenCulminations, it, inSouth, cosLHA)
+        }
+    }
 
-            // cos_LHA < 0 ---> always up and visible
-            // cos_LHA > 0 ---> always down
-            if (cos_LHA > -1 && cos_LHA < 1) {
-                val LHA = arcCos(cos_LHA) / 15
-                val riseTime0 = iterate(moment, moment.utc.setHours(inSouth - LHA), true)
-                val setTime0 = iterate(moment, moment.utc.setHours(inSouth + LHA), false)
-                when {
-                    moment.utc.isLessThan(riseTime0) -> {
-                        it.prevRiseTime = iterate(moment, moment.utc.setHours(inSouth - LHA - 24.0), true)
-                        it.prevSetTime = iterate(moment, moment.utc.setHours(inSouth + LHA - 24.0), false)
-                        it.riseTime = riseTime0
-                        it.setTime = setTime0
+    private fun calculateSetRiseTimes(moment: IMoment, hoursBetweenCulminations: Double, position: Topocentric, inSouth: Double, cosLHA: Double) {
+        position.inSouth = moment.utc.setHours(inSouth)
+        position.culmination = getHeightFor(moment.forUTC(position.inSouth!!))
+
+        // case 1: rise(0) NOW set(0)
+        //         --> previousSet=set(-1) | rise=rise(0) | NOW | set=set(0) | nextRise=rise(+1): isUp = true
+        //
+        // case 2: (now) rise(0) set(0)
+        //      2.1: set(-1) NOW rise(0) set(0)
+        //          --> previousRise=rise(-1) | set=set(-1) | NOW | rise=rise(0) | nextSet=set(0): isUp = false
+        //
+        //      2.2: rise(-1) NOW set(-1) rise(0) set(0)
+        //          --> previousSet=set(-2) | rise=rise(-1) | NOW | set=set(-1) | nextRise=rise(0): isUp = true
+        //
+        // case 3: rise(0) set(0) NOW
+        //      3.1 rise(0) set(0) NOW rise(+1)
+        //          --> previousRise=rise(0) | set=set(0) | NOW | rise=rise(+1) | nextSet=set(+1): isUp = false
+        //
+        //      3.2 rise(0) set(0) rise(+1) NOW set(+1)
+        //          -> previousSet=set(0) | rise=rise(+1) | NOW | set=set(+1) | nextRise=rise(+2): isUp = true
+        //
+
+        // cosLHA < 0 ---> always up and visible
+        // cosLHA > 0 ---> always down
+        if (cosLHA > -1 && cosLHA < 1) {
+            val LHA = Degree.arcCos(cosLHA) / 15
+            val riseTime0 = iterate(moment, moment.utc.setHours(inSouth - LHA), true)
+            val setTime0 = iterate(moment, moment.utc.setHours(inSouth + LHA), false)
+            when {
+                moment.utc.isBefore(riseTime0) -> {
+                    val riseTime1 = iterate(moment, moment.utc.setHours(inSouth - LHA - hoursBetweenCulminations), true)
+                    val setTime1 = iterate(moment, moment.utc.setHours(inSouth + LHA - hoursBetweenCulminations), false)
+                    when {
+                        moment.utc.isBefore(setTime1) -> {
+                            position.prevSetTime = iterate(moment, moment.utc.setHours(inSouth + LHA - 2 * hoursBetweenCulminations), false)
+                            position.riseTime = riseTime1
+                            position.setTime = setTime1
+                            position.nextRiseTime = riseTime0
+                            position.isUp = true
+                        }
+                        else -> {
+                            position.prevRiseTime = riseTime1
+                            position.setTime = setTime1
+                            position.riseTime = riseTime0
+                            position.nextSetTime = setTime0
+                            position.isUp = false
+                        }
                     }
-                    moment.utc.isGreaterThan(setTime0) -> {
-                        it.riseTime = riseTime0
-                        it.setTime = setTime0
-                        it.nextRiseTime = iterate(moment, moment.utc.setHours(inSouth - LHA + 24.0), true)
-                        it.nextSetTime = iterate(moment, moment.utc.setHours(inSouth + LHA + 24.0), false)
+                }
+                moment.utc.isAfter(setTime0) -> {
+                    val riseTime1 = iterate(moment, moment.utc.setHours(inSouth - LHA + hoursBetweenCulminations), true)
+                    val setTime1 = iterate(moment, moment.utc.setHours(inSouth + LHA + hoursBetweenCulminations), false)
+                    when {
+                        moment.utc.isAfter(riseTime1) -> {
+                            position.prevSetTime = setTime0
+                            position.riseTime = riseTime1
+                            position.setTime = setTime1
+                            position.nextRiseTime = iterate(moment, moment.utc.setHours(inSouth - LHA + 2 * hoursBetweenCulminations), true)
+                            position.isUp = true
+                        }
+                        else -> {
+                            position.prevRiseTime = riseTime0
+                            position.setTime = setTime0
+                            position.riseTime = riseTime1
+                            position.nextSetTime = setTime1
+                            position.isUp = false
+                        }
                     }
-                    else -> {
-                        it.prevSetTime = iterate(moment, moment.utc.setHours(inSouth + LHA - 24.0), false)
-                        it.riseTime = riseTime0
-                        it.setTime = setTime0
-                        it.nextRiseTime = iterate(moment, moment.utc.setHours(inSouth - LHA + 24.0), true)
-                    }
+                }
+                else -> {
+                    position.prevSetTime = iterate(moment, moment.utc.setHours(inSouth + LHA - hoursBetweenCulminations), false)
+                    position.riseTime = riseTime0
+                    position.setTime = setTime0
+                    position.nextRiseTime = iterate(moment, moment.utc.setHours(inSouth - LHA + hoursBetweenCulminations), true)
+                    position.isUp = true
                 }
             }
         }

@@ -20,12 +20,17 @@ abstract class AbstractPlanet : AbstractSolarSystemElement() {
 
     override fun getDetails(moment: Moment): PropertyList =
         super.getDetails(moment).apply {
-            add(com.stho.nyota.R.drawable.sunrise, "Previous Rise", position?.prevRiseTime, moment.timeZone)
-            add(com.stho.nyota.R.drawable.sunset, "Previous Set", position?.prevSetTime, moment.timeZone)
-            add(com.stho.nyota.R.drawable.sunrise, "Rise", position?.riseTime, moment.timeZone)
-            add(com.stho.nyota.R.drawable.sunset, "Set ", position?.setTime, moment.timeZone)
-            add(com.stho.nyota.R.drawable.sunrise, "Next Rise", position?.nextRiseTime, moment.timeZone)
-            add(com.stho.nyota.R.drawable.sunset, "Next Set", position?.nextSetTime, moment.timeZone)
+            if (position?.isUp == true) {
+                add(com.stho.nyota.R.drawable.sunset, "Previous Set", position?.prevSetTime, moment.timeZone)
+                add(com.stho.nyota.R.drawable.sunrise, "Rise", position?.riseTime, moment.timeZone)
+                add(com.stho.nyota.R.drawable.sunset, "Set ", position?.setTime, moment.timeZone)
+                add(com.stho.nyota.R.drawable.sunrise, "Next Rise", position?.nextRiseTime, moment.timeZone)
+            } else {
+                add(com.stho.nyota.R.drawable.sunrise, "Previous Rise", position?.prevRiseTime, moment.timeZone)
+                add(com.stho.nyota.R.drawable.sunset, "Set ", position?.setTime, moment.timeZone)
+                add(com.stho.nyota.R.drawable.sunrise, "Rise", position?.riseTime, moment.timeZone)
+                add(com.stho.nyota.R.drawable.sunset, "Next Set", position?.nextSetTime, moment.timeZone)
+            }
             add(com.stho.nyota.R.drawable.empty, "FV", Degree.fromDegree(FV))
             add(com.stho.nyota.R.drawable.empty, "Phase", Formatter.df3.format(phase))
             add(com.stho.nyota.R.drawable.empty, "Phase angle", Formatter.df0.format(phaseAngle))

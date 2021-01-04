@@ -19,7 +19,7 @@ class CityPickerViewModel(application: Application, repository: Repository) : Re
     val citiesLD: LiveData<Cities>
         get() = repository.citiesLD
 
-    val selectedCityLC: LiveData<City>
+    val selectedCityLD: LiveData<City>
         get() = Transformations.map(repository.momentLD) { moment -> moment.city }
 
     fun createDefaultCities() =

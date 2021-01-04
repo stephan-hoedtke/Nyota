@@ -41,7 +41,7 @@ class ConstellationFragment : AbstractElementFragment() {
         binding.timeVisibilityOverlay.currentVisibility.setOnClickListener { onToggleImage() }
         binding.buttonZoomIn.setOnClickListener { onZoomIn() }
         binding.buttonZoomOut.setOnClickListener { onZoomOut() }
-        binding.sky.setReferenceElement(viewModel.constellation)
+        binding.sky.setConstellation(viewModel.constellation)
         binding.image.alpha = 0f
 
         return binding.root
@@ -103,11 +103,11 @@ class ConstellationFragment : AbstractElementFragment() {
     }
 
     private fun onZoomIn() {
-        binding.sky.zoomAngle /= 1.1
+        binding.sky.options.applyScale(1.1)
     }
 
     private fun onZoomOut() {
-        binding.sky.zoomAngle *= 1.1
+        binding.sky.options.applyScale(1 / 1.1)
     }
 
     private fun getConstellationNameFromArguments(): String? =

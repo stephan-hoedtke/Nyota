@@ -2,10 +2,27 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
      <item
-        android:id="@+id/action_display"
-        android:orderInCategory="100"
-        android:title="@string/action_display"
-        android:icon="@drawable/menu_navigation"
-        app:showAsAction="never" />
+          android:id="@+id/action_display"
+          android:orderInCategory="100"
+          android:title="@string/action_display"
+          android:icon="@drawable/menu_navigation"
+          app:showAsAction="never" />
+
+     <item
+          android:id="@+id/action_options"
+          android:orderInCategory="110"
+          android:title="@string/action_options"
+          android:icon="@drawable/navigation"
+          app:showAsAction="never" />
+
+     <item
+          android:id="@+id/action_brightness"
+          android:orderInCategory="120"
+          android:title="@string/action_brightness"
+          android:icon="@drawable/alpha_gray"
+          app:showAsAction="never" />
+
+
+
 
 </menu>

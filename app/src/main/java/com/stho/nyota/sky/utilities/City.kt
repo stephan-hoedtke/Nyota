@@ -10,7 +10,7 @@ import java.util.*
                 String region,
                 Integer rawOffset)
  */
-class City private constructor(override var id: Long, var name: String, var location: Location, var timeZone: TimeZone, isAutomatic: Boolean = false) : ILocation, IDBObject {
+class City private constructor(override var id: Long, var name: String, var location: Location, var timeZone: TimeZone, val isAutomatic: Boolean = false) : ILocation, IDBObject {
 
     override val uniqueTransientId: Long by lazy {
         System.nanoTime()
@@ -26,8 +26,6 @@ class City private constructor(override var id: Long, var name: String, var loca
 
     override val isPersistent
         get() = IDBObject.isPersistent(status)
-
-    val isAutomatic: Boolean = false
 
     val nameEx: String
         get() = if (isAutomatic) "$name*" else name

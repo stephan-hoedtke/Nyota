@@ -97,11 +97,10 @@ class Repository private constructor() {
         val helper = NyotaDatabaseHelper(context)
         val adapter = NyotaDatabaseAdapter(helper.writableDatabase)
 
-        // TODO: make it unique: read(referenceToMutableList)
-
         Cities().also {
             adapter.readCities(it)
-            citiesLiveData.postValue(it)
+            ensureDefaultAutomaticCity(it)
+            citiesLiveData.value = it
         }
 
         universe.satellites.also {
@@ -120,8 +119,11 @@ class Repository private constructor() {
             if (ensureDefaultSettings(it)) {
                 adapter.saveSettings(it)
             }
-            settingsLiveData.postValue(it)
+            settingsLiveData.value = it
         }
+
+        applySettings()
+
     }
 
     fun saveCity(context: Context, city: City) {
@@ -137,17 +139,17 @@ class Repository private constructor() {
         touchMoment()
     }
 
+    fun saveSettings(context: Context) {
+        val helper = NyotaDatabaseHelper(context)
+        val adapter = NyotaDatabaseAdapter(helper.writableDatabase)
+        adapter.saveSettings(settings)
+    }
+
     fun touchMoment() =
         momentLiveData.postValue(momentLiveData.value)
 
-    private fun ensureDefaultCities(cities: Cities): Boolean =
-        when (cities.size) {
-            0 -> {
-                cities.createDefaultCities(true)
-                true
-            }
-            else -> false
-        }
+    private fun ensureDefaultAutomaticCity(cities: Cities) =
+        cities.ensureDefaultAutomaticCity()
 
     private fun ensureDefaultSettings(settings: Settings): Boolean =
         when {
@@ -281,7 +283,7 @@ class Repository private constructor() {
         val adapter = NyotaDatabaseAdapter(helper.writableDatabase)
 
         liveCities.also {
-            it.createDefaultCities(false)
+            it.createDefaultCities()
             adapter.saveCities(it)
             citiesLiveData.postValue(it)
         }
@@ -289,6 +291,16 @@ class Repository private constructor() {
 
     internal fun updateCityDistances() =
         liveCities.updateDistances(referenceLocation = currentAutomaticLocation)
+
+    private fun applySettings() {
+        val city =  citiesLiveData.value!!.findCityByName(settings.currentLocation)
+        if (city != null) {
+            setCity(city)
+        }
+        updateTimeAutomatically = settings.updateTimeAutomatically
+        updateLocationAutomatically = settings.updateLocationAutomatically
+        updateOrientationAutomatically = settings.updateOrientationAutomatically
+    }
 
     companion object {
         private var singleton: Repository? = null
@@ -319,27 +331,27 @@ class Repository private constructor() {
     }
 
     fun deleteCity(context: Context, city: City) {
+        city.markAsDeleted()
+        saveCity(context, city)
         liveCities.also {
-            city.markAsDeleted()
             it.delete(city)
-            saveCity(context, city)
             citiesLiveData.postValue(it)
         }
     }
 
     fun undoDeleteCity(context: Context, position: Int, city: City) {
+        city.markAsNew()
+        saveCity(context, city)
         liveCities.also {
-            city.markAsNew()
             it.undoDelete(position, city)
-            saveCity(context, city)
             citiesLiveData.postValue(it)
         }
     }
 
     fun updateCity(context: Context, city: City) {
+        saveCity(context, city)
         liveCities.also {
-            it.addOrUpdate(city)
-            saveCity(context, city)
+            it.add(city, overwrite = true)
             citiesLiveData.postValue(it)
         }
     }
@@ -377,7 +389,7 @@ class Repository private constructor() {
         get() = City.defaultLocationBerlinBuch
 
     private val defaultAutomaticCity: City
-        get() = citiesLiveData.value!!.automaticCity
+        get() = Cities.automaticCity
 
     private val liveMoment: Moment
         get() = momentLiveData.value!!

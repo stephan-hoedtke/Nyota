@@ -135,4 +135,12 @@
     <string name="message_city_was_deleted">City was deleted</string>
     <string name="label_reset">Reset</string>
     <string name="label_reset_to_default">Reset to Default</string>
+    <string name="action_brightness">Brightness</string>
+    <string name="action_options">Options</string>
+    <string name="label_display_names">Names</string>
+    <string name="label_display_symbols">Symbols</string>
+    <string name="label_display_magnitude">Magnitude</string>
+    <string name="label_display_constellations">Constellations</string>
+    <string name="label_brightness">Brightness</string>
+    <string name="default_brightness">2.0</string>
 </resources>

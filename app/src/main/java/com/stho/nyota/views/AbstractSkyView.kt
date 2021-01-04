@@ -12,10 +12,15 @@ import com.stho.nyota.sky.universe.Target
 import com.stho.nyota.sky.utilities.Degree
 import com.stho.nyota.sky.utilities.SphereProjection
 import com.stho.nyota.sky.utilities.Topocentric
+import com.stho.nyota.ui.sky.ISkyViewOptions
 import java.util.*
 import kotlin.math.abs
 
+
 abstract class AbstractSkyView(context: Context?, attrs: AttributeSet?): View(context, attrs), View.OnDragListener {
+
+    abstract val options: ISkyViewOptions
+
     val green = Paint()
     val white = Paint()
     val yellow = Paint()
@@ -25,28 +30,14 @@ abstract class AbstractSkyView(context: Context?, attrs: AttributeSet?): View(co
     val path = Path()
     val positions = HashMap<Star, PointF>()
     val bitmaps = HashMap<Int, Bitmap>()
-    var displayNames = true
-    var displaySymbols = true
-    var displayMagnitude = true
     val center = Topocentric(0.0, 0.0)
     var scaleGestureDetector: ScaleGestureDetector? = null
     var gestureDetector: GestureDetector? = null
-    var zoomAngle = 45.0
-        set(value) {
-            field = value
-            invalidate()
-        }
     val projection = SphereProjection()
     var isScrollingEnabled: Boolean = true
     var isScalingEnabled: Boolean = true
-    val drawGrid = true
-    private var listener: ISkyViewListener? = null
 
-    interface ISkyViewSettings {
-        val displayNames: Boolean
-        val displaySymbols: Boolean
-        val displayMagnitude: Boolean
-    }
+    private var listener: ISkyViewListener? = null
 
     init {
         onCreate(context)
@@ -54,12 +45,6 @@ abstract class AbstractSkyView(context: Context?, attrs: AttributeSet?): View(co
 
     fun registerListener(listener: ISkyViewListener?) {
         this.listener = listener
-    }
-
-    fun loadSettings(settings: ISkyViewSettings) {
-        displayNames = settings.displayNames
-        displaySymbols = settings.displaySymbols
-        displayMagnitude = settings.displayMagnitude
     }
 
     private fun onCreate(context: Context?) {
@@ -140,18 +125,12 @@ abstract class AbstractSkyView(context: Context?, attrs: AttributeSet?): View(co
 
     open fun applyScale(scaleFactor: Double) {
         if (isScalingEnabled) {
-            val MIN_ZOOM_ANGLE = 0.5
-            val MAX_ZOOM_ANGLE = 120.0
-            zoomAngle = Math.max(
-                MIN_ZOOM_ANGLE,
-                Math.min(MAX_ZOOM_ANGLE, zoomAngle / scaleFactor)
-            )
-            invalidate()
+            options.applyScale(scaleFactor)
         }
     }
 
     open fun resetTransformation() {
-        zoomAngle = 45.0
+        options.zoomAngle = 45.0
         referencePosition?.apply {
             center.azimuth = azimuth
             center.altitude = altitude
@@ -177,7 +156,7 @@ abstract class AbstractSkyView(context: Context?, attrs: AttributeSet?): View(co
             val zoom: Double = getZoom()
             projection.setCenter(center.azimuth, center.altitude)
             positions.clear()
-            if (drawGrid) {
+            if (options.drawGrid) {
                 drawGrid(canvas, width, height, zoom)
             }
             onDrawElements(canvas, zoom)
@@ -194,7 +173,7 @@ abstract class AbstractSkyView(context: Context?, attrs: AttributeSet?): View(co
         }
     }
 
-    fun setCenter(azimuth: Double, altitude: Double) {
+    private fun setCenter(azimuth: Double, altitude: Double) {
         if (azimuth != center.azimuth || altitude != center.altitude) {
             center.azimuth = azimuth
             center.altitude = altitude
@@ -202,10 +181,8 @@ abstract class AbstractSkyView(context: Context?, attrs: AttributeSet?): View(co
         }
     }
 
-    protected fun getZoom(): Double {
-        val w = width
-        return 0.5 * w / Degree.tan(0.5 * zoomAngle)
-    }
+    private fun getZoom(): Double =
+        0.5 * width / Degree.tan(0.5 * options.zoomAngle)
 
     protected fun drawStar(canvas: Canvas, zoom: Double, star: Star) {
         calculatePosition(zoom, star)
@@ -319,21 +296,25 @@ abstract class AbstractSkyView(context: Context?, attrs: AttributeSet?): View(co
         for (star: Star in constellation.stars) {
             drawStar(canvas, star, green);
         }
-        for (line in constellation.lines) {
-            drawLine(canvas, line);
+        if (options.displayConstellations) {
+            for (line in constellation.lines) {
+                drawLine(canvas, line);
+            }
         }
     }
 
      private fun drawStar(canvas: Canvas, star: Star, color: Paint) {
-        val p = positions.get(star)
+        val p = positions[star]
         if (p != null && isOnScreen(p)) {
-            var r = 4f
-            if (displayMagnitude) {
-                r = applyMagnitude(color, star.brightness);
-            }
-            canvas.drawCircle(p.x, p.y, r, color);
-            if (displaySymbols) {
-                canvas.drawText(UniverseInitializer.greekSymbolToString(star.symbol), p.x, p.y, gray);
+            if (star.isBrighterThan(options.brightness)) {
+                var r = 4f
+                if (options.displayMagnitude) {
+                    r = applyMagnitude(color, star.magnitude);
+                }
+                canvas.drawCircle(p.x, p.y, r, color);
+                if (options.displaySymbols) {
+                    canvas.drawText(UniverseInitializer.greekSymbolToString(star.symbol), p.x, p.y, gray);
+                }
             }
         }
     }
