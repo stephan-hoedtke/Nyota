@@ -73,18 +73,35 @@ class UniverseInitializer(universe: Universe) : AbstractUniverseInitializer(univ
     //          Lat.:52.6400° Lon.:13.4900° Hgt.: 55.0m LST:UT+1h ΔT=69s
     //              2018-12-04 0:00:00--> Alt: 53 14 10, Azi: 359 30 16, Hour angle: 21 58 50
     private fun registerVIP() {
+        asVIP(newStar("Sirius", Symbol.ONE, "6h 45m 8.82", "-16° 42' 56.9", -1.46)) // Canis Major
+        asVIP(newStar("Canopus", Symbol.TWO, "06h 23m 57.10988", "−52° 41′ 44.3810", -0.74)) // Carina
+        asVIP(newStar("Alpha Centauri", Symbol.THREE, "14h 39m 36.49400", "–60° 50′ 02.3737", -0.27)) // Centaurus
+        asVIP(newStar("Arcturus", Symbol.FOUR, "14h 15m 39.7", "+19° 10′ 56.0", -0.05)) // Boötus
+        asVIP(newStar("Vega", Symbol.FIVE, "18h 36m 56.33635", "+38° 47′ 01.2802", +0.026)) // Lyra
+        asVIP(newStar("Capella", Symbol.ALPHA, "05h 16m 41.30", "+45° 59′ 56.5", 0.08)) // Auriga
+        asVIP(newStar("Rigel", Symbol.BETA, "05h 14m 32.27210", "−08° 12′ 05.8981", 0.12)) // Orion
+
+
+        // "Procyon", ..., brightness: 0.38) // Canis Minor
+        asVIP(newStar("Achernar", Symbol.ALPHA, "01h 37m 42.85", "-57° 14′ 12.3", 0.50)) // Eridanus
+        asVIP(newStar("Betelgeuse", Symbol.ALPHA, "05h 55m 10.30536", "+07° 24′ 25.4304", 0.50)) // Orion
+        asVIP(newStar("Hadar", Symbol.BETA , "14h 03m 49.4", "-60° 22' 23", 0.61)) // Centaurus
+        asVIP(newStar("Acrux", Symbol.ALPHA, "12h 26m 35.99", "-63° 5' 56.7", 0.76)) // Crux
+        asVIP(newStar("Altair", Symbol.ALPHA, "19h 50m 46.99855", "+08° 52′ 05.9563", 0.77)) // Aquila
+        asVIP(newStar("Aldebaran", Symbol.ALPHA, "4h 35m 55.24", "+16° 30' 33.5", 0.87)) // Taurus
+        asVIP(newStar("Antares", Symbol.ALPHA, "16h 29m 24.45970", "−26° 25′ 55.2094", 0.96)) // Scorpius
+        asVIP(newStar("Spica", Symbol.ALPHA, "13h 25m 11.60", "−11° 09′ 40.5", 0.98)) // Virgo
+        asVIP(newStar("Pollux", Symbol.BETA, "07h 45m 18.94987", "+28° 01′ 34.3160", 1.14)) // Gemini
+        // Formalhaut, 1.16 // Piscis Austrinus
+        asVIP(newStar("Becrux", Symbol.BETA, "12h 47m 43.3", "-59° 41' 20", 1.25)) // Crux
+        asVIP(newStar("Deneb", Symbol.ALPHA, "20h 41m 25.91", "+45° 16′ 49.2", 1.25)) // Cygnus
+        asVIP(newStar("Regulus", Symbol.ALPHA, "10h 08m 22.311", "+11° 58′ 01.95", 1.35)) // Leo
+        // Adhara, 1.50 // Canis Major
+        asVIP(newStar("Castor", Symbol.ALPHA, "07h 34m 35.863", "+31° 53′ 17.79", 1.57)) // Gemini
+        asVIP(newStar("Gacrux", Symbol.GAMMA, "12h 31m 10.0", "-57° 6' 48", 1.63)) // Crux
+        // Shaula, 1.63 // Scorpius
         asVIP(newStar("Polaris", Symbol.ALPHA, "2h 31m 49.09", "+89° 15′ 50.8", 1.98))
-        asVIP(newStar("Sirius", Symbol.ONE, "6h 45m 8.82", "-16° 42' 56.9", -1.46))
-        asVIP(newStar("Aldebaran", Symbol.ALPHA, "4h 35m 55.24", "+16° 30' 33.5", 0.87))
-        asVIP(newStar("Castor", Symbol.ALPHA, "07h 34m 35.863", "+31° 53′ 17.79", 1.93))
-        asVIP(newStar("Pollux", Symbol.BETA, "07h 45m 18.94987", "+28° 01′ 34.3160", 1.14))
-        asVIP(newStar("Altair", Symbol.ALPHA, "19h 50m 46.99855", "+08° 52′ 05.9563", 0.76))
-        asVIP(newStar("Arcturus", Symbol.FOUR, "14h 15m 39.7", "+19° 10′ 56.0", -0.05))
-        asVIP(newStar("Canopus", Symbol.TWO, "06h 23m 57.10988", "−52° 41′ 44.3810", -0.74))
-        asVIP(newStar("Alpha Centauri", Symbol.THREE, "14h 39m 36.49400", "–60° 50′ 02.3737", -0.27)) // A+B
-        asVIP(newStar("Vega", Symbol.FIVE, "18h 36m 56.33635", "+38° 47′ 01.2802", +0.026))
-        asVIP(newStar("Achernar", Symbol.ALPHA, "01h 37m 42.85", "-57° 14′ 12.3", 0.50))
-        asVIP(newStar("Capella", Symbol.ALPHA, "05h 16m 41.30", "+45° 59′ 56.5", 0.08)) // α Aurigae
+        // Source: https://www.space.com/21640-star-luminosity-and-magnitude.html
     }
 
     private fun registerCrux() {
@@ -760,6 +777,11 @@ class UniverseInitializer(universe: Universe) : AbstractUniverseInitializer(univ
         // Start alpha =
         // newConstellation("Chamaeleon", R.drawable.chamaeleon)
         //        .register(...);
+        // TODO
+    }
+
+    // https://de.wikipedia.org/wiki/Zentaur_(Sternbild)
+    private fun registerCentaurus() {
         // TODO
     }
 

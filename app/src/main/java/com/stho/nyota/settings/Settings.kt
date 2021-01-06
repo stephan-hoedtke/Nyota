@@ -48,10 +48,12 @@ class Settings: ISkyViewSettings {
 
     var currentLocation: String? = null
 
-    override var displayNames: Boolean = true
     override var displaySymbols: Boolean = true
     override var displayMagnitude: Boolean = true
     override var displayConstellations: Boolean = true
+    override var displayConstellationNames: Boolean = true
+    override var displayPlanetNames: Boolean = true
+    override var displayStarNames: Boolean = true
 
     val zoomLD: LiveData<Double>
         get() = zoomLiveData

@@ -306,7 +306,7 @@ abstract class AbstractSkyView(context: Context?, attrs: AttributeSet?): View(co
      private fun drawStar(canvas: Canvas, star: Star, color: Paint) {
         val p = positions[star]
         if (p != null && isOnScreen(p)) {
-            if (star.isBrighterThan(options.brightness)) {
+            if (star.isBrighterThan(options.magnitude)) {
                 var r = 4f
                 if (options.displayMagnitude) {
                     r = applyMagnitude(color, star.magnitude);

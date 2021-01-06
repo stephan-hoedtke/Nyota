@@ -65,6 +65,9 @@ class Repository private constructor() {
     val currentOrientation: Orientation
         get() = currentOrientationLiveData.value ?: Orientation.defaultOrientation
 
+    val settingsLD: LiveData<Settings>
+        get() = settingsLiveData
+
     val citiesLD: LiveData<Cities>
         get() = citiesLiveData
 

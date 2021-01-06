@@ -57,19 +57,19 @@ class SkyView(context: Context?, attrs: AttributeSet?) : AbstractSkyView(context
             }
             for (constellation in it.constellations.values) {
                 super.drawConstellation(canvas, zoom, constellation)
-                if (options.displayNames) {
+                if (options.displayConstellationNames) {
                     super.drawName(canvas, zoom, constellation)
                 }
             }
             for (star in it.vip) {
                 super.drawStar(canvas, zoom, star)
-                if (options.displayNames) {
+                if (options.displayStarNames) {
                     super.drawName(canvas, zoom, star)
                 }
             }
             for (planet in it.solarSystem.planets) {
                 super.drawPlanet(canvas, zoom, planet)
-                if (options.displayNames) {
+                if (options.displayPlanetNames) {
                     super.drawName(canvas, zoom, planet)
                 }
             }

@@ -20,10 +20,12 @@ class NyotaDatabaseAdapter(private val db: SQLiteDatabase) {
         contract.write(UpdateLocationAutomatically, settings.updateLocationAutomatically)
         contract.write(UpdateTimeAutomatically, settings.updateTimeAutomatically)
         contract.write(CurrentLocation, settings.currentLocation)
-        contract.write(DisplayNames, settings.displayNames)
         contract.write(DisplaySymbols, settings.displaySymbols)
         contract.write(DisplayMagnitude, settings.displayMagnitude)
         contract.write(DisplayConstellations, settings.displayConstellations)
+        contract.write(DisplayConstellationNames, settings.displayConstellationNames)
+        contract.write(DisplayPlanetNames, settings.displayPlanetNames)
+        contract.write(DisplayStarNames, settings.displayStarNames)
     }
 
     fun readSettings(settings: Settings) {
@@ -32,10 +34,12 @@ class NyotaDatabaseAdapter(private val db: SQLiteDatabase) {
         settings.updateLocationAutomatically = contract.readBoolean(UpdateLocationAutomatically, settings.updateLocationAutomatically)
         settings.updateTimeAutomatically = contract.readBoolean(UpdateTimeAutomatically, settings.updateTimeAutomatically)
         settings.currentLocation = contract.readStringOrDefault(CurrentLocation, settings.currentLocation)
-        settings.displayNames = contract.readBoolean(DisplayNames, settings.displayNames)
         settings.displaySymbols = contract.readBoolean(DisplaySymbols, settings.displaySymbols)
         settings.displayMagnitude = contract.readBoolean(DisplayMagnitude, settings.displayMagnitude)
         settings.displayConstellations = contract.readBoolean(DisplayConstellations, settings.displayConstellations)
+        settings.displayConstellationNames = contract.readBoolean(DisplayConstellationNames, settings.displayConstellationNames)
+        settings.displayPlanetNames = contract.readBoolean(DisplayPlanetNames, settings.displayPlanetNames)
+        settings.displayStarNames = contract.readBoolean(DisplayStarNames, settings.displayStarNames)
     }
 
     companion object {
@@ -43,10 +47,12 @@ class NyotaDatabaseAdapter(private val db: SQLiteDatabase) {
         private const val UpdateLocationAutomatically = "UpdateLocationAutomatically"
         private const val UpdateTimeAutomatically = "UpdateTimeAutomatically"
         private const val CurrentLocation = "CurrentLocation"
-        private const val DisplayNames = "DisplayNames"
         private const val DisplaySymbols = "DisplaySymbols"
         private const val DisplayMagnitude = "DisplayMagnitude"
         private const val DisplayConstellations = "DisplayConstellations"
+        private const val DisplayConstellationNames = "DisplayConstellationNames"
+        private const val DisplayPlanetNames = "DisplayPlanetNames"
+        private const val DisplayStarNames = "DisplayStarNames"
     }
 
     fun saveCities(cities: Cities) {

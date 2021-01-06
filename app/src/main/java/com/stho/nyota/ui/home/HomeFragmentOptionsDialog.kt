@@ -1,9 +1,8 @@
 package com.stho.nyota.ui.home
 
+import android.R
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import androidx.fragment.app.DialogFragment
 import com.stho.nyota.createViewModel
 import com.stho.nyota.databinding.FragmentHomeDialogOptionsBinding
@@ -25,6 +24,22 @@ class HomeFragmentOptionsDialog: DialogFragment() {
         bindingReference = FragmentHomeDialogOptionsBinding.inflate(inflater, container, false)
 
         binding.buttonOK.setOnClickListener { onOK() }
+
+        // What is the way to display the dialog in 80% of the phone width?
+        //
+        // a)
+        // set fixed width in layout xml file (done here):
+        // android:layout_width="@dimen/dialog_with"
+        //
+        // b)
+        // <style name="Theme.Holo.Dialog.MinWidth">
+        //<item name="android:windowMinWidthMajor">70%</item>
+        //
+        // c)
+        // override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        // dialog?.window?.attributes?.width = ViewGroup.LayoutParams.MATCH_PARENT
+        // dialog?.window?.attributes?.height = ViewGroup.LayoutParams.MATCH_PARENT
+        // ...
 
         return binding.root
     }

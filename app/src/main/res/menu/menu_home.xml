@@ -5,9 +5,9 @@
 
     <item
         android:id="@+id/action_view_options"
-        android:orderInCategory="110"
+        android:orderInCategory="500"
         android:title="@string/action_view_options"
-        android:icon="@drawable/alpha"
+        android:icon="@drawable/eye"
         app:showAsAction="ifRoom" />
 
 </menu>

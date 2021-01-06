@@ -29,11 +29,11 @@
     <string name="label_hide_details">(hide)</string>
     <string name="label_delete">Delete</string>
     <string name="label_options">Options:</string>
-    <string name="label_show_targets">Show Targets</string>
-    <string name="label_show_invisible_elements">Show Invisible Elements</string>
-    <string name="label_show_stars">Show Stars</string>
-    <string name="label_show_planets">Show Planets</string>
-    <string name="label_show_satellites">Show Satellites</string>
+    <string name="label_show_targets">Targets</string>
+    <string name="label_show_invisible_elements">Invisible Elements</string>
+    <string name="label_show_stars">Stars</string>
+    <string name="label_show_planets">Planets</string>
+    <string name="label_show_satellites">Satellites</string>
     <string name="label_current_location_and_time">Current Device Location and Time:</string>
     <string name="label_reference_time">Reference Time:</string>
     <string name="label_reference_location">Reference Location:</string>
@@ -43,6 +43,13 @@
     <string name="label_longitude_colon">Longitude (in °):</string>
     <string name="label_altitude_colon">Altitude (in km):</string>
     <string name="label_distance_colon">Distance (in km):</string>
+    <string name="label_display_symbols">Symbols</string>
+    <string name="label_display_magnitude">Magnitude</string>
+    <string name="label_display_constellations">Constellations</string>
+    <string name="label_display_constellation_names">Constellation Names</string>
+    <string name="label_display_planet_names">Planet Names</string>
+    <string name="label_display_star_names">Star Names</string>
+    <string name="label_magnitude_filter">Magnitude Filter</string>
     <string name="label_update_location_automatically">Update Location Automatically</string>
     <string name="label_automatic_city_location">Use Current Device Location</string>
     <string name="label_default_pitch">+23°</string>
@@ -50,6 +57,8 @@
     <string name="label_freeze">Freeze</string>
     <string name="label_unfreeze">Unfreeze</string>
     <string name="label_undo">Undo</string>
+    <string name="label_reset">Reset</string>
+    <string name="label_reset_to_default">Reset to Default</string>
     <!-- Actions -->
     <string name="action_time">Date and Time</string>
     <string name="action_location">Location</string>
@@ -58,6 +67,7 @@
     <string name="action_display">Display</string>
     <string name="action_new">New</string>
     <string name="action_default_cities">Add Default Cities</string>
+    <string name="action_view_options">View Options</string>
     <!-- Menu -->
     <string name="menu_home">Home</string>
     <string name="menu_stars">Stars</string>
@@ -106,6 +116,7 @@
     <string name="default_latitude">52.3234</string>
     <string name="default_altitude">0.483</string>
     <string name="default_geo_location">13.4°E 52.64° N</string>
+    <string name="default_magnitude">2.0</string>
     <!-- Title -->
     <string name="title_city">Reference Location</string>
     <string name="title_choose_interval">Interval</string>
@@ -133,14 +144,4 @@
     <string name="message_permission_was_granted">The permission: %s was granted.</string>
     <string name="message_permission_was_refused">The permission: %s was rejected.</string>
     <string name="message_city_was_deleted">City was deleted</string>
-    <string name="label_reset">Reset</string>
-    <string name="label_reset_to_default">Reset to Default</string>
-    <string name="action_brightness">Brightness</string>
-    <string name="action_options">Options</string>
-    <string name="label_display_names">Names</string>
-    <string name="label_display_symbols">Symbols</string>
-    <string name="label_display_magnitude">Magnitude</string>
-    <string name="label_display_constellations">Constellations</string>
-    <string name="label_brightness">Brightness</string>
-    <string name="default_brightness">2.0</string>
 </resources>

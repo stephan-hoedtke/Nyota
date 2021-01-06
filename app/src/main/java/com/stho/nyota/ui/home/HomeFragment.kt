@@ -1,9 +1,7 @@
 package com.stho.nyota.ui.home
 
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import androidx.fragment.app.FragmentManager
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -29,6 +27,7 @@ class HomeFragment : AbstractFragment() {
         super.onCreate(savedInstanceState)
         viewModel = createViewModel(HomeViewModel::class.java)
         loadOptionsFromBundle(savedInstanceState)
+        setHasOptionsMenu(true)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
@@ -41,7 +40,7 @@ class HomeFragment : AbstractFragment() {
         binding.targets.adapter = adapter
         binding.targets.addItemDecoration(RecyclerViewItemDivider(requireContext()))
         binding.buttonSkyView.setOnClickListener { onSkyView() }
-        binding.buttonShowOptions.setOnClickListener { onShowOptions() }
+        binding.buttonShowOptions.setOnClickListener { displayHomeFragmentOptionsDialog() }
         binding.imageSun.setOnClickListener { onSun() }
         binding.imageSun.setOnLongClickListener { onSkyViewForElement(viewModel.sun) }
         binding.imageMoon.setOnClickListener { onMoon() }
@@ -55,6 +54,20 @@ class HomeFragment : AbstractFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel.universeLD.observe(viewLifecycleOwner, { universe -> updateUniverse(universe.moment) })
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.menu_sky, menu)
+        super.onCreateOptionsMenu(menu, inflater)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.action_view_options -> {
+                displayHomeFragmentOptionsDialog()
+            }
+        }
+        return super.onOptionsItemSelected(item)
     }
 
     override fun onDestroyView() {
@@ -88,7 +101,7 @@ class HomeFragment : AbstractFragment() {
         }
     }
 
-    private fun onShowOptions() {
+    private fun displayHomeFragmentOptionsDialog() {
         val fragmentManager: FragmentManager = requireActivity().supportFragmentManager
         val tag = "fragment_home_options_dialog"
         HomeFragmentOptionsDialog().show(fragmentManager, tag)

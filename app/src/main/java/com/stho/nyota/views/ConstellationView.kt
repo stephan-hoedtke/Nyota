@@ -31,11 +31,13 @@ class ConstellationView(context: Context?, attrs: AttributeSet?) : AbstractSkyVi
         get() = constellation?.position
 
     override val options: ISkyViewOptions = SkyViewOptions(this).also {
-        it.brightness = SkyViewOptions.MAX_BRIGHTNESS
-        it.displayConstellations = true
-        it.displayMagnitude = false
-        it.displayNames = true
+        it.magnitude = SkyViewOptions.MAX_MAGNITUDE
         it.displaySymbols = true
+        it.displayMagnitude = false
+        it.displayConstellations = true
+        it.displayConstellationNames = false
+        it.displayPlanetNames = false
+        it.displayStarNames = true
     }
 
     override fun onDrawElements(canvas: Canvas, zoom: Double) {
