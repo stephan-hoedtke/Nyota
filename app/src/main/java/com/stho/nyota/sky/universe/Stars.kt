@@ -2,33 +2,27 @@ package com.stho.nyota.sky.universe
 
 class Stars() {
 
-    private val map: HashMap<String, Star> = HashMap<String, Star>()
+    private val array: ArrayList<Star> = ArrayList()
+    private val map: HashMap<String, Star> = HashMap()
 
     val size: Int
         get() = map.size
 
     fun add(star: Star) {
-        map[star.name] = star // automatically replace the old value if it exists
-    }
-
-    operator fun get(starName: String): Star? {
-        return map[starName]
-    }
-
-    fun exists(starName: String?): Boolean {
-        return if (starName != null)
-            map.containsKey(starName)
-        else
-            false
-    }
-
-    fun findStarByName(starName: String?): Star? {
-        return if (starName != null) {
-            map[starName]
-        } else {
-            null
+        array.add(star)
+        if (star.hasUniqueName) {
+            map[star.name] = star
         }
     }
+
+    operator fun get(starName: String): Star? =
+        map[starName]
+
+    fun exists(starName: String?): Boolean =
+        starName?.let { map.containsKey(it) } ?: false
+
+    fun findStarByName(starName: String?): Star? =
+        starName?.let { map[it]}
 
     val values: Collection<Star>
         get() = map.values

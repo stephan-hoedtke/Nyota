@@ -37,8 +37,10 @@ class MoonUnitTest : AbstractAstronomicUnitTest() {
         assertPosition("Sun altitude", Degree.fromPositive(94, 0, 0.0).angleInDegree, sun.position!!.azimuth)
         assertCalendar("Sunrise", getCESTasUTC(2016, Calendar.SEPTEMBER, 13, 6, 37), sun.position!!.riseTime!!)
         assertCalendar("Sunset", getCESTasUTC(2016, Calendar.SEPTEMBER, 13, 19, 25), sun.position!!.setTime!!)
+        assertCalendar("Moon rise", getCESTasUTC(2016, Calendar.SEPTEMBER, 12, 17, 6), moon.position!!.prevRiseTime!!)
+        assertCalendar("Moon set", getCESTasUTC(2016, Calendar.SEPTEMBER, 13, 2, 17), moon.position!!.setTime!!)
         assertCalendar("Moon rise", getCESTasUTC(2016, Calendar.SEPTEMBER, 13, 17, 44), moon.position!!.riseTime!!)
-        assertCalendar("Moon set", getCESTasUTC(2016, Calendar.SEPTEMBER, 14, 3, 23), moon.position!!.setTime!!)
+        assertCalendar("Moon set", getCESTasUTC(2016, Calendar.SEPTEMBER, 14, 3, 23), moon.position!!.nextSetTime!!)
     }
 
     @Test
@@ -59,7 +61,7 @@ class MoonUnitTest : AbstractAstronomicUnitTest() {
         val moon: Moon = universe.solarSystem.moon
 
         assertCalendar("Moon rise", getCESTasUTC(2016, Calendar.SEPTEMBER, 13, 17, 45), moon.position!!.riseTime!!)
-        assertCalendar("Moon set", getCESTasUTC(2016, Calendar.SEPTEMBER, 14, 3, 25), moon.position!!.setTime!!)
+        assertCalendar("Moon set", getCESTasUTC(2016, Calendar.SEPTEMBER, 14, 3, 25), moon.position!!.nextSetTime!!)
     }
 
     @Test

@@ -13,7 +13,7 @@ abstract class AbstractAstronomicUnitTest {
 
     @Throws(Exception::class)
     protected fun assertCalendar(text: String?, expected: UTC, actual: UTC) {
-        Assert.assertEquals(text, expected.minutes, actual.minutes, ONE_MINUTE)
+        Assert.assertEquals(text + " actual=${actual.toString()} expected=${expected.toString()}", expected.minutes, actual.minutes, ONE_MINUTE)
     }
 
     @Throws(Exception::class)
@@ -58,15 +58,15 @@ abstract class AbstractAstronomicUnitTest {
         }
 
         internal fun getCity(latitude: Double, longitude: Double): City {
-            return City("Test", Location(latitude = latitude, longitude = longitude), TimeZone.getDefault())
+            return City.createNewCity("Test", Location(latitude = latitude, longitude = longitude), TimeZone.getDefault())
         }
 
         internal fun getCity(latitude: Double, longitude: Double, altitude: Double, timeZone: String?): City {
-            return City("Test", Location(latitude = latitude, longitude = longitude, altitude = altitude), TimeZone.getTimeZone(timeZone))
+            return City.createNewCity("Test", Location(latitude = latitude, longitude = longitude, altitude = altitude), TimeZone.getTimeZone(timeZone))
         }
 
         internal fun getCity(location: Location): City {
-            return City("Test", location, TimeZone.getDefault())
+            return City.createNewCity("Test", location, TimeZone.getDefault())
         }
     }
 }

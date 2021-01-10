@@ -31,14 +31,17 @@ class Summer2017Test : AbstractAstronomicUnitTest() {
 
         // Bernau bei Berlin
         // 52°41'N / 13°35'E
-        val buch: City = City("Buch", Location(52.64, 13.49), TimeZone.getDefault())
+        val buch: City = City.createNewCity("Buch", Location(52.64, 13.49), TimeZone.getDefault())
+        val expectedPreviousSetTime: UTC = getCESTasUTC(2017, Calendar.JUNE, 19, 21, 33)
         val expectedRiseTime: UTC = getCESTasUTC(2017, Calendar.JUNE, 20, 4, 42)
         val expectedSetTime: UTC = getCESTasUTC(2017, Calendar.JUNE, 20, 21, 33)
+        val expectedNextRiseTime: UTC = getCESTasUTC(2017, Calendar.JUNE, 21, 4, 42)
 
+        sunRise_sunSet_areCorrect(Moment.forUTC(buch, getCESTasUTC(2017, Calendar.JUNE, 20, 3, 7)), expectedRiseTime, expectedPreviousSetTime)
         sunRise_sunSet_areCorrect(Moment.forUTC(buch, getCESTasUTC(2017, Calendar.JUNE, 20, 9, 7)), expectedRiseTime, expectedSetTime)
         sunRise_sunSet_areCorrect(Moment.forUTC(buch, getCESTasUTC(2017, Calendar.JUNE, 20, 13, 7)), expectedRiseTime, expectedSetTime)
         sunRise_sunSet_areCorrect(Moment.forUTC(buch, getCESTasUTC(2017, Calendar.JUNE, 20, 20, 7)), expectedRiseTime, expectedSetTime)
-        sunRise_sunSet_areCorrect(Moment.forUTC(buch, getCESTasUTC(2017, Calendar.JUNE, 20, 23, 59)), expectedRiseTime, expectedSetTime)
+        sunRise_sunSet_areCorrect(Moment.forUTC(buch, getCESTasUTC(2017, Calendar.JUNE, 20, 23, 59)), expectedNextRiseTime, expectedSetTime)
     }
 
     private fun sunRise_sunSet_areCorrect(moment: Moment, expectedRiseTime: UTC, expectedSetTime: UTC) {

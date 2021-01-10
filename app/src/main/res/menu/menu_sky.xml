@@ -7,7 +7,7 @@
         android:id="@+id/action_view_options"
         android:orderInCategory="110"
         android:title="@string/action_view_options"
-        android:icon="@drawable/alpha"
+        android:icon="@drawable/seekbar"
         app:showAsAction="ifRoom" />
 
 </menu>

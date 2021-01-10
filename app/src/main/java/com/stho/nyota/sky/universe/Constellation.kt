@@ -4,13 +4,22 @@ import com.stho.nyota.sky.utilities.CircularAverage
 import com.stho.nyota.sky.utilities.Moment
 import com.stho.nyota.sky.utilities.PropertyList
 import java.util.*
+import kotlin.collections.HashMap
+
+enum class Language {
+    LATIN,
+    ENGLISH,
+    GERMAN,
+}
 
 /**
  * Created by shoedtke on 08.09.2016.
  */
 class Constellation internal constructor(override val name: String, override val imageId: Int) : AbstractElement() {
+
     val stars = ArrayList<Star>()
     val lines = ArrayList<Array<out Star>>()
+    val translations: HashMap<Language, String> = HashMap()
 
     override val largeImageId: Int
         get() = imageId
@@ -19,6 +28,7 @@ class Constellation internal constructor(override val name: String, override val
         for (star in newStars) {
             if (!stars.contains(star)) {
                 stars.add(star)
+                star.register(this)
             }
         }
         if (newStars.size > 1) {
@@ -32,9 +42,13 @@ class Constellation internal constructor(override val name: String, override val
         return this
     }
 
-    override fun toString(): String {
-        return name
+    fun translate(language: Language, name: String): Constellation {
+        translations[language] = name
+        return this
     }
+
+    override fun toString(): String =
+        name
 
     private fun calculateAveragePosition() {
         val length = stars.size
@@ -49,12 +63,14 @@ class Constellation internal constructor(override val name: String, override val
         RA = CircularAverage.getCircularAverage(ra, length)
     }
 
-    override fun getDetails(moment: Moment): PropertyList {
-        val list = super.getDetails(moment)
-        for (star in stars) {
-            list.add(UniverseInitializer.greekSymbolImageId(star.symbol), star.name, star.position.toString())
+    override fun getDetails(moment: Moment): PropertyList =
+        super.getDetails(moment).apply {
+            for (star in stars) {
+                add(UniverseInitializer.greekSymbolImageId(star.symbol), star.name, star.position.toString())
+            }
+            for (x in translations) {
+                add(UniverseInitializer.languageImageId(x.key), x.key.toString(), x.value)
+            }
         }
-        return list
-    }
 
 }

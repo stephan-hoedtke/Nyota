@@ -8,7 +8,9 @@ import com.stho.nyota.R
 import com.stho.nyota.databinding.FragmentConstellationBinding
 import com.stho.nyota.sky.universe.Constellation
 import com.stho.nyota.sky.universe.IElement
+import com.stho.nyota.sky.utilities.IProperty
 import com.stho.nyota.sky.utilities.Moment
+import com.stho.nyota.ui.sky.SkyViewOptions
 
 // TODO: show constellation in "real sky view", not just the Icon
 // see: https://en.wikipedia.org/wiki/Greek_alphabet (modern print)
@@ -36,12 +38,12 @@ class ConstellationFragment : AbstractElementFragment() {
         super.setupBasics(binding.basics)
         super.setupDetails(binding.details)
 
+        binding.sky.setConstellation(viewModel.constellation)
         binding.buttonSkyView.setOnClickListener { onSkyView() }
         binding.buttonFinderView.setOnClickListener { onFinderView() }
         binding.timeVisibilityOverlay.currentVisibility.setOnClickListener { onToggleImage() }
         binding.buttonZoomIn.setOnClickListener { onZoomIn() }
         binding.buttonZoomOut.setOnClickListener { onZoomOut() }
-        binding.sky.setConstellation(viewModel.constellation)
         binding.image.alpha = 0f
 
         return binding.root
@@ -72,6 +74,16 @@ class ConstellationFragment : AbstractElementFragment() {
 
     override val element: IElement
         get() = viewModel.constellation
+
+
+    protected override fun openProperty(property: IProperty) {
+        val name = property.name
+        val star = viewModel.constellation.stars.filter { star -> star.name == name }.firstOrNull()
+        if (star != null) {
+            binding.sky.setStar(star)
+            binding.sky.invalidate()
+        }
+    }
 
     private fun onUpdateConstellation(moment: Moment) {
         viewModel.constellation.also {

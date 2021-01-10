@@ -7,12 +7,7 @@ import com.stho.nyota.sky.utilities.*
  * Created by shoedtke on 31.08.2016.
  */
 @Suppress("PropertyName")
-abstract class AbstractElement : IElement {
-
-    // TODO: make RA and Decl constructor parameters, and avoid init() in derived classes like Target
-    var RA: Double = 0.0
-    var Decl: Double = 0.0
-    var magn: Double = 1.0 // brightness
+abstract class AbstractElement(var RA: Double = 0.0, var Decl: Double = 0.0, var magn: Double = 0.0) : IElement {
 
     override var position: Topocentric? = null
         protected set

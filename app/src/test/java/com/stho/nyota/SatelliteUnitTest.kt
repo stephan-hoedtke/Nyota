@@ -52,7 +52,7 @@ class SatelliteUnitTest : AbstractAstronomicUnitTest() {
     fun topocentricCoordinatesFromECI_isCorrect() {
         // MIR over Minneapolis
         val moment: Moment = Moment.forUTC(
-            City("Minneapolis", Location(+45.0, -93.0, 0.0), TimeZone.getTimeZone("America/Minasota")),
+            City.createNewCity("Minneapolis", Location(+45.0, -93.0, 0.0), TimeZone.getTimeZone("America/Minasota")),
             UTC.forUTC(1995, Calendar.NOVEMBER, 18, 12, 46, 0)
         )
         val mir = com.stho.nyota.sky.utilities.Vector(-4400.594, +1932.870, +4760.712)

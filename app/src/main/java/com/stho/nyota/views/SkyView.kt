@@ -6,23 +6,26 @@ import android.util.AttributeSet
 import com.stho.nyota.sky.universe.*
 import com.stho.nyota.sky.utilities.Topocentric
 import com.stho.nyota.ui.sky.ISkyViewOptions
-import com.stho.nyota.ui.sky.SkyViewOptions
+import com.stho.nyota.ui.sky.ISkyViewSettings
+import com.stho.nyota.ui.sky.SkyFragmentViewOptions
 import com.stho.nyota.views.AbstractSkyView
-import java.text.FieldPosition
 
 /**
  * Created by shoedtke on 07.09.2016.
  */
 class SkyView(context: Context?, attrs: AttributeSet?) : AbstractSkyView(context, attrs) {
 
-
     private var universe: Universe? = null
-    private var referenceElement: IElement? = null
+    private var element: IElement? = null
 
-    override val options: ISkyViewOptions = SkyViewOptions(this)
+    override lateinit var options: ISkyViewOptions
 
     fun notifyDataSetChanged() {
         invalidate()
+    }
+
+    fun setOptions(settings: ISkyViewSettings) {
+        options = SkyFragmentViewOptions(this@SkyView, settings)
     }
 
     fun setUniverse(universe: Universe) {
@@ -30,65 +33,55 @@ class SkyView(context: Context?, attrs: AttributeSet?) : AbstractSkyView(context
         invalidate()
     }
 
-    fun setReferenceElement(element: IElement?) {
-        this.referenceElement = element
+    fun setElement(element: IElement?) {
+        this.element = element
         setCenter(element?.position)
         invalidate()
     }
 
     override val referencePosition: Topocentric?
-        get() = referenceElement?.position
+        get() = element?.position
 
     // TODO: mode to draw the universe with some alpha, and highlight a selected element
     // TODO: mode to change colors, display text, display ...
 
-    override fun onDrawElements(canvas: Canvas, zoom: Double) {
-        if (universe != null) {
-            drawUniverse(canvas, zoom, universe)
-        } else {
-            drawReferencedElement(canvas, zoom, referenceElement)
+    override fun onDrawElements() {
+        universe?.let {
+            onDrawUniverse(it)
+        }
+        element?.let {
+            onDrawElement(it)
         }
     }
 
-    private fun drawUniverse(canvas: Canvas, zoom: Double, universe: Universe?) {
-        universe?.also {
-            for (special in it.specials) {
-                super.drawName(canvas, zoom, special)
-            }
-            for (constellation in it.constellations.values) {
-                super.drawConstellation(canvas, zoom, constellation)
-                if (options.displayConstellationNames) {
-                    super.drawName(canvas, zoom, constellation)
-                }
-            }
-            for (star in it.vip) {
-                super.drawStar(canvas, zoom, star)
-                if (options.displayStarNames) {
-                    super.drawName(canvas, zoom, star)
-                }
-            }
-            for (planet in it.solarSystem.planets) {
-                super.drawPlanet(canvas, zoom, planet)
-                if (options.displayPlanetNames) {
-                    super.drawName(canvas, zoom, planet)
-                }
-            }
-            for (target in it.targets.values) {
-                super.drawTarget(canvas, zoom, target)
-            }
-            super.drawMoon(canvas, zoom, it.solarSystem.moon)
-            super.drawSun(canvas, zoom, it.solarSystem.sun)
-            super.drawName(canvas, zoom, it.zenit, "Z")
+    private fun onDrawUniverse(universe: Universe) {
+        for (special in universe.specials) {
+            super.drawSpecial(special)
         }
+        for (constellation in universe.constellations.values) {
+            super.drawConstellation(constellation)
+        }
+        for (star in universe.vip) {
+            super.drawStar(star)
+        }
+        for (planet in universe.solarSystem.planets) {
+            super.drawPlanet(planet)
+        }
+        for (target in universe.targets.values) {
+            super.drawTarget(target)
+        }
+        super.drawMoon(universe.solarSystem.moon)
+        super.drawSun(universe.solarSystem.sun)
+        super.drawName(universe.zenit, "Z")
     }
 
-    private fun drawReferencedElement(canvas: Canvas, zoom: Double, element: IElement?) {
-        element?.also {
-            when (it) {
-                is Constellation -> super.drawConstellation(canvas, zoom, it)
-                is AbstractPlanet -> super.drawPlanet(canvas, zoom, it)
-            }
+    private fun onDrawElement(element: IElement) {
+        when (element) {
+            is Star -> super.drawStarAsReference(element)
+            is Constellation -> super.drawConstellationAsReference(element)
         }
     }
 }
+
+
 

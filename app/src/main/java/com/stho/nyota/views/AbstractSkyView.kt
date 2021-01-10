@@ -8,32 +8,115 @@ import android.view.GestureDetector.SimpleOnGestureListener
 import android.view.ScaleGestureDetector.SimpleOnScaleGestureListener
 import com.stho.nyota.ISkyViewListener
 import com.stho.nyota.sky.universe.*
-import com.stho.nyota.sky.universe.Target
-import com.stho.nyota.sky.utilities.Degree
 import com.stho.nyota.sky.utilities.SphereProjection
+import com.stho.nyota.sky.utilities.Ten
 import com.stho.nyota.sky.utilities.Topocentric
 import com.stho.nyota.ui.sky.ISkyViewOptions
+import com.stho.nyota.ui.sky.SkyViewOptions
 import java.util.*
 import kotlin.math.abs
 
+
+class SkyDrawColors: ISkyDrawColors {
+
+    override val gridColor: Paint = Paint().apply {
+        color = Color.BLUE
+        alpha = 200
+        style = Paint.Style.FILL_AND_STROKE
+        isAntiAlias = true
+        textSize = 40f
+    }
+
+    override val starColor: Paint = Paint().apply {
+        color = Color.WHITE
+        alpha = 255
+        style = Paint.Style.FILL_AND_STROKE
+        isAntiAlias = true
+    }
+
+    override val bitmapColor: Paint = Paint().apply {
+        color = Color.WHITE
+        alpha = 255
+        style = Paint.Style.FILL_AND_STROKE
+        isAntiAlias = true
+    }
+
+    override val lineColor: Paint = Paint().apply {
+        color = Color.YELLOW
+        alpha = 120
+        style = Paint.Style.STROKE
+    }
+
+    override val starSymbolColor: Paint = Paint().apply {
+        color = Color.GRAY
+        alpha = 200
+        style = Paint.Style.FILL_AND_STROKE
+        isAntiAlias = true
+        textSize = 40f
+    }
+
+    override val starNameColor: Paint = Paint().apply {
+        color = Color.rgb(253, 106, 2) // Orange
+        alpha = 120
+        style = Paint.Style.FILL_AND_STROKE
+        isAntiAlias = true
+        textSize = 40f
+    }
+
+    override val constellationNameColor: Paint = Paint().apply {
+        color = Color.rgb(253, 106, 2) // Orange
+        alpha = 120
+        style = Paint.Style.FILL_AND_STROKE
+        isAntiAlias = true
+        textSize = 40f
+    }
+
+    override val planetNameColor: Paint  = Paint().apply {
+        color = Color.rgb(253, 106, 2) // Orange
+        alpha = 120
+        style = Paint.Style.FILL_AND_STROKE
+        isAntiAlias = true
+        textSize = 40f
+    }
+
+    override val targetNameColor: Paint  = Paint().apply {
+        color = Color.rgb(253, 106, 2) // Orange
+        alpha = 120
+        style = Paint.Style.FILL_AND_STROKE
+        isAntiAlias = true
+        textSize = 40f
+    }
+
+    override val specialNameColor: Paint  = Paint().apply {
+        color = Color.rgb(253, 106, 2) // Orange
+        alpha = 120
+        style = Paint.Style.FILL_AND_STROKE
+        isAntiAlias = true
+        textSize = 40f
+    }
+
+    override val referenceColor: Paint  = Paint().apply {
+        color = Color.rgb(230, 20, 20) // Red
+        alpha = 120
+        style = Paint.Style.FILL_AND_STROKE
+        isAntiAlias = true
+        textSize = 40f
+    }
+}
 
 abstract class AbstractSkyView(context: Context?, attrs: AttributeSet?): View(context, attrs), View.OnDragListener {
 
     abstract val options: ISkyViewOptions
 
-    val green = Paint()
-    val white = Paint()
-    val yellow = Paint()
-    val gray = Paint()
-    val blue = Paint()
-    val orange = Paint()
+    private val bitmaps = HashMap<Int, Bitmap>()
+    private var colors = SkyDrawColors()
+
     val path = Path()
-    val positions = HashMap<Star, PointF>()
-    val bitmaps = HashMap<Int, Bitmap>()
     val center = Topocentric(0.0, 0.0)
     var scaleGestureDetector: ScaleGestureDetector? = null
     var gestureDetector: GestureDetector? = null
-    val projection = SphereProjection()
+    private val projection = SphereProjection()
+    private var draw = SkyDraw(projection)
     var isScrollingEnabled: Boolean = true
     var isScalingEnabled: Boolean = true
 
@@ -78,33 +161,6 @@ abstract class AbstractSkyView(context: Context?, attrs: AttributeSet?): View(co
                 return super.onSingleTapConfirmed(e)
             }
         })
-        yellow.color = Color.YELLOW
-        yellow.alpha = 120
-        yellow.style = Paint.Style.STROKE
-        green.color = Color.GREEN
-        green.alpha = 200
-        green.style = Paint.Style.FILL_AND_STROKE
-        green.isAntiAlias = true
-        green.textSize = 50f
-        white.color = Color.WHITE
-        white.alpha = 255
-        white.style = Paint.Style.FILL_AND_STROKE
-        white.isAntiAlias = true
-        gray.color = Color.GRAY
-        gray.alpha = 200
-        gray.style = Paint.Style.FILL_AND_STROKE
-        gray.isAntiAlias = true
-        gray.textSize = 40f
-        blue.color = Color.BLUE
-        blue.alpha = 200
-        blue.style = Paint.Style.FILL_AND_STROKE
-        blue.isAntiAlias = true
-        blue.textSize = 40f
-        orange.color = Color.rgb(253, 106, 2)
-        orange.alpha = 120
-        orange.style = Paint.Style.FILL_AND_STROKE
-        orange.isAntiAlias = true
-        orange.textSize = 40f
     }
 
     open fun raiseOnChangeSkyCenter() {
@@ -115,9 +171,8 @@ abstract class AbstractSkyView(context: Context?, attrs: AttributeSet?): View(co
 
     open fun applyScrolling(dx: Double, dy: Double) {
         if (isScrollingEnabled) {
-            val zoom: Double = getZoom()
-            center.azimuth += Degree.arcTan2(dx, zoom)
-            center.altitude -= Degree.arcTan2(dy, zoom)
+            center.azimuth += projection.calculateAngle(dx)
+            center.altitude -= projection.calculateAngle(dy)
             raiseOnChangeSkyCenter()
             invalidate()
         }
@@ -130,7 +185,7 @@ abstract class AbstractSkyView(context: Context?, attrs: AttributeSet?): View(co
     }
 
     open fun resetTransformation() {
-        options.zoomAngle = 45.0
+        options.zoomAngle = SkyViewOptions.DEFAULT_ZOOM_ANGLE
         referencePosition?.apply {
             center.azimuth = azimuth
             center.altitude = altitude
@@ -149,29 +204,33 @@ abstract class AbstractSkyView(context: Context?, attrs: AttributeSet?): View(co
         return true
     }
 
-    override fun onDraw(canvas: Canvas?) {
+    override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
-        if (canvas != null) {
-            canvas.translate(width / 2f, height / 2f)
-            val zoom: Double = getZoom()
-            projection.setCenter(center.azimuth, center.altitude)
-            positions.clear()
-            if (options.drawGrid) {
-                drawGrid(canvas, width, height, zoom)
-            }
-            onDrawElements(canvas, zoom)
+
+        canvas.translate(width / 2f, height / 2f)
+
+        projection.setZoom(options.zoomAngle, width)
+        projection.setCenter(center.azimuth, center.altitude)
+
+        draw.configure(canvas, width, height, center)
+        draw.options = options
+        draw.colors = colors
+
+        if (options.drawGrid) {
+            draw.drawGrid()
         }
+
+        onDrawElements()
     }
 
-    protected abstract fun onDrawElements(canvas: Canvas, zoom: Double)
+    protected abstract fun onDrawElements()
 
     protected abstract val referencePosition: Topocentric?
 
-    fun setCenter(position: Topocentric?) {
+    fun setCenter(position: Topocentric?) =
         position?.apply {
             setCenter(azimuth, altitude)
         }
-    }
 
     private fun setCenter(azimuth: Double, altitude: Double) {
         if (azimuth != center.azimuth || altitude != center.altitude) {
@@ -181,230 +240,52 @@ abstract class AbstractSkyView(context: Context?, attrs: AttributeSet?): View(co
         }
     }
 
-    private fun getZoom(): Double =
-        0.5 * width / Degree.tan(0.5 * options.zoomAngle)
+    protected fun drawStar(star: Star) =
+        draw.drawStar(star)
 
-    protected fun drawStar(canvas: Canvas, zoom: Double, star: Star) {
-        calculatePosition(zoom, star)
-        drawStar(canvas, star, white)
-    }
+    protected fun drawSun(sun: IElement) =
+        draw.drawSun(sun, getScaledBitmap(sun.imageId, 72, 72))
 
-    protected fun drawConstellation(canvas: Canvas, zoom: Double, constellation: Constellation) {
-        calculatePositions(zoom, constellation)
-        drawConstellation(canvas, constellation)
-    }
+    protected fun drawMoon(moon: IElement) =
+        draw.drawMoon(moon, getScaledBitmap(moon.imageId, 48, 48))
 
-    protected fun drawSun(canvas: Canvas, zoom: Double, sun: IElement) {
-        val p = getPosition(zoom, sun.position)
-        if (p != null && isOnScreen(p)) {
-            val bm: Bitmap = getScaledBitmap(sun.imageId, 32, 32)
-            canvas.drawBitmap(bm, p.x - 16, p.y - 16, white)
-        }
-    }
+    protected fun drawPlanet(planet: IElement) =
+        draw.drawPlanet(planet, getScaledBitmap(planet.imageId, 32, 32))
 
-    protected fun drawMoon(canvas: Canvas, zoom: Double, moon: IElement) {
-        val p = getPosition(zoom, moon.position)
-        if (p != null && isOnScreen(p)) {
-            val bm: Bitmap = getScaledBitmap(moon.imageId, 48, 48)
-            canvas.drawBitmap(bm, p.x - 24, p.y - 24, white)
-        }
-    }
+    protected fun drawTarget(target: com.stho.nyota.sky.universe.Target) =
+        draw.drawTarget(target, getScaledBitmap(target.imageId, 16, 16))
 
-    protected fun drawPlanet(canvas: Canvas, zoom: Double, element: IElement) {
-        val p = getPosition(zoom, element.position)
-        if (p != null && isOnScreen(p)) {
-            val bm: Bitmap = getScaledBitmap(element.imageId, 16, 16)
-            canvas.drawBitmap(bm, p.x - 8, p.y - 8, white)
-        }
-    }
+    protected fun drawSpecial(special: SpecialElement) =
+        draw.drawSpecial(special)
 
-    protected fun drawName(canvas: Canvas, zoom: Double, element: IElement) {
-        drawName(canvas, zoom, element.position, element.name)
-    }
+    protected fun drawConstellation(constellation: Constellation) =
+        draw.drawConstellation(constellation)
 
-    protected fun drawName(canvas: Canvas, zoom: Double, position: Topocentric?, name: String?) {
-        val p = getPosition(zoom, position)
-        if (p != null && isOnScreen(p)) {
-            canvas.drawText(name!!, p.x + 10, p.y - 10, orange)
-        }
-    }
+    protected fun drawName(position: Topocentric?, name: String) =
+        draw.drawName(position, name)
 
-    protected fun drawTarget(canvas: Canvas, zoom: Double, target: Target) {
-        val p = getPosition(zoom, target.position)
-        if (p != null && isOnScreen(p)) {
-            val bm: Bitmap = getScaledBitmap(target.imageId, 64, 64)
-            canvas.drawBitmap(bm, p.x - 32, p.y - 32, white)
-            canvas.drawText(target.name, p.x + 40, p.y - 10, orange)
+    protected fun drawStarAsReference(star: Star) =
+        draw.drawStar(star, true)
+
+    protected fun drawConstellationAsReference(constellation: Constellation) =
+        draw.drawConstellation(constellation, true)
+    /**
+    get image from cache or create it
+     */
+    private fun getScaledBitmap(resourceId: Int, newWidth: Int, newHeight: Int): Bitmap =
+        bitmaps[resourceId] ?: createScaledBitmapIntoCache(resourceId, newWidth, newHeight)
+
+    private fun createScaledBitmapIntoCache(resourceId: Int, newWidth: Int, newHeight: Int): Bitmap =
+        createScaledBitmap(resourceId, newWidth, newHeight).also {
+            bitmaps[resourceId] = it
         }
 
-    }
-
-    private fun getScaledBitmap(resourceId: Int, newWidth: Int, newHeight: Int): Bitmap {
-        return getScaledBitmapFromCache(resourceId) ?: createScaledBitmapIntoCache(resourceId, newWidth, newHeight)
-    }
-
-    private fun getScaledBitmapFromCache(resourceId: Int): Bitmap? {
-        return if (bitmaps.containsKey(resourceId)) {
-            bitmaps[resourceId]
-        } else {
-            null
+    private fun createScaledBitmap(resourceId: Int, newWidth: Int, newHeight: Int): Bitmap =
+        BitmapFactory.decodeResource(resources, resourceId).let {
+            Bitmap.createScaledBitmap(it, newWidth, newHeight, false)
         }
-    }
 
-    private fun createScaledBitmapIntoCache(resourceId: Int, newWidth: Int, newHeight: Int): Bitmap {
-        val bm= createScaledBitmap(resourceId, newWidth, newHeight)
-        bitmaps[resourceId] = bm
-        return bm
-    }
 
-    private fun createScaledBitmap(resourceId: Int, newWidth: Int, newHeight: Int): Bitmap {
-        val bm = BitmapFactory.decodeResource(resources, resourceId)
-        return Bitmap.createScaledBitmap(bm, newWidth, newHeight, false)
-    }
-
-    private fun calculatePosition(zoom: Double, star: Star) {
-        val p = getPosition(zoom, star.position)
-        if (p != null) {
-            positions[star] = p
-        }
-    }
-
-    private fun calculatePositions(zoom: Double, constellation: Constellation) {
-        for (star in constellation.stars) {
-            val p = getPosition(zoom, star.position)
-            if (p != null) {
-                positions[star] = p
-            }
-        }
-    }
-
-    private fun getPosition(zoom: Double, topocentric: Topocentric?): PointF? {
-        return getPosition(zoom, topocentric!!.azimuth, topocentric.altitude)
-    }
-
-    private fun getPosition(zoom: Double, azimuth: Double, altitude: Double): PointF? {
-        val p = projection.getImagePoint(azimuth, altitude)
-        if (p != null) {
-            val x = (zoom * p.x).toFloat()
-            val y = (zoom * p.y).toFloat()
-            return PointF(x, -y)
-        }
-        return null
-    }
-
-    private fun drawConstellation(canvas: Canvas, constellation: Constellation) {
-        for (star: Star in constellation.stars) {
-            drawStar(canvas, star, green);
-        }
-        if (options.displayConstellations) {
-            for (line in constellation.lines) {
-                drawLine(canvas, line);
-            }
-        }
-    }
-
-     private fun drawStar(canvas: Canvas, star: Star, color: Paint) {
-        val p = positions[star]
-        if (p != null && isOnScreen(p)) {
-            if (star.isBrighterThan(options.magnitude)) {
-                var r = 4f
-                if (options.displayMagnitude) {
-                    r = applyMagnitude(color, star.magnitude);
-                }
-                canvas.drawCircle(p.x, p.y, r, color);
-                if (options.displaySymbols) {
-                    canvas.drawText(UniverseInitializer.greekSymbolToString(star.symbol), p.x, p.y, gray);
-                }
-            }
-        }
-    }
-
-    private fun applyMagnitude(color: Paint, magnitude: Double): Float {
-        when {
-            (magnitude > 5.0) -> {
-                color.alpha = 100
-                return 3f
-            }
-            (magnitude > 3.0) -> {
-                color.alpha = 150
-                return 4f
-            }
-            (magnitude > 1.0) -> {
-                color.alpha = 200
-                return 5f
-            }
-            else -> {
-                color.alpha = 255
-                return 6f
-            }
-        }
-    }
-
-    private fun drawLine(canvas: Canvas, line: Array<out Star>) {
-        var first: Boolean = true;
-        path.reset();
-        for (star: Star in line) {
-            val p= positions.get(star)
-            if (p != null && isOnScreen(p)) {
-                if (first) {
-                    path.moveTo(p.x, p.y);
-                    first = false;
-                } else {
-                    path.lineTo(p.x, p.y);
-                }
-            } else {
-                first = true;
-            }
-        }
-        canvas.drawPath(path, yellow);
-    }
-
-    private fun drawGrid(canvas: Canvas, w: Int, h: Int, zoom: Double) {
-        if (center.altitude > 0) {
-            for (x in 0 until 180 step 10) {
-                val azimuth: Double = center.azimuth + x
-                for (y in Companion.downwards) {
-                    val altitude: Double = 0.0 + y
-                    val p: PointF? = getPosition(zoom, azimuth, altitude)
-                    if (p != null) {
-                        if (p.x > w || p.y > h) {
-                            break
-                        }
-                        if (isOnScreen(p)) {
-                            canvas.drawCircle(p.x, p.y, 2f, blue)
-                            canvas.drawCircle(-p.x, p.y, 2f, blue)
-                        }
-                    }
-                }
-            }
-        } else {
-            for (x in 0 until 180 step 10) {
-                val azimuth: Double = center.azimuth + x
-                for (y in Companion.upwards) {
-                    val altitude: Double = 0.0 + y
-                    val p: PointF? = getPosition(zoom, azimuth, altitude)
-                    if (p != null) {
-                        if (p.x > w || p.y < -h) {
-                            break;
-                        }
-                        if (isOnScreen(p)) {
-                            canvas.drawCircle(p.x, p.y, 2f, blue);
-                            canvas.drawCircle(-p.x, p.y, 2f, blue);
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    private fun isOnScreen(p: PointF): Boolean {
-        return (abs(p.x) < width) && (abs(p.y) < height);
-    }
-
-    companion object {
-        private val downwards = listOf(85, 80, 75, 70, 65, 60, 55, 50, 45, 40, 35, 30, 25, 20, 15, 10, 5, 0, -5, -10, -15, -20, -25, -30, -35, -40, -45, -50, -55, -60, -65, -70, -75, -80, -85)
-        private val upwards = listOf(-85, -80, -75, -70, -65, -60, -55, -50, -45, -40, -35, -30, -25, -20, -15, -10, -5, -0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 80, 85)
-    }
 }
 
 

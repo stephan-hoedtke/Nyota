@@ -1,9 +1,7 @@
 package com.stho.nyota.ui.sky
 
-import android.app.AlertDialog
 import android.os.Bundle
 import android.view.*
-import android.widget.SeekBar
 import androidx.fragment.app.FragmentManager
 import com.stho.nyota.AbstractFragment
 import com.stho.nyota.AbstractViewModel
@@ -16,9 +14,13 @@ import com.stho.nyota.sky.utilities.Moment
 // TODO: implement styles
 // TODO: change updateMoment(...) into onObserveMoment(...) for all observers
 
+
+
+
 class SkyFragment : AbstractFragment() {
 
     private lateinit var viewModel: SkyViewModel
+    private lateinit var skyViewOptions: SkyFragmentViewOptions
     private var bindingReference: FragmentSkyBinding? = null
     private val binding: FragmentSkyBinding get() = bindingReference!!
 
@@ -35,9 +37,9 @@ class SkyFragment : AbstractFragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         bindingReference = FragmentSkyBinding.inflate(inflater, container, false)
 
+        binding.sky.setOptions(viewModel.repository.settings)
         binding.sky.setUniverse(viewModel.universe)
-        binding.sky.setReferenceElement(viewModel.element)
-        binding.sky.options.loadSettings(viewModel.settings)
+        binding.sky.setElement(viewModel.element)
         binding.buttonZoomIn.setOnClickListener { onZoomIn() }
         binding.buttonZoomOut.setOnClickListener { onZoomOut() }
 
@@ -47,7 +49,6 @@ class SkyFragment : AbstractFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel.universeLD.observe(viewLifecycleOwner, { universe -> updateMoment(universe.moment) })
-        viewModel.settingsLD.observe(viewLifecycleOwner, { settings -> updateSettings(settings) })
     }
 
     override fun onDestroyView() {
@@ -77,10 +78,6 @@ class SkyFragment : AbstractFragment() {
         binding.timeOverlay.currentTime.text = toLocalTimeString(moment)
         binding.sky.notifyDataSetChanged()
         updateActionBar(R.string.label_nyota, toLocalDateString(moment))
-    }
-
-    private fun updateSettings(settings: ISkyViewSettings) {
-        binding.sky.options.loadSettings(settings)
     }
 
     private fun onZoomIn() =

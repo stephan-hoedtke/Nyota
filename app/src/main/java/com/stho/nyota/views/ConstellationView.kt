@@ -3,10 +3,11 @@ package com.stho.software.nyota.views
 import android.content.Context
 import android.graphics.Canvas
 import android.util.AttributeSet
+import android.view.View
 import com.stho.nyota.sky.universe.Constellation
+import com.stho.nyota.sky.universe.Star
 import com.stho.nyota.sky.utilities.Topocentric
-import com.stho.nyota.ui.sky.ISkyViewOptions
-import com.stho.nyota.ui.sky.SkyViewOptions
+import com.stho.nyota.ui.sky.*
 import com.stho.nyota.views.AbstractSkyView
 
 /**
@@ -16,11 +17,25 @@ import com.stho.nyota.views.AbstractSkyView
 class ConstellationView(context: Context?, attrs: AttributeSet?) : AbstractSkyView(context, attrs) {
 
     private var constellation: Constellation? = null
+    private var star: Star? = null
+
+    override var options: ISkyViewOptions = object : SkyViewOptions(this@ConstellationView) {
+        override var displaySymbols: Boolean = true
+        override var displayMagnitude: Boolean = false
+        override var displayConstellations: Boolean = true
+        override var displayConstellationNames: Boolean = false
+        override var displayPlanetNames: Boolean = false
+        override var displayStarNames: Boolean = false
+     }
 
     fun setConstellation(constellation: Constellation) {
         this.constellation = constellation
         setCenter(constellation.position!!)
         invalidate()
+    }
+
+    fun setStar(star: Star?) {
+        this.star = star
     }
 
     fun notifyDataSetChanged() {
@@ -30,19 +45,12 @@ class ConstellationView(context: Context?, attrs: AttributeSet?) : AbstractSkyVi
     override val referencePosition: Topocentric?
         get() = constellation?.position
 
-    override val options: ISkyViewOptions = SkyViewOptions(this).also {
-        it.magnitude = SkyViewOptions.MAX_MAGNITUDE
-        it.displaySymbols = true
-        it.displayMagnitude = false
-        it.displayConstellations = true
-        it.displayConstellationNames = false
-        it.displayPlanetNames = false
-        it.displayStarNames = true
-    }
-
-    override fun onDrawElements(canvas: Canvas, zoom: Double) {
-        if (constellation != null) {
-            drawConstellation(canvas, zoom, constellation!!)
+    override fun onDrawElements() {
+        constellation?.let {
+            drawConstellation(it)
+        }
+        star?.let {
+            drawStarAsReference(it)
         }
     }
 }

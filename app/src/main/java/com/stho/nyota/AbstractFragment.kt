@@ -84,7 +84,7 @@ abstract class AbstractFragment : Fragment() {
         }
     }
 
-    protected fun openProperty(property: IProperty) =
+    protected open fun openProperty(property: IProperty) =
         showSnackbar("Display property ${property.name} with value ${property.value} for key ${property.key}")
 
     fun showSnackbar(message: String) {
