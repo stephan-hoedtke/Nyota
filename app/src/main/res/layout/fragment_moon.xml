@@ -48,13 +48,20 @@
                 app:layout_constraintTop_toBottomOf="@+id/moon_age_layout"
                 />
 
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/details"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@+id/basics"
+                />
+
             <ImageView
                 android:id="@+id/buttonSkyView"
                 android:layout_width="@dimen/button_size"
                 android:layout_height="@dimen/button_size"
                 android:src="@drawable/sky"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/basics"
+                app:layout_constraintTop_toBottomOf="@id/details"
                 android:layout_margin="16dp"
                 android:contentDescription="@string/label_empty"
                 />
@@ -65,7 +72,7 @@
                 android:layout_height="@dimen/button_size"
                 android:src="@drawable/finder"
                 app:layout_constraintStart_toEndOf="@id/buttonSkyView"
-                app:layout_constraintTop_toBottomOf="@id/basics"
+                app:layout_constraintTop_toBottomOf="@id/details"
                 android:layout_margin="16dp"
                 android:contentDescription="@string/label_empty"
                 />
@@ -76,17 +83,9 @@
                 android:layout_height="@dimen/button_size"
                 android:src="@drawable/show"
                 app:layout_constraintStart_toEndOf="@id/buttonFinderView"
-                app:layout_constraintTop_toBottomOf="@id/basics"
+                app:layout_constraintTop_toBottomOf="@id/details"
                 android:layout_margin="16dp"
                 android:contentDescription="@string/label_empty"
-                />
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/details"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:layout_constraintTop_toBottomOf="@+id/buttonFinderView"
-                android:layout_marginTop="@dimen/text_margin"
                 />
 
             <Space

@@ -7,7 +7,9 @@ import androidx.core.os.bundleOf
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.stho.nyota.sky.universe.Constellation
 import com.stho.nyota.sky.universe.IElement
+import com.stho.nyota.sky.universe.Star
 
 abstract class AbstractElementFragment : AbstractFragment() {
 
@@ -49,7 +51,8 @@ abstract class AbstractElementFragment : AbstractFragment() {
 
     protected fun setupBasics(recyclerView: RecyclerView) {
         basicsAdapter = PropertiesRecyclerViewAdapter()
-        basicsAdapter.onItemClick = { p -> openProperty(p) }
+        basicsAdapter.onItemClick = { p -> onPropertyClick(p) }
+        basicsAdapter.onItemLongClick = { p -> onPropertyLongClick(p) }
 
         with (recyclerView) {
             this.layoutManager = LinearLayoutManager(context)
@@ -61,7 +64,8 @@ abstract class AbstractElementFragment : AbstractFragment() {
     protected fun setupDetails(recyclerView: RecyclerView) {
 
         detailsAdapter = PropertiesRecyclerViewAdapter()
-        detailsAdapter.onItemClick = { p -> openProperty(p) }
+        detailsAdapter.onItemClick = { p -> onPropertyClick(p) }
+        detailsAdapter.onItemLongClick = { p -> onPropertyLongClick(p) }
 
         with (recyclerView) {
             this.layoutManager = LinearLayoutManager(context)
@@ -76,6 +80,13 @@ abstract class AbstractElementFragment : AbstractFragment() {
     protected fun onFinderView() =
         findNavController().navigate(R.id.action_global_nav_finder, bundleForElement)
 
+    protected fun onStar(starName: String) =
+        findNavController().navigate(R.id.action_global_nav_star, bundleOf("STAR" to starName))
+
+    protected fun onConstellation(constellationName: String) =
+        findNavController().navigate(R.id.action_global_nav_constellation, bundleOf("CONSTELLATION" to constellationName))
+
     private val bundleForElement: Bundle
-        get() = bundleOf("ELEMENT" to element.name)
+        get() = bundleOf("ELEMENT" to element.uniqueName)
+
 }

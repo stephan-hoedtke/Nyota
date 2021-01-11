@@ -11,13 +11,8 @@ import com.stho.nyota.sky.utilities.Orientation
 
 class FinderViewModel(application: Application, repository: Repository, val element: IElement) : RepositoryViewModelArgs(application, repository) {
 
-    private val ringAngleLiveData = MutableLiveData<Double>()
-    private val refreshAutomaticallyLiveData = MutableLiveData<Boolean>()
-
-    init {
-        ringAngleLiveData.value = 0.0
-        refreshAutomaticallyLiveData.value = true
-    }
+    private val ringAngleLiveData = MutableLiveData<Double>().apply { value = 0.0 }
+    private val refreshAutomaticallyLiveData = MutableLiveData<Boolean>().apply { value = true }
 
     val ringAngleLD: LiveData<Double>
         get() = ringAngleLiveData

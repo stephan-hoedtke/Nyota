@@ -58,6 +58,24 @@ class SkyFragmentViewOptions(view: View, val settings: ISkyViewSettings): SkyVie
                 invalidate()
             }
         }
+
+    override var displayTargets: Boolean
+        get() = settings.displayTargets
+        set(value) {
+            if (settings.displayTargets != value) {
+                settings.displayTargets = value
+                invalidate()
+            }
+        }
+
+    override var displaySatellites: Boolean
+        get() = settings.displaySatellites
+        set(value) {
+            if (settings.displaySatellites != value) {
+                settings.displaySatellites = value
+                invalidate()
+            }
+        }
 }
 
 

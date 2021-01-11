@@ -5,7 +5,7 @@ package com.stho.nyota.sky.utilities
  */
 internal class TimeCounter {
     private var averageDifference = 0.0
-    private var startTime: Long
+    private var startTime: Long = System.nanoTime()
 
     @get:Synchronized
     val averageTimeDifferenceInSeconds: Float
@@ -28,9 +28,5 @@ internal class TimeCounter {
 
     companion object {
         private const val NANOSECONDS = 1000000000.0
-    }
-
-    init {
-        startTime = System.nanoTime()
     }
 }

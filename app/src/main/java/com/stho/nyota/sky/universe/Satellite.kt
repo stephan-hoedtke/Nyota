@@ -22,12 +22,20 @@ import java.util.*
  *  name = HST
  *  noradSatelliteNumber = 20580
  *  description = Hubble Space Telescope
+ *
+ *  see for the brightest satellites:
+ *  https://www.n2yo.com/satellites/?c=1#:~:text=Satellites%20are%20visible%20when%20the,normally%20brighter%20than%20magnitude%204.
  */
 class Satellite private constructor(override var id: Long, override val name: String, val displayName: String, val noradSatelliteNumber: Int, var elements: String) : AbstractSatellite(), IDBObject {
 
     init {
         updateElements(elements)
     }
+
+    override val uniqueName: String by lazy { name }
+
+    override fun toString(): String =
+        name
 
     override val uniqueTransientId: Long by lazy { System.nanoTime() }
 

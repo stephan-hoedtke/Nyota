@@ -18,11 +18,7 @@ class HomeViewModel(application: Application, repository: Repository) : Reposito
         var showInvisibleElements: Boolean = false
     }
 
-    private val optionsLiveData: MutableLiveData<Options> = MutableLiveData()
-
-    init {
-        optionsLiveData.value = Options()
-    }
+    private val optionsLiveData = MutableLiveData<Options>().apply { value = Options() }
 
     val universe: Universe
         get() = repository.universe

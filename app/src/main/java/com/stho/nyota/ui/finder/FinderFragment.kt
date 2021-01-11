@@ -23,7 +23,6 @@ class FinderFragment : AbstractFragment() {
     private lateinit var viewModel: FinderViewModel
     private var bindingReference: FragmentFinderBinding? = null
     private val binding: FragmentFinderBinding get() = bindingReference!!
-    private val handler: Handler = Handler()
 
     override val abstractViewModel: AbstractViewModel
         get() = viewModel
@@ -80,7 +79,7 @@ class FinderFragment : AbstractFragment() {
         binding.targetAltitude.text = Angle.toString(element.position?.altitude ?: 0.0, Angle.AngleType.ALTITUDE)
         binding.horizonView.targetAltitude = element.position?.altitude ?: 0.0
         binding.targetAzimuthPointer.rotation = viewModel.getRotationToTarget()
-        updateActionBar(element.name, toLocalDateString(moment))
+        updateActionBar(element.toString(), toLocalDateString(moment))
     }
 
     private fun onUpdateRingAngle(angle: Double) {

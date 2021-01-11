@@ -2,14 +2,16 @@ package com.stho.nyota.sky.universe
 
 import com.stho.nyota.sky.utilities.CircularAverage
 import com.stho.nyota.sky.utilities.Moment
+import com.stho.nyota.sky.utilities.PropertyKey
 import com.stho.nyota.sky.utilities.PropertyList
 import java.util.*
-import kotlin.collections.HashMap
+import kotlin.collections.ArrayList
+
 
 enum class Language {
-    LATIN,
-    ENGLISH,
-    GERMAN,
+    Latin,
+    German,
+    English,
 }
 
 /**
@@ -17,9 +19,10 @@ enum class Language {
  */
 class Constellation internal constructor(override val name: String, override val imageId: Int) : AbstractElement() {
 
-    val stars = ArrayList<Star>()
-    val lines = ArrayList<Array<out Star>>()
-    val translations: HashMap<Language, String> = HashMap()
+    val stars: ArrayList<Star> = ArrayList()
+    val lines: ArrayList<Array<out Star>> = ArrayList()
+
+    private val translations: EnumMap<Language, String> = EnumMap(Language::class.java)
 
     override val largeImageId: Int
         get() = imageId
@@ -47,6 +50,12 @@ class Constellation internal constructor(override val name: String, override val
         return this
     }
 
+    fun findStarInConstellationByName(starName: String) =
+        stars.firstOrNull { star -> star.name == starName }
+
+    fun joinConstellationStarName(star: Star) =
+        Constellation.joinConstellationStarName(name, star.name)
+
     override fun toString(): String =
         name
 
@@ -66,11 +75,18 @@ class Constellation internal constructor(override val name: String, override val
     override fun getDetails(moment: Moment): PropertyList =
         super.getDetails(moment).apply {
             for (star in stars) {
-                add(UniverseInitializer.greekSymbolImageId(star.symbol), star.name, star.position.toString())
+                add(PropertyKey.STAR, UniverseInitializer.greekSymbolImageId(star.symbol), star.name, star.position.toString())
             }
             for (x in translations) {
-                add(UniverseInitializer.languageImageId(x.key), x.key.toString(), x.value)
+                add(PropertyKey.TRANSLATION, UniverseInitializer.languageImageId(x.key), x.key.toString(), x.value)
             }
         }
 
+    companion object {
+        fun joinConstellationStarName(constellationName: String, starName: String) =
+            "$constellationName|$starName"
+
+        fun splitConstellationStarName(name: String): List<String> =
+            name.split("|")
+    }
 }

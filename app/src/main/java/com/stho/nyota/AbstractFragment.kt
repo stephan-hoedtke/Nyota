@@ -63,10 +63,10 @@ abstract class AbstractFragment : Fragment() {
 
     private fun setupFooterListener() {
         binding.interval?.setOnClickListener { onIntervalSelect() }
-        binding.interval?.setOnLongClickListener { onIntervalReset() }
+        binding.interval?.setOnLongClickListener { onIntervalReset(); true }
         binding.buttonNext?.setOnClickListener { onButtonNext() }
         binding.buttonPrevious?.setOnClickListener { onButtonPrevious() }
-        binding.imageTime?.setOnLongClickListener { onIntervalReset() }
+        binding.imageTime?.setOnLongClickListener { onIntervalReset(); true }
         abstractViewModel.intervalLD.observe(viewLifecycleOwner) { interval -> updateUpdateInterval(interval) }
         abstractViewModel.settings.updateLocationAutomaticallyLD.observe(viewLifecycleOwner) { value -> updateLocationAutomatically(value) }
         abstractViewModel.settings.updateTimeAutomaticallyLD.observe(viewLifecycleOwner) { value -> updateTimeAutomatically(value) }
@@ -84,8 +84,11 @@ abstract class AbstractFragment : Fragment() {
         }
     }
 
-    protected open fun openProperty(property: IProperty) =
-        showSnackbar("Display property ${property.name} with value ${property.value} for key ${property.key}")
+    protected open fun onPropertyClick(property: IProperty) =
+        showSnackbar("Property: ${property.name} with value ${property.value} for key ${property.key}")
+
+    protected open fun onPropertyLongClick(property: IProperty) =
+        showSnackbar("Open property ${property.name} with value ${property.value} for key ${property.key}")
 
     fun showSnackbar(message: String) {
         view?.also {
@@ -99,10 +102,8 @@ abstract class AbstractFragment : Fragment() {
     private fun onIntervalSelect() =
         findNavController().navigate(R.id.action_global_nav_interval_picker)
 
-    private fun onIntervalReset(): Boolean {
+    private fun onIntervalReset() =
         abstractViewModel.onReset()
-        return true
-    }
 
     private fun onButtonNext() =
         abstractViewModel.onNext()

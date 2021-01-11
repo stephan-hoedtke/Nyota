@@ -76,6 +76,7 @@ class SkyFragment : AbstractFragment() {
 
     private fun bind(moment: Moment) {
         binding.timeOverlay.currentTime.text = toLocalTimeString(moment)
+        binding.direction.text = binding.sky.center.toString()
         binding.sky.notifyDataSetChanged()
         updateActionBar(R.string.label_nyota, toLocalDateString(moment))
     }

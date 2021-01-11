@@ -45,6 +45,9 @@ class SatelliteFragment : AbstractElementFragment() {
         binding.buttonSkyView.setOnClickListener { onSkyView() }
         binding.buttonEarthView.setOnClickListener { onEarthView() }
         binding.buttonDownloadTle.setOnClickListener { onUpdateTle() }
+        binding.buttonFinderView.setOnClickListener { onFinderView() }
+        binding.image.setOnClickListener { onEarthView() }
+        binding.image.setOnLongClickListener { onFinderView(); true }
 
         return binding.root
     }
@@ -72,10 +75,9 @@ class SatelliteFragment : AbstractElementFragment() {
         binding.timeVisibilityOverlay.currentVisibility.setImageResource(satellite.visibility)
         binding.image.setImageResource(satellite.largeImageId)
         binding.title.text = satellite.displayName
-        if (satellite.tle.isOutdated) {
-            binding.buttonDownloadTle.setImageResource(R.drawable.download_tle_red)
-        } else {
-            binding.buttonDownloadTle.setImageResource(R.drawable.download_tle_green)
+        when (satellite.tle.isOutdated) {
+            true -> binding.buttonDownloadTle.setImageResource(R.drawable.download_tle_red)
+            false -> binding.buttonDownloadTle.setImageResource(R.drawable.download_tle_green)
         }
         updateActionBar(satellite.name, toLocalDateString(moment))
     }

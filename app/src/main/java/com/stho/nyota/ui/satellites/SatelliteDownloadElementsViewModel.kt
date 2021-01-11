@@ -12,13 +12,8 @@ import java.lang.Exception
 
 class SatelliteDownloadElementsViewModel(application: Application, repository: Repository, val satellite: Satellite) : RepositoryViewModelArgs(application, repository) {
 
-    private val errorMessageLiveData = MutableLiveData<String>()
-    private val processingStatusLiveData = MutableLiveData<Boolean>()
-
-    init {
-        errorMessageLiveData.value = null
-        processingStatusLiveData.value = false
-    }
+    private val errorMessageLiveData = MutableLiveData<String>().apply { value = null }
+    private val processingStatusLiveData = MutableLiveData<Boolean>().apply { value = false }
 
     val errorMessageLD: LiveData<String>
         get() = errorMessageLiveData

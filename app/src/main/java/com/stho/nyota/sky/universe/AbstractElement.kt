@@ -9,6 +9,11 @@ import com.stho.nyota.sky.utilities.*
 @Suppress("PropertyName")
 abstract class AbstractElement(var RA: Double = 0.0, var Decl: Double = 0.0, var magn: Double = 0.0) : IElement {
 
+    override val uniqueName: String by lazy { name }
+
+    override fun toString(): String =
+        name
+
     override var position: Topocentric? = null
         protected set
 
@@ -32,14 +37,14 @@ abstract class AbstractElement(var RA: Double = 0.0, var Decl: Double = 0.0, var
 
     override fun getBasics(moment: Moment): PropertyList =
         PropertyList().apply {
-            add(com.stho.nyota.R.drawable.horizontal, "Direction", position!!.toString())
+            add(com.stho.nyota.R.drawable.compass, "Direction", position!!.toString())
             add(com.stho.nyota.R.drawable.horizontal, "Azimuth", Hour.fromDegree(position!!.azimuth))
             add(com.stho.nyota.R.drawable.horizontal, "Altitude", Degree.fromDegree(position!!.altitude))
         }
 
     override fun getDetails(moment: Moment): PropertyList =
         PropertyList().apply {
-            add(com.stho.nyota.R.drawable.equatorial, "Ascension", Hour.fromDegree(RA))
+            add(com.stho.nyota.R.drawable.equatorial, "Right Ascension", Hour.fromDegree(RA))
             add(com.stho.nyota.R.drawable.equatorial, "Declination", Degree.fromDegree(Decl))
         }
 

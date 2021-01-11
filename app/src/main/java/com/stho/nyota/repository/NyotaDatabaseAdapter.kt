@@ -8,6 +8,7 @@ import com.stho.nyota.sky.universe.Target
 import com.stho.nyota.sky.universe.Targets
 import com.stho.nyota.sky.utilities.Cities
 import com.stho.nyota.sky.utilities.City
+import kotlinx.coroutines.DisposableHandle
 
 
 // see:
@@ -26,6 +27,8 @@ class NyotaDatabaseAdapter(private val db: SQLiteDatabase) {
         contract.write(DisplayConstellationNames, settings.displayConstellationNames)
         contract.write(DisplayPlanetNames, settings.displayPlanetNames)
         contract.write(DisplayStarNames, settings.displayStarNames)
+        contract.write(DisplayTargets, settings.displayTargets)
+        contract.write(DisplaySatellites, settings.displaySatellites)
     }
 
     fun readSettings(settings: Settings) {
@@ -40,6 +43,9 @@ class NyotaDatabaseAdapter(private val db: SQLiteDatabase) {
         settings.displayConstellationNames = contract.readBoolean(DisplayConstellationNames, settings.displayConstellationNames)
         settings.displayPlanetNames = contract.readBoolean(DisplayPlanetNames, settings.displayPlanetNames)
         settings.displayStarNames = contract.readBoolean(DisplayStarNames, settings.displayStarNames)
+        settings.displayTargets = contract.readBoolean(DisplayTargets, settings.displayTargets)
+        settings.displaySatellites = contract.readBoolean(DisplaySatellites, settings.displaySatellites)
+
     }
 
     companion object {
@@ -53,6 +59,9 @@ class NyotaDatabaseAdapter(private val db: SQLiteDatabase) {
         private const val DisplayConstellationNames = "DisplayConstellationNames"
         private const val DisplayPlanetNames = "DisplayPlanetNames"
         private const val DisplayStarNames = "DisplayStarNames"
+        private const val DisplayTargets = "DisplayTargets"
+        private const val DisplaySatellites= "DisplaySatellites"
+
     }
 
     fun saveCities(cities: Cities) {

@@ -42,11 +42,11 @@ class HomeFragment : AbstractFragment() {
         binding.buttonSkyView.setOnClickListener { onSkyView() }
         binding.buttonShowOptions.setOnClickListener { displayHomeFragmentOptionsDialog() }
         binding.imageSun.setOnClickListener { onSun() }
-        binding.imageSun.setOnLongClickListener { onSkyViewForElement(viewModel.sun) }
+        binding.imageSun.setOnLongClickListener { onSkyViewForElement(viewModel.sun); true }
         binding.imageMoon.setOnClickListener { onMoon() }
-        binding.imageMoon.setOnLongClickListener { onSkyViewForElement(viewModel.moon) }
+        binding.imageMoon.setOnLongClickListener { onSkyViewForElement(viewModel.moon); true }
         binding.imageIss.setOnClickListener { onIss() }
-        binding.imageIss.setOnLongClickListener { onSkyViewForElement(viewModel.iss) }
+        binding.imageIss.setOnLongClickListener { onSkyViewForElement(viewModel.iss); true }
 
         return binding.root
     }
@@ -148,10 +148,8 @@ class HomeFragment : AbstractFragment() {
     private fun onSkyView() =
         findNavController().navigate(HomeFragmentDirections.actionNavHomeToNavSky(null))
 
-    private fun onSkyViewForElement(element: IElement): Boolean {
+    private fun onSkyViewForElement(element: IElement) =
         findNavController().navigate(HomeFragmentDirections.actionNavHomeToNavSky(element.name))
-        return true
-    }
 
     companion object {
         private const val STARS = "STARS"

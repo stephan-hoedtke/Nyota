@@ -9,7 +9,9 @@ import com.stho.nyota.AbstractViewModel
 import com.stho.nyota.databinding.FragmentStarBinding
 import com.stho.nyota.sky.universe.IElement
 import com.stho.nyota.sky.universe.Star
+import com.stho.nyota.sky.utilities.IProperty
 import com.stho.nyota.sky.utilities.Moment
+import com.stho.nyota.sky.utilities.PropertyKey
 
 
 class StarFragment : AbstractElementFragment() {
@@ -23,8 +25,8 @@ class StarFragment : AbstractElementFragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val planetName: String? = getStarNameFromArguments()
-        viewModel = createStarViewModel(planetName)
+        val starName: String? = getStarNameFromArguments()
+        viewModel = createStarViewModel(starName)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
@@ -35,6 +37,8 @@ class StarFragment : AbstractElementFragment() {
 
         binding.buttonSkyView.setOnClickListener { onSkyView() }
         binding.buttonFinderView.setOnClickListener { onFinderView() }
+        binding.image.setOnClickListener { onSkyView() }
+        binding.image.setOnLongClickListener { onFinderView(); true }
 
         return binding.root
     }
@@ -52,6 +56,14 @@ class StarFragment : AbstractElementFragment() {
     override val element: IElement
         get() = viewModel.star
 
+    @Suppress("NON_EXHAUSTIVE_WHEN")
+    override fun onPropertyLongClick(property: IProperty) {
+        when (property.key) {
+            PropertyKey.CONSTELLATION -> onConstellation(property.name)
+        }
+        super.onPropertyClick(property)
+    }
+
     private fun updateStar(moment: Moment) {
         with (viewModel.star) {
             basicsAdapter.updateProperties(this.getBasics(moment))
@@ -65,7 +77,7 @@ class StarFragment : AbstractElementFragment() {
         binding.timeVisibilityOverlay.currentVisibility.setImageResource(star.visibility)
         binding.image.setImageResource(star.largeImageId)
         binding.title.text = star.name
-        updateActionBar(star.name, toLocalDateString(moment))
+        updateActionBar(star.toString(), toLocalDateString(moment))
     }
 
     private fun getStarNameFromArguments(): String? {

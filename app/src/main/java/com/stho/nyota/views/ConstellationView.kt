@@ -26,6 +26,8 @@ class ConstellationView(context: Context?, attrs: AttributeSet?) : AbstractSkyVi
         override var displayConstellationNames: Boolean = false
         override var displayPlanetNames: Boolean = false
         override var displayStarNames: Boolean = false
+        override var displayTargets: Boolean = false
+        override var displaySatellites: Boolean = false
      }
 
     fun setConstellation(constellation: Constellation) {

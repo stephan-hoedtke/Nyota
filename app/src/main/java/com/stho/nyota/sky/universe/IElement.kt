@@ -9,6 +9,7 @@ interface IElement {
     val name: String
     val imageId: Int
     val largeImageId: Int
+    val uniqueName: String
 
     fun getBasics(moment: Moment): PropertyList
     fun getDetails(moment: Moment): PropertyList

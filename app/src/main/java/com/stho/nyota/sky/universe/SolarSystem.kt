@@ -20,4 +20,8 @@ class SolarSystem : AbstractSolarSystem(), ISolarSystem {
         neptune = Neptune()
         elements = listOf(sun, moon, mercury, venus, mars, jupiter, saturn, uranus, neptune)
     }
+
+    fun findPlanetByName(name: String): AbstractPlanet? =
+        elements.firstOrNull { e -> e.isPlanet && e.name == name} as AbstractPlanet?
+
 }

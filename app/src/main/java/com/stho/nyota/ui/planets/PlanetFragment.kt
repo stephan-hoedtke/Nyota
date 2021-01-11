@@ -34,6 +34,8 @@ class PlanetFragment : AbstractElementFragment() {
 
         binding.buttonSkyView.setOnClickListener { onSkyView() }
         binding.buttonFinderView.setOnClickListener { onFinderView() }
+        binding.image.setOnClickListener { onSkyView() }
+        binding.image.setOnLongClickListener { onFinderView(); true }
 
         return binding.root
     }

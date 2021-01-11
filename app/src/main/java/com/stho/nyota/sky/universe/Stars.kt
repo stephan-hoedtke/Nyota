@@ -10,7 +10,7 @@ class Stars() {
 
     fun add(star: Star) {
         array.add(star)
-        if (star.hasUniqueName) {
+        if (star.nameIsUnique) {
             map[star.name] = star
         }
     }
@@ -22,9 +22,9 @@ class Stars() {
         starName?.let { map.containsKey(it) } ?: false
 
     fun findStarByName(starName: String?): Star? =
-        starName?.let { map[it]}
+        starName?.let { map[it] }
 
     val values: Collection<Star>
-        get() = map.values
+        get() = array
 
 }

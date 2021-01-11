@@ -54,6 +54,8 @@ class Settings: ISkyViewSettings {
     override var displayConstellationNames: Boolean = true
     override var displayPlanetNames: Boolean = true
     override var displayStarNames: Boolean = true
+    override var displayTargets: Boolean = false
+    override var displaySatellites: Boolean = true
 
     val zoomLD: LiveData<Double>
         get() = zoomLiveData

@@ -9,27 +9,14 @@ import com.stho.nyota.ui.sky.ISkyViewOptions
 import java.util.HashMap
 import kotlin.math.abs
 
-interface ISkyDrawColors {
-    val gridColor: Paint // Blue
-    val starColor: Paint // White
-    val bitmapColor: Paint // White
-    val lineColor: Paint // Yellow
-    val starSymbolColor: Paint // Gray
-    val starNameColor: Paint // Orange
-    val constellationNameColor: Paint // Orange
-    val planetNameColor: Paint // Orange
-    val targetNameColor: Paint // Orange
-    val specialNameColor: Paint // Orange
-    val referenceColor: Paint // Rose // TODO Colors ...
-}
 
 class SkyDraw(val projection: SphereProjection) {
 
-    private val positions = HashMap<IElement, PointF>()
+    private val positions: HashMap<IElement, PointF> = HashMap()
+    private var colors: ISkyDrawColors = SkyDrawColors()
 
     lateinit var canvas: Canvas
     lateinit var center: Topocentric
-    lateinit var colors: ISkyDrawColors
     lateinit var options: ISkyViewOptions
 
     private val path = Path()
@@ -50,7 +37,7 @@ class SkyDraw(val projection: SphereProjection) {
             if (isOnScreen(it)) {
                 drawImageAt(bitmap, it)
                 if (options.displayPlanetNames) {
-                    drawNameAt(sun.name, colors.planetNameColor, it)
+                    drawNameAt(sun.name, colors.nameColor, it)
                 }
             }
         }
@@ -60,7 +47,7 @@ class SkyDraw(val projection: SphereProjection) {
             if (isOnScreen(it)) {
                 drawImageAt(bitmap, it)
                 if (options.displayPlanetNames) {
-                    drawNameAt(moon.name, colors.planetNameColor, it)
+                    drawNameAt(moon.name, colors.nameColor, it)
                 }
             }
         }
@@ -70,7 +57,7 @@ class SkyDraw(val projection: SphereProjection) {
             if (isOnScreen(it)) {
                 drawImageAt(bitmap, it)
                 if (options.displayPlanetNames) {
-                    drawNameAt(planet.name, colors.planetNameColor, it)
+                    drawNameAt(planet.name, colors.nameColor, it)
                 }
             }
         }
@@ -79,44 +66,45 @@ class SkyDraw(val projection: SphereProjection) {
         getPosition(target)?.let {
             if (isOnScreen(it)) {
                 drawImageAt(bitmap, it)
-                drawNameAt(target.name, colors.targetNameColor, it)
+                drawNameAt(target.name, colors.nameColor, it)
             }
         }
 
     fun drawSpecial(special: SpecialElement) =
         getPosition(special)?.let {
             if (isOnScreen(it)) {
-                drawNameAt(special.name, colors.specialNameColor, it)
+                drawNameAt(special.name, colors.nameColor, it)
             }
         }
 
     fun drawStar(star: Star, isReference: Boolean = false) =
         getPosition(star)?.let {
             if (isOnScreen(it)) {
-                if (isReference) {
-                    val r = 5f
-                    drawCircleAt(r, colors.referenceColor, it)
-                    if (options.displaySymbols) {
+                when (isReference) {
+                    true -> {
+                        val r = 5f
+                        drawCircleAt(r, colors.referenceColor, it)
                         if (options.displaySymbols) {
-                            drawNameAt(UniverseInitializer.greekSymbolToString(star.symbol), colors.referenceColor, it);
+                            drawNameAt(UniverseInitializer.greekSymbolToString(star.symbol), colors.referenceSymbolColor, it);
                         }
-                        if (options.displayStarNames) {
-                            drawNameAt(star.name, colors.referenceColor, it)
+                        if (options.displayStarNames && star.nameIsUnique) {
+                            drawNameAt(star.name, colors.referenceNameColor, it)
                         }
                     }
-                } else {
-                    if (star.isBrighterThan(options.magnitude)) {
-                        var r = 4f
-                        if (options.displayMagnitude) {
-                            colors.starColor.alpha = getStarAlpha(star.magn)
-                            r = getStarSize(star.magn)
-                        }
-                        drawCircleAt(r, colors.starColor, it)
-                        if (options.displaySymbols) {
-                            drawNameAt(UniverseInitializer.greekSymbolToString(star.symbol), colors.starSymbolColor, it);
-                        }
-                        if (options.displayStarNames) {
-                            drawNameAt(star.name, colors.starNameColor, it)
+                    false -> {
+                        if (star.isBrighterThan(options.magnitude)) {
+                            var r = 4f
+                            if (options.displayMagnitude) {
+                                colors.starColor.alpha = getStarAlpha(star.magn)
+                                r = getStarSize(star.magn)
+                            }
+                            drawCircleAt(r, colors.starColor, it)
+                            if (options.displaySymbols) {
+                                drawNameAt(UniverseInitializer.greekSymbolToString(star.symbol), colors.symbolColor, it);
+                            }
+                            if (options.displayStarNames && star.nameIsUnique) {
+                                drawNameAt(star.name, colors.nameColor, it)
+                            }
                         }
                     }
                 }
@@ -124,33 +112,43 @@ class SkyDraw(val projection: SphereProjection) {
         }
 
     fun drawConstellation(constellation: Constellation, isReference: Boolean = false) {
-        if (isReference) {
-            for (star: Star in constellation.stars) {
-                drawStar(star, true);
-            }
-            for (line in constellation.lines) {
-                drawLine(line, colors.referenceColor);
-            }
-            if (options.displayConstellationNames) {
-                drawName(constellation.position, constellation.name, colors.referenceColor)
-            }
-        } else {
-            for (star: Star in constellation.stars) {
-                drawStar(star, false);
-            }
-            if (options.displayConstellations) {
+        when (isReference) {
+            true -> {
+                for (star: Star in constellation.stars) {
+                    drawStar(star, true);
+                }
                 for (line in constellation.lines) {
-                    drawLine(line, colors.lineColor);
+                    drawLine(line, colors.referenceLineColor);
+                }
+                if (options.displayConstellationNames) {
+                    drawName(constellation.position, constellation.name, colors.referenceNameColor)
                 }
             }
-            if (options.displayConstellationNames) {
-                drawName(constellation.position, constellation.name, colors.constellationNameColor)
+            false -> {
+                for (star: Star in constellation.stars) {
+                    drawStar(star, false);
+                }
+                if (options.displayConstellations) {
+                    for (line in constellation.lines) {
+                        drawLine(line, colors.lineColor);
+                    }
+                }
+                if (options.displayConstellationNames) {
+                    drawName(constellation.position, constellation.name, colors.constellationNameColor)
+                }
             }
         }
     }
 
-    fun drawName(position: Topocentric?, name: String) =
-        drawName(position, name, colors.specialNameColor)
+    fun drawZenit(zenit: Topocentric) =
+        drawName(zenit, "Z", colors.gridColor)
+
+    fun drawSatellite(satellite: Satellite, bitmap: Bitmap) =
+        calculatePosition(satellite.position)?.let {
+            if (isOnScreen(it)) {
+                drawImageAt(bitmap, it)
+            }
+        }
 
     private fun drawName(position: Topocentric?, name: String, color: Paint) =
         calculatePosition(position)?.let {

@@ -49,11 +49,14 @@
     <string name="label_display_constellation_names">Constellation Names</string>
     <string name="label_display_planet_names">Planet Names</string>
     <string name="label_display_star_names">Star Names</string>
+    <string name="label_display_targets">Targets</string>
+    <string name="label_display_satellites">Satellites</string>
     <string name="label_magnitude_filter">Magnitude Filter</string>
     <string name="label_update_location_automatically">Update Location Automatically</string>
     <string name="label_automatic_city_location">Use Current Device Location</string>
     <string name="label_default_pitch">+23°</string>
     <string name="label_default_roll">-3°</string>
+    <string name="label_default_direction">124° SW 48° N</string>
     <string name="label_freeze">Freeze</string>
     <string name="label_unfreeze">Unfreeze</string>
     <string name="label_undo">Undo</string>

@@ -29,6 +29,17 @@
         android:src="@drawable/zoom_in"
         android:contentDescription="@string/label_empty" />
 
+    <TextView
+        android:id="@+id/direction"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="@id/buttonZoomIn"
+        app:layout_constraintBottom_toBottomOf="@id/buttonZoomIn"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:text="@string/label_default_direction"
+        />
+
     <include android:id="@+id/time_overlay" layout="@layout/time_overlay" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

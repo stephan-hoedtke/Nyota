@@ -10,7 +10,7 @@ import com.stho.nyota.sky.universe.Constellation
 import com.stho.nyota.sky.universe.IElement
 import com.stho.nyota.sky.utilities.IProperty
 import com.stho.nyota.sky.utilities.Moment
-import com.stho.nyota.ui.sky.SkyViewOptions
+import com.stho.nyota.sky.utilities.PropertyKey
 
 // TODO: show constellation in "real sky view", not just the Icon
 // see: https://en.wikipedia.org/wiki/Greek_alphabet (modern print)
@@ -45,6 +45,8 @@ class ConstellationFragment : AbstractElementFragment() {
         binding.buttonZoomIn.setOnClickListener { onZoomIn() }
         binding.buttonZoomOut.setOnClickListener { onZoomOut() }
         binding.image.alpha = 0f
+        binding.image.setOnClickListener { onSkyView() }
+        binding.image.setOnLongClickListener { onFinderView(); true }
 
         return binding.root
     }
@@ -76,12 +78,24 @@ class ConstellationFragment : AbstractElementFragment() {
         get() = viewModel.constellation
 
 
-    protected override fun openProperty(property: IProperty) {
-        val name = property.name
-        val star = viewModel.constellation.stars.filter { star -> star.name == name }.firstOrNull()
-        if (star != null) {
-            binding.sky.setStar(star)
-            binding.sky.invalidate()
+    @Suppress("NON_EXHAUSTIVE_WHEN")
+    override fun onPropertyClick(property: IProperty) {
+        when (property.key) {
+            PropertyKey.STAR ->
+                viewModel.constellation.stars.firstOrNull { star -> star.name == property.name } ?.let {
+                    binding.sky.setStar(it)
+                    binding.sky.invalidate()
+                }
+        }
+    }
+
+    @Suppress("NON_EXHAUSTIVE_WHEN")
+    override fun onPropertyLongClick(property: IProperty) {
+        when (property.key) {
+            PropertyKey.STAR ->
+                viewModel.constellation.stars.firstOrNull { star -> star.name == property.name }?.let {
+                    onStar(it.uniqueName)
+                }
         }
     }
 

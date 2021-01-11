@@ -2,14 +2,29 @@ package com.stho.nyota.sky.universe
 
 import com.stho.nyota.sky.utilities.Formatter
 import com.stho.nyota.sky.utilities.Moment
+import com.stho.nyota.sky.utilities.PropertyKey
 import com.stho.nyota.sky.utilities.PropertyList
+import java.lang.Exception
 
 /**
  * Created by shoedtke on 31.08.2016.
  */
-class Star private constructor(override val name: String, val hasUniqueName: Boolean, val symbol: UniverseInitializer.Symbol, RA: Double, Decl: Double, magn: Double) : AbstractElement(RA, Decl, magn) {
+class Star private constructor(override val name: String, val nameIsUnique: Boolean, val symbol: UniverseInitializer.Symbol, RA: Double, Decl: Double, magn: Double) : AbstractElement(RA, Decl, magn) {
 
     private val constellations: ArrayList<Constellation> = ArrayList()
+
+    override val uniqueName: String by lazy {
+        when (nameIsUnique) {
+            true -> name
+            false -> constellations.firstOrNull()?.joinConstellationStarName(this) ?: throw Exception("Star $name doesn't have a unique name")
+        }
+    }
+
+    override fun toString(): String =
+        when (nameIsUnique) {
+            true -> name
+            false -> constellations.firstOrNull()?.let { it.name + ": " + this.name } ?: name
+        }
 
     override val imageId: Int
         get() = com.stho.nyota.R.mipmap.star
@@ -26,7 +41,7 @@ class Star private constructor(override val name: String, val hasUniqueName: Boo
     override fun getDetails(moment: Moment): PropertyList =
         super.getDetails(moment).apply {
             for(constellation: Constellation in constellations) {
-                add(constellation.imageId, "Constellation", constellation.name)
+                add(PropertyKey.CONSTELLATION, constellation.imageId, constellation.name, constellation.position.toString())
             }
         }
 

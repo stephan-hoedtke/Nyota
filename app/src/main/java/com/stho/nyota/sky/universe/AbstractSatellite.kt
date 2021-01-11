@@ -33,7 +33,7 @@ abstract class AbstractSatellite : IElement {
 
     override fun getBasics(moment: Moment): PropertyList =
         PropertyList().apply {
-            add(com.stho.nyota.R.drawable.horizontal, "Direction", position!!.toString())
+            add(com.stho.nyota.R.drawable.compass, "Direction", position!!.toString())
             add(com.stho.nyota.R.drawable.horizontal, "Azimuth", Hour.fromDegree(position!!.azimuth))
             add(com.stho.nyota.R.drawable.horizontal, "Altitude", Degree.fromDegree(position!!.altitude))
             add(com.stho.nyota.R.drawable.equatorial, "Height", Formatter.toDistanceString(location.altitude))

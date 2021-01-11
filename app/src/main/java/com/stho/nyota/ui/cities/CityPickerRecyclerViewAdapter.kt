@@ -105,10 +105,7 @@ class CityPickerRecyclerViewAdapter(private val fragment: CityPickerFragment, pr
             binding.textViewName.text = city.nameEx
             binding.textViewDistance.text = Formatter.toDistanceString(city.distanceInKm)
             binding.root.isSelected = isSelected
-            binding.root.setOnLongClickListener {
-                onEdit(adapterPosition)
-                true
-            }
+            binding.root.setOnLongClickListener { onEdit(adapterPosition); true }
         }
 
         internal val foregroundLayer: View = binding.foregroundLayer

@@ -18,9 +18,22 @@ object Formatter {
     private val formatDateTimeZone = SimpleDateFormat("d MMM yyyy Z", Locale.ENGLISH)
     private val formatDate: SimpleDateFormat = SimpleDateFormat("d MMM yyyy", Locale.ENGLISH)
     private val formatTimeZone = SimpleDateFormat("Z", Locale.ENGLISH)
-    val df0: DecimalFormat = DecimalFormat.getNumberInstance(Locale.ENGLISH) as DecimalFormat
-    val df2: DecimalFormat = DecimalFormat.getNumberInstance(Locale.ENGLISH) as DecimalFormat
-    val df3: DecimalFormat = DecimalFormat.getNumberInstance(Locale.ENGLISH) as DecimalFormat
+    val df0: DecimalFormat = decimalFormat().apply {
+        maximumFractionDigits = 0
+        minimumFractionDigits = 0
+        minimumIntegerDigits = 1
+        decimalFormatSymbols.groupingSeparator = UNICODE_THIN_SPACE
+    }
+    val df2: DecimalFormat = decimalFormat().apply {
+        minimumFractionDigits = 2
+        maximumFractionDigits = 2
+        minimumIntegerDigits = 1
+    }
+    val df3: DecimalFormat = decimalFormat().apply {
+        minimumFractionDigits = 3
+        maximumFractionDigits = 3
+        minimumIntegerDigits = 1
+    }
     internal const val SPACE = "  "
     private const val UNICODE_THIN_SPACE = '\u2009'
     internal val timeZoneGMT: TimeZone by lazy {
@@ -91,17 +104,7 @@ object Formatter {
         DATE, DATE_TIMEZONE, TIME, DATETIME, DATETIME_TIMEZONE, DATETIME_SEC, DATETIME_SEC_TIMEZONE, TIMEZONE, TIME_SEC
     }
 
-    init {
-        df0.maximumFractionDigits = 0
-        df0.minimumFractionDigits = 0
-        df0.minimumIntegerDigits = 1
-        df0.decimalFormatSymbols = df0.decimalFormatSymbols.also { it.groupingSeparator = UNICODE_THIN_SPACE }
-        df2.minimumFractionDigits = 2
-        df2.maximumFractionDigits = 2
-        df2.minimumIntegerDigits = 1
-        df3.minimumFractionDigits = 3
-        df3.maximumFractionDigits = 3
-        df3.minimumIntegerDigits = 1
-    }
-}
+    private fun decimalFormat(): DecimalFormat =
+        DecimalFormat.getNumberInstance(Locale.ENGLISH) as DecimalFormat
+ }
 

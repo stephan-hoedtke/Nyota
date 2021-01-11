@@ -57,12 +57,26 @@
             android:text="@string/label_display_star_names"
             app:layout_constraintTop_toBottomOf="@id/checkBoxDisplayPlanetNames" />
 
+        <CheckBox
+            android:id="@+id/checkBoxDisplayTargets"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/label_display_targets"
+            app:layout_constraintTop_toBottomOf="@id/checkBoxDisplayStarNames" />
+
+        <CheckBox
+            android:id="@+id/checkBoxDisplaySatellites"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/label_display_satellites"
+            app:layout_constraintTop_toBottomOf="@id/checkBoxDisplayTargets" />
+
         <TextView
             android:id="@+id/labelBrightness"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/label_magnitude_filter"
-            app:layout_constraintTop_toBottomOf="@id/checkBoxDisplayStarNames"
+            app:layout_constraintTop_toBottomOf="@id/checkBoxDisplaySatellites"
             android:layout_marginTop="@dimen/text_margin" />
 
         <SeekBar

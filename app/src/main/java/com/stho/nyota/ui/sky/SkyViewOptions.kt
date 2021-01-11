@@ -15,6 +15,8 @@ interface ISkyViewSettings
     var displayConstellationNames: Boolean
     var displayPlanetNames: Boolean
     var displayStarNames: Boolean
+    var displayTargets: Boolean
+    var displaySatellites: Boolean
 }
 
 /*

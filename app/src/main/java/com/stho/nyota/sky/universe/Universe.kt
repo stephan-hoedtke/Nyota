@@ -67,66 +67,34 @@ class Universe {
         return this
     }
 
-    fun findStarByName(name: String?): Star? {
-        if (name != null && stars.exists(name)) {
-            return stars[name]
+    fun findStarByName(name: String?): Star? =
+        name?.let {
+            val tokens: List<String> = Constellation.splitConstellationStarName(name)
+            if (tokens.size == 2) {
+                findStarInConstellationByName(constellationName = tokens[0], starName = tokens[1])
+            } else {
+                stars.findStarByName(it)
+            }
         }
-        return null
-    }
+
+    private fun findStarInConstellationByName(constellationName: String, starName: String): Star? =
+        findConstellationByName(constellationName)?.findStarInConstellationByName(starName)
 
     val zenit: Topocentric
         get() = Topocentric(0.0, 90.0)
 
-    fun findConstellationByName(name: String?): Constellation? {
-        if (name != null && constellations.exists(name)) {
-            return constellations[name]
+    fun findConstellationByName(name: String?): Constellation? =
+        name?.let { constellations[it] }
+
+    fun findPlanetByName(name: String?): AbstractPlanet? =
+        name?.let { solarSystem.findPlanetByName(it) }
+
+    fun findElementByName(name: String?): IElement? =
+        name?.let {
+            solarSystem.elements.firstOrNull { e -> e.name == it }
+                ?: satellites[it]
+                ?: constellations[it]
+                ?: targets[it]
+                ?: findStarByName(name)
         }
-        return null
-    }
-
-    fun findPlanetByName(name: String?): AbstractPlanet? {
-        if (name != null) {
-            for (celestial in solarSystem.planets) {
-                if (celestial.name == name)
-                    return celestial as AbstractPlanet
-            }
-        }
-        return null
-    }
-
-    fun findElementByName(name: String?): IElement? {
-        if (name != null) {
-
-            // Any solar system element ?
-            for (celestial in solarSystem.elements) {
-                if (celestial.name == name)
-                    return celestial
-            }
-
-            if (satellites.exists(name))
-                return satellites[name]
-
-            if (constellations.exists(name))
-                return constellations[name]
-
-            if (targets.exists(name))
-                return targets[name]
-
-            if (stars.exists(name))
-                return stars[name]
-        }
-        return null
-    }
-
-    // may return null if there is no constellation that contains this star.
-    fun findConstellationByStar(star: Star?): Constellation? {
-        if (star != null) {
-            for (constellation in constellations.values) {
-                if (constellation.stars.contains(star)) {
-                    return constellation
-                }
-            }
-        }
-        return null
-    }
 }

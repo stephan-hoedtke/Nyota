@@ -48,6 +48,8 @@ class MoonFragment : AbstractElementFragment() {
         binding.timeIntervalFooter.buttonNext.setOnClickListener { viewModel.onNext() }
         binding.timeIntervalFooter.buttonPrevious.setOnClickListener { viewModel.onPrevious() }
         binding.timeIntervalFooter.interval.setOnClickListener { onPickInterval() }
+        binding.image.setOnClickListener { onSkyView() }
+        binding.image.setOnLongClickListener { onFinderView(); true }
 
         // TODO: solve the annotation issue with accessibility (I do not understand yet, what to do)
         binding.moonAgeLayout.age.setOnTouchListener(@SuppressLint("ClickableViewAccessibility")

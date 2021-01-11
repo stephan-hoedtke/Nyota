@@ -30,6 +30,8 @@ class SkyFragmentOptionsDialog(val options: ISkyViewOptions): DialogFragment() {
         binding.checkBoxDisplayConstellationNames.setOnCheckedChangeListener { v, isChecked -> options.displayConstellationNames = isChecked }
         binding.checkBoxDisplayPlanetNames.setOnCheckedChangeListener { v, isChecked -> options.displayPlanetNames = isChecked }
         binding.checkBoxDisplayStarNames.setOnCheckedChangeListener { v, isChecked -> options.displayStarNames = isChecked }
+        binding.checkBoxDisplayTargets.setOnCheckedChangeListener { v, isChecked -> options.displayTargets = isChecked }
+        binding.checkBoxDisplaySatellites.setOnCheckedChangeListener { v, isChecked -> options.displaySatellites = isChecked }
         binding.seekBarBrightness.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
                 options.magnitude = SkyViewOptions.percentToBrightness(progress)
@@ -58,6 +60,8 @@ class SkyFragmentOptionsDialog(val options: ISkyViewOptions): DialogFragment() {
         binding.checkBoxDisplayConstellationNames.isChecked = options.displayConstellationNames
         binding.checkBoxDisplayPlanetNames.isChecked = options.displayPlanetNames
         binding.checkBoxDisplayStarNames.isChecked = options.displayStarNames
+        binding.checkBoxDisplayTargets.isChecked = options.displayTargets
+        binding.checkBoxDisplaySatellites.isChecked = options.displaySatellites
         binding.textViewBrightness.text = Formatter.df2.format(options.magnitude)
         binding.seekBarBrightness.progress = SkyViewOptions.brightnessToPercent(options.magnitude)
     }

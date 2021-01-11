@@ -67,12 +67,19 @@ class SkyView(context: Context?, attrs: AttributeSet?) : AbstractSkyView(context
         for (planet in universe.solarSystem.planets) {
             super.drawPlanet(planet)
         }
-        for (target in universe.targets.values) {
-            super.drawTarget(target)
+        if (options.displayTargets) {
+            for (target in universe.targets.values) {
+                super.drawTarget(target)
+            }
+        }
+        if (options.displaySatellites) {
+            for (satellite in universe.satellites.values) {
+                super.drawSatellite(satellite)
+            }
         }
         super.drawMoon(universe.solarSystem.moon)
         super.drawSun(universe.solarSystem.sun)
-        super.drawName(universe.zenit, "Z")
+        super.drawZenit(universe.zenit)
     }
 
     private fun onDrawElement(element: IElement) {

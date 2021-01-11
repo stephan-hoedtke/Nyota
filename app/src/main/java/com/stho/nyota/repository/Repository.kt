@@ -16,21 +16,12 @@ class Repository private constructor() {
 
     var universe: Universe = Universe()
 
-    private val settingsLiveData = MutableLiveData<Settings>()
-    private val citiesLiveData = MutableLiveData<Cities>()
-    private val momentLiveData = MutableLiveData<Moment>()
-    private val currentAutomaticTimeLiveData = MutableLiveData<UTC>()
-    private val currentAutomaticLocationLiveData = MutableLiveData<Location>()
-    private val currentOrientationLiveData = MutableLiveData<Orientation>()
-
-    init {
-        settingsLiveData.value = Settings()
-        citiesLiveData.value = Cities()
-        momentLiveData.value = Moment.forNow(defaultAutomaticCity)
-        currentAutomaticTimeLiveData.value = defaultAutomaticTime
-        currentAutomaticLocationLiveData.value = defaultAutomaticLocation
-        currentOrientationLiveData.value = Orientation.defaultOrientation
-    }
+    private val settingsLiveData = MutableLiveData<Settings>().apply { value = Settings() }
+    private val citiesLiveData = MutableLiveData<Cities>().apply { value = Cities() }
+    private val momentLiveData = MutableLiveData<Moment>().apply { value = Moment.forNow(defaultAutomaticCity) }
+    private val currentAutomaticTimeLiveData = MutableLiveData<UTC>().apply { value = defaultAutomaticTime }
+    private val currentAutomaticLocationLiveData = MutableLiveData<Location>().apply { value = defaultAutomaticLocation }
+    private val currentOrientationLiveData = MutableLiveData<Orientation>().apply { value = Orientation.defaultOrientation }
 
     val momentLD: LiveData<Moment>
         get() = momentLiveData

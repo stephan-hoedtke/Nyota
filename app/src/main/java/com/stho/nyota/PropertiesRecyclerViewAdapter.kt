@@ -16,6 +16,7 @@ class PropertiesRecyclerViewAdapter : RecyclerView.Adapter<PropertiesRecyclerVie
 
     private var entries: PropertyList = PropertyList()
     var onItemClick: ((IProperty) -> Unit)? = null
+    var onItemLongClick: ((IProperty) -> Unit)? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.property_list_entry, parent, false)
@@ -41,7 +42,8 @@ class PropertiesRecyclerViewAdapter : RecyclerView.Adapter<PropertiesRecyclerVie
             binding.image.setImageResource(entry.imageId)
             binding.name.text = entry.name
             binding.value.text = entry.value
-            binding.root.setOnClickListener { getPropertyByIndex(adapterPosition)?.also { onItemClick?.invoke(it) } }
+            binding.root.setOnClickListener { onPropertyClick(adapterPosition) }
+            binding.root.setOnLongClickListener { onPropertyLongClick(adapterPosition); true }
         }
     }
 
@@ -49,4 +51,11 @@ class PropertiesRecyclerViewAdapter : RecyclerView.Adapter<PropertiesRecyclerVie
         entries = properties
         notifyDataSetChanged()
     }
+
+    private fun onPropertyClick(position: Int) =
+        getPropertyByIndex(position)?.let { onItemClick?.invoke(it) }
+
+    private fun onPropertyLongClick(position: Int) =
+        getPropertyByIndex(position)?.let { onItemLongClick?.invoke(it) }
+
 }

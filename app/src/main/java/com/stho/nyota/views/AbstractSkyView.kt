@@ -17,99 +17,12 @@ import java.util.*
 import kotlin.math.abs
 
 
-class SkyDrawColors: ISkyDrawColors {
-
-    override val gridColor: Paint = Paint().apply {
-        color = Color.BLUE
-        alpha = 200
-        style = Paint.Style.FILL_AND_STROKE
-        isAntiAlias = true
-        textSize = 40f
-    }
-
-    override val starColor: Paint = Paint().apply {
-        color = Color.WHITE
-        alpha = 255
-        style = Paint.Style.FILL_AND_STROKE
-        isAntiAlias = true
-    }
-
-    override val bitmapColor: Paint = Paint().apply {
-        color = Color.WHITE
-        alpha = 255
-        style = Paint.Style.FILL_AND_STROKE
-        isAntiAlias = true
-    }
-
-    override val lineColor: Paint = Paint().apply {
-        color = Color.YELLOW
-        alpha = 120
-        style = Paint.Style.STROKE
-    }
-
-    override val starSymbolColor: Paint = Paint().apply {
-        color = Color.GRAY
-        alpha = 200
-        style = Paint.Style.FILL_AND_STROKE
-        isAntiAlias = true
-        textSize = 40f
-    }
-
-    override val starNameColor: Paint = Paint().apply {
-        color = Color.rgb(253, 106, 2) // Orange
-        alpha = 120
-        style = Paint.Style.FILL_AND_STROKE
-        isAntiAlias = true
-        textSize = 40f
-    }
-
-    override val constellationNameColor: Paint = Paint().apply {
-        color = Color.rgb(253, 106, 2) // Orange
-        alpha = 120
-        style = Paint.Style.FILL_AND_STROKE
-        isAntiAlias = true
-        textSize = 40f
-    }
-
-    override val planetNameColor: Paint  = Paint().apply {
-        color = Color.rgb(253, 106, 2) // Orange
-        alpha = 120
-        style = Paint.Style.FILL_AND_STROKE
-        isAntiAlias = true
-        textSize = 40f
-    }
-
-    override val targetNameColor: Paint  = Paint().apply {
-        color = Color.rgb(253, 106, 2) // Orange
-        alpha = 120
-        style = Paint.Style.FILL_AND_STROKE
-        isAntiAlias = true
-        textSize = 40f
-    }
-
-    override val specialNameColor: Paint  = Paint().apply {
-        color = Color.rgb(253, 106, 2) // Orange
-        alpha = 120
-        style = Paint.Style.FILL_AND_STROKE
-        isAntiAlias = true
-        textSize = 40f
-    }
-
-    override val referenceColor: Paint  = Paint().apply {
-        color = Color.rgb(230, 20, 20) // Red
-        alpha = 120
-        style = Paint.Style.FILL_AND_STROKE
-        isAntiAlias = true
-        textSize = 40f
-    }
-}
 
 abstract class AbstractSkyView(context: Context?, attrs: AttributeSet?): View(context, attrs), View.OnDragListener {
 
     abstract val options: ISkyViewOptions
 
     private val bitmaps = HashMap<Int, Bitmap>()
-    private var colors = SkyDrawColors()
 
     val path = Path()
     val center = Topocentric(0.0, 0.0)
@@ -214,7 +127,6 @@ abstract class AbstractSkyView(context: Context?, attrs: AttributeSet?): View(co
 
         draw.configure(canvas, width, height, center)
         draw.options = options
-        draw.colors = colors
 
         if (options.drawGrid) {
             draw.drawGrid()
@@ -261,14 +173,18 @@ abstract class AbstractSkyView(context: Context?, attrs: AttributeSet?): View(co
     protected fun drawConstellation(constellation: Constellation) =
         draw.drawConstellation(constellation)
 
-    protected fun drawName(position: Topocentric?, name: String) =
-        draw.drawName(position, name)
+    protected fun drawZenit(zenit: Topocentric) =
+        draw.drawZenit(zenit)
 
     protected fun drawStarAsReference(star: Star) =
         draw.drawStar(star, true)
 
     protected fun drawConstellationAsReference(constellation: Constellation) =
         draw.drawConstellation(constellation, true)
+
+    protected fun drawSatellite(satellite: Satellite) =
+        draw.drawSatellite(satellite, getScaledBitmap(satellite.imageId, 72, 72))
+
     /**
     get image from cache or create it
      */
