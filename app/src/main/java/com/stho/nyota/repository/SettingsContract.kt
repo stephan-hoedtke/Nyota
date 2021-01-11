@@ -2,6 +2,7 @@ package com.stho.nyota.repository
 
 import android.content.ContentValues
 import android.database.sqlite.SQLiteDatabase
+import java.lang.Exception
 
 internal class SettingsContract(private val db: SQLiteDatabase) : BaseContract() {
     fun createTable() {
@@ -14,6 +15,10 @@ internal class SettingsContract(private val db: SQLiteDatabase) : BaseContract()
 
     fun write(name: String, value: Boolean) {
         write(name, serializeFromBoolean(value))
+    }
+
+    fun write(name: String, value: Int) {
+        write(name, serializeFromInt(value))
     }
 
     fun write(name: String, value: String?) {
@@ -32,8 +37,8 @@ internal class SettingsContract(private val db: SQLiteDatabase) : BaseContract()
     fun readBoolean(name: String, defaultValue: Boolean): Boolean =
         deserializeIntoBoolean(readStringOrDefault(name), defaultValue)
 
-    fun readBoolean(name: String): Boolean =
-        deserializeIntoBoolean(readStringOrDefault(name), false)
+    fun readInt(name: String, defaultValue: Int): Int =
+        deserializeIntoInt(readStringOrDefault(name), defaultValue)
 
     private fun readStringOrDefault(name: String): String? {
         var value: String? = null
@@ -73,13 +78,27 @@ internal class SettingsContract(private val db: SQLiteDatabase) : BaseContract()
             arrayOf(name)
 
         private fun deserializeIntoBoolean(value: String?, defaultValue: Boolean): Boolean =
-            when {
-                "TRUE".equals(value, true) -> true
-                "FALSE".equals(value, true) -> false
-                else -> defaultValue
+            try {
+                when {
+                    "TRUE".equals(value, true) -> true
+                    "FALSE".equals(value, true) -> false
+                    else -> defaultValue
+                }
+            } catch (ex: Exception) {
+                defaultValue
             }
 
         private fun serializeFromBoolean(value: Boolean): String =
             if (value) "TRUE" else "FALSE"
+
+        private fun deserializeIntoInt(value: String?, defaultValue: Int): Int =
+            try {
+                value?.toInt() ?: defaultValue
+            } catch (ex: Exception) {
+                defaultValue
+            }
+
+        private fun serializeFromInt(value: Int): String =
+            value.toString()
     }
 }

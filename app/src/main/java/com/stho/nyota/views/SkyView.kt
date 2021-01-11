@@ -18,15 +18,12 @@ class SkyView(context: Context?, attrs: AttributeSet?) : AbstractSkyView(context
     private var universe: Universe? = null
     private var element: IElement? = null
 
-    override lateinit var options: ISkyViewOptions
-
     fun notifyDataSetChanged() {
         invalidate()
     }
 
-    fun setOptions(settings: ISkyViewSettings) {
-        options = SkyFragmentViewOptions(this@SkyView, settings)
-    }
+    fun setOptions(settings: ISkyViewSettings) =
+        super.setOptions(SkyFragmentViewOptions(this@SkyView, settings))
 
     fun setUniverse(universe: Universe) {
         this.universe = universe

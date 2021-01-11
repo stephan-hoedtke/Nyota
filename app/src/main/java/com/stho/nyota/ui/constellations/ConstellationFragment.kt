@@ -45,8 +45,6 @@ class ConstellationFragment : AbstractElementFragment() {
         binding.buttonZoomIn.setOnClickListener { onZoomIn() }
         binding.buttonZoomOut.setOnClickListener { onZoomOut() }
         binding.image.alpha = 0f
-        binding.image.setOnClickListener { onSkyView() }
-        binding.image.setOnLongClickListener { onFinderView(); true }
 
         return binding.root
     }

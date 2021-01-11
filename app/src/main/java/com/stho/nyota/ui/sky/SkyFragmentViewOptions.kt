@@ -1,6 +1,7 @@
 package com.stho.nyota.ui.sky
 
 import android.view.View
+import com.stho.nyota.sky.utilities.Projection
 
 
 class SkyFragmentViewOptions(view: View, val settings: ISkyViewSettings): SkyViewOptions(view), ISkyViewOptions, ISkyViewSettings {
@@ -73,6 +74,15 @@ class SkyFragmentViewOptions(view: View, val settings: ISkyViewSettings): SkyVie
         set(value) {
             if (settings.displaySatellites != value) {
                 settings.displaySatellites = value
+                invalidate()
+            }
+        }
+
+    override var sphereProjection: Projection
+        get() = settings.sphereProjection
+        set(value) {
+            if (settings.sphereProjection != value) {
+                settings.sphereProjection = value
                 invalidate()
             }
         }

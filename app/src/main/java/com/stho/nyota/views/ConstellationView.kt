@@ -6,6 +6,7 @@ import android.util.AttributeSet
 import android.view.View
 import com.stho.nyota.sky.universe.Constellation
 import com.stho.nyota.sky.universe.Star
+import com.stho.nyota.sky.utilities.Projection
 import com.stho.nyota.sky.utilities.Topocentric
 import com.stho.nyota.ui.sky.*
 import com.stho.nyota.views.AbstractSkyView
@@ -19,16 +20,19 @@ class ConstellationView(context: Context?, attrs: AttributeSet?) : AbstractSkyVi
     private var constellation: Constellation? = null
     private var star: Star? = null
 
-    override var options: ISkyViewOptions = object : SkyViewOptions(this@ConstellationView) {
-        override var displaySymbols: Boolean = true
-        override var displayMagnitude: Boolean = false
-        override var displayConstellations: Boolean = true
-        override var displayConstellationNames: Boolean = false
-        override var displayPlanetNames: Boolean = false
-        override var displayStarNames: Boolean = false
-        override var displayTargets: Boolean = false
-        override var displaySatellites: Boolean = false
-     }
+    init {
+        setOptions(object: SkyViewOptions(this@ConstellationView) {
+            override var displaySymbols: Boolean = true
+            override var displayMagnitude: Boolean = false
+            override var displayConstellations: Boolean = true
+            override var displayConstellationNames: Boolean = false
+            override var displayPlanetNames: Boolean = false
+            override var displayStarNames: Boolean = false
+            override var displayTargets: Boolean = false
+            override var displaySatellites: Boolean = false
+            override var sphereProjection: Projection = Projection.PLAIN
+        })
+    }
 
     fun setConstellation(constellation: Constellation) {
         this.constellation = constellation

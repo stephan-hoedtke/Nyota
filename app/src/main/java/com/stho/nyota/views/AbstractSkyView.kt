@@ -8,28 +8,37 @@ import android.view.GestureDetector.SimpleOnGestureListener
 import android.view.ScaleGestureDetector.SimpleOnScaleGestureListener
 import com.stho.nyota.ISkyViewListener
 import com.stho.nyota.sky.universe.*
-import com.stho.nyota.sky.utilities.SphereProjection
-import com.stho.nyota.sky.utilities.Ten
-import com.stho.nyota.sky.utilities.Topocentric
+import com.stho.nyota.sky.utilities.*
 import com.stho.nyota.ui.sky.ISkyViewOptions
 import com.stho.nyota.ui.sky.SkyViewOptions
 import java.util.*
-import kotlin.math.abs
-
 
 
 abstract class AbstractSkyView(context: Context?, attrs: AttributeSet?): View(context, attrs), View.OnDragListener {
 
-    abstract val options: ISkyViewOptions
+    lateinit var options: ISkyViewOptions
+        private set
+
+    private lateinit var projection: ISphereProjection
+    private lateinit var draw: SkyDraw
 
     private val bitmaps = HashMap<Int, Bitmap>()
 
+    fun setOptions(options: ISkyViewOptions) {
+        this.options = options
+        projection = when (options.sphereProjection) {
+            Projection.PLAIN -> SphereToPlainProjection()
+            Projection.SPHERE -> SphereToSphereProjection()
+        }
+        draw = SkyDraw(projection)
+    }
+
     val path = Path()
     val center = Topocentric(0.0, 0.0)
+
     var scaleGestureDetector: ScaleGestureDetector? = null
     var gestureDetector: GestureDetector? = null
-    private val projection = SphereProjection()
-    private var draw = SkyDraw(projection)
+
     var isScrollingEnabled: Boolean = true
     var isScalingEnabled: Boolean = true
 
@@ -68,9 +77,7 @@ abstract class AbstractSkyView(context: Context?, attrs: AttributeSet?): View(co
             }
 
             override fun onSingleTapConfirmed(e: MotionEvent): Boolean {
-                listener?.apply {
-                    onSingleTapConfirmed(e)
-                }
+                listener?.apply { onSingleTapConfirmed(e); }
                 return super.onSingleTapConfirmed(e)
             }
         })
@@ -200,8 +207,7 @@ abstract class AbstractSkyView(context: Context?, attrs: AttributeSet?): View(co
         BitmapFactory.decodeResource(resources, resourceId).let {
             Bitmap.createScaledBitmap(it, newWidth, newHeight, false)
         }
-
-
 }
+
 
 

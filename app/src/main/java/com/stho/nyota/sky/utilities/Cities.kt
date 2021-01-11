@@ -94,7 +94,7 @@ class Cities {
         array.firstOrNull { city -> city.id == id }
 
     fun findCityByName(cityName: String?): City? =
-        findMatchingNonAutomaticCity(cityName)
+        findMatchingCity(cityName)
 
     fun createDefaultCities() {
         val defaultCities = City.createCities()

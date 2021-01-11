@@ -1,6 +1,7 @@
 package com.stho.nyota.ui.sky
 
 import android.view.View
+import com.stho.nyota.sky.utilities.Projection
 
 // TODO: make ISkyViewSettings readonly (the view reads the data) and IMutableSkyViewSettings available to the fragment...
 
@@ -17,6 +18,7 @@ interface ISkyViewSettings
     var displayStarNames: Boolean
     var displayTargets: Boolean
     var displaySatellites: Boolean
+    var sphereProjection: Projection
 }
 
 /*

@@ -5,6 +5,7 @@ import android.view.*
 import androidx.fragment.app.FragmentManager
 import com.stho.nyota.AbstractFragment
 import com.stho.nyota.AbstractViewModel
+import com.stho.nyota.ISkyViewListener
 import com.stho.nyota.R
 import com.stho.nyota.databinding.FragmentSkyBinding
 import com.stho.nyota.sky.utilities.Moment
@@ -42,6 +43,14 @@ class SkyFragment : AbstractFragment() {
         binding.sky.setElement(viewModel.element)
         binding.buttonZoomIn.setOnClickListener { onZoomIn() }
         binding.buttonZoomOut.setOnClickListener { onZoomOut() }
+        binding.sky.registerListener(object: ISkyViewListener {
+            override fun onChangeSkyCenter() {
+                binding.direction.text = binding.sky.center.toString()
+            }
+            override fun onSingleTapConfirmed(e: MotionEvent?) {
+                // Nothing for now
+            }
+        })
 
         return binding.root
     }

@@ -3,6 +3,7 @@ package com.stho.nyota.settings
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.stho.nyota.Interval
+import com.stho.nyota.sky.utilities.Projection
 import com.stho.nyota.ui.sky.ISkyViewSettings
 
 class Settings: ISkyViewSettings {
@@ -56,6 +57,7 @@ class Settings: ISkyViewSettings {
     override var displayStarNames: Boolean = true
     override var displayTargets: Boolean = false
     override var displaySatellites: Boolean = true
+    override var sphereProjection: Projection = Projection.PLAIN
 
     val zoomLD: LiveData<Double>
         get() = zoomLiveData

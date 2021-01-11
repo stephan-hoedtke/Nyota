@@ -2,15 +2,15 @@ package com.stho.nyota.views
 
 import android.graphics.*
 import com.stho.nyota.sky.universe.*
-import com.stho.nyota.sky.utilities.SphereProjection
+import com.stho.nyota.sky.utilities.ISphereProjection
 import com.stho.nyota.sky.utilities.Ten
 import com.stho.nyota.sky.utilities.Topocentric
 import com.stho.nyota.ui.sky.ISkyViewOptions
-import java.util.HashMap
+import java.util.*
 import kotlin.math.abs
 
 
-class SkyDraw(val projection: SphereProjection) {
+class SkyDraw(private val projection: ISphereProjection) {
 
     private val positions: HashMap<IElement, PointF> = HashMap()
     private var colors: ISkyDrawColors = SkyDrawColors()
@@ -82,8 +82,12 @@ class SkyDraw(val projection: SphereProjection) {
             if (isOnScreen(it)) {
                 when (isReference) {
                     true -> {
-                        val r = 5f
-                        drawCircleAt(r, colors.referenceColor, it)
+                        var r = 5f
+                        if (options.displayMagnitude) {
+                            colors.referenceStarColor.alpha = getStarAlpha(star.magn)
+                            r = getStarSize(star.magn)
+                        }
+                        drawCircleAt(r, colors.referenceStarColor, it)
                         if (options.displaySymbols) {
                             drawNameAt(UniverseInitializer.greekSymbolToString(star.symbol), colors.referenceSymbolColor, it);
                         }
@@ -159,7 +163,7 @@ class SkyDraw(val projection: SphereProjection) {
 
     fun drawGrid() {
         val c = gridCenter
-        for (x in 0 until 180 step 10) {
+        for (x in 0 until 90 step 10) {
             drawGridPointsUpwards(c, x, colors)
             drawGridPointsDownwards(c, x, colors)
         }
