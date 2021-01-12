@@ -70,7 +70,8 @@
     <string name="action_display">Display</string>
     <string name="action_new">New</string>
     <string name="action_default_cities">Add Default Cities</string>
-    <string name="action_view_options">View Options</string>
+    <string name="action_view_options">Display</string>
+    <string name="action_view_projections">Projections</string>
     <!-- Menu -->
     <string name="menu_home">Home</string>
     <string name="menu_stars">Stars</string>

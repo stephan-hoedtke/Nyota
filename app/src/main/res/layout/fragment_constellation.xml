@@ -39,7 +39,7 @@
         android:layout_height="@dimen/button_size"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintBottom_toBottomOf="@id/horizontal_guideline1"
-        android:src="@drawable/zoom_out"
+        android:src="@drawable/minus"
         android:contentDescription="@string/label_empty" />
 
     <ImageView
@@ -48,7 +48,7 @@
         android:layout_height="@dimen/button_size"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="@id/horizontal_guideline1"
-        android:src="@drawable/zoom_in"
+        android:src="@drawable/plus"
         android:contentDescription="@string/label_empty" />
 
     <include android:id="@+id/time_visibility_overlay" layout="@layout/time_visibility_overlay"/>

@@ -10,4 +10,11 @@
         android:icon="@drawable/seekbar"
         app:showAsAction="ifRoom" />
 
+    <item
+        android:id="@+id/action_view_projections"
+        android:orderInCategory="112"
+        android:title="@string/action_view_projections"
+        android:icon="@drawable/equatorial"
+        app:showAsAction="never" />
+
 </menu>

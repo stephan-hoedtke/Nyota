@@ -1,7 +1,7 @@
 package com.stho.nyota.ui.sky
 
 import android.view.View
-import com.stho.nyota.sky.utilities.Projection
+import com.stho.nyota.sky.utilities.projections.Projection
 
 
 class SkyFragmentViewOptions(view: View, val settings: ISkyViewSettings): SkyViewOptions(view), ISkyViewOptions, ISkyViewSettings {

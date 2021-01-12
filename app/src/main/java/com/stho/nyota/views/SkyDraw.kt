@@ -2,15 +2,15 @@ package com.stho.nyota.views
 
 import android.graphics.*
 import com.stho.nyota.sky.universe.*
-import com.stho.nyota.sky.utilities.ISphereProjection
 import com.stho.nyota.sky.utilities.Ten
 import com.stho.nyota.sky.utilities.Topocentric
+import com.stho.nyota.sky.utilities.projections.ISphereProjection
 import com.stho.nyota.ui.sky.ISkyViewOptions
 import java.util.*
 import kotlin.math.abs
 
 
-class SkyDraw(private val projection: ISphereProjection) {
+class SkyDraw() {
 
     private val positions: HashMap<IElement, PointF> = HashMap()
     private var colors: ISkyDrawColors = SkyDrawColors()
@@ -18,6 +18,7 @@ class SkyDraw(private val projection: ISphereProjection) {
     lateinit var canvas: Canvas
     lateinit var center: Topocentric
     lateinit var options: ISkyViewOptions
+    lateinit var projection: ISphereProjection
 
     private val path = Path()
 
@@ -145,7 +146,7 @@ class SkyDraw(private val projection: ISphereProjection) {
     }
 
     fun drawZenit(zenit: Topocentric) =
-        drawName(zenit, "Z", colors.gridColor)
+        drawName(zenit, "Z", colors.visibleGridColor)
 
     fun drawSatellite(satellite: Satellite, bitmap: Bitmap) =
         calculatePosition(satellite.position)?.let {
@@ -163,9 +164,11 @@ class SkyDraw(private val projection: ISphereProjection) {
 
     fun drawGrid() {
         val c = gridCenter
-        for (x in 0 until 90 step 10) {
-            drawGridPointsUpwards(c, x, colors)
-            drawGridPointsDownwards(c, x, colors)
+        for (x in 0 until 90 step 15) { // once per hour
+            drawGridPointsUpwards(c.azimuth + x, c.altitude)
+            drawGridPointsUpwards(c.azimuth - x, c.altitude)
+            drawGridPointsDownwards(c.azimuth + x, c.altitude)
+            drawGridPointsDownwards(c.azimuth - x, c.altitude)
         }
     }
 
@@ -203,14 +206,12 @@ class SkyDraw(private val projection: ISphereProjection) {
         canvas.drawText(name, p.x + 10, p.y - 10, color)
     }
 
-    private fun drawGridPointsUpwards(c: Topocentric, x: Int, colors: ISkyDrawColors) {
-        val azimuth = c.azimuth + x
-        for (y in 0 until 90 step 5) {
-            val altitude: Double = c.altitude + y
+    private fun drawGridPointsUpwards(azimuth: Double, centerAltitude: Double) {
+        for (y in 0 until 90 step 10) {
+            val altitude: Double = centerAltitude + y
             calculatePosition(azimuth, altitude)?.let {
                 if (isOnScreen(it)) {
-                    canvas.drawCircle(it.x, it.y, 2f, colors.gridColor)
-                    canvas.drawCircle(-it.x, it.y, 2f, colors.gridColor)
+                    canvas.drawCircle(it.x, it.y, 2f, if (altitude > 0) colors.visibleGridColor else colors.invisibleGridColor)
                 } else {
                     return
                 }
@@ -218,14 +219,12 @@ class SkyDraw(private val projection: ISphereProjection) {
         }
     }
 
-    private fun drawGridPointsDownwards(c: Topocentric, x: Int, colors: ISkyDrawColors) {
-        val azimuth = c.azimuth + x
-        for (y in 0 until 90 step 5) {
-            val altitude: Double = c.altitude - y
+    private fun drawGridPointsDownwards(azimuth: Double, centerAltitude: Double) {
+        for (y in 0 until 90 step 10) {
+            val altitude: Double = centerAltitude - y
             calculatePosition(azimuth, altitude)?.let {
                 if (isOnScreen(it)) {
-                    canvas.drawCircle(it.x, it.y, 2f, colors.gridColor);
-                    canvas.drawCircle(-it.x, it.y, 2f, colors.gridColor);
+                    canvas.drawCircle(it.x, it.y, 2f, if (altitude > 0) colors.visibleGridColor else colors.invisibleGridColor)
                 } else {
                     return
                 }
@@ -254,7 +253,7 @@ class SkyDraw(private val projection: ISphereProjection) {
         (abs(p.x) < width) && (abs(p.y) < height)
 
     private val gridCenter: Topocentric
-        get() = Topocentric(Ten.nearestTen(center.azimuth), Ten.nearestTen(center.altitude))
+        get() = Topocentric(Ten.nearest15(center.azimuth), Ten.nearest10(center.altitude))
 
     private fun getPosition(element: IElement): PointF? =
         positions[element] ?: calculatePosition(element.position)?.also { positions[element] = it }

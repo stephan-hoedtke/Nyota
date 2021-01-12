@@ -21,7 +21,6 @@ import com.stho.nyota.sky.utilities.Moment
 class SkyFragment : AbstractFragment() {
 
     private lateinit var viewModel: SkyViewModel
-    private lateinit var skyViewOptions: SkyFragmentViewOptions
     private var bindingReference: FragmentSkyBinding? = null
     private val binding: FragmentSkyBinding get() = bindingReference!!
 
@@ -72,9 +71,8 @@ class SkyFragment : AbstractFragment() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.action_view_options -> {
-                displaySkyFragmentOptionsDialog()
-            }
+            R.id.action_view_options -> displaySkyFragmentOptionsDialog()
+            R.id.action_view_projections -> displaySkyFragmentProjectionsDialog()
         }
         return super.onOptionsItemSelected(item)
     }
@@ -103,6 +101,12 @@ class SkyFragment : AbstractFragment() {
         val fragmentManager: FragmentManager = requireActivity().supportFragmentManager
         val tag = "fragment_sky_options_dialog"
         SkyFragmentOptionsDialog(binding.sky.options).show(fragmentManager, tag)
+    }
+
+    private fun displaySkyFragmentProjectionsDialog() {
+        val fragmentManager: FragmentManager = requireActivity().supportFragmentManager
+        val tag = "fragment_sky_projections_dialog"
+        SkyFragmentChooseProjectionDialog(binding.sky.options).show(fragmentManager, tag)
     }
 }
 

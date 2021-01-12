@@ -5,7 +5,8 @@ import android.graphics.Paint
 
 
 interface ISkyDrawColors {
-    val gridColor: Paint // Blue
+    val visibleGridColor: Paint // Dark Green
+    val invisibleGridColor: Paint // Dark Blue
     val bitmapColor: Paint // White
     val starColor: Paint // White
     val lineColor: Paint // Yellow
@@ -20,9 +21,17 @@ interface ISkyDrawColors {
 
 class SkyDrawColors: ISkyDrawColors {
 
-    override val gridColor: Paint = Paint().apply {
+     override val visibleGridColor: Paint = Paint().apply {
+        color = Color.rgb(4, 224, 52) // GREEN
+        alpha = 110
+        style = Paint.Style.FILL_AND_STROKE
+        isAntiAlias = true
+        textSize = 40f
+    }
+
+    override val invisibleGridColor: Paint = Paint().apply {
         color = Color.rgb(4, 52, 224) // BLUE
-        alpha = 200
+        alpha = 140
         style = Paint.Style.FILL_AND_STROKE
         isAntiAlias = true
         textSize = 40f

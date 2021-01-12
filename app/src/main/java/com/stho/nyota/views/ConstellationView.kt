@@ -1,13 +1,11 @@
 package com.stho.software.nyota.views
 
 import android.content.Context
-import android.graphics.Canvas
 import android.util.AttributeSet
-import android.view.View
 import com.stho.nyota.sky.universe.Constellation
 import com.stho.nyota.sky.universe.Star
-import com.stho.nyota.sky.utilities.Projection
 import com.stho.nyota.sky.utilities.Topocentric
+import com.stho.nyota.sky.utilities.projections.Projection
 import com.stho.nyota.ui.sky.*
 import com.stho.nyota.views.AbstractSkyView
 
@@ -30,7 +28,7 @@ class ConstellationView(context: Context?, attrs: AttributeSet?) : AbstractSkyVi
             override var displayStarNames: Boolean = false
             override var displayTargets: Boolean = false
             override var displaySatellites: Boolean = false
-            override var sphereProjection: Projection = Projection.PLAIN
+            override var sphereProjection: Projection = Projection.SPHERE
         })
     }
 

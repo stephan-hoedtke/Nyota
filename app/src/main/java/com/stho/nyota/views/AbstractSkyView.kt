@@ -9,6 +9,7 @@ import android.view.ScaleGestureDetector.SimpleOnScaleGestureListener
 import com.stho.nyota.ISkyViewListener
 import com.stho.nyota.sky.universe.*
 import com.stho.nyota.sky.utilities.*
+import com.stho.nyota.sky.utilities.projections.*
 import com.stho.nyota.ui.sky.ISkyViewOptions
 import com.stho.nyota.ui.sky.SkyViewOptions
 import java.util.*
@@ -19,18 +20,13 @@ abstract class AbstractSkyView(context: Context?, attrs: AttributeSet?): View(co
     lateinit var options: ISkyViewOptions
         private set
 
-    private lateinit var projection: ISphereProjection
-    private lateinit var draw: SkyDraw
 
     private val bitmaps = HashMap<Int, Bitmap>()
+    private var projection: ISphereProjection = SphereProjection()
+    private var draw: SkyDraw = SkyDraw()
 
     fun setOptions(options: ISkyViewOptions) {
         this.options = options
-        projection = when (options.sphereProjection) {
-            Projection.PLAIN -> SphereToPlainProjection()
-            Projection.SPHERE -> SphereToSphereProjection()
-        }
-        draw = SkyDraw(projection)
     }
 
     val path = Path()
@@ -129,17 +125,28 @@ abstract class AbstractSkyView(context: Context?, attrs: AttributeSet?): View(co
 
         canvas.translate(width / 2f, height / 2f)
 
-        projection.setZoom(options.zoomAngle, width)
-        projection.setCenter(center.azimuth, center.altitude)
+        ensureProjection()
+        ensureDraw(canvas)
 
-        draw.configure(canvas, width, height, center)
-        draw.options = options
-
-        if (options.drawGrid) {
+        if (options.displayGrid) {
             draw.drawGrid()
         }
 
         onDrawElements()
+    }
+
+    private fun ensureProjection() {
+        if (projection.projection != options.sphereProjection) {
+            projection = ISphereProjection.create(options.sphereProjection)
+        }
+        projection.setZoom(options.zoomAngle, width)
+        projection.setCenter(center.azimuth, center.altitude)
+    }
+
+    private fun ensureDraw(canvas: Canvas) {
+        draw.configure(canvas, width, height, center)
+        draw.options = options
+        draw.projection = projection
     }
 
     protected abstract fun onDrawElements()

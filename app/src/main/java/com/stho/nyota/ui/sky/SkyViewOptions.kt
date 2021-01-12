@@ -1,7 +1,7 @@
 package com.stho.nyota.ui.sky
 
 import android.view.View
-import com.stho.nyota.sky.utilities.Projection
+import com.stho.nyota.sky.utilities.projections.Projection
 
 // TODO: make ISkyViewSettings readonly (the view reads the data) and IMutableSkyViewSettings available to the fragment...
 
@@ -27,7 +27,7 @@ interface ISkyViewSettings
 interface ISkyViewOptions: ISkyViewSettings {
     var zoomAngle: Double
     var magnitude: Double
-    var drawGrid: Boolean
+    var displayGrid: Boolean
     fun applyScale(scaleFactor: Double)
 }
 
@@ -55,7 +55,7 @@ abstract class SkyViewOptions(private val view: View): ISkyViewOptions {
             }
         }
 
-    override var drawGrid: Boolean = true
+    override var displayGrid: Boolean = true
         set(value) {
             field = value
             invalidate()

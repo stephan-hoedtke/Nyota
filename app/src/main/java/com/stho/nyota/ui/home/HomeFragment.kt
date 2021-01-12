@@ -57,15 +57,13 @@ class HomeFragment : AbstractFragment() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.menu_sky, menu)
+        inflater.inflate(R.menu.menu_home, menu)
         super.onCreateOptionsMenu(menu, inflater)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.action_view_options -> {
-                displayHomeFragmentOptionsDialog()
-            }
+            R.id.action_view_options -> displayHomeFragmentOptionsDialog()
         }
         return super.onOptionsItemSelected(item)
     }

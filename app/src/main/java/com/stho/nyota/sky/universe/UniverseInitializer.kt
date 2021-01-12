@@ -696,10 +696,11 @@ class UniverseInitializer(universe: Universe) : AbstractUniverseInitializer(univ
             .translate(Language.German, "Schütze")
             .translate(Language.English, "Archer")
             .build()
-        newConstellation("Teapot", com.stho.nyota.R.drawable.constellation_teapot)
-            .register(epsilon, delta, gamma, epsilon, zeta, phi, delta, lambda, phi, sigma, tau, zeta)
-            .translate(Language.English, "Teapot")
-            .build()
+// Although it's quite funny, I favour the clear appearance of the sagittarius
+//        newConstellation("Teapot", com.stho.nyota.R.drawable.constellation_teapot)
+//            .register(epsilon, delta, gamma, epsilon, zeta, phi, delta, lambda, phi, sigma, tau, zeta)
+//            .translate(Language.English, "Teapot")
+//            .build()
     }
 
     // Steinbock, The Sea-Goat (englisch)
