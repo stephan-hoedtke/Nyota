@@ -54,6 +54,9 @@ class Star private constructor(override val name: String, val nameIsUnique: Bool
         }
     }
 
+    val referenceConstellation: Constellation?
+        get() = constellations.firstOrNull()
+
     companion object {
         fun create(name: String, symbol: UniverseInitializer.Symbol, ra: Double, decl: Double, magnitude: Double): Star =
             Star(name, true, symbol, ra, decl, magnitude)

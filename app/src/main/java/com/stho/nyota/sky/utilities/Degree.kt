@@ -119,7 +119,7 @@ class Degree {
                 }
             }
 
-        fun getAngleDifference(x: Double, y: Double): Double =
+        fun difference(x: Double, y: Double): Double =
             normalizeTo180(x - y)
 
     }

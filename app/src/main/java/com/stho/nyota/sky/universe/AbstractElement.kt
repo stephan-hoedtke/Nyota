@@ -2,6 +2,7 @@ package com.stho.nyota.sky.universe
 
 
 import com.stho.nyota.sky.utilities.*
+import com.stho.nyota.sky.utilities.Topocentric.Companion.INVALID_DISTANCE
 
 /**
  * Created by shoedtke on 31.08.2016.
@@ -57,5 +58,12 @@ abstract class AbstractElement(var RA: Double = 0.0, var Decl: Double = 0.0, var
 
     override val isVisible: Boolean
         get() = Topocentric.isVisible(position)
+
+    override fun isNear(otherPosition: Topocentric, toleranceInDegree: Double): Boolean =
+        position?.isNear(otherPosition, toleranceInDegree) ?: false
+
+    override fun distanceTo(otherPosition: Topocentric): Double =
+        position?.distanceTo(otherPosition) ?: INVALID_DISTANCE
+
 }
 

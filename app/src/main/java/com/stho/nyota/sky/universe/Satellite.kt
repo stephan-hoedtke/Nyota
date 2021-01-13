@@ -99,6 +99,12 @@ class Satellite private constructor(override var id: Long, override val name: St
         location = getLocationForECI(positionVector, julianDay)
     }
 
+    override fun isNear(otherPosition: Topocentric, toleranceInDegree: Double): Boolean =
+        position?.isNear(otherPosition, toleranceInDegree) ?: false
+
+    override fun distanceTo(otherPosition: Topocentric): Double =
+        position?.distanceTo(otherPosition) ?: Topocentric.INVALID_DISTANCE
+
     companion object {
         private const val ISS: Int = 25544
         private const val HST: Int = 20580

@@ -164,7 +164,7 @@ class SkyDraw() {
 
     fun drawGrid() {
         val c = gridCenter
-        for (x in 0 until 90 step 15) { // once per hour
+        for (x in 0..90 step 15) { // once per hour
             drawGridPointsUpwards(c.azimuth + x, c.altitude)
             drawGridPointsUpwards(c.azimuth - x, c.altitude)
             drawGridPointsDownwards(c.azimuth + x, c.altitude)
@@ -207,7 +207,7 @@ class SkyDraw() {
     }
 
     private fun drawGridPointsUpwards(azimuth: Double, centerAltitude: Double) {
-        for (y in 0 until 90 step 10) {
+        for (y in 0..90 step 10) {
             val altitude: Double = centerAltitude + y
             calculatePosition(azimuth, altitude)?.let {
                 if (isOnScreen(it)) {
@@ -220,7 +220,7 @@ class SkyDraw() {
     }
 
     private fun drawGridPointsDownwards(azimuth: Double, centerAltitude: Double) {
-        for (y in 0 until 90 step 10) {
+        for (y in 0..90 step 10) {
             val altitude: Double = centerAltitude - y
             calculatePosition(azimuth, altitude)?.let {
                 if (isOnScreen(it)) {

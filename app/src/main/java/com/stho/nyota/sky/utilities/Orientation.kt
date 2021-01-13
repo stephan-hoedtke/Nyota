@@ -1,7 +1,5 @@
 package com.stho.nyota.sky.utilities
 
-import com.stho.nyota.sky.universe.IElement
-
 /*******************************************************************************************************
     Orientation:
     - is the direction in which your eyes look into the phone.
@@ -26,7 +24,7 @@ import com.stho.nyota.sky.universe.IElement
 data class Orientation(val azimuth: Double, val pitch: Double, val direction: Double, val roll: Double) {
 
     fun getRotationToTargetAt(targetAzimuth: Double): Float =
-        Degree.getAngleDifference(x = targetAzimuth, y = azimuth).toFloat()
+        Degree.difference(x = targetAzimuth, y = azimuth).toFloat()
 
     fun getRotationToNorth(): Float =
         Degree.normalizeTo180(-azimuth).toFloat()

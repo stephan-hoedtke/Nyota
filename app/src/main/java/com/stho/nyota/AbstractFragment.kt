@@ -91,12 +91,10 @@ abstract class AbstractFragment : Fragment() {
         showSnackbar("Open property ${property.name} with value ${property.value} for key ${property.key}")
 
     fun showSnackbar(message: String) {
-        view?.also {
-            Snackbar.make(it, message, Snackbar.LENGTH_LONG)
-                .setBackgroundTint(getColor(R.color.colorSignalBackground))
-                .setTextColor(getColor(R.color.colorSecondaryText))
-                .show()
-        }
+        Snackbar.make(requireView(), message, Snackbar.LENGTH_LONG)
+            .setBackgroundTint(getColor(R.color.colorSignalBackground))
+            .setTextColor(getColor(R.color.colorSecondaryText))
+            .show()
     }
 
     private fun onIntervalSelect() =

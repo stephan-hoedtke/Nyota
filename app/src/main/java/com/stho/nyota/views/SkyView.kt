@@ -30,9 +30,11 @@ class SkyView(context: Context?, attrs: AttributeSet?) : AbstractSkyView(context
         invalidate()
     }
 
-    fun setElement(element: IElement?) {
+    fun setElement(element: IElement?, updateCenter: Boolean = true) {
         this.element = element
-        setCenter(element?.position)
+        if (updateCenter) {
+            setCenter(element?.position)
+        }
         invalidate()
     }
 

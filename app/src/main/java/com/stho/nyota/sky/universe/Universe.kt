@@ -4,7 +4,9 @@ import com.stho.nyota.sky.utilities.City
 import com.stho.nyota.sky.utilities.Moment
 import com.stho.nyota.sky.utilities.Topocentric
 import com.stho.nyota.sky.utilities.createDefaultBerlinBuch
+import java.text.FieldPosition
 import java.util.*
+import kotlin.collections.ArrayList
 
 // Implemented as static singleton. There is just one universe!
 class Universe {
@@ -97,4 +99,39 @@ class Universe {
                 ?: targets[it]
                 ?: findStarByName(name)
         }
+
+    fun findNearestElementByPosition(position: Topocentric): IElement? {
+        val tolerance = 10.0
+        var distance = Topocentric.INVALID_DISTANCE
+        var element: IElement? = null
+
+        for (e in solarSystem.planets) {
+            if (e.isNear(position, tolerance)) {
+                val d = e.distanceTo(position)
+                if (d < distance) {
+                    distance = d
+                    element = e
+                }
+            }
+        }
+        for (c in constellations.values) {
+            if (c.isNear(position, tolerance)) {
+                val d = c.distanceTo(position)
+                if (d < distance) {
+                    distance = d
+                    element = c
+                }
+            }
+        }
+        for (s in stars.values) {
+            if (s.isNear(position, tolerance)) {
+                val d = s.distanceTo(position)
+                if (d < distance) {
+                    distance = d
+                    element = s
+                }
+           }
+        }
+        return element
+    }
 }

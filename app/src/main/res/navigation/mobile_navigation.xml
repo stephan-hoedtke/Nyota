@@ -270,6 +270,7 @@
     <action android:id="@+id/action_global_nav_moment_time" app:destination="@id/nav_moment_time"/>
     <action android:id="@+id/action_global_nav_moment_location" app:destination="@id/nav_moment_location"/>
     <action android:id="@+id/action_global_nav_star" app:destination="@id/nav_star"/>
+    <action android:id="@+id/action_global_nav_planet" app:destination="@id/nav_planet"/>
     <action android:id="@+id/action_global_nav_constellation" app:destination="@id/nav_constellation"/>
 
 </navigation>

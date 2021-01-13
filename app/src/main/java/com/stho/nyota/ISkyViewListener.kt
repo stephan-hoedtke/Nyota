@@ -1,9 +1,9 @@
 package com.stho.nyota
 
-import android.view.MotionEvent
+import com.stho.nyota.sky.utilities.Topocentric
 
 interface ISkyViewListener {
-    fun onSingleTapConfirmed(e: MotionEvent?)
+    fun onSingleTap(position: Topocentric)
     fun onChangeSkyCenter()
 }
 

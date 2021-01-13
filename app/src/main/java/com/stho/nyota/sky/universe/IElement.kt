@@ -1,6 +1,7 @@
 package com.stho.nyota.sky.universe
 
 import com.stho.nyota.sky.utilities.*
+import java.text.FieldPosition
 
 /**
  * Common properties of
@@ -22,4 +23,8 @@ interface IElement {
 
     // Returns true if the elements is above the horizon
     val isVisible: Boolean
+
+    fun isNear(otherPosition: Topocentric, toleranceInDegree: Double = 0.01): Boolean
+
+    fun distanceTo(otherPosition: Topocentric): Double
 }

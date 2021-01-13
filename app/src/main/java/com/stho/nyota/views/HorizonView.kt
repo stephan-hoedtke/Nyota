@@ -82,7 +82,7 @@ class HorizonView(context: Context?, attrs: AttributeSet?) : View(context, attrs
         val outer = t / 2.2f
         val alpha = 0 - currentDeviceOrientation.roll
         val beta = if (flat) currentDeviceOrientation.pitch else currentDeviceOrientation.direction
-        var phi: Float = Degree.getAngleDifference(targetAltitude, beta).toFloat()
+        var phi: Float = Degree.difference(targetAltitude, beta).toFloat()
         if (phi > 90) phi = 90f
         if (phi < -90) phi = -90f
         canvas.translate(w / 2.toFloat(), h / 2.toFloat())

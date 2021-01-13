@@ -62,18 +62,20 @@ abstract class AbstractSkyView(context: Context?, attrs: AttributeSet?): View(co
                 return false
             }
 
-            override fun onScroll(
-                e1: MotionEvent,
-                e2: MotionEvent,
-                distanceX: Float,
-                distanceY: Float
-            ): Boolean {
+            override fun onScroll(e1: MotionEvent, e2: MotionEvent, distanceX: Float, distanceY: Float): Boolean {
                 applyScrolling(distanceX.toDouble(), distanceY.toDouble())
                 return false // super.onScroll(e1, e2, distanceX, distanceY);
             }
 
             override fun onSingleTapConfirmed(e: MotionEvent): Boolean {
-                listener?.apply { onSingleTapConfirmed(e); }
+                listener?.apply {
+                    val cx = width / 2
+                    val cy = height / 2
+                    val p: PointF = PointF( e.x - cx, cy - e.y)
+                    projection.inverseZoomImagePoint(p)?.let {
+                        onSingleTap(it);
+                    }
+                }
                 return super.onSingleTapConfirmed(e)
             }
         })

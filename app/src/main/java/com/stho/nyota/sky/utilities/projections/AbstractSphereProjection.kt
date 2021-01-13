@@ -1,8 +1,14 @@
 package com.stho.nyota.sky.utilities.projections
 
 import android.graphics.PointF
+import android.os.Debug
+import android.util.Log
 import com.stho.nyota.sky.utilities.Degree
 import com.stho.nyota.sky.utilities.Point
+import com.stho.nyota.sky.utilities.Topocentric
+import kotlin.math.asin
+import kotlin.math.atan2
+import kotlin.math.sqrt
 
 abstract class AbstractSphereProjection: ISphereProjection {
 
@@ -25,8 +31,8 @@ abstract class AbstractSphereProjection: ISphereProjection {
 
     override fun calculateZoomImagePoint(azimuth: Double, altitude: Double): PointF? =
         calculateImagePoint(azimuth, altitude) ?.let {
-            val x = (zoom * it.x).toFloat()
-            val y = (zoom * it.y).toFloat()
+            val x: Float = (zoom * it.x).toFloat()
+            val y: Float = (zoom * it.y).toFloat()
             PointF(x, -y)
         }
 
@@ -36,18 +42,43 @@ abstract class AbstractSphereProjection: ISphereProjection {
         val L = Degree.cos(pointAltitude)
         val x = L * Degree.sin(deltaAzimuth)
         val y = L * Degree.cos(deltaAzimuth)
+        val x1 = x
         val y1 = z * cos - y * sin
-        val z1 = y * cos + z * sin
+        val z1 = z * sin + y * cos
 
         if (isExcluded(z1)) {
             return null
         }
 
-        return projectImagePoint(x, y1, z1)
+        return projectImagePoint(x1, y1, z1)
     }
 
+    override fun inverseZoomImagePoint(p: PointF): Topocentric? {
+        val x2: Double = p.x / zoom
+        val y2: Double = p.y / zoom
+        return inverseImagePoint(x2, y2)
+    }
 
-    protected abstract fun projectImagePoint(x: Double, y: Double, z: Double): Point
+    private fun inverseImagePoint(x2: Double, y2: Double): Topocentric? =
+        inverseProjection(x2, y2) ?.let {
+            val x1 = it.x
+            val y1 = it.y
+            val Q = 1 - x1 * x1 - y1 * y1
+            if (Q > 1) {
+                return null
+            }
+            val z1 = sqrt(Q)
+            val x = x1
+            val y = z1 * cos - y1 * sin
+            val z = z1 * sin + y1 * cos
+            val altitude = Degree.normalizeTo180(Degree.arcSin(z))
+            val azimuth = Degree.normalizeTo180(Degree.arcTan2(x, y))
+            Topocentric(azimuth = azimuth + centerAzimuth, altitude = altitude)
+        }
+
+
+    protected abstract fun projectImagePoint(x1: Double, y1: Double, z1: Double): Point
+    protected abstract fun inverseProjection(x2: Double, y2: Double): Point?
 
     /**
      * to avoid projection of points "behind the observer"

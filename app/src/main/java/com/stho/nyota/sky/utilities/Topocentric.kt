@@ -1,6 +1,10 @@
 package com.stho.nyota.sky.utilities
 
 import java.io.Serializable
+import java.lang.Math.pow
+import java.text.FieldPosition
+import kotlin.math.abs
+import kotlin.math.sqrt
 
 /**
  * Topocentric, that is, horizontal coordinates, in relation to an observer at the surface of the earth, with azimuth in degrees, altitude in degrees and, if applicable, distance in km.
@@ -38,7 +42,17 @@ class Topocentric(var azimuth: Double, var altitude: Double, var distance: Doubl
     val isDizzy: Boolean =
         altitude >= 0.0 && altitude <= 5.0
 
+    fun isNear(position: Topocentric, toleranceInDegree: Double): Boolean =
+        abs(Degree.difference(azimuth, position.azimuth)) < toleranceInDegree && abs(Degree.difference(altitude, position.altitude)) < toleranceInDegree
+
+    fun distanceTo(position: Topocentric): Double {
+        val x = Degree.difference(azimuth, position.azimuth)
+        val y = Degree.difference(altitude, position.altitude)
+        return sqrt(x * x + y * y)
+    }
+
     companion object {
+        const val INVALID_DISTANCE: Double = 10000.0
         fun isAboveHorizon(position: Topocentric?) = position?.isAboveHorizon ?: false
         fun isBelowHorizon(position: Topocentric?) = position?.isBelowHorizon ?: false
         fun isVisible(position: Topocentric?) = position?.isVisible ?: false
