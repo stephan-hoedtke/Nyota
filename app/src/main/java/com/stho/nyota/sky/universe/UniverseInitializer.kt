@@ -840,7 +840,41 @@ class UniverseInitializer(universe: Universe) : AbstractUniverseInitializer(univ
     }
 
     private fun registerPerseus() {
-        // TODO
+        val alpha = newStar("Mirfak", Symbol.Alpha, "03h 24m 19.35", "+49° 51′ 40.5", 1.79)
+        val beta = newStar("Algol", Symbol.Beta, "03h 08m 10.13", "+40° 57′ 20.3", 2.09)
+        val zeta = newStar("Atik", Symbol.Zeta, "03h 54m 07.92", "+31° 53′ 01.2", 2.84)
+        val epsilon = newStar(Symbol.Epsilon, "03h 57m 51.22", "+40° 00′ 37.0", 2.90)
+        val xi = newStar("Menkib", Symbol.Xi, "03h 58m 57.90", "+35° 47′ 27.7", 3.98)
+        val omicron = newStar(Symbol.Omichron, "03h 44m 19.13", "+32° 17′ 17.8", 3.84)
+        val rho = newStar(Symbol.RHO, "03h 05m 10.50", "+38° 50′ 25.9", 3.32)
+        val kappa = newStar(Symbol.Kappa, "03h 09m 29.63", "+44° 51′ 28.4", 3.79)
+        val iota = newStar(Symbol.Iota, "03h 09m 02.88", "+49° 36′ 48.6", 4.05)
+        val theta = newStar(Symbol.Theta, "02h 44m 11.69", "+49° 13′ 43.2", 4.10)
+        val tau = newStar(Symbol.Tau, "02h 54m 15.46", "+52° 45′ 45.0", 3.93)
+        val eta = newStar(Symbol.Eta, "02h 50m 41.79", "+55° 53′ 43.9", 3.77)
+        val gamma = newStar(Symbol.Gamma, "03h 04m 47.79", "+53° 30′ 23.2", 2.91)
+        val psi = newStar(Symbol.Psi, "03h 36m 29.36", "+48° 11′ 33.7", 4.32)
+        val delta = newStar(Symbol.Delta, "03h 42m 55.48", "+47° 47′ 15.6", 3.01)
+        val nu = newStar(Symbol.Nu, "03h 45m 11.64", "+42° 34′ 42.8", 3.77)
+        val phi = newStar(Symbol.Phi, "01h 43m 39.62", "+50° 41′ 19.6", 4.01)
+        val mu = newStar(Symbol.Mu, "04h 14m 53.86", "+48° 24′ 33.7", 4.12)
+        val lambda = newStar(Symbol.Lambda, "04h 06m 35.06", "+50° 21′ 04.9", 4.25)
+        val omega = newStar(Symbol.Omega, "03h 11m 17.40", "+39° 36′ 41.7", 4.61)
+        val pi = newStar(Symbol.Pi, "02h 58m 45.65", "+39° 39′ 46.2", 4.68)
+        newConstellation("Perseus", com.stho.nyota.R.drawable.constellation_perseus)
+            .register(rho, beta, kappa, iota, tau, eta, gamma, alpha, delta, epsilon, xi, zeta, omicron)
+            .register(lambda, mu, delta)
+            .register(alpha, iota, theta)
+            .register(epsilon, beta)
+            .register(omega)
+            .register(pi)
+            .register(psi)
+            .register(phi)
+            .register(nu)
+            .translate(Language.Latin, "Perseus")
+            .translate(Language.German, "Perseus")
+            .translate(Language.English, "Perseus")
+            .build()
     }
 
     // Musca = Fly
