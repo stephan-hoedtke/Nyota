@@ -7,13 +7,6 @@ import com.stho.nyota.sky.utilities.PropertyList
 import java.util.*
 import kotlin.collections.ArrayList
 
-
-enum class Language {
-    Latin,
-    German,
-    English,
-}
-
 /**
  * Created by shoedtke on 08.09.2016.
  */
@@ -75,10 +68,10 @@ class Constellation internal constructor(override val name: String, override val
     override fun getDetails(moment: Moment): PropertyList =
         super.getDetails(moment).apply {
             for (star in stars) {
-                add(PropertyKey.STAR, UniverseInitializer.greekSymbolImageId(star.symbol), star.name, star.position.toString())
+                add(PropertyKey.STAR, Symbol.greekSymbolImageId(star.symbol), star.name, star.position.toString())
             }
             for (x in translations) {
-                add(PropertyKey.TRANSLATION, UniverseInitializer.languageImageId(x.key), x.key.toString(), x.value)
+                add(PropertyKey.TRANSLATION, Language.languageImageId(x.key), x.key.toString(), x.value)
             }
         }
 

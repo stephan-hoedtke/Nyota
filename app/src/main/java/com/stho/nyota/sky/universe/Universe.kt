@@ -105,7 +105,7 @@ class Universe {
         var distance = Topocentric.INVALID_DISTANCE
         var element: IElement? = null
 
-        for (e in solarSystem.planets) {
+        for (e in solarSystem.elements) {
             if (e.isNear(position, tolerance)) {
                 val d = e.distanceTo(position)
                 if (d < distance) {
@@ -131,6 +131,24 @@ class Universe {
                     element = s
                 }
            }
+        }
+        for (s in satellites.values) {
+            if (s.isNear(position, tolerance)) {
+                val d = s.distanceTo(position)
+                if (d < distance) {
+                    distance = d
+                    element = s
+                }
+            }
+        }
+        for (t in targets.values) {
+            if (t.isNear(position, tolerance)) {
+                val d = t.distanceTo(position)
+                if (d < distance) {
+                    distance = d
+                    element = t
+                }
+            }
         }
         return element
     }

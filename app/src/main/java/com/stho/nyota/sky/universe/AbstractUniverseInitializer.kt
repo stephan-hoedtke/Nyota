@@ -10,19 +10,19 @@ abstract class AbstractUniverseInitializer(protected var universe: Universe) {
     fun getStar(name: String): Star =
         universe.stars.findStarByName(name) ?: throw Exception("Star $name was not initialized yet")
 
-    fun newStar(name: String, symbol: UniverseInitializer.Symbol, ascension: String, declination: String, brightness: Double): Star =
+    fun newStar(name: String, symbol: Symbol, ascension: String, declination: String, brightness: Double): Star =
         newStar(name, symbol, Hour.fromHour(ascension), Degree.fromDegree(declination), brightness)
 
-    fun newStar(symbol: UniverseInitializer.Symbol, ascension: String, declination: String, brightness: Double): Star =
+    fun newStar(symbol: Symbol, ascension: String, declination: String, brightness: Double): Star =
         newStar(symbol, Hour.fromHour(ascension), Degree.fromDegree(declination), brightness)
 
-    private fun newStar(name: String, symbol: UniverseInitializer.Symbol, ascension: Hour, declination: Degree, brightness: Double): Star =
+    private fun newStar(name: String, symbol: Symbol, ascension: Hour, declination: Degree, brightness: Double): Star =
         universe.stars.findStarByName(name) ?:
             Star.create(name, symbol, ascension.angleInDegree, declination.angleInDegree, brightness).also {
                 universe.stars.add(it)
             }
 
-    private fun newStar(symbol: UniverseInitializer.Symbol, ascension: Hour, declination: Degree, brightness: Double): Star =
+    private fun newStar(symbol: Symbol, ascension: Hour, declination: Degree, brightness: Double): Star =
         Star.create(symbol, ascension.angleInDegree, declination.angleInDegree, brightness).also {
             universe.stars.add(it)
         }

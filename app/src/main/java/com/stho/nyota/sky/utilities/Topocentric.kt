@@ -15,7 +15,7 @@ import kotlin.math.sqrt
  *
  * horizontal coordinates, from North (0°) through East (90°), South (180°), West (270°) and back to North.
 */
-class Topocentric(var azimuth: Double, var altitude: Double, var distance: Double = 0.0) : Serializable {
+class Topocentric(var azimuth: Double, var altitude: Double, var distance: Double = 0.0) {
     var nextSetTime: UTC? = null
     var nextRiseTime: UTC? = null
     var setTime: UTC? = null

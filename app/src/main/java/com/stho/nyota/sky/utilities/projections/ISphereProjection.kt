@@ -1,17 +1,17 @@
 package com.stho.nyota.sky.utilities.projections
 
-import android.graphics.PointF
 import com.stho.nyota.sky.utilities.Topocentric
-import com.stho.nyota.views.SkyDraw
+import com.stho.nyota.views.SkyPoint
+import com.stho.nyota.views.SkyPointF
 
 
 interface ISphereProjection {
     val projection: Projection
     fun setZoom(zoomAngle: Double, width: Int)
     fun setCenter(centerAzimuth: Double, centerAltitude: Double)
-    fun calculateZoomImagePoint(azimuth: Double, altitude: Double): PointF?
+    fun calculateZoomImagePoint(azimuth: Double, altitude: Double): SkyPointF?
     fun calculateAngle(delta: Double): Double
-    fun inverseZoomImagePoint(p: PointF): Topocentric?
+    fun inverseZoomImagePoint(p: SkyPointF): Topocentric?
 
     companion object {
         fun create(projection: Projection) =

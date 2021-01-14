@@ -157,9 +157,9 @@ class SkyFragment : AbstractFragment() {
                 is Star -> displaySnackbarForStarAtPosition(position, it)
                 is AbstractPlanet -> displaySnackbarForPlanetAtPosition(position, it)
                 is Constellation -> displaySnackbarForConstellationAtPosition(position, it)
-                else -> displaySnackbar("$position")
+                else -> displaySnackbar("$position ${it.name}")
             }
-        }
+        } ?: displaySnackbar("$position")
     }
 
     private fun displaySnackbar(message: String) {

@@ -635,23 +635,23 @@ class UniverseInitializer(universe: Universe) : AbstractUniverseInitializer(univ
     // Skorpios (griechisch)
     // Vṛścika (sanskrit)
     private fun registerScorpius() {
-        val nu = newStar("Nu Scorpii",Symbol.Nu, "16h 11m 59.740", "−19° 27′ 38.33", 4.349)
-        val beta = newStar("Beta Scorpii", Symbol.Beta, "16h 05m 26.23198", "–19° 48′ 19.6300", 2.62)
-        val delta = newStar("Delta Scorpii", Symbol.Delta, "16h 00m 20.00528", "–22° 37′ 18.1431", 2.307)
-        val pi = newStar("Pi Scorpii", Symbol.Pi, "15h 58m 51.11324", "−26° 06′ 50.7886", 2.89)
-        val rho = newStar("Rho Scorpii", Symbol.RHO, "15h 56m 53.07624", "−29° 12′ 50.6612", 3.86)
-        val sigma = newStar("Sigma Scorpii", Symbol.Sigma, "16h 21m 11.31571", "–25° 35′ 34.0515", 2.88)
-        val antares = newStar("Antares", Symbol.Alpha, "16h 29m 24.45970", "−26° 25′ 55.2094", 0.6)
-        val tau = newStar("Tau Scorpii", Symbol.Tau, "16h 35m 52.95285", "−28° 12′ 57.6615", 2.82)
-        val epsilon = newStar("Epsilon Scorpii", Symbol.Epsilon, "16h 50m 09.8", "–34° 17′ 36", 2.310)
-        val mu = newStar("Mu Scorpii", Symbol.Mu, "16h 51m 52.23111", "−38° 02′ 50.5694", 3.04)
-        val zeta = newStar("Zeta Scorpii", Symbol.Zeta, "16h 53m 59.72650", "−42° 21′ 43.3063", 3.59)
-        val eta = newStar("Eta Scorpii", Symbol.Eta, "17h 12m 09.19565", "–43° 14′ 21.0905", 3.33)
-        val iota = newStar("Iota Scorpii", Symbol.Iota, "17h 47m 35.08113", "−40° 07′ 37.1893", 3.03)
-        val kappa = newStar("Kappa Scorpii", Symbol.Kappa, "17h 42m 29.27520", "–39° 01′ 47.9391", 2.39)
-        val theta = newStar("Theta Scorpii", Symbol.Theta, "17h 37m 19.12985", "–42° 59′ 52.1808", 1.84)
-        val lambda = newStar("Lambda Scorpii", Symbol.Lambda, "17h 33m 36.520", "−37° 06′ 13.76", 1.62)
-        val upsilon = newStar("Upsilon Scorpii", Symbol.Upsilon, "17h 30m 45.83712", "–37° 17′ 44.9285", 2.70)
+        val nu = newStar(Symbol.Nu, "16h 11m 59.740", "−19° 27′ 38.33", 4.349)
+        val beta = newStar(Symbol.Beta, "16h 05m 26.23198", "–19° 48′ 19.6300", 2.62)
+        val delta = newStar(Symbol.Delta, "16h 00m 20.00528", "–22° 37′ 18.1431", 2.307)
+        val pi = newStar(Symbol.Pi, "15h 58m 51.11324", "−26° 06′ 50.7886", 2.89)
+        val rho = newStar(Symbol.RHO, "15h 56m 53.07624", "−29° 12′ 50.6612", 3.86)
+        val sigma = newStar( Symbol.Sigma, "16h 21m 11.31571", "–25° 35′ 34.0515", 2.88)
+        val antares = newStar(Symbol.Alpha, "16h 29m 24.45970", "−26° 25′ 55.2094", 0.6)
+        val tau = newStar(Symbol.Tau, "16h 35m 52.95285", "−28° 12′ 57.6615", 2.82)
+        val epsilon = newStar(Symbol.Epsilon, "16h 50m 09.8", "–34° 17′ 36", 2.310)
+        val mu = newStar(Symbol.Mu, "16h 51m 52.23111", "−38° 02′ 50.5694", 3.04)
+        val zeta = newStar(Symbol.Zeta, "16h 53m 59.72650", "−42° 21′ 43.3063", 3.59)
+        val eta = newStar(Symbol.Eta, "17h 12m 09.19565", "–43° 14′ 21.0905", 3.33)
+        val iota = newStar(Symbol.Iota, "17h 47m 35.08113", "−40° 07′ 37.1893", 3.03)
+        val kappa = newStar(Symbol.Kappa, "17h 42m 29.27520", "–39° 01′ 47.9391", 2.39)
+        val theta = newStar(Symbol.Theta, "17h 37m 19.12985", "–42° 59′ 52.1808", 1.84)
+        val lambda = newStar(Symbol.Lambda, "17h 33m 36.520", "−37° 06′ 13.76", 1.62)
+        val upsilon = newStar(Symbol.Upsilon, "17h 30m 45.83712", "–37° 17′ 44.9285", 2.70)
         newConstellation("Scorpius", com.stho.nyota.R.drawable.constellation_scorpius)
             .register(sigma, nu)
             .register(sigma, beta)
@@ -830,7 +830,7 @@ class UniverseInitializer(universe: Universe) : AbstractUniverseInitializer(univ
         val eta = newStar(Symbol.Eta, "05h 06m 30.87", "+41° 14′ 04.7", 3.18)
         val delta = newStar( Symbol.Delta, "05h 59m 31.63", "+54° 17′ 04.77", 3.71)
         newConstellation("Auriga", com.stho.nyota.R.drawable.constellation_auriga)
-            .register(iota, epsilon, alpha!!, beta, theta, iota)
+            .register(iota, epsilon, alpha, beta, theta, iota)
             .register(eta)
             .register(delta)
             .translate(Language.Latin, "Auriga")
@@ -919,135 +919,5 @@ class UniverseInitializer(universe: Universe) : AbstractUniverseInitializer(univ
     private fun registerSpecialElements() {
         newSpecialElement("S", Hour.fromDegree(0.0), Degree.fromNegative(90, 0, 0.0))
         newSpecialElement("N", Hour.fromDegree(0.0), Degree.fromPositive(90, 0, 0.0))
-    }
-
-
-    // TODO: move to another class and make symbol public
-    enum class Symbol {
-        Alpha,
-        Beta,
-        Gamma,
-        Delta,
-        Epsilon,
-        Zeta,
-        Eta,
-        Theta,
-        Iota,
-        Kappa,
-        Lambda,
-        Mu,
-        Nu,
-        Xi,
-        Omichron,
-        Pi,
-        RHO,
-        Sigma,
-        Tau,
-        Upsilon,
-        Phi,
-        Chi,
-        Psi,
-        Omega,
-        One,
-        Two,
-        Three,
-        Four,
-        Five,
-        Six,
-        Seven,
-        Eight,
-        Nine,
-        Eleven,
-        FortyOne,
-    }
-
-    companion object {
-
-        fun greekSymbolToString(symbol: Symbol): String =
-            when (symbol) {
-                Symbol.Alpha -> "α"
-                Symbol.Beta -> "β"
-                Symbol.Gamma -> "γ"
-                Symbol.Delta -> "δ"
-                Symbol.Epsilon -> "ε"
-                Symbol.Zeta -> "ζ"
-                Symbol.Eta -> "η"
-                Symbol.Theta -> "θ"
-                Symbol.Iota -> "ι"
-                Symbol.Kappa -> "κ"
-                Symbol.Lambda -> "λ"
-                Symbol.Mu -> "μ"
-                Symbol.Nu -> "ν"
-                Symbol.Xi -> "ξ"
-                Symbol.Omichron -> "ο"
-                Symbol.Pi -> "π"
-                Symbol.RHO -> "ρ"
-                Symbol.Sigma -> "σ"
-                Symbol.Tau -> "τ"
-                Symbol.Upsilon -> "υ"
-                Symbol.Phi -> "φ"
-                Symbol.Chi -> "χ"
-                Symbol.Psi -> "ψ"
-                Symbol.Omega -> "ω"
-                Symbol.One -> "1"
-                Symbol.Two -> "2"
-                Symbol.Three -> "3"
-                Symbol.Four -> "4"
-                Symbol.Five -> "5"
-                Symbol.Six -> "6"
-                Symbol.Seven -> "7"
-                Symbol.Eight -> "8"
-                Symbol.Nine -> "9"
-                Symbol.Eleven -> "11"
-                Symbol.FortyOne -> "41"
-            }
-
-        // TODO: move to another class
-
-        fun greekSymbolImageId(symbol: Symbol): Int =
-            when (symbol) {
-                Symbol.Alpha -> com.stho.nyota.R.drawable.greek_alpha
-                Symbol.Beta -> com.stho.nyota.R.drawable.greek_beta
-                Symbol.Gamma -> com.stho.nyota.R.drawable.greek_gamma
-                Symbol.Delta -> com.stho.nyota.R.drawable.greek_delta
-                Symbol.Epsilon -> com.stho.nyota.R.drawable.greek_epsilon
-                Symbol.Zeta -> com.stho.nyota.R.drawable.greek_zeta
-                Symbol.Eta -> com.stho.nyota.R.drawable.greek_eta
-                Symbol.Theta -> com.stho.nyota.R.drawable.greek_theta
-                Symbol.Iota -> com.stho.nyota.R.drawable.greek_iota
-                Symbol.Kappa -> com.stho.nyota.R.drawable.greek_kappa
-                Symbol.Lambda -> com.stho.nyota.R.drawable.greek_lambda
-                Symbol.Mu -> com.stho.nyota.R.drawable.greek_mu
-                Symbol.Nu -> com.stho.nyota.R.drawable.greek_nu
-                Symbol.Xi -> com.stho.nyota.R.drawable.greek_xi
-                Symbol.Omichron -> com.stho.nyota.R.drawable.greek_omicron
-                Symbol.Pi -> com.stho.nyota.R.drawable.greek_pi
-                Symbol.RHO -> com.stho.nyota.R.drawable.greek_rho
-                Symbol.Sigma -> com.stho.nyota.R.drawable.greek_sigma
-                Symbol.Tau -> com.stho.nyota.R.drawable.greek_tau
-                Symbol.Upsilon -> com.stho.nyota.R.drawable.greek_upsilon
-                Symbol.Phi -> com.stho.nyota.R.drawable.greek_phi
-                Symbol.Chi -> com.stho.nyota.R.drawable.greek_chi
-                Symbol.Psi -> com.stho.nyota.R.drawable.greek_psi
-                Symbol.Omega -> com.stho.nyota.R.drawable.greek_omega
-                Symbol.One -> com.stho.nyota.R.drawable.star
-                Symbol.Two -> com.stho.nyota.R.drawable.star
-                Symbol.Three -> com.stho.nyota.R.drawable.star
-                Symbol.Four -> com.stho.nyota.R.drawable.star
-                Symbol.Five -> com.stho.nyota.R.drawable.star
-                Symbol.Six -> com.stho.nyota.R.drawable.star
-                Symbol.Seven -> com.stho.nyota.R.drawable.star
-                Symbol.Eight -> com.stho.nyota.R.drawable.star
-                Symbol.Nine -> com.stho.nyota.R.drawable.star
-                Symbol.Eleven -> com.stho.nyota.R.drawable.star
-                Symbol.FortyOne -> com.stho.nyota.R.drawable.star
-        }
-
-        fun languageImageId(language: Language): Int =
-            when (language) {
-                Language.Latin -> com.stho.nyota.R.drawable.language_latin
-                Language.German -> com.stho.nyota.R.drawable.language_german
-                Language.English -> com.stho.nyota.R.drawable.language_english
-            }
     }
 }

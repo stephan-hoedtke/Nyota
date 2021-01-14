@@ -6,6 +6,8 @@ import android.util.Log
 import com.stho.nyota.sky.utilities.Degree
 import com.stho.nyota.sky.utilities.Point
 import com.stho.nyota.sky.utilities.Topocentric
+import com.stho.nyota.views.SkyPoint
+import com.stho.nyota.views.SkyPointF
 import kotlin.math.asin
 import kotlin.math.atan2
 import kotlin.math.sqrt
@@ -29,14 +31,15 @@ abstract class AbstractSphereProjection: ISphereProjection {
         sin = Degree.sin(centerAltitude)
     }
 
-    override fun calculateZoomImagePoint(azimuth: Double, altitude: Double): PointF? =
-        calculateImagePoint(azimuth, altitude) ?.let {
-            val x: Float = (zoom * it.x).toFloat()
-            val y: Float = (zoom * it.y).toFloat()
-            PointF(x, -y)
+    override fun calculateZoomImagePoint(azimuth: Double, altitude: Double): SkyPointF? =
+        calculateImagePoint(azimuth, altitude)?.let {
+            val x3: Float = (zoom * it.x).toFloat()
+            val y3: Float = (zoom * it.y).toFloat()
+            SkyPointF(x3, -y3)
+            // TODO: consider SkyPointF.fromImagePoint(...)
         }
 
-    private fun calculateImagePoint(pointAzimuth: Double, pointAltitude: Double): Point? {
+    private fun calculateImagePoint(pointAzimuth: Double, pointAltitude: Double): SkyPoint? {
         val deltaAzimuth = pointAzimuth - centerAzimuth
         val z = Degree.sin(pointAltitude)
         val L = Degree.cos(pointAltitude)
@@ -45,29 +48,25 @@ abstract class AbstractSphereProjection: ISphereProjection {
         val x1 = x
         val y1 = z * cos - y * sin
         val z1 = z * sin + y * cos
-
-        if (isExcluded(z1)) {
+        // TODO consider: SkyPoint.fromPosition(pointAzimuth, pointAltitude), p.rotate(cos, sin) -> p = SkyPoint -> project(
+        if (z1 < TOLERANCE) {
             return null
         }
-
         return projectImagePoint(x1, y1, z1)
     }
 
-    override fun inverseZoomImagePoint(p: PointF): Topocentric? {
+    override fun inverseZoomImagePoint(p: SkyPointF): Topocentric? {
         val x2: Double = p.x / zoom
         val y2: Double = p.y / zoom
-        return inverseImagePoint(x2, y2)
+        // // TODO: consider SkyPointF.toImagePoint(...)
+        return inverseImagePoint(x2, -y2)
     }
 
     private fun inverseImagePoint(x2: Double, y2: Double): Topocentric? =
         inverseProjection(x2, y2) ?.let {
             val x1 = it.x
             val y1 = it.y
-            val Q = 1 - x1 * x1 - y1 * y1
-            if (Q > 1) {
-                return null
-            }
-            val z1 = sqrt(Q)
+            val z1 = it.z
             val x = x1
             val y = z1 * cos - y1 * sin
             val z = z1 * sin + y1 * cos
@@ -77,17 +76,13 @@ abstract class AbstractSphereProjection: ISphereProjection {
         }
 
 
-    protected abstract fun projectImagePoint(x1: Double, y1: Double, z1: Double): Point
-    protected abstract fun inverseProjection(x2: Double, y2: Double): Point?
+    protected abstract fun projectImagePoint(x1: Double, y1: Double, z1: Double): SkyPoint?
+    protected abstract fun inverseProjection(x2: Double, y2: Double): SkyPoint?
 
     /**
      * to avoid projection of points "behind the observer"
      */
     companion object {
-
         private const val TOLERANCE = 0.17364818 // cos(80°)
-
-        private fun isExcluded(z: Double): Boolean =
-            z < TOLERANCE
     }
 }

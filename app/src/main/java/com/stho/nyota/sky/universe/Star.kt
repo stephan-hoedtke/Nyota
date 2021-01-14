@@ -9,7 +9,7 @@ import java.lang.Exception
 /**
  * Created by shoedtke on 31.08.2016.
  */
-class Star private constructor(override val name: String, val nameIsUnique: Boolean, val symbol: UniverseInitializer.Symbol, RA: Double, Decl: Double, magn: Double) : AbstractElement(RA, Decl, magn) {
+class Star private constructor(override val name: String, val nameIsUnique: Boolean, val symbol: Symbol, RA: Double, Decl: Double, magn: Double) : AbstractElement(RA, Decl, magn) {
 
     private val constellations: ArrayList<Constellation> = ArrayList()
 
@@ -35,7 +35,7 @@ class Star private constructor(override val name: String, val nameIsUnique: Bool
     override fun getBasics(moment: Moment): PropertyList =
         super.getBasics(moment).apply {
             add(com.stho.nyota.R.drawable.alpha_gray, "Magnitude", Formatter.df2.format(magn))
-            add(UniverseInitializer.greekSymbolImageId(symbol), "Symbol", UniverseInitializer.greekSymbolToString(symbol))
+            add(Symbol.greekSymbolImageId(symbol), "Symbol", Symbol.greekSymbolToString(symbol))
         }
 
     override fun getDetails(moment: Moment): PropertyList =
@@ -58,10 +58,10 @@ class Star private constructor(override val name: String, val nameIsUnique: Bool
         get() = constellations.firstOrNull()
 
     companion object {
-        fun create(name: String, symbol: UniverseInitializer.Symbol, ra: Double, decl: Double, magnitude: Double): Star =
+        fun create(name: String, symbol: Symbol, ra: Double, decl: Double, magnitude: Double): Star =
             Star(name, true, symbol, ra, decl, magnitude)
 
-        fun create(symbol: UniverseInitializer.Symbol, ra: Double, decl: Double, magnitude: Double): Star =
+        fun create(symbol: Symbol, ra: Double, decl: Double, magnitude: Double): Star =
             Star(symbol.toString(), false, symbol, ra, decl, magnitude)
     }
 }

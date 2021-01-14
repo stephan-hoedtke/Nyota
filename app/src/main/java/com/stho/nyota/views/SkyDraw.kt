@@ -12,7 +12,7 @@ import kotlin.math.abs
 
 class SkyDraw() {
 
-    private val positions: HashMap<IElement, PointF> = HashMap()
+    private val positions: HashMap<IElement, SkyPointF> = HashMap()
     private var colors: ISkyDrawColors = SkyDrawColors()
 
     lateinit var canvas: Canvas
@@ -90,7 +90,7 @@ class SkyDraw() {
                         }
                         drawCircleAt(r, colors.referenceStarColor, it)
                         if (options.displaySymbols) {
-                            drawNameAt(UniverseInitializer.greekSymbolToString(star.symbol), colors.referenceSymbolColor, it);
+                            drawNameAt(Symbol.greekSymbolToString(star.symbol), colors.referenceSymbolColor, it);
                         }
                         if (options.displayStarNames && star.nameIsUnique) {
                             drawNameAt(star.name, colors.referenceNameColor, it)
@@ -105,7 +105,7 @@ class SkyDraw() {
                             }
                             drawCircleAt(r, colors.starColor, it)
                             if (options.displaySymbols) {
-                                drawNameAt(UniverseInitializer.greekSymbolToString(star.symbol), colors.symbolColor, it);
+                                drawNameAt(Symbol.greekSymbolToString(star.symbol), colors.symbolColor, it);
                             }
                             if (options.displayStarNames && star.nameIsUnique) {
                                 drawNameAt(star.name, colors.nameColor, it)
@@ -172,11 +172,11 @@ class SkyDraw() {
         }
     }
 
-    private fun drawCircleAt(r: Float, color: Paint, p: PointF) {
+    private fun drawCircleAt(r: Float, color: Paint, p: SkyPointF) {
         canvas.drawCircle(p.x, p.y, r, color);
     }
 
-    private fun drawImageAt(bitmap: Bitmap, p: PointF) {
+    private fun drawImageAt(bitmap: Bitmap, p: SkyPointF) {
         val dx: Int = bitmap.width / 2
         val dy: Int = bitmap.height / 2
         canvas.drawBitmap(bitmap, p.x - dx, p.y - dy, colors.bitmapColor)
@@ -202,7 +202,7 @@ class SkyDraw() {
         canvas.drawPath(path, color);
     }
 
-    private fun drawNameAt(name: String, color: Paint, p: PointF) {
+    private fun drawNameAt(name: String, color: Paint, p: SkyPointF) {
         canvas.drawText(name, p.x + 10, p.y - 10, color)
     }
 
@@ -249,21 +249,21 @@ class SkyDraw() {
             else -> 6f
         }
 
-    private fun isOnScreen(p: PointF): Boolean =
+    private fun isOnScreen(p: SkyPointF): Boolean =
         (abs(p.x) < width) && (abs(p.y) < height)
 
     private val gridCenter: Topocentric
         get() = Topocentric(Ten.nearest15(center.azimuth), Ten.nearest10(center.altitude))
 
-    private fun getPosition(element: IElement): PointF? =
+    private fun getPosition(element: IElement): SkyPointF? =
         positions[element] ?: calculatePosition(element.position)?.also { positions[element] = it }
 
-    private fun calculatePosition(topocentric: Topocentric?): PointF? =
+    private fun calculatePosition(topocentric: Topocentric?): SkyPointF? =
         topocentric?.let {
             projection.calculateZoomImagePoint(it.azimuth, it.altitude)
         }
 
-    private fun calculatePosition(azimuth: Double, altitude: Double): PointF? =
+    private fun calculatePosition(azimuth: Double, altitude: Double): SkyPointF? =
         projection.calculateZoomImagePoint(azimuth, altitude)
 
 

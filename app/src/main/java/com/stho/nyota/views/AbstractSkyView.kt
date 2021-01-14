@@ -69,9 +69,7 @@ abstract class AbstractSkyView(context: Context?, attrs: AttributeSet?): View(co
 
             override fun onSingleTapConfirmed(e: MotionEvent): Boolean {
                 listener?.apply {
-                    val cx = width / 2
-                    val cy = height / 2
-                    val p: PointF = PointF( e.x - cx, cy - e.y)
+                    val p = SkyPointF.forMotionEvent(e, width, height)
                     projection.inverseZoomImagePoint(p)?.let {
                         onSingleTap(it);
                     }
