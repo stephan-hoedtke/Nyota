@@ -40,6 +40,19 @@ object Angle {
             }
         }
 
+    fun toString(azimuth: Double, altitude: Double, angleType: AngleType?): String =
+        when (angleType) {
+            AngleType.ORIENTATION -> {
+                toString(azimuth, AngleType.AZIMUTH) + " " + toString(altitude, AngleType.ALTITUDE)
+            }
+            else -> {
+                val alpha = normalizeTo180(azimuth)
+                val beta = normalizeTo180(altitude)
+                sign(alpha) + Formatter.df2.format(abs(alpha)) + "°" + sign(beta) + Formatter.df2.format(abs(beta)) + "°"
+            }
+        }
+
+
     private fun sign(x: Double): String =
         if (x < 0) "-" else "+"
 
@@ -65,7 +78,7 @@ object Angle {
         Degree.normalizeTo180(angle)
 
     enum class AngleType {
-        DEGREE_NORTH_EAST_SOUTH_WEST, AZIMUTH, ALTITUDE, LATITUDE, LONGITUDE, PITCH, ROLL
+        DEGREE_NORTH_EAST_SOUTH_WEST, AZIMUTH, ALTITUDE, LATITUDE, LONGITUDE, PITCH, ROLL, ORIENTATION
     }
 
     private val DIRECTION = arrayOf("N", "NE", "E", "SE", "S", "SW", "W", "NW", "N")

@@ -17,4 +17,11 @@
         android:icon="@drawable/equatorial"
         app:showAsAction="never" />
 
+    <item
+        android:id="@+id/action_view_live_mode"
+        android:orderInCategory="114"
+        android:title="@string/action_view_live_mode"
+        android:icon="@drawable/live_yes"
+        app:showAsAction="never" />
+
 </menu>

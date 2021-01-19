@@ -2,8 +2,8 @@ package com.stho.nyota.ui.sky
 
 import android.os.Bundle
 import android.view.*
-import androidx.appcompat.widget.PopupMenu
 import androidx.core.os.bundleOf
+import androidx.core.view.isVisible
 import androidx.fragment.app.FragmentManager
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
@@ -13,9 +13,7 @@ import com.stho.nyota.ISkyViewListener
 import com.stho.nyota.R
 import com.stho.nyota.databinding.FragmentSkyBinding
 import com.stho.nyota.sky.universe.*
-import com.stho.nyota.sky.utilities.Moment
-import com.stho.nyota.sky.utilities.Topocentric
-import java.text.FieldPosition
+import com.stho.nyota.sky.utilities.*
 
 
 // TODO: implement options in Sky view: show names, letters, lines, change colors, ...
@@ -50,20 +48,34 @@ class SkyFragment : AbstractFragment() {
         binding.buttonZoomIn.setOnClickListener { onZoomIn() }
         binding.buttonZoomOut.setOnClickListener { onZoomOut() }
         binding.sky.registerListener(object: ISkyViewListener {
-            override fun onChangeSkyCenter() {
-                binding.direction.text = binding.sky.center.toString()
+            override fun onChangeCenter() {
+                updateDisplayZoom()
+                viewModel.isLive = false
+            }
+            override fun onChangeZoom() {
+                updateDisplayZoom()
+                viewModel.isLive = false
             }
             override fun onSingleTap(position: Topocentric) {
                 displaySnackbarForPosition(position)
             }
         })
+        binding.buttonLiveMode.setOnClickListener { viewModel.onToggleLiveMode() }
+        binding.arrowDown.apply{ isVisible = true; alpha = 0f }
+        binding.arrowUp.apply{ isVisible = true; alpha = 0f }
+        binding.arrowLeft.apply{ isVisible = true; alpha = 0f }
+        binding.arrowRight.apply{ isVisible = true; alpha = 0f }
 
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel.universeLD.observe(viewLifecycleOwner, { universe -> updateMoment(universe.moment) })
+        viewModel.universeLD.observe(viewLifecycleOwner, { universe -> updateMoment(universe.moment) }) // TODO: rename live data observer in onObserve...
+        viewModel.currentOrientationLD.observe(viewLifecycleOwner, { orientation -> onObserveOrientation(orientation) })
+        viewModel.skyOrientationLD.observe(viewLifecycleOwner, { arrow -> onObserveSkyOrientation(arrow) })
+        viewModel.isLiveLD.observe(viewLifecycleOwner, { isLive -> onObserveIsLive(isLive) })
+        viewModel.liveModeLD.observe(viewLifecycleOwner, { liveMode -> onObserveLiveMode(liveMode) })
     }
 
     override fun onDestroyView() {
@@ -80,8 +92,64 @@ class SkyFragment : AbstractFragment() {
         when (item.itemId) {
             R.id.action_view_options -> displaySkyFragmentOptionsDialog()
             R.id.action_view_projections -> displaySkyFragmentProjectionsDialog()
+            R.id.action_view_live_mode -> displaySkyFragmentLiveModeDialog()
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    @Suppress("NON_EXHAUSTIVE_WHEN")
+    private fun onObserveOrientation(orientation: Orientation) {
+        when (viewModel.liveMode) {
+            LiveMode.Hints -> {
+                viewModel.onUpdateOrientation(orientation, binding.sky.center)
+            }
+            LiveMode.MoveCenter -> {
+                binding.sky.setCenter(orientation.roll, orientation.direction)
+            }
+        }
+        binding.orientation.text = Angle.toString(orientation.azimuth, orientation.direction, Angle.AngleType.ORIENTATION)
+    }
+
+    private fun onObserveSkyOrientation(skyOrientation: SkyViewModel.SkyOrientation) {
+        binding.arrowLeft.alpha = skyOrientation.left
+        binding.arrowRight.alpha = skyOrientation.right
+        binding.arrowDown.alpha = skyOrientation.down
+        binding.arrowUp.alpha = skyOrientation.up
+    }
+
+    private fun onObserveIsLive(isLive: Boolean) {
+        if (isLive) {
+            binding.buttonLiveMode.setImageResource(R.drawable.live_yes)
+        } else {
+            binding.buttonLiveMode.setImageResource(R.drawable.live_no)
+            binding.arrowLeft.alpha = 0f
+            binding.arrowRight.alpha = 0f
+            binding.arrowDown.alpha = 0f
+            binding.arrowUp.alpha = 0f
+        }
+    }
+
+    private fun onObserveLiveMode(liveMode: LiveMode) {
+        when (liveMode) {
+            LiveMode.Off -> {
+                viewModel.isLive = false
+                binding.arrowLeft.alpha = 0f
+                binding.arrowRight.alpha = 0f
+                binding.arrowDown.alpha = 0f
+                binding.arrowUp.alpha = 0f
+                binding.buttonLiveMode.isEnabled = false
+            }
+            LiveMode.Hints -> {
+                binding.buttonLiveMode.isEnabled = true
+            }
+            LiveMode.MoveCenter -> {
+                binding.arrowLeft.alpha = 0f
+                binding.arrowRight.alpha = 0f
+                binding.arrowDown.alpha = 0f
+                binding.arrowUp.alpha = 0f
+                binding.buttonLiveMode.isEnabled = true
+            }
+        }
     }
 
     private fun updateMoment(moment: Moment) {
@@ -90,16 +158,25 @@ class SkyFragment : AbstractFragment() {
 
     private fun bind(moment: Moment) {
         binding.timeOverlay.currentTime.text = toLocalTimeString(moment)
-        binding.direction.text = binding.sky.center.toString()
         binding.sky.notifyDataSetChanged()
         updateActionBar(R.string.label_nyota, toLocalDateString(moment))
+        updateDisplayZoom()
     }
 
-    private fun onZoomIn() =
+    private fun onZoomIn() {
         binding.sky.options.applyScale(1.1)
+        updateDisplayZoom()
+    }
 
-    private fun onZoomOut() =
+    private fun onZoomOut() {
         binding.sky.options.applyScale(1 / 1.1)
+        updateDisplayZoom()
+    }
+
+    private fun updateDisplayZoom() {
+        binding.direction.text = binding.sky.center.toString()
+        binding.zoom.text = getString(R.string.label_zoom_angle, binding.sky.options.zoomAngle)
+    }
 
     private fun getElementNameFromArguments(): String? =
         arguments?.getString("ELEMENT")
@@ -114,6 +191,12 @@ class SkyFragment : AbstractFragment() {
         val fragmentManager: FragmentManager = requireActivity().supportFragmentManager
         val tag = "fragment_sky_projections_dialog"
         SkyFragmentChooseProjectionDialog(binding.sky.options).show(fragmentManager, tag)
+    }
+
+    private fun displaySkyFragmentLiveModeDialog() {
+        val fragmentManager: FragmentManager = requireActivity().supportFragmentManager
+        val tag = "fragment_sky_live_mode_dialog"
+        SkyFragmentLiveModeDialog(viewModel.settings).show(fragmentManager, tag)
     }
 
     /**
@@ -157,6 +240,9 @@ class SkyFragment : AbstractFragment() {
                 is Star -> displaySnackbarForStarAtPosition(position, it)
                 is AbstractPlanet -> displaySnackbarForPlanetAtPosition(position, it)
                 is Constellation -> displaySnackbarForConstellationAtPosition(position, it)
+                is Satellite -> displaySnackbarForSatelliteAtPosition(position, it)
+                is Moon -> displaySnackbarForMoonAtPosition(position, it)
+                is Sun -> displaySnackbarForSunAtPosition(position, it)
                 else -> displaySnackbar("$position ${it.name}")
             }
         } ?: displaySnackbar("$position")
@@ -215,9 +301,60 @@ class SkyFragment : AbstractFragment() {
             .show()
     }
 
-    private fun onPlanet(planet: AbstractPlanet) {
-        findNavController().navigate(R.id.action_global_nav_planet, bundleOf("PLANET" to planet.uniqueName))
+    private fun displaySnackbarForMoonAtPosition(position: Topocentric, moon: Moon) {
+        val message: String = moon.let {
+            binding.sky.setElement(it, false)
+            "$position -> ${it.name}"
+        }
+
+        Snackbar.make(requireView(), message, Snackbar.LENGTH_INDEFINITE)
+            .setBackgroundTint(getColor(R.color.colorSignalBackground))
+            .setTextColor(getColor(R.color.colorSecondaryText))
+            .setDuration(3000)
+            .setAction(moon.name) { onMoon() }
+            .show()
     }
+
+    private fun displaySnackbarForSunAtPosition(position: Topocentric, sun: Sun) {
+        val message: String = sun.let {
+            binding.sky.setElement(it, false)
+            "$position -> ${it.name}"
+        }
+
+        Snackbar.make(requireView(), message, Snackbar.LENGTH_INDEFINITE)
+            .setBackgroundTint(getColor(R.color.colorSignalBackground))
+            .setTextColor(getColor(R.color.colorSecondaryText))
+            .setDuration(3000)
+            .setAction(sun.name) { onSun() }
+            .show()
+    }
+
+    private fun displaySnackbarForSatelliteAtPosition(position: Topocentric, satellite: Satellite) {
+        val message: String = satellite.let {
+            binding.sky.setElement(it, false)
+            "$position -> ${it.name}"
+        }
+
+        Snackbar.make(requireView(), message, Snackbar.LENGTH_INDEFINITE)
+            .setBackgroundTint(getColor(R.color.colorSignalBackground))
+            .setTextColor(getColor(R.color.colorSecondaryText))
+            .setDuration(3000)
+            .setAction(satellite.name) { onSatellite(satellite) }
+            .show()
+    }
+
+
+    private fun onMoon() =
+        findNavController().navigate(R.id.action_global_nav_moon)
+
+    private fun onSun() =
+        findNavController().navigate(R.id.action_global_nav_sun)
+
+    private fun onSatellite(satellite: Satellite) =
+        findNavController().navigate(R.id.action_global_nav_satellite, bundleOf("SATELLITE" to satellite.name))
+
+    private fun onPlanet(planet: AbstractPlanet) =
+        findNavController().navigate(R.id.action_global_nav_planet, bundleOf("PLANET" to planet.uniqueName))
 
     private fun onStar(star: Star) =
         findNavController().navigate(R.id.action_global_nav_star, bundleOf("STAR" to star.uniqueName))

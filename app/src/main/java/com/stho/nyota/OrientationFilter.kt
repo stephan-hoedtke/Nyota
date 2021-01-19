@@ -36,7 +36,8 @@ class OrientationAccelerationFilter: OrientationFilter {
                 azimuth = Degree.normalize(azimuth),
                 pitch = Degree.normalizeTo180(pitch),
                 direction = Degree.normalizeTo180(direction),
-                roll =  Degree.normalizeTo180(roll)
+                roll =  Degree.normalizeTo180(roll),
+                lowPassFilter.getVector()
             )
         }
 

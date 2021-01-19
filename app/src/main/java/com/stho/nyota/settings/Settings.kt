@@ -3,6 +3,7 @@ package com.stho.nyota.settings
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.stho.nyota.Interval
+import com.stho.nyota.sky.utilities.LiveMode
 import com.stho.nyota.sky.utilities.projections.Projection
 import com.stho.nyota.ui.sky.ISkyViewSettings
 
@@ -10,6 +11,7 @@ class Settings: ISkyViewSettings {
 
     private val zoomLiveData: MutableLiveData<Double> = MutableLiveData()
     private val intervalLiveData: MutableLiveData<Interval> = MutableLiveData()
+    private val liveModeLiveData: MutableLiveData<LiveMode> = MutableLiveData<LiveMode>().apply { value = LiveMode.Off }
     private val updateTimeAutomaticallyLiveData: MutableLiveData<Boolean> = MutableLiveData()
     private val updateLocationAutomaticallyLiveData: MutableLiveData<Boolean> = MutableLiveData()
     private val updateOrientationAutomaticallyLiveData: MutableLiveData<Boolean> = MutableLiveData()
@@ -78,6 +80,17 @@ class Settings: ISkyViewSettings {
         set(value) {
             if (intervalLiveData.value != value) {
                 intervalLiveData.postValue(value)
+            }
+        }
+
+    val liveModeLD: LiveData<LiveMode>
+        get() = liveModeLiveData
+
+    var liveMode: LiveMode
+        get() = liveModeLiveData.value ?: LiveMode.Off
+        set(value) {
+            if (liveModeLiveData.value != value) {
+                liveModeLiveData.postValue(value)
             }
         }
 

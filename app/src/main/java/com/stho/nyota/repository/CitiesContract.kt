@@ -61,7 +61,7 @@ internal class CitiesContract(private val db: SQLiteDatabase) : BaseContract() {
         values.put(COLUMN_LONGITUDE, city.longitude)
         values.put(COLUMN_LATITUDE, city.latitude)
         values.put(COLUMN_ALTITUDE, city.altitude)
-        values.put(COLUMN_TIMEZONE, city.timeZone.displayName)
+        values.put(COLUMN_TIMEZONE, city.timeZone.id)
         values.put(COLUMN_AUTOMATIC, city.isAutomatic)
         return values
     }

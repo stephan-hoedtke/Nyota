@@ -151,13 +151,60 @@
                 android:layout_marginHorizontal="@dimen/text_margin"
                 style="@style/MyTheme.LargeText" />
 
-            <CheckBox
-                android:id="@+id/checkBoxAutomaticCityLocation"
+            <TextView
+                android:id="@+id/labelTimeZone"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/label_timezone_colon" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal" >
+
+                <EditText
+                    android:id="@+id/edit_time_zone"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1.0"
+                    android:text="@string/default_timezone"
+                    android:inputType="text"
+                    android:layout_marginHorizontal="@dimen/text_margin"
+                    android:autofillHints="@string/label_empty"
+                    android:hint="@string/label_empty" />
+
+                <ImageView
+                    android:id="@+id/buttonChooseTimezone"
+                    android:layout_width="@dimen/button_size"
+                    android:layout_height="@dimen/button_size"
+                    android:src="@drawable/timezone"
+                    android:contentDescription="@string/label_empty" />
+
+            </LinearLayout>
+
+            <RadioGroup
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:checked="true"
-                android:layout_marginTop="@dimen/text_margin"
-                android:text="@string/label_automatic_city_location" />
+                android:orientation="horizontal"
+                android:layout_marginTop="@dimen/text_margin">
+
+                <RadioButton
+                    android:id="@+id/radioButtonFixedLocation"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/label_fixed"
+                    android:enabled="false"
+                    android:checked="false"
+                    android:layout_marginEnd="@dimen/text_margin"/>
+
+                <RadioButton
+                    android:id="@+id/radioButtonUseDeviceLocation"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/label_use_device_location"
+                    android:enabled="false"
+                    android:checked="false" />
+            </RadioGroup>
 
             <CheckBox
                 android:id="@+id/checkBoxAutomaticLocation"
@@ -166,7 +213,6 @@
                 android:checked="true"
                 android:layout_marginTop="@dimen/text_margin"
                 android:text="@string/label_update_location_automatically" />
-
 
             <Space
                 android:layout_width="match_parent"

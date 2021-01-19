@@ -14,7 +14,7 @@ object Formatter {
     private val formatDateTimeTimeZone = SimpleDateFormat("d MMM yyyy HH:mm Z", Locale.ENGLISH)
     private val formatDateTime = SimpleDateFormat("d MMM HH:mm", Locale.ENGLISH)
     private val formatTime = SimpleDateFormat("HH:mm", Locale.ENGLISH)
-    private val formatTimeSec = SimpleDateFormat("HH:mm::ss", Locale.ENGLISH)
+    private val formatTimeSec = SimpleDateFormat("HH:mm:ss", Locale.ENGLISH)
     private val formatDateTimeZone = SimpleDateFormat("d MMM yyyy Z", Locale.ENGLISH)
     private val formatDate: SimpleDateFormat = SimpleDateFormat("d MMM yyyy", Locale.ENGLISH)
     private val formatTimeZone = SimpleDateFormat("Z", Locale.ENGLISH)

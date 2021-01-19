@@ -232,6 +232,12 @@
         tools:layout="@layout/fragment_city_picker" >
     </fragment>
 
+    <fragment
+        android:id="@+id/nav_info"
+        android:name="com.stho.nyota.ui.info.InfoFragment"
+        android:label="@string/menu_info"
+        tools:layout="@layout/fragment_info" >
+    </fragment>
 
     <fragment
         android:id="@+id/nav_constellation"
@@ -271,6 +277,8 @@
     <action android:id="@+id/action_global_nav_moment_location" app:destination="@id/nav_moment_location"/>
     <action android:id="@+id/action_global_nav_star" app:destination="@id/nav_star"/>
     <action android:id="@+id/action_global_nav_planet" app:destination="@id/nav_planet"/>
+    <action android:id="@+id/action_global_nav_satellite" app:destination="@id/nav_satellite"/>
     <action android:id="@+id/action_global_nav_constellation" app:destination="@id/nav_constellation"/>
+    <action android:id="@+id/action_global_nav_info" app:destination="@id/nav_info"/>
 
 </navigation>

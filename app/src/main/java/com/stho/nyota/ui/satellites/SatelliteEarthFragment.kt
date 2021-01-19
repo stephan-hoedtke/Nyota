@@ -22,9 +22,7 @@ import com.stho.nyota.databinding.FragmentSatelliteEarthBinding
 import com.stho.nyota.sky.universe.IElement
 import com.stho.nyota.sky.universe.Satellite
 import com.stho.nyota.sky.universe.SatellitePreview
-import com.stho.nyota.sky.utilities.City
-import com.stho.nyota.sky.utilities.Location
-import com.stho.nyota.sky.utilities.Moment
+import com.stho.nyota.sky.utilities.*
 import org.osmdroid.config.Configuration
 import org.osmdroid.events.MapListener
 import org.osmdroid.events.ScrollEvent
@@ -43,6 +41,8 @@ class SatelliteEarthFragment : AbstractFragment() {
     private lateinit var viewModel: SatelliteEarthViewModel
     private var bindingReference: FragmentSatelliteEarthBinding? = null
     private val binding: FragmentSatelliteEarthBinding get() = bindingReference!!
+    private val icons: HashMap<Int, BitmapDrawable> = HashMap()
+
 
     override val abstractViewModel: AbstractViewModel
         get() = viewModel
@@ -64,6 +64,7 @@ class SatelliteEarthFragment : AbstractFragment() {
         binding.buttonZoomOut.setOnClickListener { viewModel.zoomOut() }
         binding.buttonHome.setOnClickListener { setCenter(viewModel.repository.currentAutomaticLocation) }
         binding.buttonTarget.setOnClickListener { setCenter(viewModel.satellite.location) }
+
         return binding.root
     }
 
@@ -101,8 +102,6 @@ class SatelliteEarthFragment : AbstractFragment() {
     private fun resumeMapView() {
         binding.map.onResume()
         binding.map.addMapListener(mapListener)
-        binding.map.setOnTouchListener(touchListener)
-        // TODO: fix the issue or remove comment...
     }
 
     private fun pauseMapView() {
@@ -121,12 +120,6 @@ class SatelliteEarthFragment : AbstractFragment() {
                 viewModel.updateZoom(binding.map.zoomLevelDouble)
                 return true
             }
-        }
-    }
-
-    private val touchListener by lazy {
-        View.OnTouchListener { v, event -> // nothing to do for now...
-            false
         }
     }
 
@@ -166,7 +159,7 @@ class SatelliteEarthFragment : AbstractFragment() {
             updateCityMarker(moment.city)
             updateSatelliteMarker(satellite)
             updateVisibilityMarker(satellite)
-            updatePreviewMarkers(satellite, moment.location)
+            updatePreviewMarkers(satellite, moment)
             binding.map.invalidate()
         } catch (ex: Exception) {
             //ignore
@@ -187,7 +180,7 @@ class SatelliteEarthFragment : AbstractFragment() {
                 it.id = cityMarkerId
                 it.title = city.name
                 it.position = city.location.toGeoPoint()
-                // it.subDescription = toDescription(position)
+                it.subDescription = city.location.toString()
                 it.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM)
                 it.infoWindow = BasicInfoWindow(R.layout.marker_info_window, binding.map)
             }
@@ -198,7 +191,7 @@ class SatelliteEarthFragment : AbstractFragment() {
             marker.also {
                 it.position.latitude = city.latitude
                 it.position.longitude = city.longitude
-                // it.subDescription = toDescription(position)
+                it.subDescription = city.location.toString()
             }
         }
     }
@@ -207,11 +200,10 @@ class SatelliteEarthFragment : AbstractFragment() {
         var marker = findMarkerById(currentLocationMarkerId)
         if (marker == null) {
             marker = Marker(binding.map).also {
-                it.setIconAnchorCenter(getIcon(R.drawable.target128))
+                it.setIconAnchorCenter(getIcon(R.drawable.target_blue))
                 it.id = currentLocationMarkerId
                 it.title = "You"
                 it.position = you
-                // it.subDescription = toDescription(position)
                 it.infoWindow = BasicInfoWindow(R.layout.marker_info_window, binding.map)
             }
             binding.map.overlays.add(marker)
@@ -220,8 +212,6 @@ class SatelliteEarthFragment : AbstractFragment() {
             marker.also {
                 it.position.latitude = you.latitude
                 it.position.longitude = you.longitude
-                // it.subDescription = toDescription(position)
-                // it.setThisIcon(if (viewModel.useTracking) targetHotIcon else targetIcon)
             }
         }
     }
@@ -235,7 +225,6 @@ class SatelliteEarthFragment : AbstractFragment() {
                 it.id = satelliteMarkerId
                 it.title = satellite.name
                 it.position = iss
-                // it.subDescription = toDescription(position)
                 it.infoWindow = BasicInfoWindow(R.layout.marker_info_window, binding.map)
             }
             binding.map.overlays.add(marker)
@@ -272,7 +261,7 @@ class SatelliteEarthFragment : AbstractFragment() {
         }
     }
 
-    private fun updatePreviewMarkers(satellite: Satellite, observer: com.stho.nyota.sky.utilities.Location) {
+    private fun updatePreviewMarkers(satellite: Satellite, observer: Moment) {
         if (previewMarkers == null) {
             previewMarkers = ArrayList<Marker>().also {
                 // calculate and assign once only...
@@ -281,20 +270,20 @@ class SatelliteEarthFragment : AbstractFragment() {
         }
     }
 
-    private fun updatePreviewMarkers(satellite: Satellite, observer: com.stho.nyota.sky.utilities.Location, map: MapView, previewMarkers: ArrayList<Marker>) {
-        val points = SatellitePreview.getPreviewPoints(satellite, observer)
-        for (point in points) {
-
-            val marker = Marker(map).also {
-                it.setIconAnchorCenter(getIcon(point.resourceId))
-                it.id = previewMarkerId
-                it.title = point.title
-                it.position = point
-                // it.subDescription = toDescription(position)
-                it.infoWindow = BasicInfoWindow(R.layout.marker_info_window, map)
+    private fun updatePreviewMarkers(satellite: Satellite, observer: Moment, map: MapView, previewMarkers: ArrayList<Marker>) {
+        SatellitePreview.getPreviewPoints(satellite, observer).also {
+            for (point in it) {
+                val marker = Marker(map).also {
+                    it.setIconAnchorCenter(getIcon(point.resourceId))
+                    it.id = previewMarkerId
+                    it.title = point.title
+                    it.position = point
+                    // it.subDescription = toDescription(position)
+                    it.infoWindow = BasicInfoWindow(R.layout.marker_info_window, map)
+                }
+                map.overlays.add(marker)
+                previewMarkers.add(marker)
             }
-            map.overlays.add(marker)
-            previewMarkers.add(marker)
         }
     }
 
@@ -312,10 +301,6 @@ class SatelliteEarthFragment : AbstractFragment() {
         binding.map.controller.setCenter(location.toGeoPoint())
     }
 
-    private fun getIcon(resourceId: Int): BitmapDrawable {
-        return ContextCompat.getDrawable(requireActivity(), resourceId) as BitmapDrawable
-    }
-
     private fun findMarkerById(id: String): Marker? {
         binding.map.overlays?.forEach {
             if (it is Marker && it.id == id) {
@@ -324,6 +309,17 @@ class SatelliteEarthFragment : AbstractFragment() {
         }
         return null
     }
+
+    private fun getIcon(resourceId: Int): BitmapDrawable =
+        icons[resourceId] ?: createIconIntoCache(resourceId)
+
+    private fun createIconIntoCache(resourceId: Int): BitmapDrawable =
+        createIcon(resourceId).also { icons[resourceId] = it }
+
+    private fun createIcon(resourceId: Int): BitmapDrawable =
+        ContextCompat.getDrawable(requireActivity(), resourceId) as BitmapDrawable
+
+
 
     private fun findPolygonById(id: String): Polygon? {
         binding.map.overlays?.forEach {
@@ -357,12 +353,16 @@ class SatelliteEarthFragment : AbstractFragment() {
     }
 }
 
-// Hack: the osmdroid has a bug calculating the anchor: see explanation in MeHere
-fun Marker.setIconAnchorCenter(image: BitmapDrawable) {
+// Hack: osmdroid has a bug calculating the anchor: see explanation in MeHere
+private fun Marker.setIconAnchorCenter(image: BitmapDrawable) {
     val fx: Float = Marker.ANCHOR_CENTER * image.bitmap.width / image.intrinsicWidth
     val fy: Float = Marker.ANCHOR_CENTER * image.bitmap.height / image.intrinsicHeight
     this.icon = image
     //this.image = image
     this.setAnchor(fx, fy)
 }
+
+private fun GeoPoint.getPositionAsString(): String =
+    Angle.toString(longitude, Angle.AngleType.LONGITUDE) + Formatter.SPACE + Angle.toString(latitude, Angle.AngleType.LATITUDE)
+
 

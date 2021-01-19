@@ -88,8 +88,18 @@ class MomentLocationFragment : AbstractFragment(),  DatePickerDialog.OnDateSetLi
         binding.editLongitude.paint.isUnderlineText = true
         binding.textViewDistance.text = Formatter.toDistanceString(moment.city.distanceInKm)
         binding.image.setImageResource(moment.city.imageId)
-        binding.checkBoxAutomaticCityLocation.isChecked = moment.city.isAutomatic
-        binding.checkBoxAutomaticCityLocation.isEnabled = false
+        if (moment.city.isAutomatic) {
+            binding.radioButtonFixedLocation.isChecked = false
+            binding.radioButtonFixedLocation.isEnabled = false
+            binding.radioButtonUseDeviceLocation.isChecked = true
+            binding.radioButtonUseDeviceLocation.isEnabled = true
+        } else {
+            binding.radioButtonFixedLocation.isChecked = true
+            binding.radioButtonFixedLocation.isEnabled = true
+            binding.radioButtonUseDeviceLocation.isChecked = false
+            binding.radioButtonUseDeviceLocation.isEnabled = false
+        }
+        binding.editTimeZone.text = moment.timeZone.id
         updateActionBar(moment.city.name, Formatter.toString(moment.localTime, Formatter.TimeFormat.DATETIME_TIMEZONE))
     }
 

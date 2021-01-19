@@ -47,6 +47,8 @@ class HomeFragment : AbstractFragment() {
         binding.imageMoon.setOnLongClickListener { onSkyViewForElement(viewModel.moon); true }
         binding.imageIss.setOnClickListener { onIss() }
         binding.imageIss.setOnLongClickListener { onSkyViewForElement(viewModel.iss); true }
+        binding.image.setOnClickListener { openConstellations() }
+        binding.image.setOnLongClickListener { onSkyView(); true }
 
         return binding.root
     }
@@ -64,6 +66,7 @@ class HomeFragment : AbstractFragment() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.action_view_options -> displayHomeFragmentOptionsDialog()
+            R.id.action_info -> displayInfo()
         }
         return super.onOptionsItemSelected(item)
     }
@@ -128,6 +131,9 @@ class HomeFragment : AbstractFragment() {
         showSnackbar("See: ${element.name}")
     }
 
+    private fun openConstellations() =
+        findNavController().navigate(HomeFragmentDirections.actionGlobalNavConstellations())
+
     private fun openPlanet(planet: AbstractPlanet) =
         findNavController().navigate(HomeFragmentDirections.actionNavHomeToNavPlanet(planet.name))
 
@@ -148,6 +154,9 @@ class HomeFragment : AbstractFragment() {
 
     private fun onSkyViewForElement(element: IElement) =
         findNavController().navigate(HomeFragmentDirections.actionNavHomeToNavSky(element.name))
+
+    private fun displayInfo() =
+        findNavController().navigate(R.id.action_global_nav_info)
 
     companion object {
         private const val STARS = "STARS"

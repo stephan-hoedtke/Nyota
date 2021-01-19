@@ -1,5 +1,7 @@
 package com.stho.nyota.sky.utilities
 
+import android.view.Gravity
+
 /*******************************************************************************************************
     Orientation:
     - is the direction in which your eyes look into the phone.
@@ -21,7 +23,7 @@ package com.stho.nyota.sky.utilities
 /*
     Orientation: azimuth, pitch and roll in Degree
  */
-data class Orientation(val azimuth: Double, val pitch: Double, val direction: Double, val roll: Double) {
+data class Orientation(val azimuth: Double, val pitch: Double, val direction: Double, val roll: Double, val gravity: IVector) {
 
     fun getRotationToTargetAt(targetAzimuth: Double): Float =
         Degree.difference(x = targetAzimuth, y = azimuth).toFloat()
@@ -31,7 +33,7 @@ data class Orientation(val azimuth: Double, val pitch: Double, val direction: Do
 
     companion object {
         val defaultOrientation: Orientation
-            get() = Orientation(0.0, 0.0, -90.0, 0.0)
+            get() = Orientation(0.0, 0.0, -90.0, 0.0, Vector())
     }
 }
 

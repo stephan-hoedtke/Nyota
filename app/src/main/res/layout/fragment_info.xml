@@ -1,0 +1,244 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorBackground">
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:background="@color/colorBackground"
+        android:orientation="vertical"
+        android:fillViewport="true">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:id="@+id/image"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/home_image_size"
+                android:scaleType="fitCenter"
+                android:adjustViewBounds="true"
+                app:layout_constraintTop_toTopOf="parent"
+                android:src="@drawable/nyota_blue"
+                android:contentDescription="@string/label_empty" />
+
+            <LinearLayout
+                android:id="@+id/details"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintTop_toBottomOf="@id/image"
+                android:layout_marginHorizontal="@dimen/text_margin">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/label_orientation_colon"
+                    android:layout_marginTop="@dimen/button_margin"
+                    style="@style/MyTheme.AccentText" />
+
+                 <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="@dimen/text_margin"
+                    android:layout_marginHorizontal="@dimen/button_margin">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/label_pitch_colon"
+                        android:layout_marginEnd="@dimen/image_margin"
+                        style="@style/MyTheme.AccentText" />
+
+                    <TextView
+                        android:id="@+id/textViewPitch"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/label_default_pitch"
+                        android:layout_marginEnd="@dimen/image_margin"
+                        style="@style/MyTheme.AccentText" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="@dimen/text_margin"
+                    android:layout_marginHorizontal="@dimen/button_margin">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/label_direction_colon"
+                        android:layout_marginEnd="@dimen/image_margin"
+                        style="@style/MyTheme.AccentText" />
+
+                    <TextView
+                        android:id="@+id/textViewDirection"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/label_default_direction"
+                        android:layout_marginEnd="@dimen/image_margin"
+                        style="@style/MyTheme.AccentText" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="@dimen/text_margin"
+                    android:layout_marginHorizontal="@dimen/button_margin">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/label_compass_colon"
+                        android:layout_marginEnd="@dimen/image_margin"
+                        style="@style/MyTheme.AccentText" />
+
+                    <TextView
+                        android:id="@+id/textViewAzimuth"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/label_default_direction"
+                        android:layout_marginEnd="@dimen/image_margin"
+                        style="@style/MyTheme.AccentText" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="@dimen/text_margin"
+                    android:layout_marginHorizontal="@dimen/button_margin">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/label_roll_colon"
+                        android:layout_marginEnd="@dimen/image_margin"
+                        style="@style/MyTheme.AccentText" />
+
+                    <TextView
+                        android:id="@+id/textViewRoll"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/label_default_roll"
+                        android:layout_marginEnd="@dimen/image_margin"
+                        style="@style/MyTheme.AccentText" />
+
+                </LinearLayout>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Gravity"
+                    android:layout_marginTop="@dimen/button_margin"
+                    style="@style/MyTheme.AccentText" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="@dimen/text_margin"
+                    android:layout_marginHorizontal="@dimen/button_margin">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="x="
+                        style="@style/MyTheme.AccentText" />
+
+                    <TextView
+                        android:id="@+id/textViewGravityX"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="0.1234"
+                        android:layout_marginEnd="@dimen/image_margin"
+                        style="@style/MyTheme.AccentText" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="y="
+                        style="@style/MyTheme.AccentText" />
+
+                    <TextView
+                        android:id="@+id/textViewGravityY"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="0.1234"
+                        android:layout_marginEnd="@dimen/image_margin"
+                        style="@style/MyTheme.AccentText" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="z="
+                        style="@style/MyTheme.AccentText" />
+
+                    <TextView
+                        android:id="@+id/textViewGravityZ"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="0.1234"
+                        android:layout_marginEnd="@dimen/image_margin"
+                        style="@style/MyTheme.AccentText" />
+
+                </LinearLayout>
+
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/label_current_location_colon"
+                    android:layout_marginTop="@dimen/button_margin"
+                    style="@style/MyTheme.AccentText" />
+
+                <TextView
+                    android:id="@+id/textViewCurrentLocation"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/default_geo_location"
+                    android:layout_marginTop="@dimen/text_margin"
+                    android:layout_marginHorizontal="@dimen/button_margin"
+                    style="@style/MyTheme.NormalText" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/label_current_time_colon"
+                    android:layout_marginTop="@dimen/button_margin"
+                    style="@style/MyTheme.AccentText" />
+
+                <TextView
+                    android:id="@+id/textViewCurrentTime"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/default_time"
+                    android:layout_marginTop="@dimen/text_margin"
+                    android:layout_marginHorizontal="@dimen/button_margin"
+                    style="@style/MyTheme.NormalText" />
+
+                <Space
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/bottom_space"
+                    app:layout_constraintTop_toBottomOf="@id/details" />
+
+            </LinearLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.core.widget.NestedScrollView>
+</androidx.constraintlayout.widget.ConstraintLayout>
+

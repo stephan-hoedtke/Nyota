@@ -104,7 +104,7 @@ class BasicUnitTest {
         val utc: UTC = UTC.forCalendar(calendar)
         val actual = JulianDay.fromGMT(calendar)
         val timeString = Formatter.toString(utc, TimeZone.getTimeZone("GMT"), Formatter.TimeFormat.DATETIME_SEC_TIMEZONE)
-        Assert.assertEquals("JD for $utc = ${timeString}", expected, actual, EPS)
+        Assert.assertEquals("JD for $utc = $timeString", expected, actual, EPS)
     }
 
     @Test

@@ -7,6 +7,7 @@ import com.stho.nyota.sky.universe.Algorithms.getTopocentricFromPosition
 import com.stho.nyota.sky.universe.Algorithms.getVisibilityRadius
 import com.stho.nyota.sky.universe.SatelliteAlgorithms.calculatePositionVelocity
 import com.stho.nyota.sky.utilities.*
+import com.stho.nyota.sky.utilities.Formatter
 import com.stho.nyota.sky.utilities.UTC.Companion.forNow
 import com.stho.nyota.sky.utilities.Vector
 import org.osmdroid.util.GeoPoint
@@ -23,7 +24,7 @@ class SatellitePreview {
         private const val LIMIT = 4000
         private const val PREVIEW_INTERVAL_IN_HOURS = 1.0 / 60.0
 
-        fun getPreviewPoints(satellite: Satellite, observer: Location): List<SatelliteGeoPoint> {
+        fun getPreviewPoints(satellite: Satellite, observer: Moment): List<SatelliteGeoPoint> {
             val points: MutableList<SatelliteGeoPoint> = ArrayList()
             var utc = forNow()
             var visible = false
@@ -31,11 +32,12 @@ class SatellitePreview {
             while (i < LIMIT) {
                 val level = 13 * i / COUNT
                 val point = getPreviewPoint(satellite, observer, utc, level)
-                if (i < COUNT || point.visible) {
+                if (i < COUNT || point.isVisible) {
                     points.add(point)
-                    visible = visible or point.visible
+                    visible = visible || point.isVisible
                 } else {
-                    if (i > COUNT && visible) break
+                    if (i > COUNT && visible)
+                        break
                 }
                 i++
                 utc = utc.addHours(PREVIEW_INTERVAL_IN_HOURS)
@@ -43,20 +45,29 @@ class SatellitePreview {
             return points
         }
 
-        private fun getPreviewPoint(satellite: Satellite, observer: Location, utc: UTC, level: Int): SatelliteGeoPoint {
+        private fun getPreviewPoint(satellite: Satellite, observer: Moment, utc: UTC, level: Int): SatelliteGeoPoint {
             val julianDay = utc.julianDay
             val position = Vector()
             calculatePositionVelocity(satellite.tle, julianDay, position, null)
             val location = getLocationForECI(position, julianDay)
-            val topocentric = getTopocentricFromPosition(observer, julianDay, position)
-            val sunForObserver = getSunFor(observer, utc)
+            val topocentric = getTopocentricFromPosition(observer.location, julianDay, position)
+            val sunForObserver = getSunFor(observer.location, utc)
             val sunForSatellite = getSunFor(location, utc)
             val isDark = sunForObserver.isDark
             val isReflecting = sunForSatellite.isVisibleAt(satellite.location.altitude)
-            val visible = isDark && isReflecting && topocentric.altitude > MINIMAL_VISIBILITY_ELONGATION
-            return SatelliteGeoPoint(location.latitude, location.longitude, topocentric.altitude, level, utc, topocentric.distance, sunForObserver.position!!.altitude, sunForSatellite.position!!.altitude, visible)
+            val isAboveHorizon = topocentric.altitude > MINIMAL_VISIBILITY_ELONGATION
+            val isVisible = isDark && isReflecting && isAboveHorizon
+            return SatelliteGeoPoint(
+                location.latitude,
+                location.longitude,
+                topocentric.altitude,
+                level,
+                utc, observer.timeZone,
+                topocentric.distance,
+                sunForObserver.position!!.altitude,
+                sunForSatellite.position!!.altitude,
+                isVisible)
         }
-
 
         private fun getSunFor(location: Location, utc: UTC): Sun {
             val city: City = City.createNewCityFor(location)

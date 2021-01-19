@@ -76,19 +76,40 @@
                         android:layout_marginEnd="@dimen/image_margin"
                         style="@style/MyTheme.AccentText" />
 
+                     <TextView
+                        android:id="@+id/editTimeZone"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/default_timezone"
+                        android:layout_marginEnd="@dimen/image_margin"
+                        style="@style/MyTheme.AccentText" />
+
                 </LinearLayout>
 
-                <CheckBox
-                    android:id="@+id/checkBoxAutomaticCityLocation"
+                <RadioGroup
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="@dimen/text_margin"
+                    android:orientation="horizontal"
                     android:layout_marginTop="@dimen/text_margin"
-                    android:checked="true"
-                    android:text="@string/label_automatic_city_location"
-                    android:enabled="false"
-                    android:textColor="@color/colorPrimaryDisabledText"
-                    style="@style/MyTheme.CheckBox"/>
+                    android:layout_marginHorizontal="@dimen/text_margin">
+
+                    <RadioButton
+                        android:id="@+id/radioButtonFixedLocation"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/label_fixed"
+                        android:enabled="false"
+                        android:checked="false"
+                        android:layout_marginEnd="@dimen/text_margin"/>
+
+                    <RadioButton
+                        android:id="@+id/radioButtonUseDeviceLocation"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/label_use_device_location"
+                        android:enabled="false"
+                        android:checked="false" />
+                </RadioGroup>
 
                 <CheckBox
                     android:id="@+id/checkBoxAutomaticLocation"

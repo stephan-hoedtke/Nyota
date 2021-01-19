@@ -1,50 +1,81 @@
 package com.stho.nyota
 
+import com.stho.nyota.sky.utilities.Angle
+import com.stho.nyota.sky.utilities.IVector
+import com.stho.nyota.sky.utilities.Radian
 import com.stho.nyota.sky.utilities.Vector
 
+/**
+ * A low pass filter for a 3-vector of angles
+ */
 internal class LowPassFilter(private val timeConstant: Double = 0.2, private val timeSource: TimeSource = SystemClockTimeSource()) {
 
-    private val gravity: Vector = Vector(0.0, 0.0, 9.78)
+    private val vector: Vector = Vector(0.0, 0.0, 9.78)
     private var startTime: Double = 0.0
-    private var count: Long = 0L
 
     fun setAcceleration(acceleration: FloatArray): Vector {
-        val dt: Double = getAverageTimeDifferenceInSeconds()
-        lowPassFilter(acceleration, dt)
-        return gravity
+        lowPassFilter(acceleration)
+        return vector
     }
+
+    fun getVector(): IVector =
+        vector
 
     fun reset() {
-        gravity.x = 0.0
-        gravity.y = 0.0
-        gravity.z = 9.78
+        vector.x = 0.0
+        vector.y = 0.0
+        vector.z = 9.78
     }
 
-    private fun lowPassFilter(acceleration: FloatArray, dt: Double) {
-        if (dt > 0) {
-            val alpha = dt / (timeConstant + dt)
-            gravity.x += alpha * (acceleration[0] - gravity.x)
-            gravity.y += alpha * (acceleration[1] - gravity.y)
-            gravity.z += alpha * (acceleration[2] - gravity.z)
+    private fun lowPassFilter(acceleration: FloatArray) {
+        val x = Radian.normalizePi(acceleration[0].toDouble())
+        val y = Radian.normalizePi(acceleration[1].toDouble())
+        val z = Radian.normalizePi(acceleration[2].toDouble())
+
+        if (lookAtPhoneFromAbove(roll = z)) {
+            lowPassFilter(x, y, z)
         } else {
-            gravity.x = acceleration[0].toDouble()
-            gravity.y = acceleration[1].toDouble()
-            gravity.z = acceleration[2].toDouble()
+            lowPassFilterForLookingAtThePhoneFromBelow(x, y, z)
         }
     }
 
-    private fun getAverageTimeDifferenceInSeconds(): Double =
-        when {
-            count < 1 -> {
-                startTime = timeSource.elapsedRealtimeSeconds
-                count = 1L
-                0.0
-            }
-            else -> {
-                (timeSource.elapsedRealtimeSeconds - startTime) / count++
-            }
-        }
+    private fun lookAtPhoneFromAbove(roll: Double) =
+        -PI_2 < roll && roll < PI_2
 
+    private fun lowPassFilterForLookingAtThePhoneFromBelow(x: Double, y: Double, z: Double) =
+        lowPassFilter(x = Radian.normalizePi( PI - x), y = Radian.normalizePi( PI - y), z = Radian.normalizePi(PI + z))
+
+    private fun lowPassFilter(x: Double, y: Double, z: Double) {
+        val dt: Double = getTimeDifferenceInSeconds()
+        if (dt > 0) {
+            val alpha = getAlpha(dt)
+            vector.x = Radian.normalizePi(vector.x + alpha * Radian.normalizePi(x - vector.x))
+            vector.y = Radian.normalizePi(vector.y + alpha * Radian.normalizePi(y - vector.y))
+            vector.z = Radian.normalizePi(vector.z + alpha * Radian.normalizePi(z - vector.z))
+        } else {
+            vector.x = x
+            vector.y = y
+            vector.z = z
+        }
+    }
+
+    private fun getTimeDifferenceInSeconds(): Double {
+        val t0 = startTime
+        val t1 = timeSource.elapsedRealtimeSeconds
+        startTime = t1
+        return t1 - t0
+    }
+
+    /**
+     * dt > T --> 1.0, otherwise dt / T
+     */
+    private fun getAlpha(dt: Double): Double =
+        dt.coerceAtMost(timeConstant) / timeConstant
+
+    companion object {
+        private const val PI = Math.PI
+        private const val PI_2 = 0.5 * Math.PI
+    }
 }
 
 

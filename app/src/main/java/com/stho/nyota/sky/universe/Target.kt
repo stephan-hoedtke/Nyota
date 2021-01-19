@@ -27,10 +27,10 @@ class Target(override val name: String, ra: Double, decl: Double) : AbstractElem
         get() = IDBObject.isPersistent(status)
 
     override val imageId: Int
-        get() = com.stho.nyota.R.drawable.targethot128
+        get() = com.stho.nyota.R.drawable.target_red
 
     override val largeImageId: Int
-        get() = com.stho.nyota.R.drawable.targethot128
+        get() = com.stho.nyota.R.drawable.target_red
 
     override fun toString(): String {
         return name

@@ -79,9 +79,15 @@ abstract class AbstractSkyView(context: Context?, attrs: AttributeSet?): View(co
         })
     }
 
-    open fun raiseOnChangeSkyCenter() {
+    open fun raiseOnChangeCenter() {
         listener?.apply {
-            onChangeSkyCenter()
+            onChangeCenter()
+        }
+    }
+
+    open fun raiseOnChangeZoom() {
+        listener?.apply {
+            onChangeZoom()
         }
     }
 
@@ -89,7 +95,7 @@ abstract class AbstractSkyView(context: Context?, attrs: AttributeSet?): View(co
         if (isScrollingEnabled) {
             center.azimuth += projection.calculateAngle(dx)
             center.altitude -= projection.calculateAngle(dy)
-            raiseOnChangeSkyCenter()
+            raiseOnChangeCenter()
             invalidate()
         }
     }
@@ -97,6 +103,7 @@ abstract class AbstractSkyView(context: Context?, attrs: AttributeSet?): View(co
     open fun applyScale(scaleFactor: Double) {
         if (isScalingEnabled) {
             options.applyScale(scaleFactor)
+            raiseOnChangeZoom()
         }
     }
 
@@ -106,7 +113,7 @@ abstract class AbstractSkyView(context: Context?, attrs: AttributeSet?): View(co
             center.azimuth = azimuth
             center.altitude = altitude
         }
-        raiseOnChangeSkyCenter()
+        raiseOnChangeCenter()
         invalidate()
     }
 
@@ -158,7 +165,7 @@ abstract class AbstractSkyView(context: Context?, attrs: AttributeSet?): View(co
             setCenter(azimuth, altitude)
         }
 
-    private fun setCenter(azimuth: Double, altitude: Double) {
+    fun setCenter(azimuth: Double, altitude: Double) {
         if (azimuth != center.azimuth || altitude != center.altitude) {
             center.azimuth = azimuth
             center.altitude = altitude

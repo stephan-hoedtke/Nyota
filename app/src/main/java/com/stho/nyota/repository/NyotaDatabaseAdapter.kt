@@ -9,6 +9,7 @@ import com.stho.nyota.sky.universe.Targets
 import com.stho.nyota.sky.utilities.Cities
 import com.stho.nyota.sky.utilities.City
 import com.stho.nyota.sky.utilities.projections.Projection
+import com.stho.nyota.sky.utilities.LiveMode
 
 
 // see:
@@ -29,7 +30,8 @@ class NyotaDatabaseAdapter(private val db: SQLiteDatabase) {
         contract.write(DisplayStarNames, settings.displayStarNames)
         contract.write(DisplayTargets, settings.displayTargets)
         contract.write(DisplaySatellites, settings.displaySatellites)
-        contract.write(SphereProjection, settings.sphereProjection.serialize())
+        contract.write(SphereProjectionParameter, settings.sphereProjection.serialize())
+        contract.write(LiveModeParameter, settings.liveMode.serialize())
     }
 
     fun readSettings(settings: Settings) {
@@ -46,7 +48,8 @@ class NyotaDatabaseAdapter(private val db: SQLiteDatabase) {
         settings.displayStarNames = contract.readBoolean(DisplayStarNames, settings.displayStarNames)
         settings.displayTargets = contract.readBoolean(DisplayTargets, settings.displayTargets)
         settings.displaySatellites = contract.readBoolean(DisplaySatellites, settings.displaySatellites)
-        settings.sphereProjection = Projection.deserialize(contract.readString(SphereProjection, settings.sphereProjection.serialize()))
+        settings.sphereProjection = Projection.deserialize(contract.readString(SphereProjectionParameter, settings.sphereProjection.serialize()))
+        settings.liveMode = LiveMode.deserialize(contract.readString(LiveModeParameter, settings.liveMode.serialize()))
     }
 
     companion object {
@@ -62,7 +65,8 @@ class NyotaDatabaseAdapter(private val db: SQLiteDatabase) {
         private const val DisplayStarNames = "DisplayStarNames"
         private const val DisplayTargets = "DisplayTargets"
         private const val DisplaySatellites = "DisplaySatellites"
-        private const val SphereProjection = "SphereProjection"
+        private const val SphereProjectionParameter = "SphereProjection"
+        private const val LiveModeParameter = "LiveMode"
     }
 
     fun saveCities(cities: Cities) {

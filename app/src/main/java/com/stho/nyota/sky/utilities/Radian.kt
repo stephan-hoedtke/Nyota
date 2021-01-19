@@ -27,6 +27,16 @@ object Radian {
             }
         }
 
+    fun normalizePi(radian: Double): Double =
+        radian.IEEErem(TWO_PI).let {
+            when {
+                it > PI -> it - TWO_PI
+                it < -PI -> it + TWO_PI
+                else -> it
+            }
+        }
+
+    private const val PI = Math.PI
     private const val TWO_PI = 2 * Math.PI
     private const val HOUR_IN_RADIAN = Math.PI / 12
 }

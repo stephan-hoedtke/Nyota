@@ -10,7 +10,7 @@ import java.util.*
                 String region,
                 Integer rawOffset)
  */
-class City private constructor(override var id: Long, var name: String, var location: Location, var timeZone: TimeZone, val isAutomatic: Boolean = false) : ILocation, IDBObject {
+class City private constructor(override var id: Long, var name: String, var location: Location, var timeZone: TimeZone, val isAutomatic: Boolean) : ILocation, IDBObject {
 
     override val uniqueTransientId: Long by lazy {
         System.nanoTime()
@@ -147,13 +147,13 @@ class City private constructor(override var id: Long, var name: String, var loca
             City(id = 0L, name = "You", location = Location.getDefault(), timeZone = TimeZone.getDefault(), isAutomatic = true)
 
         internal fun createNewCity(cityName: String): City =
-            City(id = 0L, name = cityName, location = Location.getDefault(), timeZone = TimeZone.getDefault())
+            City(id = 0L, name = cityName, location = Location.getDefault(), timeZone = TimeZone.getDefault(), isAutomatic = false)
 
         internal fun createNewCity(cityName: String, location: Location, timeZone: TimeZone): City =
-            City(id = 0L, name = cityName, location = location, timeZone = timeZone)
+            City(id = 0L, name = cityName, location = location, timeZone = timeZone, isAutomatic = false)
 
         internal fun createNewCityFor(location: Location): City =
-            City(id = 0L, name = "-", location = location, timeZone = TimeZone.getDefault())
+            City(id = 0L, name = "-", location = location, timeZone = TimeZone.getDefault(), isAutomatic = false)
 
         internal fun createCityWithId(id: Long, name: String, location: Location, timeZone: TimeZone): City =
             City(id, name, location, timeZone, false)

@@ -11,6 +11,9 @@ import com.stho.nyota.PermissionManager
 import com.stho.nyota.R
 import com.stho.nyota.databinding.FragmentCityBinding
 import com.stho.nyota.sky.utilities.*
+import com.stho.nyota.sky.utilities.Formatter
+import java.sql.Time
+import java.util.*
 
 // TODO: get location on button click
 // TODO: choose location using a map
@@ -44,6 +47,7 @@ class CityFragment : AbstractFragment() {
         binding.buttonEarthView.setOnClickListener { onEarthView() }
         binding.buttonFinderView.setOnClickListener { onFinderView() }
         binding.buttonReset.setOnClickListener { onReset() }
+        binding.buttonChooseTimezone.setOnClickListener { onChooseTimezone() }
 
         registerForContextMenu(binding.buttonReset)
 
@@ -84,8 +88,17 @@ class CityFragment : AbstractFragment() {
     }
 
     private fun updateCity(city: City) {
-        binding.checkBoxAutomaticCityLocation.isChecked = city.isAutomatic
-        binding.checkBoxAutomaticCityLocation.isEnabled = false
+        if (city.isAutomatic) {
+            binding.radioButtonFixedLocation.isChecked = false
+            binding.radioButtonFixedLocation.isEnabled = false
+            binding.radioButtonUseDeviceLocation.isChecked = true
+            binding.radioButtonUseDeviceLocation.isEnabled = true
+        } else {
+            binding.radioButtonFixedLocation.isChecked = true
+            binding.radioButtonFixedLocation.isEnabled = true
+            binding.radioButtonUseDeviceLocation.isChecked = false
+            binding.radioButtonUseDeviceLocation.isEnabled = false
+        }
         binding.checkBoxAutomaticLocation.isChecked = viewModel.repository.updateLocationAutomatically
         binding.checkBoxAutomaticLocation.isEnabled = false
         binding.editName.setText(city.name)
@@ -93,6 +106,7 @@ class CityFragment : AbstractFragment() {
         binding.editLongitude.setText(Formatter.toString(city.longitude))
         binding.editAltitude.setText(Formatter.toString(city.altitude))
         binding.textViewDistance.text =  Formatter.toDistanceString(city.distanceInKm)
+        binding.editTimeZone.setText(city.timeZone.id)
         binding.image.setImageResource(city.imageId)
         binding.copyright.text = city.copyright.text
         binding.copyright.setOnClickListener {
@@ -102,9 +116,15 @@ class CityFragment : AbstractFragment() {
     }
 
     private fun updateAutomaticLocation(location: Location) {
-        if (binding.checkBoxAutomaticCityLocation.isChecked) {
+        if (binding.radioButtonUseDeviceLocation.isChecked) {
             bindToLocation(location)
+            bindToTimeZone(TimeZone.getDefault())
         }
+    }
+
+    private fun onChooseTimezone() {
+        // TODO: implement dialog to select a timezone
+        showSnackbar("Choose a timezone: not yet implemented")
     }
 
     private fun onUseCurrentLocation() {
@@ -128,6 +148,10 @@ class CityFragment : AbstractFragment() {
         binding.textViewDistance.text = getString(R.string.label_empty)
     }
 
+    private fun bindToTimeZone(timeZone: TimeZone) {
+        binding.editTimeZone.setText(timeZone.id)
+    }
+
     /*
         don't change if the city location is updated automatically
      */
@@ -140,11 +164,17 @@ class CityFragment : AbstractFragment() {
                 binding.editLongitude.text.toString().toDouble(),
                 binding.editAltitude.text.toString().toDouble()
             )
+            binding.editTimeZone.text.toString().also {
+                when {
+                    it.isBlank() -> city.timeZone = TimeZone.getDefault()
+                    it != city.timeZone.id -> city.timeZone = TimeZone.getTimeZone(it)
+                }
+            }
             viewModel.updateCity(city)
             findNavController().popBackStack()
         }
         catch (ex: Exception) {
-            // IGNORE
+            showSnackbar("Error: ${ex.message}")
         }
     }
 

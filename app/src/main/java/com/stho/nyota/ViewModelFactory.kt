@@ -10,6 +10,7 @@ import com.stho.nyota.repository.Repository
 import com.stho.nyota.ui.cities.CityPickerViewModel
 import com.stho.nyota.ui.constellations.ConstellationListViewModel
 import com.stho.nyota.ui.home.HomeViewModel
+import com.stho.nyota.ui.info.InfoViewModel
 import com.stho.nyota.ui.interval.IntervalPickerViewModel
 import com.stho.nyota.ui.moment.MomentViewModel
 import com.stho.nyota.ui.moon.MoonViewModel
@@ -34,6 +35,7 @@ class ViewModelFactory(private val application: Application, private val reposit
             modelClass.isAssignableFrom(CityPickerViewModel::class.java) -> CityPickerViewModel(application, repository)
             modelClass.isAssignableFrom(MomentViewModel::class.java) -> MomentViewModel(application, repository)
             modelClass.isAssignableFrom(MainViewModel::class.java) -> MainViewModel(application, repository)
+            modelClass.isAssignableFrom(InfoViewModel::class.java) -> InfoViewModel(application, repository)
             else -> super.create(modelClass)
         }
         @Suppress("UNCHECKED_CAST")

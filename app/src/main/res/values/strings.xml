@@ -57,11 +57,18 @@
     <string name="label_default_pitch">+23°</string>
     <string name="label_default_roll">-3°</string>
     <string name="label_default_direction">124° SW 48° N</string>
+    <string name="label_default_zoom">45°</string>
     <string name="label_freeze">Freeze</string>
     <string name="label_unfreeze">Unfreeze</string>
     <string name="label_undo">Undo</string>
     <string name="label_reset">Reset</string>
     <string name="label_reset_to_default">Reset to Default</string>
+    <string name="label_gmt">GMT</string>
+    <string name="label_fixed">Fixed</string>
+    <string name="label_use_device_location">Use Device Location</string>
+    <string name="label_timezone_colon">Timezone:</string>
+    <string name="label_zoom_angle">%.0f°</string>
+
     <!-- Actions -->
     <string name="action_time">Date and Time</string>
     <string name="action_location">Location</string>
@@ -72,6 +79,7 @@
     <string name="action_default_cities">Add Default Cities</string>
     <string name="action_view_options">Display</string>
     <string name="action_view_projections">Projections</string>
+    <string name="action_view_live_mode">Live Mode</string>
     <!-- Menu -->
     <string name="menu_home">Home</string>
     <string name="menu_stars">Stars</string>
@@ -90,6 +98,7 @@
     <string name="menu_city">City</string>
     <string name="menu_moment">Moment</string>
     <string name="menu_settings">Settings</string>
+    <string name="menu_info">Info</string>
     <!-- Defaults -->
     <string name="default_satellite_name">ISS</string>
     <string name="default_satellite_number">83928</string>
@@ -148,4 +157,14 @@
     <string name="message_permission_was_granted">The permission: %s was granted.</string>
     <string name="message_permission_was_refused">The permission: %s was rejected.</string>
     <string name="message_city_was_deleted">City was deleted</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="label_orientation_colon">Orientation:</string>
+    <string name="label_pitch_colon">Pitch:</string>
+    <string name="label_direction_colon">Direction:</string>
+    <string name="label_compass_colon">Compass Azimuth:</string>
+    <string name="label_roll_colon">Roll:</string>
+    <string name="label_current_location_colon">Current Location:</string>
+    <string name="label_current_time_colon">Current Time:</string>
+    <string name="action_info">Info</string>
 </resources>
