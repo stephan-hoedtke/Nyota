@@ -92,8 +92,8 @@ class FinderFragment : AbstractFragment() {
     private fun onUpdateDeviceOrientation(orientation: Orientation) {
         binding.compassNorthPointer.rotation = orientation.getRotationToNorth()
         binding.horizonView.currentDeviceOrientation = orientation
-        binding.currentDeviceAzimuth.text = Angle.toString(orientation.azimuth, Angle.AngleType.AZIMUTH)
-        binding.currentDevicePitch.text = Angle.toString(orientation.pitch, Angle.AngleType.PITCH)
+        binding.currentDeviceAzimuth.text = Angle.toString(orientation.pointerAzimuth, Angle.AngleType.AZIMUTH)
+        binding.currentDevicePitch.text = Angle.toString(orientation.pointerAltitude, Angle.AngleType.PITCH)
         binding.currentDeviceRoll.text = Angle.toString(orientation.roll, Angle.AngleType.ROLL)
         if (viewModel.refreshAutomatically) {
             binding.targetAzimuthPointer.rotation = viewModel.getRotationToTargetAutomaticallyFor(orientation)

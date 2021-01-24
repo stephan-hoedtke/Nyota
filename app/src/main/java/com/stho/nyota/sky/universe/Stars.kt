@@ -6,7 +6,7 @@ class Stars() {
     private val map: HashMap<String, Star> = HashMap()
 
     val size: Int
-        get() = map.size
+        get() = array.size
 
     fun add(star: Star) {
         array.add(star)
@@ -17,9 +17,6 @@ class Stars() {
 
     operator fun get(starName: String): Star? =
         map[starName]
-
-    fun exists(starName: String?): Boolean =
-        starName?.let { map.containsKey(it) } ?: false
 
     fun findStarByName(starName: String?): Star? =
         starName?.let { map[it] }

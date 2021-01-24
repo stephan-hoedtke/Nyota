@@ -23,8 +23,8 @@ class SkyViewModel(application: Application, repository: Repository, val element
 
         companion object {
             fun getSkyOrientation(orientation: Orientation, center: Topocentric): SkyOrientation {
-                val lambda = Degree.difference(center.azimuth, orientation.roll)
-                val phi = Degree.difference(center.altitude, orientation.direction)
+                val lambda = Degree.difference(center.azimuth, orientation.centerAzimuth)
+                val phi = Degree.difference(center.altitude, orientation.centerAltitude)
                 return SkyOrientation(
                     left =  if (lambda < 0) alpha(lambda) else 0f,
                     right = if (lambda > 0) alpha(lambda) else 0f,

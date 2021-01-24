@@ -1,47 +1,28 @@
 package com.stho.nyota.sky.universe
 
-import com.stho.nyota.sky.utilities.City
-
 class Constellations {
 
+    private val array: ArrayList<Constellation> = ArrayList()
     private val map: HashMap<String, Constellation> = HashMap<String, Constellation>()
 
     val size: Int
-        get() = map.size
-
-    fun addAll(collection: Collection<Constellation>) {
-        for (constellation in collection) {
-            add(constellation)
-        }
-    }
+        get() = array.size
 
     fun add(constellation: Constellation) {
+        array.add(constellation)
         map[constellation.name] = constellation // automatically replace the old value if it exists
     }
 
-    operator fun get(constellationName: String): Constellation? {
-        return map[constellationName]
-    }
+    operator fun get(constellationName: String): Constellation? =
+        map[constellationName]
 
-    fun exists(constellationName: String?): Boolean {
-        return if (constellationName != null)
-            map.containsKey(constellationName)
-        else
-            false
-    }
+    fun findConstellationByName(constellationName: String?): Constellation? =
+        constellationName?.let { return map[it] }
 
-    fun findConstellationByName(constellationName: String?): Constellation? {
-        return if (constellationName != null)
-            return map[constellationName]
-        else
-            null
-    }
-
-    fun first(): Constellation {
-        return map.values.first()
-    }
+    fun first(): Constellation =
+        array.first()
 
     val values: Collection<Constellation>
-        get() = map.values
+        get() = array
 
 }

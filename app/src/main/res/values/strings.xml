@@ -123,6 +123,7 @@
     <string name="default_processing_status">…</string>
     <string name="default_zoom">5.0</string>
     <string name="default_copyright">Copyright ©</string>
+    <string name="label_default_center">134° SE +17°</string>
     <string name="default_longitude">13.1234</string>
     <string name="default_city">Berlin</string>
     <string name="default_date_time_timezone">29 Dec 2020 21:23:00 +0200</string>
@@ -161,8 +162,8 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="label_orientation_colon">Orientation:</string>
     <string name="label_pitch_colon">Pitch:</string>
-    <string name="label_direction_colon">Direction:</string>
-    <string name="label_compass_colon">Compass Azimuth:</string>
+    <string name="label_center_colon">Center:</string>
+    <string name="label_azimuth_colon">Azimuth:</string>
     <string name="label_roll_colon">Roll:</string>
     <string name="label_current_location_colon">Current Location:</string>
     <string name="label_current_time_colon">Current Time:</string>

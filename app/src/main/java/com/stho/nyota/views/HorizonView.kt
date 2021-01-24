@@ -27,15 +27,7 @@ class HorizonView(context: Context?, attrs: AttributeSet?) : View(context, attrs
             }
         }
 
-    var currentDeviceOrientation: Orientation = Orientation(35.0, 5.0, -85.0, 12.0, Vector()) // Orientation.defaultOrientation
-        set(value) {
-            if (field != value) {
-                field = value
-                invalidate()
-            }
-        }
-
-    var flat: Boolean = true
+    var currentDeviceOrientation: Orientation = Orientation(35.0, 5.0, -85.0, 12.0, centerAltitude = -85.0) // Orientation.defaultOrientation
         set(value) {
             if (field != value) {
                 field = value
@@ -81,7 +73,7 @@ class HorizonView(context: Context?, attrs: AttributeSet?) : View(context, attrs
         val middle = t / 2.6f
         val outer = t / 2.2f
         val alpha = 0 - currentDeviceOrientation.roll
-        val beta = if (flat) currentDeviceOrientation.pitch else currentDeviceOrientation.direction
+        val beta = currentDeviceOrientation.pointerAltitude
         var phi: Float = Degree.difference(targetAltitude, beta).toFloat()
         if (phi > 90) phi = 90f
         if (phi < -90) phi = -90f

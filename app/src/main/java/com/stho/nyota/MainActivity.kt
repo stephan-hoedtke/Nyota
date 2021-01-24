@@ -2,7 +2,6 @@ package com.stho.nyota
 
 import android.os.Bundle
 import android.os.Handler
-import android.os.PersistableBundle
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -18,8 +17,6 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.navigation.NavigationView
 import com.google.android.material.snackbar.Snackbar
-import com.stho.nyota.ui.finder.OrientationFilter
-import com.stho.nyota.ui.finder.OrientationAccelerationFilter
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers.Default
 import kotlinx.coroutines.launch
@@ -45,7 +42,7 @@ class MainActivity : AppCompatActivity(), ActivityCompat.OnRequestPermissionsRes
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var handler: Handler
     private lateinit var viewModel: MainViewModel
-    private lateinit var orientationFilter: OrientationFilter
+    private lateinit var orientationFilter: OrientationAccelerationFilter
     private lateinit var orientationSensorListener: OrientationSensorListener
     private lateinit var locationFilter: LocationFilter
     private lateinit var locationServiceListener: LocationServiceListener
@@ -62,7 +59,7 @@ class MainActivity : AppCompatActivity(), ActivityCompat.OnRequestPermissionsRes
         orientationFilter = OrientationAccelerationFilter()
         orientationSensorListener = OrientationSensorListener(this, orientationFilter)
 
-        locationFilter = SimpleLocationFilter()
+        locationFilter = LocationFilter()
         locationServiceListener = LocationServiceListener(this, locationFilter)
 
 
@@ -160,7 +157,7 @@ class MainActivity : AppCompatActivity(), ActivityCompat.OnRequestPermissionsRes
 
     internal fun enableLocationServiceListener() {
         PermissionManager(this).checkPermissionToObtainLocation()
-        if (!locationListerIsActive) {
+        if (locationFilter.isInActive) {
             locationServiceListener.onResume()
         }
     }
@@ -169,7 +166,7 @@ class MainActivity : AppCompatActivity(), ActivityCompat.OnRequestPermissionsRes
         val runnableCode: Runnable = object : Runnable {
             override fun run() {
                 CoroutineScope(Default).launch {
-                    if (locationFilter.updateCounter > 0) {
+                    if (locationFilter.isActive) {
                         viewModel.updateForNow(locationFilter.currentLocation)
                         disableLocationListenerWhenCurrentLocationIsSure()
                     }
@@ -184,13 +181,10 @@ class MainActivity : AppCompatActivity(), ActivityCompat.OnRequestPermissionsRes
     }
 
     private fun disableLocationListenerWhenCurrentLocationIsSure() {
-        if (locationFilter.updateCounter > 100) {
+        if (locationFilter.isStable) {
             locationServiceListener.onPause()
         }
     }
-
-    internal val locationListerIsActive: Boolean
-        get() = locationServiceListener.isActive
 
     private fun executeHandlerToUpdateOrientation() {
         val runnableCode: Runnable = object : Runnable {

@@ -23,17 +23,17 @@ import android.view.Gravity
 /*
     Orientation: azimuth, pitch and roll in Degree
  */
-data class Orientation(val azimuth: Double, val pitch: Double, val direction: Double, val roll: Double, val gravity: IVector) {
+data class Orientation(val pointerAzimuth: Double, val pointerAltitude: Double, val roll: Double, val centerAzimuth: Double, val centerAltitude: Double) {
 
     fun getRotationToTargetAt(targetAzimuth: Double): Float =
-        Degree.difference(x = targetAzimuth, y = azimuth).toFloat()
+        Degree.difference(x = targetAzimuth, y = pointerAzimuth).toFloat()
 
     fun getRotationToNorth(): Float =
-        Degree.normalizeTo180(-azimuth).toFloat()
+        Degree.normalizeTo180(-pointerAzimuth).toFloat()
 
     companion object {
         val defaultOrientation: Orientation
-            get() = Orientation(0.0, 0.0, -90.0, 0.0, Vector())
+            get() = Orientation(0.0, 0.0, -10.0, 0.0, centerAltitude = -90.0)
     }
 }
 

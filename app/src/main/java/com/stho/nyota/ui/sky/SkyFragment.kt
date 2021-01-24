@@ -104,10 +104,10 @@ class SkyFragment : AbstractFragment() {
                 viewModel.onUpdateOrientation(orientation, binding.sky.center)
             }
             LiveMode.MoveCenter -> {
-                binding.sky.setCenter(orientation.roll, orientation.direction)
+                binding.sky.setCenter(orientation.centerAzimuth, orientation.centerAltitude)
             }
         }
-        binding.orientation.text = Angle.toString(orientation.azimuth, orientation.direction, Angle.AngleType.ORIENTATION)
+        binding.orientation.text = Angle.toString(orientation.centerAzimuth, orientation.centerAltitude, Angle.AngleType.ORIENTATION)
     }
 
     private fun onObserveSkyOrientation(skyOrientation: SkyViewModel.SkyOrientation) {

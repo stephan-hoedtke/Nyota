@@ -78,31 +78,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/label_direction_colon"
-                        android:layout_marginEnd="@dimen/image_margin"
-                        style="@style/MyTheme.AccentText" />
-
-                    <TextView
-                        android:id="@+id/textViewDirection"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/label_default_direction"
-                        android:layout_marginEnd="@dimen/image_margin"
-                        style="@style/MyTheme.AccentText" />
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:layout_marginTop="@dimen/text_margin"
-                    android:layout_marginHorizontal="@dimen/button_margin">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/label_compass_colon"
+                        android:text="@string/label_azimuth_colon"
                         android:layout_marginEnd="@dimen/image_margin"
                         style="@style/MyTheme.AccentText" />
 
@@ -140,13 +116,6 @@
 
                 </LinearLayout>
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Gravity"
-                    android:layout_marginTop="@dimen/button_margin"
-                    style="@style/MyTheme.AccentText" />
-
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -157,47 +126,19 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="x="
-                        style="@style/MyTheme.AccentText" />
-
-                    <TextView
-                        android:id="@+id/textViewGravityX"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="0.1234"
+                        android:text="@string/label_center_colon"
                         android:layout_marginEnd="@dimen/image_margin"
                         style="@style/MyTheme.AccentText" />
 
                     <TextView
+                        android:id="@+id/textViewDirection"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="y="
-                        style="@style/MyTheme.AccentText" />
-
-                    <TextView
-                        android:id="@+id/textViewGravityY"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="0.1234"
-                        android:layout_marginEnd="@dimen/image_margin"
-                        style="@style/MyTheme.AccentText" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="z="
-                        style="@style/MyTheme.AccentText" />
-
-                    <TextView
-                        android:id="@+id/textViewGravityZ"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="0.1234"
+                        android:text="@string/label_default_center"
                         android:layout_marginEnd="@dimen/image_margin"
                         style="@style/MyTheme.AccentText" />
 
                 </LinearLayout>
-
 
                 <TextView
                     android:layout_width="match_parent"

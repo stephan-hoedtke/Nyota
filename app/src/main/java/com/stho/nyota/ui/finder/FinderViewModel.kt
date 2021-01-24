@@ -58,7 +58,7 @@ class FinderViewModel(application: Application, repository: Repository, val elem
         ringAngleLiveData.postValue(0.0)
 
     fun seek() =
-        ringAngleLiveData.postValue(-repository.currentOrientation.azimuth)
+        ringAngleLiveData.postValue(-repository.currentOrientation.pointerAzimuth)
 
     companion object {
         private fun getRotationToTargetManuallyFor(ringAngle: Double, element: IElement): Float =

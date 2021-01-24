@@ -1,31 +1,41 @@
 package com.stho.nyota
 
 
-interface LocationFilter {
-    fun onLocationChanged(location: android.location.Location)
-    val currentLocation: com.stho.nyota.sky.utilities.Location
-    val updateCounter: Long
-    fun onResume()
-}
 
 /*
     The class takes updates of the current location by listening to onLocationChanged(android location).
     A handler will regularly read the updated location
  */
-class SimpleLocationFilter : LocationFilter {
+class LocationFilter : ILocationFilter {
 
-    override var updateCounter: Long = 0L
-        private set
+    private var updateCounter: Long = 0L
+    private var stableCounter: Long = 0L
 
-    override var currentLocation: com.stho.nyota.sky.utilities.Location = com.stho.nyota.sky.utilities.Location(0.0, 0.0)
+    var currentLocation: com.stho.nyota.sky.utilities.Location = com.stho.nyota.sky.utilities.Location(0.0, 0.0)
         private set
 
     override fun onLocationChanged(location: android.location.Location) {
-        currentLocation = com.stho.nyota.sky.utilities.Location.fromAndroidLocation(location)
-        updateCounter++
+        com.stho.nyota.sky.utilities.Location.fromAndroidLocation(location).also {
+            if (currentLocation.isNearTo(it)) {
+                stableCounter++
+            } else {
+                stableCounter = 0
+            }
+            currentLocation = it
+            updateCounter++
+        }
     }
 
-    override fun onResume() {
-        updateCounter = 0L
+    val isActive: Boolean
+        get() = updateCounter > 0
+
+    val isInActive: Boolean
+        get() = !isActive
+
+    val isStable: Boolean
+        get() = stableCounter > NUMBER_REQUIRED_STABLE_UPDATES
+
+    companion object {
+        private const val NUMBER_REQUIRED_STABLE_UPDATES = 3
     }
 }

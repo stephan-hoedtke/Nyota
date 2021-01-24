@@ -57,12 +57,9 @@ class InfoFragment : AbstractFragment() {
     }
 
     private fun updateOrientation(orientation: Orientation) {
-        binding.textViewAzimuth.text = Formatter.df0.format(orientation.azimuth)
-        binding.textViewPitch.text = Formatter.df0.format(orientation.pitch)
-        binding.textViewDirection.text = Formatter.df0.format(orientation.direction)
+        binding.textViewAzimuth.text = Formatter.df0.format(orientation.pointerAzimuth)
+        binding.textViewPitch.text = Formatter.df0.format(orientation.pointerAltitude)
+        binding.textViewDirection.text = Angle.toString(orientation.centerAzimuth, orientation.centerAltitude, Angle.AngleType.ORIENTATION)
         binding.textViewRoll.text = Formatter.df0.format(orientation.roll)
-        binding.textViewGravityX.text = Formatter.df2.format(orientation.gravity.x)
-        binding.textViewGravityY.text = Formatter.df2.format(orientation.gravity.y)
-        binding.textViewGravityZ.text = Formatter.df2.format(orientation.gravity.z)
     }
 }

@@ -8,9 +8,20 @@ import android.hardware.SensorManager
 import android.view.Display
 import android.view.Surface
 import android.view.WindowManager
-import com.stho.nyota.ui.finder.OrientationFilter
 
-class OrientationSensorListener(private val context: Context, private val filter: OrientationFilter) : SensorEventListener {
+interface IOrientationFilter {
+    /**
+     * Called when the phone's orientation changed measured by the acceleration and magnetic field sensors
+     * @param R Rotation Matrix
+     *
+     * To rotate a vector in phone coordinates into earth coordinates: earth = R * phone
+     * To rotate a vector in earth coordinates into phone coordinates: phone = R_inverse * earth = R_transpose * earth
+     */
+    fun onOrientationChanged(R: FloatArray)
+}
+
+
+class OrientationSensorListener(private val context: Context, private val filter: IOrientationFilter) : SensorEventListener {
 
     private val sensorManager: SensorManager = context.getSystemService(Context.SENSOR_SERVICE) as SensorManager
     private val windowManager: WindowManager = context.getSystemService(Context.WINDOW_SERVICE) as WindowManager
@@ -18,7 +29,6 @@ class OrientationSensorListener(private val context: Context, private val filter
     private val magnetometerReading = FloatArray(3)
     private val rotationMatrix = FloatArray(9)
     private val rotationMatrixAdjusted = FloatArray(9)
-    private val orientationAngles = FloatArray(3)
     private var display: Display? = null
 
     internal fun onResume() {
@@ -70,8 +80,7 @@ class OrientationSensorListener(private val context: Context, private val filter
     // the device's accelerometer and magnetometer.
     private fun updateOrientationAngles() {
         if (SensorManager.getRotationMatrix(rotationMatrix, null, accelerometerReading, magnetometerReading)) {
-            SensorManager.getOrientation(getAdjustedRotationMatrix(), orientationAngles)
-            filter.onOrientationAnglesChanged(orientationAngles)
+            filter.onOrientationChanged(getAdjustedRotationMatrix())
         }
     }
 

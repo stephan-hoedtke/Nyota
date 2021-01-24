@@ -4,12 +4,13 @@ import android.content.Context
 import android.location.LocationManager
 import android.os.Bundle
 
-class LocationServiceListener(context: Context, private val filter: LocationFilter) : android.location.LocationListener {
+interface ILocationFilter {
+    fun onLocationChanged(location: android.location.Location)
+}
+
+class LocationServiceListener(context: Context, private val filter: ILocationFilter) : android.location.LocationListener {
 
     private var locationManager: LocationManager = context.getSystemService(Context.LOCATION_SERVICE) as LocationManager
-
-    internal val isActive: Boolean
-        get() = filter.updateCounter > 1
 
     internal fun onResume() =
         enableLocationListener()
