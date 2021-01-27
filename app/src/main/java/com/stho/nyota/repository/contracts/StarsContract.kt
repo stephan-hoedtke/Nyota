@@ -15,7 +15,7 @@ internal class StarsContract(private val db: SQLiteDatabase) : BaseContract() {
             val symbol = getString(cursor, 4)
             val rightAscension = getDouble(cursor, 5)
             val declination = getDouble(cursor, 6)
-            val magnitude = getDouble(cursor, 7)
+            val magnitude = getDouble(cursor, 7, 100.0)
             val distance = getDouble(cursor, 8)
             val constellationId = getLong(cursor, 9)
             stars.createWithId(id, hd, name, friendlyName, symbol, rightAscension, declination, magnitude, distance, constellationId)

@@ -169,7 +169,7 @@ class Constellation internal constructor(val id: Long, val number: Int, override
     override fun getDetails(moment: Moment): PropertyList =
         super.getDetails(moment).apply {
             for (star in stars) {
-                add(PropertyKey.STAR, Symbol.greekSymbolImageId(star.symbol), star.name, star.position.toString())
+                add(PropertyKey.STAR, Symbol.greekSymbolImageId(star.symbol), star.toString(), star.position.toString())
             }
             for (x in translations) {
                 add(PropertyKey.TRANSLATION, Language.languageImageId(x.key), x.key.toString(), x.value)
