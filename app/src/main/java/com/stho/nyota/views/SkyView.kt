@@ -63,6 +63,9 @@ class SkyView(context: Context?, attrs: AttributeSet?) : AbstractSkyView(context
         for (star in universe.vip) {
             super.drawStar(star)
         }
+        for (star in universe.extra) {
+            super.drawStar(star)
+        }
         for (planet in universe.solarSystem.planets) {
             super.drawPlanet(planet)
         }

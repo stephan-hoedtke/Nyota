@@ -33,7 +33,7 @@ class SatelliteListRecyclerViewAdapter : RecyclerView.Adapter<SatelliteListRecyc
             binding.image.setImageResource(satellite.imageId)
             binding.name.text = satellite.name
             binding.noradSatelliteNumber.text = satellite.noradSatelliteNumber.toString()
-            binding.displayName.text = satellite.displayName
+            binding.displayName.text = satellite.friendlyName
             binding.position.text = "${satellite.position}"
             binding.root.setOnClickListener { satellites.findSatelliteByIndex(adapterPosition)?.also { select(it) } }
         }

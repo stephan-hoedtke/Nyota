@@ -1,5 +1,6 @@
 package com.stho.nyota.sky.universe
 
+import androidx.core.text.isDigitsOnly
 import com.stho.nyota.sky.utilities.City
 import com.stho.nyota.sky.utilities.Moment
 import com.stho.nyota.sky.utilities.Topocentric
@@ -12,22 +13,17 @@ import kotlin.collections.ArrayList
 class Universe {
 
     val solarSystem = SolarSystem()
-    val stars = Stars()
     val constellations = Constellations()
+    val stars = Stars(constellations)
     val satellites = Satellites()
     val vip = ArrayList<Star>()
+    val extra = ArrayList<Star>()
     val specials = ArrayList<SpecialElement>()
     val targets = Targets()
-
-    init {
-        /* Solar system and stars... */
-        UniverseInitializer(this).initialize()
-    }
 
     fun setSatelliteTLE(satelliteName: String, elements: String) {
         satellites.findSatelliteByName(satelliteName)?.updateElements(elements)
     }
-
 
     /**
      * Returns the moment (observer + UTC) for which the Universe was calculated last
@@ -71,9 +67,10 @@ class Universe {
 
     fun findStarByName(name: String?): Star? =
         name?.let {
-            val tokens: List<String> = Constellation.splitConstellationStarName(name)
-            if (tokens.size == 2) {
-                findStarInConstellationByName(constellationName = tokens[0], starName = tokens[1])
+            // Usually the name should just be the HD-catalog-number ...
+            if (it.isDigitsOnly()) {
+                val hd: Int = it.toInt()
+                stars[hd]
             } else {
                 stars.findStarByName(it)
             }

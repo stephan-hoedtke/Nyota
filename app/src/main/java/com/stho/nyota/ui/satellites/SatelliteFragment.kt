@@ -74,7 +74,7 @@ class SatelliteFragment : AbstractElementFragment() {
         binding.timeVisibilityOverlay.currentTime.text = toLocalTimeString(moment)
         binding.timeVisibilityOverlay.currentVisibility.setImageResource(satellite.visibility)
         binding.image.setImageResource(satellite.largeImageId)
-        binding.title.text = satellite.displayName
+        binding.title.text = satellite.friendlyName
         when (satellite.tle.isOutdated) {
             true -> binding.buttonDownloadTle.setImageResource(R.drawable.download_tle_red)
             false -> binding.buttonDownloadTle.setImageResource(R.drawable.download_tle_green)

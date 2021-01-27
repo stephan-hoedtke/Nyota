@@ -3,13 +3,17 @@ package com.stho.nyota.sky.universe
 import com.stho.nyota.sky.utilities.Degree
 import com.stho.nyota.sky.utilities.Hour
 import com.stho.nyota.sky.utilities.IDBObject
+import kotlin.concurrent.fixedRateTimer
 
-class Target(override val name: String, ra: Double, decl: Double) : AbstractElement(), IDBObject {
+class Target(override val name: String, val friendlyName: String, ra: Double, decl: Double) : AbstractElement(), IDBObject {
 
     init {
         RA = ra
         Decl = decl
     }
+
+    val hasFriendlyName: Boolean
+        get() = friendlyName.isNotBlank()
 
     override var id: Long = 0
 
@@ -32,28 +36,30 @@ class Target(override val name: String, ra: Double, decl: Double) : AbstractElem
     override val largeImageId: Int
         get() = com.stho.nyota.R.drawable.target_red
 
-    override fun toString(): String {
-        return name
-    }
+    override fun toString(): String =
+        when {
+            hasFriendlyName -> friendlyName
+            else -> name
+        }
 
     companion object {
 
-        fun createWithId(id: Long, name: String, ra: Double, decl: Double): Target {
-            return Target(name, ra, decl).apply {
+        fun createWithId(id: Long, name: String, friendlyName: String, ra: Double, decl: Double): Target {
+            return Target(name, friendlyName, ra, decl).apply {
                 this.id = id
             }
         }
 
-        fun create(name: String, ra: Double, decl: Double): Target {
-            return Target(name, ra, decl)
+        fun create(name: String, friendlyName: String, ra: Double, decl: Double): Target {
+            return Target(name, friendlyName, ra, decl)
         }
 
-        fun create(name: String, ascension: String, declination: String): Target {
-            return Target.create(name, Hour.fromHour(ascension).angleInDegree, Degree.fromDegree(declination).angleInDegree)
+        fun create(name: String, friendlyName: String, ascension: String, declination: String): Target {
+            return Target.create(name, friendlyName, Hour.fromHour(ascension).angleInDegree, Degree.fromDegree(declination).angleInDegree)
         }
 
         fun createDefaultNeowise(): Target {
-            return Target.create("C/2020 F3 (NEOWISE)", "07h 02m 59", "+43° 54' 42")
+            return Target.create("C/2020 F3", "NEOWISE", "07h 02m 59", "+43° 54' 42")
         }
     }
 }

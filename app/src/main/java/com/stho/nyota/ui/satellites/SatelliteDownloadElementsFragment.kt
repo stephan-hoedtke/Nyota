@@ -60,7 +60,7 @@ class SatelliteDownloadElementsFragment : AbstractFragment() {
 
     private fun bind(moment: Moment, satellite: Satellite) {
         binding.image.setImageResource(satellite.largeImageId)
-        binding.title.text = satellite.displayName
+        binding.title.text = satellite.friendlyName
         binding.tleDate.text = Formatter.toString(satellite.tle.date, moment.timeZone, Formatter.TimeFormat.DATETIME_TIMEZONE)
         binding.tleSummary.text = satellite.tle.toSummaryString()
         if (satellite.tle.isOutdated) {

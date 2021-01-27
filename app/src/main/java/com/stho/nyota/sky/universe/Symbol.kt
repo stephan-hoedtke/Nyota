@@ -2,6 +2,7 @@ package com.stho.nyota.sky.universe
 
 // TODO: move to another class and make symbol public
 enum class Symbol {
+    Empty,
     Alpha,
     Beta,
     Gamma,
@@ -16,9 +17,9 @@ enum class Symbol {
     Mu,
     Nu,
     Xi,
-    Omichron,
+    Omicron,
     Pi,
-    RHO,
+    Rho,
     Sigma,
     Tau,
     Upsilon,
@@ -38,10 +39,14 @@ enum class Symbol {
     Eleven,
     FortyOne;
 
+    fun isNotEmpty(): Boolean =
+        this != Empty
+
     companion object {
 
         fun greekSymbolToString(symbol: Symbol): String =
             when (symbol) {
+                Symbol.Empty -> ""
                 Symbol.Alpha -> "α"
                 Symbol.Beta -> "β"
                 Symbol.Gamma -> "γ"
@@ -56,9 +61,9 @@ enum class Symbol {
                 Symbol.Mu -> "μ"
                 Symbol.Nu -> "ν"
                 Symbol.Xi -> "ξ"
-                Symbol.Omichron -> "ο"
+                Symbol.Omicron -> "ο"
                 Symbol.Pi -> "π"
-                Symbol.RHO -> "ρ"
+                Symbol.Rho -> "ρ"
                 Symbol.Sigma -> "σ"
                 Symbol.Tau -> "τ"
                 Symbol.Upsilon -> "υ"
@@ -81,6 +86,7 @@ enum class Symbol {
 
         fun greekSymbolImageId(symbol: Symbol): Int =
             when (symbol) {
+                Symbol.Empty -> com.stho.nyota.R.drawable.empty
                 Symbol.Alpha -> com.stho.nyota.R.drawable.greek_alpha
                 Symbol.Beta -> com.stho.nyota.R.drawable.greek_beta
                 Symbol.Gamma -> com.stho.nyota.R.drawable.greek_gamma
@@ -95,9 +101,9 @@ enum class Symbol {
                 Symbol.Mu -> com.stho.nyota.R.drawable.greek_mu
                 Symbol.Nu -> com.stho.nyota.R.drawable.greek_nu
                 Symbol.Xi -> com.stho.nyota.R.drawable.greek_xi
-                Symbol.Omichron -> com.stho.nyota.R.drawable.greek_omicron
+                Symbol.Omicron -> com.stho.nyota.R.drawable.greek_omicron
                 Symbol.Pi -> com.stho.nyota.R.drawable.greek_pi
-                Symbol.RHO -> com.stho.nyota.R.drawable.greek_rho
+                Symbol.Rho -> com.stho.nyota.R.drawable.greek_rho
                 Symbol.Sigma -> com.stho.nyota.R.drawable.greek_sigma
                 Symbol.Tau -> com.stho.nyota.R.drawable.greek_tau
                 Symbol.Upsilon -> com.stho.nyota.R.drawable.greek_upsilon
@@ -117,5 +123,16 @@ enum class Symbol {
                 Symbol.Eleven -> com.stho.nyota.R.drawable.star
                 Symbol.FortyOne -> com.stho.nyota.R.drawable.star
             }
+
+        fun fromString(symbol: String): Symbol {
+            if (symbol.isNotBlank()) {
+                try {
+                    return Symbol.valueOf(symbol)
+                } catch (ex: Exception) {
+                    // Ignore
+                }
+            }
+            return Symbol.Empty
+        }
     }
 }

@@ -91,8 +91,8 @@ class ConstellationFragment : AbstractElementFragment() {
     override fun onPropertyLongClick(property: IProperty) {
         when (property.key) {
             PropertyKey.STAR ->
-                viewModel.constellation.stars.firstOrNull { star -> star.name == property.name }?.let {
-                    onStar(it.uniqueName)
+                viewModel.constellation.stars.firstOrNull { star -> star.name == property.name || star.friendlyName == property.name }?.let {
+                    onStar(it.HD)
                 }
         }
     }

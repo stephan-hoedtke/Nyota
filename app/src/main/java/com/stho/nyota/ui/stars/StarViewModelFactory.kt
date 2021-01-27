@@ -23,11 +23,11 @@ class StarViewModelFactory(private val application: Application, private val rep
     }
 }
 
-fun StarFragment.createStarViewModel(starName: String?): StarViewModel {
+fun StarFragment.createStarViewModel(HD: Int): StarViewModel {
     val repository = Repository.requireRepository(this.requireContext())
-    val star: Star = repository.getStarOrDefault(starName)
     val activity = this.requireActivity()
     val application = activity.application
+    val star = repository.getStarOrDefault(HD);
     val viewModelFactory = StarViewModelFactory(application, repository, star)
     return ViewModelProvider(this, viewModelFactory).get(StarViewModel::class.java)
 }

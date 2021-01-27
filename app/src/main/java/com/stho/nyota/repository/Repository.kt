@@ -97,9 +97,10 @@ class Repository private constructor() {
             citiesLiveData.value = it
         }
 
-        universe.satellites.also {
-            adapter.readSatellites(it)
-        }
+        adapter.readConstellations(universe.constellations)
+        adapter.readStars(universe.stars)
+
+        adapter.readSatellites(universe.satellites)
 
         universe.targets.also {
             adapter.readTargets(it)
@@ -115,6 +116,8 @@ class Repository private constructor() {
             }
             settingsLiveData.value = it
         }
+
+        UniverseInitializer(universe).initialize()
 
         applySettings()
 
@@ -262,6 +265,9 @@ class Repository private constructor() {
 
     internal fun getConstellationOrDefault(constellationName: String?): Constellation =
         universe.findConstellationByName(constellationName) ?: universe.constellations.first()
+
+    internal fun getStarOrDefault(hd: Int): Star =
+        universe.stars[hd] ?: universe.vip.first()
 
     internal fun getStarOrDefault(starName: String?): Star =
         universe.findStarByName(starName) ?: universe.vip.first()

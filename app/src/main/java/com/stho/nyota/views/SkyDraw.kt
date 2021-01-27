@@ -92,8 +92,8 @@ class SkyDraw() {
                         if (options.displaySymbols) {
                             drawNameAt(Symbol.greekSymbolToString(star.symbol), colors.referenceSymbolColor, it);
                         }
-                        if (options.displayStarNames && star.nameIsUnique) {
-                            drawNameAt(star.name, colors.referenceNameColor, it)
+                        if (options.displayStarNames && star.hasFriendlyName) {
+                            drawNameAt(star.friendlyName, colors.referenceNameColor, it)
                         }
                     }
                     false -> {
@@ -107,8 +107,8 @@ class SkyDraw() {
                             if (options.displaySymbols) {
                                 drawNameAt(Symbol.greekSymbolToString(star.symbol), colors.symbolColor, it);
                             }
-                            if (options.displayStarNames && star.nameIsUnique) {
-                                drawNameAt(star.name, colors.nameColor, it)
+                            if (options.displayStarNames && star.hasFriendlyName) {
+                                drawNameAt(star.friendlyName, colors.nameColor, it)
                             }
                         }
                     }

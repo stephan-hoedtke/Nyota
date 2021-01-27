@@ -59,7 +59,7 @@ class StarListFragment : AbstractFragment() {
     }
 
     private fun openStar(star: Star) =
-        findNavController().navigate(StarListFragmentDirections.actionNavStarsToNavStar(star.name))
+        findNavController().navigate(StarListFragmentDirections.actionNavStarsToNavStar(star.HD))
 
     private fun updateUniverse(universe: Universe) {
         adapter.updateElementsUseNewList(universe.vip)

@@ -36,7 +36,7 @@ class ElementsRecyclerViewAdapter : RecyclerView.Adapter<ElementsRecyclerViewAda
 
         fun bind(element: IElement) {
             binding.image.setImageResource(element.imageId)
-            binding.name.text = element.name
+            binding.name.text = element.toString()
             binding.position.text = element.position.toString()
             binding.root.setOnClickListener { getElementByIndex(adapterPosition)?.also { onItemClick?.invoke(it) } }
         }

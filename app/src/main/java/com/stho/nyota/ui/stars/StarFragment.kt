@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.text.isDigitsOnly
 import com.stho.nyota.AbstractElementFragment
 import com.stho.nyota.AbstractViewModel
 import com.stho.nyota.databinding.FragmentStarBinding
@@ -25,8 +26,8 @@ class StarFragment : AbstractElementFragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val starName: String? = getStarNameFromArguments()
-        viewModel = createStarViewModel(starName)
+        val HD: Int = getHenryDraperCatalogNumberFromArguments()
+        viewModel = createStarViewModel(HD)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
@@ -56,16 +57,15 @@ class StarFragment : AbstractElementFragment() {
     override val element: IElement
         get() = viewModel.star
 
-    @Suppress("NON_EXHAUSTIVE_WHEN")
     override fun onPropertyLongClick(property: IProperty) {
         when (property.key) {
             PropertyKey.CONSTELLATION -> onConstellation(property.name)
+            else -> super.onPropertyClick(property)
         }
-        super.onPropertyClick(property)
     }
 
     private fun updateStar(moment: Moment) {
-        with (viewModel.star) {
+        with(viewModel.star) {
             basicsAdapter.updateProperties(this.getBasics(moment))
             detailsAdapter.updateProperties(this.getDetails(moment))
             bind(moment, this)
@@ -80,8 +80,7 @@ class StarFragment : AbstractElementFragment() {
         updateActionBar(star.toString(), toLocalDateString(moment))
     }
 
-    private fun getStarNameFromArguments(): String? {
-        return arguments?.getString("STAR")
-    }
-}
+    private fun getHenryDraperCatalogNumberFromArguments(): Int =
+        arguments?.getInt("HD", 0) ?: 0
 
+}

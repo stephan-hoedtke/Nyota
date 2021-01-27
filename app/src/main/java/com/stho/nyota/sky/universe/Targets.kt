@@ -1,6 +1,5 @@
 package com.stho.nyota.sky.universe
 
-import com.stho.nyota.sky.utilities.City
 import java.util.*
 
 class Targets {
@@ -40,27 +39,15 @@ class Targets {
         return map[targetName]
     }
 
-    fun exists(targetName: String?): Boolean {
-        return if (targetName != null)
-            map.containsKey(targetName)
-        else
-            false
-    }
+    fun findTargetById(id: Long): Target? =
+        map.values.firstOrNull { it.id == id }
 
-    fun findTargetById(id: Long): Target? {
-        return map.values.firstOrNull { it.id == id }
-    }
-
-    fun findTargetByName(targetName: String?): Target? {
-        return if (targetName != null)
-            map[targetName]
-        else
-            null
-    }
+    fun findTargetByName(targetName: String?): Target? =
+        targetName?.let { map[it] }
 
     val values: List<Target>
         get() = array
 
-    internal fun createWithId(id: Long, name: String, ra: Double, decl: Double) =
-        Target.createWithId(id, name, ra, decl).also { add(it) }
+    internal fun createWithId(id: Long, name: String, friendlyName: String, ra: Double, decl: Double) =
+        Target.createWithId(id, name, friendlyName, ra, decl).also { add(it) }
 }

@@ -121,6 +121,7 @@ class City private constructor(override var id: Long, var name: String, var loca
         when {
             (name.compareTo(otherCity.name, ignoreCase = true) == 0) -> true
             (isAutomatic && otherCity.isAutomatic) -> true
+            (isAutomatic != otherCity.isAutomatic) -> false
             (isNearTo(otherCity.location)) -> true
             else -> false
         }

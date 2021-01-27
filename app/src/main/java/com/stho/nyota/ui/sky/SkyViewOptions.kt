@@ -74,9 +74,9 @@ abstract class SkyViewOptions(private val view: View): ISkyViewOptions {
         const val DEFAULT_ZOOM_ANGLE = 45.0
 
         internal fun brightnessToPercent(f: Double): Int =
-            (255 * (f - MIN_MAGNITUDE) / (MAX_MAGNITUDE - MIN_MAGNITUDE) + 0.5).toInt()
+            (100 * (f - MIN_MAGNITUDE) / (MAX_MAGNITUDE - MIN_MAGNITUDE) + 0.5).toInt()
 
         internal fun percentToBrightness(i: Int): Double =
-            MIN_MAGNITUDE + (MAX_MAGNITUDE - MIN_MAGNITUDE) * (i / 255.0)
+            MIN_MAGNITUDE + (MAX_MAGNITUDE - MIN_MAGNITUDE) * (i / 100.0)
     }
 }

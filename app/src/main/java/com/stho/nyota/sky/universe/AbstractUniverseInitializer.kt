@@ -7,31 +7,17 @@ import java.lang.Exception
 
 abstract class AbstractUniverseInitializer(protected var universe: Universe) {
 
+    fun getStar(hd: Int): Star =
+        universe.stars[hd] ?: throw Exception("Star $hd was not initialized yet")
+
     fun getStar(name: String): Star =
         universe.stars.findStarByName(name) ?: throw Exception("Star $name was not initialized yet")
 
-    fun newStar(name: String, symbol: Symbol, ascension: String, declination: String, brightness: Double): Star =
-        newStar(name, symbol, Hour.fromHour(ascension), Degree.fromDegree(declination), brightness)
+    fun newGalaxy(name: String, imageId: Int, ascension: String, declination: String, brightness: Double, distance: Double): Galaxy =
+        newGalaxy(name, imageId, Hour.fromHour(ascension), Degree.fromDegree(declination), brightness, distance)
 
-    fun newStar(symbol: Symbol, ascension: String, declination: String, brightness: Double): Star =
-        newStar(symbol, Hour.fromHour(ascension), Degree.fromDegree(declination), brightness)
-
-    private fun newStar(name: String, symbol: Symbol, ascension: Hour, declination: Degree, brightness: Double): Star =
-        universe.stars.findStarByName(name) ?:
-            Star.create(name, symbol, ascension.angleInDegree, declination.angleInDegree, brightness).also {
-                universe.stars.add(it)
-            }
-
-    private fun newStar(symbol: Symbol, ascension: Hour, declination: Degree, brightness: Double): Star =
-        Star.create(symbol, ascension.angleInDegree, declination.angleInDegree, brightness).also {
-            universe.stars.add(it)
-        }
-
-    fun newConstellation(name: String, imageId: Int): Constellation =
-        universe.constellations.findConstellationByName(name) ?:
-            Constellation(name, imageId).also {
-                universe.constellations.add(it)
-            }
+    private fun newGalaxy(name: String, imageId: Int, ascension: Hour, declination: Degree, brightness: Double, distance: Double): Galaxy =
+        Galaxy(name, imageId, ascension.angleInDegree, declination.angleInDegree, brightness, distance)
 
     fun newSatellite(name: String, displayName: String, noradSatelliteNumber: Int, elements: String): Satellite =
         universe.satellites.findSatelliteByName(name) ?:
@@ -44,9 +30,15 @@ abstract class AbstractUniverseInitializer(protected var universe: Universe) {
             universe.specials.add(it)
         }
 
-    fun asVIP(star: Star) {
-        if (!universe.vip.contains(star)) {
-            universe.vip.add(star)
+    fun setFriendlyNameTo(hd: Int, name: String): Star? =
+        universe.stars[hd]?.setFriendlyName(name)
+
+    fun asVIP(star: Star?) {
+        star?.also {
+            if (!universe.vip.contains(it)) {
+                universe.vip.add(it)
+            }
         }
     }
 }
+

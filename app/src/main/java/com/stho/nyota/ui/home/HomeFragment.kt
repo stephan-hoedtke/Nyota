@@ -126,9 +126,8 @@ class HomeFragment : AbstractFragment() {
         when (element) {
             is AbstractPlanet -> openPlanet(element)
             is Star -> openStar(element)
+            else -> showSnackbar("See: ${element.name} ...")
         }
-        findNavController()
-        showSnackbar("See: ${element.name}")
     }
 
     private fun openConstellations() =
@@ -138,7 +137,7 @@ class HomeFragment : AbstractFragment() {
         findNavController().navigate(HomeFragmentDirections.actionNavHomeToNavPlanet(planet.name))
 
     private fun openStar(star: Star) =
-        findNavController().navigate(HomeFragmentDirections.actionNavHomeToNavStar(star.name))
+        findNavController().navigate(HomeFragmentDirections.actionNavHomeToNavStar(star.HD))
 
     private fun onSun() =
         findNavController().navigate(R.id.action_global_nav_sun)

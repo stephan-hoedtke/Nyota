@@ -80,8 +80,8 @@ abstract class AbstractElementFragment : AbstractFragment() {
     protected fun onFinderView() =
         findNavController().navigate(R.id.action_global_nav_finder, bundleForElement)
 
-    protected fun onStar(starName: String) =
-        findNavController().navigate(R.id.action_global_nav_star, bundleOf("STAR" to starName))
+    protected fun onStar(HD: Int) =
+        findNavController().navigate(R.id.action_global_nav_star, bundleOf("HD" to HD))
 
     protected fun onConstellation(constellationName: String) =
         findNavController().navigate(R.id.action_global_nav_constellation, bundleOf("CONSTELLATION" to constellationName))

@@ -84,6 +84,7 @@ abstract class AbstractFragment : Fragment() {
         }
     }
 
+    // TODO: remove the action.
     protected open fun onPropertyClick(property: IProperty) =
         showSnackbar("Property: ${property.name} with value ${property.value} for key ${property.key}")
 
