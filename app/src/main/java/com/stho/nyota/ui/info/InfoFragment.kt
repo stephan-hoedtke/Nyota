@@ -10,6 +10,7 @@ import com.stho.nyota.R
 import com.stho.nyota.createViewModel
 import com.stho.nyota.databinding.FragmentInfoBinding
 import com.stho.nyota.databinding.FragmentMomentLocationBinding
+import com.stho.nyota.sky.universe.Universe
 import com.stho.nyota.sky.utilities.*
 import com.stho.nyota.ui.moment.MomentViewModel
 import java.text.Normalizer
@@ -41,6 +42,14 @@ class InfoFragment : AbstractFragment() {
         viewModel.repository.currentAutomaticTimeLD.observe(viewLifecycleOwner, { utc -> updateAutomaticTime(utc) })
         viewModel.repository.currentAutomaticLocationLD.observe(viewLifecycleOwner, { location -> updateAutomaticLocation(location) })
         viewModel.repository.currentOrientationLD.observe(viewLifecycleOwner, { orientation -> updateOrientation(orientation) })
+
+        bindElements(viewModel.repository.universe)
+    }
+
+    private fun bindElements(universe: Universe) {
+        binding.textViewConstellations.text = "Constellations: ${universe.constellations.size}"
+        binding.textViewStars.text = "Stars: ${universe.stars.size}"
+        binding.textViewSatellites.text = "Satellites: ${universe.satellites.size}"
     }
 
     override fun onDestroyView() {

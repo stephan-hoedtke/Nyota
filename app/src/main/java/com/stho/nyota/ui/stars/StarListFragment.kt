@@ -59,7 +59,7 @@ class StarListFragment : AbstractFragment() {
     }
 
     private fun openStar(star: Star) =
-        findNavController().navigate(StarListFragmentDirections.actionNavStarsToNavStar(star.HD))
+        findNavController().navigate(StarListFragmentDirections.actionNavStarsToNavStar(star.key))
 
     private fun updateUniverse(universe: Universe) {
         adapter.updateElementsUseNewList(universe.vip)
@@ -67,7 +67,7 @@ class StarListFragment : AbstractFragment() {
     }
 
     private fun bind(moment: Moment) {
-        binding.timeOverlay.currentTime.text = toLocalTimeString(moment)
+        bindTime(binding.timeOverlay, moment)
         updateActionBar(getString(R.string.label_stars), toLocalDateString(moment))
     }
 }

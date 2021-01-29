@@ -134,7 +134,7 @@ class City private constructor(override var id: Long, var name: String, var loca
     }
 
     internal fun createDefault(): City =
-        City.createCities().firstOrNull { it.name == this.name } ?: this
+        City.createCities().find { it.name == this.name } ?: this
 
     companion object {
 

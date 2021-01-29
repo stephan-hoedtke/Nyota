@@ -8,9 +8,10 @@ import com.stho.nyota.R
 import com.stho.nyota.databinding.FragmentConstellationBinding
 import com.stho.nyota.sky.universe.Constellation
 import com.stho.nyota.sky.universe.IElement
+import com.stho.nyota.sky.universe.Star
 import com.stho.nyota.sky.utilities.IProperty
 import com.stho.nyota.sky.utilities.Moment
-import com.stho.nyota.sky.utilities.PropertyKey
+import com.stho.nyota.sky.utilities.PropertyKeyType
 
 // TODO: show constellation in "real sky view", not just the Icon
 // see: https://en.wikipedia.org/wiki/Greek_alphabet (modern print)
@@ -27,8 +28,8 @@ class ConstellationFragment : AbstractElementFragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val constellationName: String? = getConstellationNameFromArguments()
-        viewModel = createConstellationViewModel(constellationName)
+        val key: String? = getKeyFromArguments()
+        viewModel = createConstellationViewModel(key)
         setHasOptionsMenu(true)
     }
 
@@ -78,9 +79,9 @@ class ConstellationFragment : AbstractElementFragment() {
 
     @Suppress("NON_EXHAUSTIVE_WHEN")
     override fun onPropertyClick(property: IProperty) {
-        when (property.key) {
-            PropertyKey.STAR ->
-                viewModel.constellation.stars.firstOrNull { star -> star.name == property.name } ?.let {
+        when (property.keyType) {
+            PropertyKeyType.STAR ->
+                viewModel.constellation.stars.find { star -> star.name == property.name } ?.let {
                     binding.sky.setStar(it)
                     binding.sky.invalidate()
                 }
@@ -89,11 +90,8 @@ class ConstellationFragment : AbstractElementFragment() {
 
     @Suppress("NON_EXHAUSTIVE_WHEN")
     override fun onPropertyLongClick(property: IProperty) {
-        when (property.key) {
-            PropertyKey.STAR ->
-                viewModel.constellation.stars.firstOrNull { star -> star.name == property.name || star.friendlyName == property.name }?.let {
-                    onStar(it.HD)
-                }
+        when (property.keyType) {
+            PropertyKeyType.STAR -> onStar(property.key)
         }
     }
 
@@ -106,8 +104,7 @@ class ConstellationFragment : AbstractElementFragment() {
     }
 
     private fun bind(moment: Moment, constellation: Constellation) {
-        binding.timeVisibilityOverlay.currentTime.text = toLocalTimeString(moment)
-        binding.timeVisibilityOverlay.currentVisibility.setImageResource(constellation.visibility)
+        bindTime(binding.timeVisibilityOverlay, moment, constellation.visibility)
         binding.image.setImageResource(constellation.largeImageId)
         binding.title.text = constellation.name
         binding.sky.notifyDataSetChanged()
@@ -134,6 +131,6 @@ class ConstellationFragment : AbstractElementFragment() {
         binding.sky.options.applyScale(1 / 1.1)
     }
 
-    private fun getConstellationNameFromArguments(): String? =
+    private fun getKeyFromArguments(): String? =
         arguments?.getString("CONSTELLATION")
 }

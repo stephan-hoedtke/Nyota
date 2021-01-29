@@ -172,6 +172,41 @@
                     android:layout_marginHorizontal="@dimen/button_margin"
                     style="@style/MyTheme.NormalText" />
 
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/label_elements_colon"
+                    android:layout_marginTop="@dimen/button_margin"
+                    style="@style/MyTheme.AccentText" />
+
+                <TextView
+                    android:id="@+id/textViewConstellations"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/default_elements"
+                    android:layout_marginTop="@dimen/text_margin"
+                    android:layout_marginHorizontal="@dimen/button_margin"
+                    style="@style/MyTheme.NormalText" />
+
+                <TextView
+                    android:id="@+id/textViewStars"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/default_elements"
+                    android:layout_marginTop="@dimen/text_margin"
+                    android:layout_marginHorizontal="@dimen/button_margin"
+                    style="@style/MyTheme.NormalText" />
+
+                <TextView
+                    android:id="@+id/textViewSatellites"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/default_elements"
+                    android:layout_marginTop="@dimen/text_margin"
+                    android:layout_marginHorizontal="@dimen/button_margin"
+                    style="@style/MyTheme.NormalText" />
+
+
                 <Space
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/bottom_space"

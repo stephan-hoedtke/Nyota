@@ -28,6 +28,15 @@ class Stars(private val constellations: Constellations) {
     fun findStarByName(starName: String?): Star? =
         starName?.let { map[it] }
 
+    fun findStarByKey(key: String): Star? =
+        when (Star.isValidKey(key)) {
+            true -> {
+                val HD = Star.hdFromKey(key)
+                get(HD)
+            }
+            else -> null
+        }
+
     fun createWithId(id: Long, hd: Int, name: String, friendlyName: String, symbol: String, rightAscension: Double, declination: Double, magnitude: Double, distance: Double, constellationId: Long) {
         Star.createWithId(id, hd, name, friendlyName, Symbol.fromString(symbol), rightAscension, declination, magnitude, distance).also { star ->
             add(star)

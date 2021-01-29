@@ -62,7 +62,7 @@ class ConstellationListFragment : AbstractFragment() {
     }
 
     private fun openConstellation(constellation: Constellation) {
-        val action = ConstellationListFragmentDirections.actionNavConstellationsToNavConstellation(constellation.name)
+        val action = ConstellationListFragmentDirections.actionNavConstellationsToNavConstellation(constellation.key)
         findNavController().navigate(action)
     }
 
@@ -72,7 +72,7 @@ class ConstellationListFragment : AbstractFragment() {
     }
 
     private fun bind(moment: Moment) {
-        binding.timeOverlay.currentTime.text = toLocalTimeString(moment)
+        bindTime(binding.timeOverlay, moment)
         updateActionBar(R.string.label_constellations, toLocalDateString(moment))
     }
 }

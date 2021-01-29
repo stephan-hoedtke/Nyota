@@ -160,8 +160,8 @@
         android:label="@string/label_star"
         tools:layout="@layout/fragment_star">
         <argument
-            android:name="HD"
-            app:argType="integer" />
+            android:name="STAR"
+            app:argType="string" />
         <action
             android:id="@+id/action_nav_star_to_nav_finder"
             app:destination="@id/nav_finder" />

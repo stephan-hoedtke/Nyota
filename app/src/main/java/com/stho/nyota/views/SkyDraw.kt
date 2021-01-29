@@ -83,17 +83,19 @@ class SkyDraw() {
             if (isOnScreen(it)) {
                 when (isReference) {
                     true -> {
-                        var r = 5f
-                        if (options.displayMagnitude) {
-                            colors.referenceStarColor.alpha = getStarAlpha(star.magn)
-                            r = getStarSize(star.magn)
-                        }
-                        drawCircleAt(r, colors.referenceStarColor, it)
-                        if (options.displaySymbols) {
-                            drawNameAt(Symbol.greekSymbolToString(star.symbol), colors.referenceSymbolColor, it);
-                        }
-                        if (options.displayStarNames && star.hasFriendlyName) {
-                            drawNameAt(star.friendlyName, colors.referenceNameColor, it)
+                        if (star.isBrighterThan(options.magnitude)) {
+                            var r = 5f
+                            if (options.displayMagnitude) {
+                                colors.referenceStarColor.alpha = getStarAlpha(star.magn)
+                                r = getStarSize(star.magn)
+                            }
+                            drawCircleAt(r, colors.referenceStarColor, it)
+                            if (options.displaySymbols) {
+                                drawNameAt(Symbol.greekSymbolToString(star.symbol), colors.referenceSymbolColor, it);
+                            }
+                            if (options.displayStarNames && star.hasFriendlyName) {
+                                drawNameAt(star.friendlyName, colors.referenceNameColor, it)
+                            }
                         }
                     }
                     false -> {
@@ -182,7 +184,7 @@ class SkyDraw() {
         canvas.drawBitmap(bitmap, p.x - dx, p.y - dy, colors.bitmapColor)
     }
 
-    private fun drawLine(line: Array<out Star>, color: Paint) {
+    private fun drawLine(line: Collection<Star>, color: Paint) {
         path.reset();
         var first = true;
         for (star: Star in line) {
@@ -234,16 +236,22 @@ class SkyDraw() {
 
     private fun getStarAlpha(magnitude: Double) =
         when {
-            magnitude > 6.0 -> 100
-            magnitude > 5.0 -> 150
-            magnitude > 4.0 -> 200
+            magnitude > 9.0 -> 100
+            magnitude > 8.0 -> 115
+            magnitude > 7.0 -> 135
+            magnitude > 6.0 -> 155
+            magnitude > 5.0 -> 175
+            magnitude > 4.0 -> 195
+            magnitude > 3.0 -> 215
+            magnitude > 2.0 -> 235
             else -> 255
         }
 
     private fun getStarSize(magnitude: Double): Float =
         when {
-            magnitude > 3.0 -> 2f
-            magnitude > 2.0 -> 3f
+            magnitude > 6.0 -> 1f
+            magnitude > 5.0 -> 2f
+            magnitude > 3.0 -> 3f
             magnitude > 1.0 -> 4f
             magnitude > 0.0 -> 5f
             else -> 6f

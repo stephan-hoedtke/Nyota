@@ -13,7 +13,7 @@ enum class Interval(private val friendlyName: String) {
 
     companion object {
         fun fromString(name: String?, default: Interval = HOUR): Interval {
-            return values().firstOrNull() { it.name == name } ?: default
+            return values().find { it.name == name } ?: default
         }
     }
 }

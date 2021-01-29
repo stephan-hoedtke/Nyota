@@ -1,17 +1,17 @@
 package com.stho.nyota.sky.utilities
 
-enum class PropertyKey() {
+enum class PropertyKeyType() {
     NULL,
     STAR,
     CONSTELLATION,
-    TRANSLATION,
 }
 
 /**
  * Created by shoedtke on 28.09.2016.
  */
 interface IProperty {
-    val key: PropertyKey
+    val keyType: PropertyKeyType
+    val key: String
     val imageId: Int
     val name: String
     val value: String

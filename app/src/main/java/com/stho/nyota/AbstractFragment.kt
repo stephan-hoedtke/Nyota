@@ -11,11 +11,15 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.LiveData
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
+import com.stho.nyota.databinding.TimeOverlayBinding
+import com.stho.nyota.databinding.TimeVisibilityOverlayBinding
 import com.stho.nyota.settings.Settings
 import com.stho.nyota.sky.universe.Universe
 import com.stho.nyota.sky.utilities.Formatter
 import com.stho.nyota.sky.utilities.IProperty
 import com.stho.nyota.sky.utilities.Moment
+import com.stho.nyota.sky.utilities.PropertyKeyType
+import java.util.*
 
 abstract class AbstractFragment : Fragment() {
 
@@ -86,11 +90,18 @@ abstract class AbstractFragment : Fragment() {
 
     // TODO: remove the action.
     protected open fun onPropertyClick(property: IProperty) =
-        showSnackbar("Property: ${property.name} with value ${property.value} for key ${property.key}")
+        showSnackbar(property)
 
     protected open fun onPropertyLongClick(property: IProperty) =
-        showSnackbar("Open property ${property.name} with value ${property.value} for key ${property.key}")
+        showSnackbar(property)
 
+    private fun showSnackbar(property: IProperty) {
+        when (property.keyType) {
+            PropertyKeyType.NULL -> showSnackbar("Property ${property.name} with value ${property.value}")
+            PropertyKeyType.STAR -> showSnackbar("Star ${property.name} with value ${property.value} for key ${property.key}")
+            PropertyKeyType.CONSTELLATION -> showSnackbar("Constellation ${property.name} with value ${property.value} for key ${property.key}")
+        }
+    }
     fun showSnackbar(message: String) {
         Snackbar.make(requireView(), message, Snackbar.LENGTH_LONG)
             .setBackgroundTint(getColor(R.color.colorSignalBackground))
@@ -121,6 +132,25 @@ abstract class AbstractFragment : Fragment() {
     private fun updateTimeAutomatically(value: Boolean) {
         binding.imageTime?.isEnabled = !value
     }
+
+    protected fun bindTime(overlay: TimeOverlayBinding, moment: Moment) {
+        overlay.currentTime.text = toLocalTimeString(moment)
+        overlay.imageTimeHours.rotation = getHoursAngle(moment)
+        overlay.imageTimeMinutes.rotation = getMinutesAngle(moment)
+    }
+
+    protected fun bindTime(overlay: TimeVisibilityOverlayBinding, moment: Moment, visibility: Int) {
+        overlay.currentTime.text = toLocalTimeString(moment)
+        overlay.imageTimeHours.rotation = getHoursAngle(moment)
+        overlay.imageTimeMinutes.rotation = getMinutesAngle(moment)
+        overlay.currentVisibility.setImageResource(visibility)
+    }
+
+    private fun getHoursAngle(moment: Moment): Float =
+        30f * moment.localTime.get(Calendar.HOUR_OF_DAY)
+
+    private fun getMinutesAngle(moment: Moment): Float =
+        6f * moment.localTime.get(Calendar.MINUTE)
 
     protected fun getColor(resId: Int): Int =
         ContextCompat.getColor(requireContext(), resId)

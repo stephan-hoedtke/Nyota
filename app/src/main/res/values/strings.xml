@@ -38,6 +38,7 @@
     <string name="label_reference_time">Reference Time:</string>
     <string name="label_reference_location">Reference Location:</string>
     <string name="label_update_time_automatically">Update Time Automatically</string>
+    <string name="label_elements_colon">Elements:</string>
     <string name="label_name_colon">Name:</string>
     <string name="label_latitude_colon">Latitude (in °):</string>
     <string name="label_longitude_colon">Longitude (in °):</string>
@@ -107,6 +108,7 @@
     <string name="default_sun">Sun</string>
     <string name="default_planet_name">Jupiter</string>
     <string name="default_constellation_name">Virgo</string>
+    <string name="default_elements">20</string>
     <string name="default_planet_position">37° E 37°</string>
     <string name="default_time">23:32</string>
     <string name="default_time_seconds">23:32:57</string>

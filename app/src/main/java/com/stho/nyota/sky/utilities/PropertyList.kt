@@ -1,5 +1,8 @@
 package com.stho.nyota.sky.utilities
 
+import com.stho.nyota.sky.universe.Constellation
+import com.stho.nyota.sky.universe.Star
+import com.stho.nyota.sky.universe.Symbol.Companion.greekSymbolImageId
 import java.util.*
 
 /**
@@ -8,36 +11,33 @@ import java.util.*
 class PropertyList : ArrayList<IProperty>() {
 
     fun add(imageId: Int, name: String, value: String) =
-        add(PropertyKey.NULL, imageId, name, value)
+        add(Property(PropertyKeyType.NULL, "", imageId, name, value))
+
+    fun add(star: Star) =
+        add(Property(PropertyKeyType.STAR, star.key, greekSymbolImageId(star.symbol), star.toString(), star.position.toString()))
+
+    fun add(constellation: Constellation) =
+        add(Property(PropertyKeyType.CONSTELLATION, constellation.key, constellation.imageId, constellation.name, constellation.position.toString()))
+
+    fun add(keyType: PropertyKeyType, key: String, imageId: Int, name: String, value: String) =
+        add(Property(keyType, key, imageId, name, value))
 
     fun add(imageId: Int, name: String, degree: Degree?) =
-        add(PropertyKey.NULL, imageId, name, degree)
-
-    fun add(imageId: Int, name: String, hour: Hour?) =
-        add(PropertyKey.NULL, imageId, name, hour)
-
-    fun add(imageId: Int, name: String, utc: UTC?, timeZone: TimeZone) =
-        add(PropertyKey.NULL, imageId, name, utc, timeZone)
-
-    fun add(key: PropertyKey, imageId: Int, name: String, value: String) =
-        add(Property(key, imageId, name, value))
-
-    fun add(key: PropertyKey, imageId: Int, name: String, degree: Degree?) =
         degree?.also {
             val value = it.toString()
-            add(Property(key, imageId, name, value))
+            add(Property(PropertyKeyType.NULL, "", imageId, name, value))
         }
 
-    fun add(key: PropertyKey, imageId: Int, name: String, hour: Hour?) =
+    fun add(imageId: Int, name: String, hour: Hour?) =
         hour?.also {
             val value = it.toString()
-            add(Property(key, imageId, name, value))
+            add(Property(PropertyKeyType.NULL, "", imageId, name, value))
         }
 
-    fun add(key: PropertyKey, imageId: Int, name: String, utc: UTC?, timeZone: TimeZone) =
+    fun add(imageId: Int, name: String, utc: UTC?, timeZone: TimeZone) =
         utc?.also {
             val value = Formatter.toString(it, timeZone, Formatter.TimeFormat.DATETIME)
-            add(Property(key, imageId, name, value))
+            add(Property(PropertyKeyType.NULL, "", imageId, name, value))
         }
 }
 

@@ -114,7 +114,7 @@ class HomeFragment : AbstractFragment() {
     }
 
     private fun bind(moment: Moment, moon: Moon, sun: Sun, iss: Satellite) {
-        binding.timeOverlay.currentTime.text = toLocalTimeString(moment)
+        bindTime(binding.timeOverlay, moment)
         binding.imageMoon.setImageResource(moon.imageId)
         binding.imageMoon.setPhase(moon)
         binding.imageSun.setImageResource(sun.imageId)
@@ -137,7 +137,7 @@ class HomeFragment : AbstractFragment() {
         findNavController().navigate(HomeFragmentDirections.actionNavHomeToNavPlanet(planet.name))
 
     private fun openStar(star: Star) =
-        findNavController().navigate(HomeFragmentDirections.actionNavHomeToNavStar(star.HD))
+        findNavController().navigate(HomeFragmentDirections.actionNavHomeToNavStar(star.key))
 
     private fun onSun() =
         findNavController().navigate(R.id.action_global_nav_sun)

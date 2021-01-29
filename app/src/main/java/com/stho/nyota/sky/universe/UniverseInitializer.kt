@@ -203,40 +203,40 @@ class UniverseInitializer(universe: Universe) : AbstractUniverseInitializer(univ
 // https://en.wikipedia.org/wiki/IAU_designated_constellations
 
     private fun registerCrux() {
-        universe.constellations["Crux"]
+        universe.constellations[Constellation.Crux]
             .line(Symbol.Alpha, Symbol.Gamma)
             .line(Symbol.Beta, Symbol.Delta)
             .build()
      }
 
     private fun registerTriangulumAustrale() {
-        universe.constellations["Triangulum Australe"]
+        universe.constellations[Constellation.TriangulumAustrale]
             .line(Symbol.Alpha, Symbol.Gamma, Symbol.Epsilon, Symbol.Beta, Symbol.Alpha)
 
     }
 
     // http://www.sternenhimmel-aktuell.de/Orion.htm
     private fun registerOrion() {
-        universe.constellations["Orion"]
+        universe.constellations[Constellation.Orion]
             .line(Symbol.Kappa, Symbol.Zeta, Symbol.Alpha, Symbol.Gamma, Symbol.Delta, Symbol.Beta)
             .line(Symbol.Zeta, Symbol.Epsilon, Symbol.Delta)
     }
 
     // https://en.wikipedia.org/wiki/Ursa_Major
     private fun registerUrsaMajor() {
-        universe.constellations["Ursa Major"]
+        universe.constellations[Constellation.UrsaMajor]
             .line(Symbol.Eta, Symbol.Zeta, Symbol.Epsilon, Symbol.Delta, Symbol.Gamma, Symbol.Beta, Symbol.Alpha, Symbol.Delta)
     }
 
     // https://en.wikipedia.org/wiki/Ursa_Minor
     private fun registerUrsaMinor() {
-        universe.constellations["Ursa Minor"]
+        universe.constellations[Constellation.UrsaMinor]
             .line(Symbol.Alpha, Symbol.Delta, Symbol.Epsilon, Symbol.Zeta, Symbol.Beta, Symbol.Gamma, Symbol.Eta, Symbol.Zeta)
     }
 
     // https://en.wikipedia.org/wiki/Cassiopeia_(constellation)
     private fun registerCassiopeia() {
-        universe.constellations["Cassiopeia"]
+        universe.constellations[Constellation.Cassiopeia]
             .line(Symbol.Beta, Symbol.Alpha, Symbol.Gamma, Symbol.Delta, Symbol.Epsilon)
     }
 
@@ -252,7 +252,7 @@ class UniverseInitializer(universe: Universe) : AbstractUniverseInitializer(univ
 
         // register the star HD 358 (Alpheratz) = Alpha Andromeda in constellation Pegasus as Delta
         val alpheratz = getStar(358)
-        val pegasus = universe.constellations["Pegasus"]
+        val pegasus = universe.constellations[Constellation.Pegasus]
 
         pegasus.register(Symbol.Delta, alpheratz)
         pegasus
@@ -263,7 +263,7 @@ class UniverseInitializer(universe: Universe) : AbstractUniverseInitializer(univ
 
     // https://en.wikipedia.org/wiki/Andromeda_(constellation)
     private fun registerAndromeda() {
-        universe.constellations["Andromeda"]
+        universe.constellations[Constellation.Andromeda]
             .line(Symbol.Alpha, Symbol.Delta, Symbol.Beta, Symbol.Gamma)
             .line(Symbol.Eta, Symbol.Zeta, Symbol.Epsilon, Symbol.Delta, Symbol.Pi, Symbol.Iota, Symbol.Kappa, Symbol.Lambda)
     }
@@ -271,14 +271,14 @@ class UniverseInitializer(universe: Universe) : AbstractUniverseInitializer(univ
     // Adler
     // https://en.wikipedia.org/wiki/List_of_stars_in_Aquila
     private fun registerAquila() {
-        universe.constellations["Aquila"]
+        universe.constellations[Constellation.Aquila]
             .line(Symbol.Alpha, Symbol.Zeta, Symbol.Delta, Symbol.Alpha, Symbol.Theta, Symbol.Eta, Symbol.Delta, Symbol.Lambda)
     }
 
     // Schwan
     // https://en.wikipedia.org/wiki/Cygnus_(constellation)
     private fun registerCygnus() {
-        universe.constellations["Cygnus"]
+        universe.constellations[Constellation.Cygnus]
             .line(Symbol.Alpha, Symbol.Gamma, Symbol.Eta, Symbol.Beta)
             .line(Symbol.Zeta, Symbol.Epsilon, Symbol.Gamma, Symbol.Delta, Symbol.Iota, Symbol.Kappa)
     }
@@ -286,7 +286,7 @@ class UniverseInitializer(universe: Universe) : AbstractUniverseInitializer(univ
     // Eidechse
     // https://en.wikipedia.org/wiki/Lacerta
     private fun registerLacerta() {
-        val lacerta = universe.constellations["Lacerta"]
+        val lacerta = universe.constellations[Constellation.Lacerta]
 
         getStar(212593).also { lacerta.register(Symbol.Four, it) }
         getStar(213310).also { lacerta.register(Symbol.Five, it) }
@@ -304,14 +304,14 @@ class UniverseInitializer(universe: Universe) : AbstractUniverseInitializer(univ
     // Altar
     // https://en.wikipedia.org/wiki/Ara_(constellation)
     private fun registerAra() {
-        universe.constellations["Ara"]
+        universe.constellations[Constellation.Ara]
             .line(Symbol.Alpha, Symbol.Beta, Symbol.Gamma, Symbol.Delta, Symbol.Eta, Symbol.Zeta, Symbol.Epsilon, Symbol.Alpha)
     }
 
     // Wasserschlange
     // https://en.wikipedia.org/wiki/Hydra_(constellation)
     private fun registerHydra() {
-        universe.constellations["Hydra"]
+        universe.constellations[Constellation.Hydra]
             .line(Symbol.Rho, Symbol.Eta, Symbol.Sigma, Symbol.Delta, Symbol.Epsilon, Symbol.Zeta, Symbol.Theta, Symbol.Iota, Symbol.Alpha, Symbol.Upsilon, Symbol.Lambda, Symbol.Mu, Symbol.Phi, Symbol.Nu, Symbol.Chi, Symbol.Beta, Symbol.Gamma, Symbol.Pi)
     }
 
@@ -320,7 +320,7 @@ class UniverseInitializer(universe: Universe) : AbstractUniverseInitializer(univ
     // https://wissen.naanoo.de/esoterik/sternzeichen-widder
     // (1) 21. März – 20. April
     private fun registerAries() {
-        val aries = universe.constellations["Aries"]
+        val aries = universe.constellations[Constellation.Aries]
 
         getStar(17573).also { aries.register(Symbol.FortyOne, it) }
 
@@ -334,7 +334,7 @@ class UniverseInitializer(universe: Universe) : AbstractUniverseInitializer(univ
     // https://wissen.naanoo.de/esoterik/sternzeichen-stier
     // (2) 21. April – 20. Mai
     private fun registerTaurus() {
-        universe.constellations["Taurus"]
+        universe.constellations[Constellation.Taurus]
             .line(Symbol.Zeta, Symbol.Alpha, Symbol.Theta, Symbol.Gamma, Symbol.Delta, Symbol.Epsilon, Symbol.Beta)
             .line(Symbol.Gamma, Symbol.Lambda, Symbol.Xi, Symbol.Omicron)
     }
@@ -346,7 +346,7 @@ class UniverseInitializer(universe: Universe) : AbstractUniverseInitializer(univ
     // https://www.space.com/16816-gemini-constellation.html
     // (3) 21. Mai – 21. Juni
     private fun registerGemini() {
-        universe.constellations["Gemini"]
+        universe.constellations[Constellation.Gemini]
             .line(Symbol.Theta, Symbol.Tau, Symbol.Iota, Symbol.Upsilon, Symbol.Kappa)
             .line(Symbol.Beta, Symbol.Upsilon, Symbol.Delta, Symbol.Zeta, Symbol.Gamma)
             .line(Symbol.Delta, Symbol.Lambda, Symbol.Xi)
@@ -359,7 +359,7 @@ class UniverseInitializer(universe: Universe) : AbstractUniverseInitializer(univ
     // https://wissen.naanoo.de/esoterik/sternzeichen-krebs
     // (4) 22. Juni – 22. Juli
     private fun registerCancer() {
-        universe.constellations["Cancer"]
+        universe.constellations[Constellation.Cancer]
             .line(Symbol.Iota, Symbol.Gamma, Symbol.Delta, Symbol.Beta)
             .line(Symbol.Delta, Symbol.Alpha)
     }
@@ -369,7 +369,7 @@ class UniverseInitializer(universe: Universe) : AbstractUniverseInitializer(univ
     // https://wissen.naanoo.de/esoterik/sternzeichen-loewe
     // (5) 23. Juli – 23. August
     private fun registerLeo() {
-        universe.constellations["Leo"]
+        universe.constellations[Constellation.Leo]
             .line(Symbol.Alpha, Symbol.Eta, Symbol.Gamma, Symbol.Delta, Symbol.Beta)
             .line(Symbol.Gamma, Symbol.Zeta, Symbol.Mu, Symbol.Epsilon)
     }
@@ -379,7 +379,7 @@ class UniverseInitializer(universe: Universe) : AbstractUniverseInitializer(univ
     // https://wissen.naanoo.de/esoterik/sternzeichen-jungfrau
     // (6) 24. August – 23. September
     private fun registerVirgo() {
-        universe.constellations["Virgo"]
+        universe.constellations[Constellation.Virgo]
             .line(Symbol.Alpha, Symbol.Theta, Symbol.Gamma, Symbol.Eta, Symbol.Beta, Symbol.Nu)
             .line(Symbol.Epsilon, Symbol.Delta, Symbol.Gamma)
             .line(Symbol.Zeta, Symbol.Theta)
@@ -390,7 +390,7 @@ class UniverseInitializer(universe: Universe) : AbstractUniverseInitializer(univ
     // https://wissen.naanoo.de/esoterik/sternzeichen-waage
     // (7) 24. September – 23. October
     private fun registerLibra() {
-        universe.constellations["Libra"]
+        universe.constellations[Constellation.Libra]
             .line(Symbol.Sigma, Symbol.Alpha, Symbol.Beta, Symbol.Gamma, Symbol.Tau, Symbol.Upsilon)
             .line(Symbol.Alpha, Symbol.Gamma)
     }
@@ -400,7 +400,7 @@ class UniverseInitializer(universe: Universe) : AbstractUniverseInitializer(univ
     // https://wissen.naanoo.de/esoterik/sternzeichen-skorpion
     // (8) 24. October – 22. November
     private fun registerScorpius() {
-        universe.constellations["Scorpius"]
+        universe.constellations[Constellation.Scorpius]
             .line(Symbol.Sigma, Symbol.Nu)
             .line(Symbol.Sigma, Symbol.Beta)
             .line(Symbol.Sigma, Symbol.Delta)
@@ -417,7 +417,7 @@ class UniverseInitializer(universe: Universe) : AbstractUniverseInitializer(univ
     // https://wissen.naanoo.de/esoterik/sternzeichen-schuetze
     // (9) 23. November – 21. December
     private fun registerSagittarius() {
-        universe.constellations["Sagittarius"]
+        universe.constellations[Constellation.Sagittarius]
             .line(Symbol.Eta, Symbol.Epsilon, Symbol.Delta, Symbol.Lambda, Symbol.Mu)
             .line(Symbol.Lambda, Symbol.Phi, Symbol.Sigma)
             .line(Symbol.Xi, Symbol.Pi, Symbol.Sigma, Symbol.Tau, Symbol.Zeta)
@@ -431,7 +431,7 @@ class UniverseInitializer(universe: Universe) : AbstractUniverseInitializer(univ
     // https://wissen.naanoo.de/esoterik/sternzeichen-steinbock
     // (10) 22. December – 20. January
     private fun registerCapricornus() {
-        universe.constellations["Capricornus"]
+        universe.constellations[Constellation.Capricornus]
             .line(Symbol.Alpha, Symbol.Beta, Symbol.Psi, Symbol.Omega, Symbol.Zeta, Symbol.Epsilon, Symbol.Delta, Symbol.Gamma, Symbol.Theta, Symbol.Alpha)
     }
 
@@ -441,7 +441,7 @@ class UniverseInitializer(universe: Universe) : AbstractUniverseInitializer(univ
     // https://wissen.naanoo.de/esoterik/sternzeichen-wassermann
     // (11) 21. January – 19. February
     private fun registerAquarius() {
-        universe.constellations["Aquarius"]
+        universe.constellations[Constellation.Aquarius]
             .line(Symbol.Epsilon, Symbol.Mu, Symbol.Beta, Symbol.Alpha, Symbol.Pi, Symbol.Zeta, Symbol.Eta)
             .line(Symbol.Zeta, Symbol.Gamma, Symbol.Alpha)
             .line(Symbol.Beta, Symbol.Iota)
@@ -454,21 +454,21 @@ class UniverseInitializer(universe: Universe) : AbstractUniverseInitializer(univ
     // https://wissen.naanoo.de/esoterik/sternzeichen
     // (12) 20. February – 20. March
     private fun registerPisces() {
-        universe.constellations["Pisces"]
+        universe.constellations[Constellation.Pisces]
             .line(Symbol.Iota, Symbol.Lambda, Symbol.Kappa, Symbol.Gamma, Symbol.Theta, Symbol.Iota, Symbol.Omega, Symbol.Delta, Symbol.Epsilon, Symbol.Zeta, Symbol.Mu, Symbol.Nu, Symbol.Alpha, Symbol.Xi, Symbol.Omicron, Symbol.Pi, Symbol.Eta, Symbol.Rho, Symbol.Phi, Symbol.Tau, Symbol.Upsilon, Symbol.Phi)
     }
 
     // (Fuhrmann)
     // https://en.wikipedia.org/wiki/Auriga_(constellation)
     private fun registerAuriga() {
-        universe.constellations["Auriga"]
+        universe.constellations[Constellation.Auriga]
             .line(Symbol.Iota, Symbol.Epsilon, Symbol.Alpha, Symbol.Beta, Symbol.Theta, Symbol.Iota)
     }
 
     // Perseus
     // https://en.wikipedia.org/wiki/Perseus_(constellation)
     private fun registerPerseus() {
-        universe.constellations["Perseus"]
+        universe.constellations[Constellation.Perseus]
             .line(Symbol.Rho, Symbol.Beta, Symbol.Kappa, Symbol.Iota, Symbol.Tau, Symbol.Eta, Symbol.Gamma, Symbol.Alpha, Symbol.Delta, Symbol.Epsilon, Symbol.Xi, Symbol.Zeta, Symbol.Omicron)
             .line(Symbol.Lambda, Symbol.Mu, Symbol.Delta)
             .line(Symbol.Alpha, Symbol.Iota, Symbol.Theta)
@@ -500,14 +500,14 @@ class UniverseInitializer(universe: Universe) : AbstractUniverseInitializer(univ
     // https://de.wikipedia.org/wiki/Pfau_(Sternbild)
     // https://en.wikipedia.org/wiki/List_of_stars_in_Pavo
     private fun registerPavo() {
-        universe.constellations["Pavo"]
+        universe.constellations[Constellation.Pavo]
             .line(Symbol.Alpha, Symbol.Beta, Symbol.Delta, Symbol.Lambda, Symbol.Eta, Symbol.Zeta, Symbol.Epsilon, Symbol.Beta)
     }
 
     // https://de.wikipedia.org/wiki/Eridanus_(Sternbild)
     // https://de.wikipedia.org/wiki/Achernar
     private fun registerEridanus() {
-        val achernar = getStar("Achernar")
+        // val achernar = getStar("Achernar")
         // TODO not ready
     }
 

@@ -50,11 +50,9 @@ class SkyFragment : AbstractFragment() {
         binding.sky.registerListener(object: ISkyViewListener {
             override fun onChangeCenter() {
                 updateDisplayZoom()
-                viewModel.isLive = false
             }
             override fun onChangeZoom() {
                 updateDisplayZoom()
-                viewModel.isLive = false
             }
             override fun onSingleTap(position: Topocentric) {
                 displaySnackbarForPosition(position)
@@ -108,6 +106,7 @@ class SkyFragment : AbstractFragment() {
             }
         }
         binding.orientation.text = Angle.toString(orientation.centerAzimuth, orientation.centerAltitude, Angle.AngleType.ORIENTATION)
+        binding.compass.rotation = orientation.centerAzimuth.toFloat() - 25f
     }
 
     private fun onObserveSkyOrientation(skyOrientation: SkyViewModel.SkyOrientation) {
@@ -157,7 +156,7 @@ class SkyFragment : AbstractFragment() {
     }
 
     private fun bind(moment: Moment) {
-        binding.timeOverlay.currentTime.text = toLocalTimeString(moment)
+        bindTime(binding.timeOverlay, moment)
         binding.sky.notifyDataSetChanged()
         updateActionBar(R.string.label_nyota, toLocalDateString(moment))
         updateDisplayZoom()
@@ -235,7 +234,7 @@ class SkyFragment : AbstractFragment() {
 
 
     private fun displaySnackbarForPosition(position: Topocentric) {
-        viewModel.universe.findNearestElementByPosition(position)?.let {
+        viewModel.universe.findNearestElementByPosition(position, binding.sky.options.magnitude)?.let {
             when (it) {
                 is Star -> displaySnackbarForStarAtPosition(position, it)
                 is AbstractPlanet -> displaySnackbarForPlanetAtPosition(position, it)
@@ -357,10 +356,10 @@ class SkyFragment : AbstractFragment() {
         findNavController().navigate(R.id.action_global_nav_planet, bundleOf("PLANET" to planet.uniqueName))
 
     private fun onStar(star: Star) =
-        findNavController().navigate(R.id.action_global_nav_star, bundleOf("HD" to star.HD))
+        findNavController().navigate(R.id.action_global_nav_star, bundleOf("STAR" to star.key))
 
     private fun onConstellation(constellation: Constellation) =
-        findNavController().navigate(R.id.action_global_nav_constellation, bundleOf("CONSTELLATION" to constellation.uniqueName))
+        findNavController().navigate(R.id.action_global_nav_constellation, bundleOf("CONSTELLATION" to constellation.key))
 }
 
 

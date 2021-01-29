@@ -80,11 +80,11 @@ abstract class AbstractElementFragment : AbstractFragment() {
     protected fun onFinderView() =
         findNavController().navigate(R.id.action_global_nav_finder, bundleForElement)
 
-    protected fun onStar(HD: Int) =
-        findNavController().navigate(R.id.action_global_nav_star, bundleOf("HD" to HD))
+    protected fun onStar(key: String) =
+        findNavController().navigate(R.id.action_global_nav_star, bundleOf("STAR" to key))
 
-    protected fun onConstellation(constellationName: String) =
-        findNavController().navigate(R.id.action_global_nav_constellation, bundleOf("CONSTELLATION" to constellationName))
+    protected fun onConstellation(key: String) =
+        findNavController().navigate(R.id.action_global_nav_constellation, bundleOf("CONSTELLATION" to key))
 
     private val bundleForElement: Bundle
         get() = bundleOf("ELEMENT" to element.uniqueName)

@@ -58,8 +58,7 @@ class SunFragment : AbstractElementFragment() {
     }
 
     private fun bind(moment: Moment, sun: Sun) {
-        binding.timeVisibilityOverlay.currentTime.text = toLocalTimeString(moment)
-        binding.timeVisibilityOverlay.currentVisibility.setImageResource(sun.visibility)
+        bindTime(binding.timeVisibilityOverlay, moment, sun.visibility)
         binding.title.text = sun.name
         updateActionBar(sun.name, toLocalDateString(moment))
     }

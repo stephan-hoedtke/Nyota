@@ -59,7 +59,7 @@ class PlanetListFragment : AbstractFragment() {
     }
 
     private fun bind(moment: Moment) {
-        binding.timeOverlay.currentTime.text = toLocalTimeString(moment)
+        bindTime(binding.timeOverlay, moment)
         updateActionBar(R.string.label_planets, toLocalDateString(moment))
     }
 

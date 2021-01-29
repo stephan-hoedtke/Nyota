@@ -22,6 +22,6 @@ class SolarSystem : AbstractSolarSystem(), ISolarSystem {
     }
 
     fun findPlanetByName(name: String): AbstractPlanet? =
-        elements.firstOrNull { e -> e.isPlanet && e.name == name} as AbstractPlanet?
+        elements.find { e -> e.isPlanet && e.name == name} as AbstractPlanet?
 
 }

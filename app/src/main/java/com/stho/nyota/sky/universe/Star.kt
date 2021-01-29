@@ -2,10 +2,9 @@ package com.stho.nyota.sky.universe
 
 import com.stho.nyota.sky.utilities.Formatter
 import com.stho.nyota.sky.utilities.Moment
-import com.stho.nyota.sky.utilities.PropertyKey
+import com.stho.nyota.sky.utilities.PropertyKeyType
 import com.stho.nyota.sky.utilities.PropertyList
 import com.stho.nyota.ui.sky.SkyViewOptions.Companion.MAX_MAGNITUDE
-import java.lang.Exception
 
 /**
  * Created by shoedtke on 31.08.2016.
@@ -64,10 +63,11 @@ class Star private constructor(val id: Long, val HD: Int, override val name: Str
 
     override fun getDetails(moment: Moment): PropertyList =
         super.getDetails(moment).apply {
-            for(constellation: Constellation in constellations) {
-                add(PropertyKey.CONSTELLATION, constellation.imageId, constellation.name, constellation.position.toString())
-            }
+            constellations.forEach { add(it) }
         }
+
+    val key: String =
+        toKey(HD)
 
     fun isBrighterThan(magnitude: Double): Boolean =
         magn <= magnitude || magnitude >= MAX_MAGNITUDE
@@ -99,5 +99,15 @@ class Star private constructor(val id: Long, val HD: Int, override val name: Str
                     it.setFriendlyName(friendlyName)
                 }
             }
+
+        fun toKey(HD: Int) =
+            "STAR:HD${HD}"
+
+        fun isValidKey(key: String): Boolean =
+            key.startsWith("STAR:HD")
+
+        fun hdFromKey(key: String): Int =
+            key.substring(7).toInt()
+
     }
 }

@@ -62,8 +62,7 @@ class PlanetFragment : AbstractElementFragment() {
     }
 
     private fun bind(moment: Moment, planet: AbstractPlanet) {
-        binding.timeVisibilityOverlay.currentTime.text = toLocalTimeString(moment)
-        binding.timeVisibilityOverlay.currentVisibility.setImageResource(planet.visibility)
+        bindTime(binding.timeVisibilityOverlay, moment, planet.visibility)
         binding.image.setImageResource(planet.largeImageId)
         binding.image.setPhase(planet)
         binding.title.text = planet.name

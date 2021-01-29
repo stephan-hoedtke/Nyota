@@ -23,9 +23,9 @@ class ConstellationViewModelFactory(private val application: Application, privat
     }
 }
 
-fun ConstellationFragment.createConstellationViewModel(constellationName: String?): ConstellationViewModel {
+fun ConstellationFragment.createConstellationViewModel(key: String?): ConstellationViewModel {
     val repository = Repository.requireRepository(this.requireContext())
-    val constellation: Constellation = repository.getConstellationOrDefault(constellationName)
+    val constellation: Constellation = repository.getConstellationByKeyOrDefault(key)
     val activity = this.requireActivity()
     val application = activity.application
     val viewModelFactory = ConstellationViewModelFactory(application, repository, constellation)

@@ -11,7 +11,7 @@ class Cities {
         get() = array.size
 
     internal fun ensureDefaultAutomaticCity() {
-        val city = array.firstOrNull { city -> city.isAutomatic }
+        val city = array.find { city -> city.isAutomatic }
         if (city == null) {
             array.add(automaticCity)
         }
@@ -59,20 +59,20 @@ class Cities {
     }
 
     private fun findAutomaticCity(): City? =
-        array.firstOrNull { city -> city.isAutomatic }
+        array.find { city -> city.isAutomatic }
 
     private fun findMatchingNonAutomaticCity(cityName: String?): City? =
         if (cityName == null) {
             null
         } else {
-            array.firstOrNull { city -> city.name.equals(cityName, ignoreCase = true) && !city.isAutomatic }
+            array.find { city -> city.name.equals(cityName, ignoreCase = true) && !city.isAutomatic }
         }
 
     private fun findMatchingCity(cityName: String?): City? =
         if (cityName == null) {
             null
         } else {
-            array.firstOrNull { city -> city.name.equals(cityName, ignoreCase = true) }
+            array.find { city -> city.name.equals(cityName, ignoreCase = true) }
         }
 
     operator fun get(index: Int): City =
@@ -91,7 +91,7 @@ class Cities {
             null
 
     fun findCityById(id: Long): City? =
-        array.firstOrNull { city -> city.id == id }
+        array.find { city -> city.id == id }
 
     fun findCityByName(cityName: String?): City? =
         findMatchingCity(cityName)

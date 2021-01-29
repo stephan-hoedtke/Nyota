@@ -71,8 +71,7 @@ class SatelliteFragment : AbstractElementFragment() {
     }
 
     private fun bind(moment: Moment, satellite: Satellite) {
-        binding.timeVisibilityOverlay.currentTime.text = toLocalTimeString(moment)
-        binding.timeVisibilityOverlay.currentVisibility.setImageResource(satellite.visibility)
+        bindTime(binding.timeVisibilityOverlay, moment, satellite.visibility)
         binding.image.setImageResource(satellite.largeImageId)
         binding.title.text = satellite.friendlyName
         when (satellite.tle.isOutdated) {

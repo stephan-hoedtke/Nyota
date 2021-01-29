@@ -40,7 +40,7 @@ class Targets {
     }
 
     fun findTargetById(id: Long): Target? =
-        map.values.firstOrNull { it.id == id }
+        map.values.find { it.id == id }
 
     fun findTargetByName(targetName: String?): Target? =
         targetName?.let { map[it] }

@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.text.isDigitsOnly
 import com.stho.nyota.AbstractElementFragment
 import com.stho.nyota.AbstractViewModel
 import com.stho.nyota.databinding.FragmentStarBinding
@@ -12,7 +11,7 @@ import com.stho.nyota.sky.universe.IElement
 import com.stho.nyota.sky.universe.Star
 import com.stho.nyota.sky.utilities.IProperty
 import com.stho.nyota.sky.utilities.Moment
-import com.stho.nyota.sky.utilities.PropertyKey
+import com.stho.nyota.sky.utilities.PropertyKeyType
 
 
 class StarFragment : AbstractElementFragment() {
@@ -26,8 +25,8 @@ class StarFragment : AbstractElementFragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val HD: Int = getHenryDraperCatalogNumberFromArguments()
-        viewModel = createStarViewModel(HD)
+        val key: String? = getKeyFromArguments()
+        viewModel = createStarViewModel(key)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
@@ -57,10 +56,10 @@ class StarFragment : AbstractElementFragment() {
     override val element: IElement
         get() = viewModel.star
 
+    @Suppress("NON_EXHAUSTIVE_WHEN")
     override fun onPropertyLongClick(property: IProperty) {
-        when (property.key) {
-            PropertyKey.CONSTELLATION -> onConstellation(property.name)
-            else -> super.onPropertyClick(property)
+        when (property.keyType) {
+            PropertyKeyType.CONSTELLATION -> onConstellation(property.key)
         }
     }
 
@@ -73,14 +72,13 @@ class StarFragment : AbstractElementFragment() {
     }
 
     private fun bind(moment: Moment, star: Star) {
-        binding.timeVisibilityOverlay.currentTime.text = toLocalTimeString(moment)
-        binding.timeVisibilityOverlay.currentVisibility.setImageResource(star.visibility)
+        bindTime(binding.timeVisibilityOverlay, moment, star.visibility)
         binding.image.setImageResource(star.largeImageId)
         binding.title.text = star.name
         updateActionBar(star.toString(), toLocalDateString(moment))
     }
 
-    private fun getHenryDraperCatalogNumberFromArguments(): Int =
-        arguments?.getInt("HD", 0) ?: 0
+    private fun getKeyFromArguments(): String? =
+        arguments?.getString("STAR")
 
 }

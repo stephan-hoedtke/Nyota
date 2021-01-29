@@ -73,8 +73,7 @@ class FinderFragment : AbstractFragment() {
         bind(moment, viewModel.element)
 
     private fun bind(moment: Moment, element: IElement) {
-        binding.timeVisibilityOverlay.currentTime.text = toLocalTimeString(moment)
-        binding.timeVisibilityOverlay.currentVisibility.setImageResource(element.visibility)
+        bindTime(binding.timeVisibilityOverlay, moment, element.visibility)
         binding.targetAzimuth.text = Angle.toString(element.position?.azimuth ?: 0.0, Angle.AngleType.AZIMUTH)
         binding.targetAltitude.text = Angle.toString(element.position?.altitude ?: 0.0, Angle.AngleType.ALTITUDE)
         binding.horizonView.targetAltitude = element.position?.altitude ?: 0.0

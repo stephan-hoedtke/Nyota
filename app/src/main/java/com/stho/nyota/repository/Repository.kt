@@ -263,14 +263,11 @@ class Repository private constructor() {
     internal fun getPlanetOrDefault(planetName: String?): AbstractPlanet =
         universe.findPlanetByName(planetName) ?: solarSystem.planets.first() as AbstractPlanet
 
-    internal fun getConstellationOrDefault(constellationName: String?): Constellation =
-        universe.findConstellationByName(constellationName) ?: universe.constellations.first()
+    internal fun getConstellationByKeyOrDefault(key: String?): Constellation =
+        key?.let { universe.constellations.findConstellationByKey(it) } ?: universe.constellations[Constellation.Crux]
 
-    internal fun getStarOrDefault(hd: Int): Star =
-        universe.stars[hd] ?: universe.vip.first()
-
-    internal fun getStarOrDefault(starName: String?): Star =
-        universe.findStarByName(starName) ?: universe.vip.first()
+    internal fun getStarByKeyOrDefault(key: String?): Star =
+        key?.let { universe.stars.findStarByKey(it) } ?: universe.vip.first()
 
     internal fun getElementOrDefault(elementName: String?): IElement =
         universe.findElementByName(elementName) ?: solarSystem.moon

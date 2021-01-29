@@ -12,7 +12,31 @@
         android:layout_height="@dimen/icon_size"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        android:src="@drawable/time"
+        android:src="@drawable/time_back"
+        android:contentDescription="@string/label_empty"
+        android:layout_margin="@dimen/image_margin"
+        />
+
+    <ImageView
+        android:id="@+id/imageTimeHours"
+        android:layout_width="@dimen/icon_size"
+        android:layout_height="@dimen/icon_size"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:src="@drawable/time_hour"
+        android:rotation="195"
+        android:contentDescription="@string/label_empty"
+        android:layout_margin="@dimen/image_margin"
+        />
+
+    <ImageView
+        android:id="@+id/imageTimeMinutes"
+        android:layout_width="@dimen/icon_size"
+        android:layout_height="@dimen/icon_size"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:src="@drawable/time_minutes"
+        android:rotation="30"
         android:contentDescription="@string/label_empty"
         android:layout_margin="@dimen/image_margin"
         />

@@ -110,9 +110,7 @@ class MoonFragment : AbstractElementFragment() {
     }
 
     private fun bind(moment: Moment, moon: Moon) {
-
-        binding.timeVisibilityOverlay.currentTime.text = toLocalTimeString(moment)
-        binding.timeVisibilityOverlay.currentVisibility.setImageResource(moon.visibility)
+        bindTime(binding.timeVisibilityOverlay, moment, moon.visibility)
         binding.image.setPhase(moon)
         binding.moonAgeLayout.age.setAge(moon)
         binding.moonAgeLayout.prevNewMoon.text = Formatter.toString(moon.prevNewMoon!!, moment.timeZone, Formatter.TimeFormat.DATETIME)
