@@ -33,7 +33,7 @@ class Constellations {
                 val rank = Constellation.rankFromKey(key)
                 get(rank)
             }
-            else -> null
+            false -> null
         }
 
     fun first(): Constellation =

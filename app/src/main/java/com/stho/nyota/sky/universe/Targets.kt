@@ -42,8 +42,14 @@ class Targets {
     fun findTargetById(id: Long): Target? =
         map.values.find { it.id == id }
 
-    fun findTargetByName(targetName: String?): Target? =
-        targetName?.let { map[it] }
+    fun findTargetByKey(key: String): Target? =
+        when (Target.isValidKey(key)) {
+            true -> {
+                val targetName = Target.nameFromKey(key)
+                get(targetName)
+            }
+            false -> null
+        }
 
     val values: List<Target>
         get() = array

@@ -9,12 +9,9 @@ import kotlin.math.pow
 /**
  * Created by shoedtke on 30.08.2016.
  */
-class Saturn : AbstractPlanet() {
+class Saturn : AbstractPlanet("Saturn") {
     private var ir = 0.0
     private var Nr = 0.0
-
-    override val name: String
-        get() = "Saturn"
 
     override val imageId: Int
         get() = com.stho.nyota.R.mipmap.saturn

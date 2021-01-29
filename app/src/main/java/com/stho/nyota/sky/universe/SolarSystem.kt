@@ -21,6 +21,22 @@ class SolarSystem : AbstractSolarSystem(), ISolarSystem {
         elements = listOf(sun, moon, mercury, venus, mars, jupiter, saturn, uranus, neptune)
     }
 
+    fun findElementByKey(key: String): IElement? =
+        when (key) {
+            moon.key -> moon
+            sun.key -> sun
+            else -> findPlanetByKey(key)
+        }
+
+    fun findPlanetByKey(key: String): AbstractPlanet? =
+        when (AbstractPlanet.isValidKey(key)) {
+            true -> {
+                val planetName = AbstractPlanet.nameFromKey(key)
+                findPlanetByName(planetName)
+            }
+            false -> null
+        }
+
     fun findPlanetByName(name: String): AbstractPlanet? =
         elements.find { e -> e.isPlanet && e.name == name} as AbstractPlanet?
 

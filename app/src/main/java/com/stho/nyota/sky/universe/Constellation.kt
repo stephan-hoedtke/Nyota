@@ -60,7 +60,7 @@ class Constellation internal constructor(val id: Long, val rank: Int, override v
     var links: ArrayList<String> = ArrayList()
         private set
 
-    val key: String =
+    override val key: String =
         toKey(rank)
 
     fun line(vararg symbols: Symbol): Constellation {
@@ -172,7 +172,7 @@ class Constellation internal constructor(val id: Long, val rank: Int, override v
                 .translate(Language.English, english)
                 .link(link)
 
-        fun toKey(rank: Int) =
+        private fun toKey(rank: Int) =
             "CONSTELLATION:${rank}"
 
         fun isValidKey(key: String): Boolean =

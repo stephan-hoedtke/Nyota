@@ -14,7 +14,7 @@ class Star private constructor(val id: Long, val HD: Int, override val name: Str
 
     private val constellations: ArrayList<Constellation> = ArrayList()
 
-    val hasHenryDraperCatalogNumber: Boolean =
+    private val hasHenryDraperCatalogNumber: Boolean =
         HD > 0
 
     val hasSymbol: Boolean =
@@ -66,7 +66,7 @@ class Star private constructor(val id: Long, val HD: Int, override val name: Str
             constellations.forEach { add(it) }
         }
 
-    val key: String =
+    override val key: String =
         toKey(HD)
 
     fun isBrighterThan(magnitude: Double): Boolean =
@@ -100,7 +100,7 @@ class Star private constructor(val id: Long, val HD: Int, override val name: Str
                 }
             }
 
-        fun toKey(HD: Int) =
+        private fun toKey(HD: Int) =
             "STAR:HD${HD}"
 
         fun isValidKey(key: String): Boolean =

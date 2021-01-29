@@ -32,7 +32,8 @@ class Satellite private constructor(override var id: Long, override val name: St
         updateElements(elements)
     }
 
-    override val uniqueName: String by lazy { name }
+    override val key: String =
+        toKey(noradSatelliteNumber)
 
     override fun toString(): String =
         name
@@ -109,6 +110,15 @@ class Satellite private constructor(override var id: Long, override val name: St
         private const val ISS: Int = 25544
         private const val HST: Int = 20580
         private const val CHEOPS: Int = 44874
+
+        private fun toKey(noradSatelliteNumber: Int): String =
+            "SATELLITE:$noradSatelliteNumber"
+
+        fun isValidKey(key: String) =
+            key.startsWith("SATELLITE:")
+
+        fun noradSatelliteNumberFromKey(key: String) =
+            key.substring(10).toInt()
 
         fun createNewSatellite(name: String, displayName: String, noradSatelliteNumber: Int, elements: String): Satellite =
             Satellite(id = 0L, name, displayName, noradSatelliteNumber, elements)

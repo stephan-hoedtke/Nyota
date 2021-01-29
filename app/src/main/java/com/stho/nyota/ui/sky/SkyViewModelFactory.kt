@@ -24,9 +24,9 @@ class SkyViewModelFactory(private val application: Application, private val repo
     }
 }
 
-fun SkyFragment.createSkyViewModel(elementName: String?): SkyViewModel {
+fun SkyFragment.createSkyViewModel(key: String?): SkyViewModel {
     val repository = Repository.requireRepository(this.requireContext())
-    val element: IElement? = repository.universe.findElementByName(elementName)
+    val element: IElement? = repository.getElementByKey(key)
     val activity = this.requireActivity()
     val application = activity.application
     val viewModelFactory = SkyViewModelFactory(application, repository, element)

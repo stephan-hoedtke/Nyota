@@ -6,7 +6,11 @@ import com.stho.nyota.sky.utilities.Degree.Companion.cos
 /**
  * Created by shoedtke on 31.08.2016.
  */
-abstract class AbstractPlanet : AbstractSolarSystemElement() {
+abstract class AbstractPlanet(override val name: String) : AbstractSolarSystemElement() {
+
+    override val key: String
+        get() = toKey(name)
+
     override val isPlanet: Boolean
         get() = true
 
@@ -50,4 +54,16 @@ abstract class AbstractPlanet : AbstractSolarSystemElement() {
         -0.583
 
     protected abstract fun getPlanetFor(moment: IMoment): AbstractPlanet
+
+    companion object {
+
+        private fun toKey(name: String): String =
+            "PLANET:$name"
+
+        fun isValidKey(key: String): Boolean =
+            key.startsWith("PLANET:")
+
+        fun nameFromKey(key: String): String =
+            key.substring(7)
+    }
 }

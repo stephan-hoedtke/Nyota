@@ -34,8 +34,8 @@ class SkyFragment : AbstractFragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val elementName = getElementNameFromArguments()
-        viewModel = createSkyViewModel(elementName)
+        val key = getElementKeyFromArguments()
+        viewModel = createSkyViewModel(key)
         setHasOptionsMenu(true)
     }
 
@@ -177,7 +177,7 @@ class SkyFragment : AbstractFragment() {
         binding.zoom.text = getString(R.string.label_zoom_angle, binding.sky.options.zoomAngle)
     }
 
-    private fun getElementNameFromArguments(): String? =
+    private fun getElementKeyFromArguments(): String? =
         arguments?.getString("ELEMENT")
 
     private fun displaySkyFragmentOptionsDialog() {
@@ -353,7 +353,7 @@ class SkyFragment : AbstractFragment() {
         findNavController().navigate(R.id.action_global_nav_satellite, bundleOf("SATELLITE" to satellite.name))
 
     private fun onPlanet(planet: AbstractPlanet) =
-        findNavController().navigate(R.id.action_global_nav_planet, bundleOf("PLANET" to planet.uniqueName))
+        findNavController().navigate(R.id.action_global_nav_planet, bundleOf("PLANET" to planet.key))
 
     private fun onStar(star: Star) =
         findNavController().navigate(R.id.action_global_nav_star, bundleOf("STAR" to star.key))

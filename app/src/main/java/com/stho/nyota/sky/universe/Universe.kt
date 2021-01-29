@@ -37,6 +37,7 @@ class Universe {
         val newMoment = moment.forNow()
         return updateFor(newMoment, true)
     }
+
     /**
      * forUTC the position (azimuth and altitude) for a given location and Local Sidereal Time (in angleInHours)
      * the phase, rise times etc will not be calculated (expensive)
@@ -71,14 +72,12 @@ class Universe {
     fun findPlanetByName(name: String?): AbstractPlanet? =
         name?.let { solarSystem.findPlanetByName(it) }
 
-    fun findElementByName(name: String?): IElement? =
-        name?.let {
-            solarSystem.elements.find { e -> e.name == it }
-                ?: satellites[it]
-                ?: constellations.findConstellationByKey(it)
-                ?: targets[it]
-                ?: stars.findStarByKey(it)
-        }
+    fun findElementByKey(key: String): IElement? =
+        solarSystem.findElementByKey(key)
+            ?: satellites.findSatelliteByKey(key)
+            ?: constellations.findConstellationByKey(key)
+            ?: stars.findStarByKey(key)
+            ?: targets.findTargetByKey(key)
 
     fun findNearestElementByPosition(position: Topocentric, magnitude: Double): IElement? {
         val tolerance = 10.0

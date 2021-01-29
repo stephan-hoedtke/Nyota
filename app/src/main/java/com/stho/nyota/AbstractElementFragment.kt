@@ -87,6 +87,6 @@ abstract class AbstractElementFragment : AbstractFragment() {
         findNavController().navigate(R.id.action_global_nav_constellation, bundleOf("CONSTELLATION" to key))
 
     private val bundleForElement: Bundle
-        get() = bundleOf("ELEMENT" to element.uniqueName)
+        get() = bundleOf("ELEMENT" to element.key)
 
 }

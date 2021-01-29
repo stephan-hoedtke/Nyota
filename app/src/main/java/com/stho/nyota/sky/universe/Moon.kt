@@ -14,6 +14,10 @@ import kotlin.math.sign
  */
 @Suppress("LocalVariableName")
 class Moon : AbstractSolarSystemElement() {
+
+    override val key: String =
+        "MOON"
+
     var parallax = 0.0 // lunar parallax
     var diameter = 0.0 // apparent  diameter of the moon
     var prevNewMoon: UTC? = null

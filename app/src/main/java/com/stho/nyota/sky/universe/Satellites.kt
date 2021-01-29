@@ -6,8 +6,8 @@ import kotlin.collections.HashMap
 
 class Satellites {
 
-    private val map: HashMap<String, Satellite> = HashMap<String, Satellite>()
     private val array: ArrayList<Satellite> = ArrayList<Satellite>()
+    private val norad: HashMap<Int, Satellite> = HashMap<Int, Satellite>()
 
     val size: Int
         get() = array.size
@@ -19,30 +19,21 @@ class Satellites {
     }
 
     fun add(satellite: Satellite) {
-        val satelliteName = satellite.name
-        val existingSatellite = map[satelliteName]
+        val noradSatelliteNumber = satellite.noradSatelliteNumber
+        val existingSatellite = norad[satellite.noradSatelliteNumber]
         if (existingSatellite != null) {
             val index = array.indexOf(existingSatellite)
             array[index] = satellite
-            map[satelliteName] = satellite
+            norad[noradSatelliteNumber] = satellite
         }
         else {
             array.add(satellite)
-            map[satelliteName] = satellite
+            norad[noradSatelliteNumber] = satellite
         }
     }
 
-    operator fun get(index: Int): Satellite =
-        array[index]
-
-    operator fun get(satelliteName: String): Satellite? =
-        map[satelliteName]
-
-    fun exists(satelliteName: String?): Boolean =
-        if (satelliteName != null)
-            map.containsKey(satelliteName)
-        else
-            false
+    operator fun get(noradSatelliteNumber: Int): Satellite? =
+        norad[noradSatelliteNumber]
 
     fun findSatelliteByIndex(index: Int): Satellite? =
         if (0 <= index && index < array.size)
@@ -51,10 +42,16 @@ class Satellites {
             null
 
     fun findSatelliteByName(satelliteName: String?): Satellite? =
-        if (satelliteName != null)
-            map[satelliteName]
-        else
-            null
+        array.find { s -> s.name == satelliteName }
+
+    fun findSatelliteByKey(key: String): Satellite? =
+        when (Satellite.isValidKey(key)) {
+            true -> {
+                val noradSatelliteNumber = Satellite.noradSatelliteNumberFromKey(key)
+                get(noradSatelliteNumber)
+            }
+            false -> null
+        }
 
     fun first(): Satellite =
         array.first()

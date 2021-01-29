@@ -8,9 +8,7 @@ import kotlin.math.pow
 /**
  * Created by shoedtke on 30.08.2016.
  */
-class Venus : AbstractPlanet() {
-    override val name: String
-        get() = "Venus"
+class Venus : AbstractPlanet("Venus") {
 
     override val imageId: Int
         get() = com.stho.nyota.R.mipmap.venus

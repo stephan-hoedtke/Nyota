@@ -12,6 +12,9 @@ class Target(override val name: String, val friendlyName: String, ra: Double, de
         Decl = decl
     }
 
+    override val key: String =
+        toKey(name)
+
     val hasFriendlyName: Boolean
         get() = friendlyName.isNotBlank()
 
@@ -43,6 +46,15 @@ class Target(override val name: String, val friendlyName: String, ra: Double, de
         }
 
     companion object {
+
+        private fun toKey(name: String) =
+            "TARGET:$name"
+
+        fun isValidKey(key: String) =
+            key.startsWith("TARGET:")
+
+        fun nameFromKey(key: String) =
+            key.substring(7)
 
         fun createWithId(id: Long, name: String, friendlyName: String, ra: Double, decl: Double): Target {
             return Target(name, friendlyName, ra, decl).apply {

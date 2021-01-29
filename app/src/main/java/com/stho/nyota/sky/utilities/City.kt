@@ -171,6 +171,5 @@ class City private constructor(override var id: Long, var name: String, var loca
 
         internal val availableTimeZones: Array<String>
             get() = TimeZone.getAvailableIDs()
-
     }
 }

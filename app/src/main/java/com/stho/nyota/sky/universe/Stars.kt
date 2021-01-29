@@ -34,7 +34,7 @@ class Stars(private val constellations: Constellations) {
                 val HD = Star.hdFromKey(key)
                 get(HD)
             }
-            else -> null
+            false -> null
         }
 
     fun createWithId(id: Long, hd: Int, name: String, friendlyName: String, symbol: String, rightAscension: Double, declination: Double, magnitude: Double, distance: Double, constellationId: Long) {

@@ -23,9 +23,9 @@ class FinderViewModelFactory(private val application: Application, private val r
     }
 }
 
-fun FinderFragment.createFinderViewModel(elementName: String?): FinderViewModel {
+fun FinderFragment.createFinderViewModel(key: String?): FinderViewModel {
     val repository = Repository.requireRepository(this.requireContext())
-    val element: IElement = repository.getElementOrDefault(elementName)
+    val element: IElement = repository.getElementByKeyOrDefault(key)
     val activity = this.requireActivity()
     val application = activity.application
     val viewModelFactory = FinderViewModelFactory(application, repository, element)

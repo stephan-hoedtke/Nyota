@@ -9,9 +9,7 @@ import kotlin.math.log10
 /**
  * Created by shoedtke on 30.08.2016.
  */
-class Jupiter : AbstractPlanet() {
-    override val name: String
-        get() = "Jupiter"
+class Jupiter : AbstractPlanet("Jupiter") {
 
     override val imageId: Int
         get() = com.stho.nyota.R.mipmap.jupiter

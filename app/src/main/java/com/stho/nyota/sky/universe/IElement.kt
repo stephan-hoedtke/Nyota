@@ -7,10 +7,19 @@ import java.text.FieldPosition
  * Common properties of
  */
 interface IElement {
+
+    /**
+     * Unique identifier to specify the element. Used as argument to the element in a fragments.
+     */
+    val key: String
+
+    /**
+     * The name may be empty on special cases. Usually to be displayed in the UI.
+     */
     val name: String
+
     val imageId: Int
     val largeImageId: Int
-    val uniqueName: String
 
     fun getBasics(moment: Moment): PropertyList
     fun getDetails(moment: Moment): PropertyList

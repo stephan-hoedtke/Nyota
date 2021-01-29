@@ -29,8 +29,8 @@ class FinderFragment : AbstractFragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val elementName: String? = getElementNameFromArguments()
-        viewModel = createFinderViewModel(elementName)
+        val key: String? = getElementKeyFromArguments()
+        viewModel = createFinderViewModel(key)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
@@ -103,7 +103,7 @@ class FinderFragment : AbstractFragment() {
         binding.buttonRefresh.text = getString(if (refresh) R.string.label_freeze else R.string.label_unfreeze)
     }
 
-    private fun getElementNameFromArguments(): String? =
+    private fun getElementKeyFromArguments(): String? =
         arguments?.getString("ELEMENT")
 
     companion object {

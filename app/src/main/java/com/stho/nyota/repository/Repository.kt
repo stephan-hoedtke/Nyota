@@ -257,11 +257,11 @@ class Repository private constructor() {
         updateTimeAutomatically = false
     }
 
-    internal fun getSatelliteOrDefault(satelliteName: String?): Satellite =
-        universe.satellites.findSatelliteByName(satelliteName) ?: satellites.first()
+    internal fun getSatelliteOrDefault(key: String?): Satellite =
+        key?.let { universe.satellites.findSatelliteByKey(it) } ?: satellites.first()
 
-    internal fun getPlanetOrDefault(planetName: String?): AbstractPlanet =
-        universe.findPlanetByName(planetName) ?: solarSystem.planets.first() as AbstractPlanet
+    internal fun getPlanetOrDefault(key: String?): AbstractPlanet =
+        key?.let { solarSystem.findPlanetByKey(it) } ?: solarSystem.venus
 
     internal fun getConstellationByKeyOrDefault(key: String?): Constellation =
         key?.let { universe.constellations.findConstellationByKey(it) } ?: universe.constellations[Constellation.Crux]
@@ -269,8 +269,11 @@ class Repository private constructor() {
     internal fun getStarByKeyOrDefault(key: String?): Star =
         key?.let { universe.stars.findStarByKey(it) } ?: universe.vip.first()
 
-    internal fun getElementOrDefault(elementName: String?): IElement =
-        universe.findElementByName(elementName) ?: solarSystem.moon
+    internal fun getElementByKeyOrDefault(key: String?): IElement =
+        key?.let { universe.findElementByKey(it) } ?: solarSystem.moon
+
+    internal fun getElementByKey(key: String?): IElement? =
+        key?.let { universe.findElementByKey(it) }
 
     internal fun getCityOrNewCity(cityName: String?): City =
         liveCities.findCityByName(cityName) ?: City.createNewCity(cityName ?: City.NEW_CITY)

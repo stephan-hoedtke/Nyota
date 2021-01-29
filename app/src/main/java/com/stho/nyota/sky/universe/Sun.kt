@@ -7,6 +7,10 @@ import com.stho.nyota.sky.utilities.*
  * Created by shoedtke on 30.08.2016.
  */
 class Sun : AbstractSolarSystemElement() {
+
+    override val key: String =
+        "SUN"
+
     override val isSun: Boolean
         get() = true
 

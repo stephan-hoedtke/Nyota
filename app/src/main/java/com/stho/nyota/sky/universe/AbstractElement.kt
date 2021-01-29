@@ -10,8 +10,9 @@ import com.stho.nyota.sky.utilities.Topocentric.Companion.INVALID_DISTANCE
 @Suppress("PropertyName")
 abstract class AbstractElement(var RA: Double = 0.0, var Decl: Double = 0.0, var magn: Double = 0.0) : IElement {
 
-    override val uniqueName: String by lazy { name }
-
+    /**
+     * Default implementation displays the name. Overridden for stars, as stars may have an empty name.
+     */
     override fun toString(): String =
         name
 
