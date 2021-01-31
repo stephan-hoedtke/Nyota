@@ -22,8 +22,8 @@ abstract class AbstractPlanet(override val name: String) : AbstractSolarSystemEl
 
     abstract fun calculateMagnitude()
 
-    override fun getDetails(moment: Moment): PropertyList =
-        super.getDetails(moment).apply {
+    override fun getBasics(moment: Moment): PropertyList =
+        super.getBasics(moment).apply {
             if (position?.isUp == true) {
                 add(com.stho.nyota.R.drawable.sunset, "Previous Set", position?.prevSetTime, moment.timeZone)
                 add(com.stho.nyota.R.drawable.sunrise, "Rise", position?.riseTime, moment.timeZone)
@@ -35,13 +35,17 @@ abstract class AbstractPlanet(override val name: String) : AbstractSolarSystemEl
                 add(com.stho.nyota.R.drawable.sunrise, "Rise", position?.riseTime, moment.timeZone)
                 add(com.stho.nyota.R.drawable.sunset, "Next Set", position?.nextSetTime, moment.timeZone)
             }
+            add(com.stho.nyota.R.drawable.empty, "Magnitude", Formatter.df2.format(magn))
+            add(com.stho.nyota.R.drawable.empty, "In south", position?.inSouth, moment.timeZone)
+            add(com.stho.nyota.R.drawable.empty, "Culmination angle", Degree.fromDegree(position!!.culmination))
+        }
+
+    override fun getDetails(moment: Moment): PropertyList =
+        super.getDetails(moment).apply {
             add(com.stho.nyota.R.drawable.empty, "FV", Degree.fromDegree(FV))
             add(com.stho.nyota.R.drawable.empty, "Phase", Formatter.df3.format(phase))
             add(com.stho.nyota.R.drawable.empty, "Phase angle", Formatter.df0.format(phaseAngle))
-            add(com.stho.nyota.R.drawable.empty, "Magnitude", Formatter.df2.format(magn))
             add(com.stho.nyota.R.drawable.empty, "Parallax", Formatter.df3.format(parallacticAngle))
-            add(com.stho.nyota.R.drawable.empty, "In south", position?.inSouth, moment.timeZone)
-            add(com.stho.nyota.R.drawable.empty, "Culmination angle", Degree.fromDegree(position!!.culmination))
         }
 
     override fun getHeightFor(moment: IMoment): Double =

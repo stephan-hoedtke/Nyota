@@ -78,39 +78,52 @@ class SkyDraw() {
             }
         }
 
-    fun drawStar(star: Star, isReference: Boolean = false) =
+    fun drawStar(star: Star, referenceType: ReferenceType = ReferenceType.None) =
         getPosition(star)?.let {
             if (isOnScreen(it)) {
-                when (isReference) {
-                    true -> {
+                when (referenceType) {
+                    ReferenceType.Reference -> {
                         if (star.isBrighterThan(options.magnitude)) {
-                            var r = 5f
+                            var r = 3f
                             if (options.displayMagnitude) {
                                 colors.referenceStarColor.alpha = getStarAlpha(star.magn)
                                 r = getStarSize(star.magn)
                             }
                             drawCircleAt(r, colors.referenceStarColor, it)
-                            if (options.displaySymbols) {
-                                drawNameAt(Symbol.greekSymbolToString(star.symbol), colors.referenceSymbolColor, it);
-                            }
-                            if (options.displayStarNames && star.hasFriendlyName) {
+                            if (star.hasFriendlyName) {
                                 drawNameAt(star.friendlyName, colors.referenceNameColor, it)
+                            } else if (star.hasSymbol) {
+                                drawNameAt(star.symbol.greekSymbol, colors.referenceSymbolColor, it);
                             }
                         }
                     }
-                    false -> {
+                    ReferenceType.Tipped -> {
                         if (star.isBrighterThan(options.magnitude)) {
-                            var r = 4f
+                            var r = 3f
+                            if (options.displayMagnitude) {
+                                colors.tippedStarColor.alpha = getStarAlpha(star.magn)
+                                r = getStarSize(star.magn)
+                            }
+                            drawCircleAt(r, colors.tippedStarColor, it)
+                            if (star.hasFriendlyName) {
+                                drawNameAt(star.friendlyName, colors.tippedStarColor, it)
+                            } else if (star.hasSymbol) {
+                                drawNameAt(star.symbol.greekSymbol, colors.tippedStarColor, it);
+                            }
+                        }
+                    }
+                    ReferenceType.None -> {
+                        if (star.isBrighterThan(options.magnitude)) {
+                            var r = 3f
                             if (options.displayMagnitude) {
                                 colors.starColor.alpha = getStarAlpha(star.magn)
                                 r = getStarSize(star.magn)
                             }
                             drawCircleAt(r, colors.starColor, it)
-                            if (options.displaySymbols) {
-                                drawNameAt(Symbol.greekSymbolToString(star.symbol), colors.symbolColor, it);
-                            }
                             if (options.displayStarNames && star.hasFriendlyName) {
                                 drawNameAt(star.friendlyName, colors.nameColor, it)
+                            } else if (options.displaySymbols && star.hasSymbol) {
+                                drawNameAt(star.symbol.greekSymbol, colors.symbolColor, it);
                             }
                         }
                     }
@@ -118,22 +131,29 @@ class SkyDraw() {
             }
         }
 
-    fun drawConstellation(constellation: Constellation, isReference: Boolean = false) {
-        when (isReference) {
-            true -> {
+    fun drawConstellation(constellation: Constellation, referenceType: ReferenceType = ReferenceType.None) {
+        when (referenceType) {
+            ReferenceType.Reference -> {
                 for (star: Star in constellation.stars) {
-                    drawStar(star, true);
+                    drawStar(star, referenceType);
                 }
                 for (line in constellation.lines) {
                     drawLine(line, colors.referenceLineColor);
                 }
-                if (options.displayConstellationNames) {
-                    drawName(constellation.position, constellation.name, colors.referenceNameColor)
-                }
+                drawName(constellation.position, constellation.name, colors.referenceNameColor)
             }
-            false -> {
+            ReferenceType.Tipped -> {
                 for (star: Star in constellation.stars) {
-                    drawStar(star, false);
+                    drawStar(star, referenceType);
+                }
+                for (line in constellation.lines) {
+                    drawLine(line, colors.tippedLineColor);
+                }
+                drawName(constellation.position, constellation.name, colors.tippedStarColor)
+            }
+            ReferenceType.None -> {
+                for (star: Star in constellation.stars) {
+                    drawStar(star, referenceType);
                 }
                 if (options.displayConstellations) {
                     for (line in constellation.lines) {

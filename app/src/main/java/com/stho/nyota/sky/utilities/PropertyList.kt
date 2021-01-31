@@ -2,7 +2,6 @@ package com.stho.nyota.sky.utilities
 
 import com.stho.nyota.sky.universe.Constellation
 import com.stho.nyota.sky.universe.Star
-import com.stho.nyota.sky.universe.Symbol.Companion.greekSymbolImageId
 import java.util.*
 
 /**
@@ -14,7 +13,7 @@ class PropertyList : ArrayList<IProperty>() {
         add(Property(PropertyKeyType.NULL, "", imageId, name, value))
 
     fun add(star: Star) =
-        add(Property(PropertyKeyType.STAR, star.key, greekSymbolImageId(star.symbol), star.toString(), star.position.toString()))
+        add(Property(PropertyKeyType.STAR, star.key, star.symbol.imageId, star.toString(), star.position.toString(), star.magnAsString))
 
     fun add(constellation: Constellation) =
         add(Property(PropertyKeyType.CONSTELLATION, constellation.key, constellation.imageId, constellation.name, constellation.position.toString()))

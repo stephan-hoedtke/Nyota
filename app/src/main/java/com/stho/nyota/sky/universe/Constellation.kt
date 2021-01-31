@@ -2,10 +2,8 @@ package com.stho.nyota.sky.universe
 
 import android.util.Log
 import com.stho.nyota.R
-import com.stho.nyota.sky.utilities.CircularAverage
-import com.stho.nyota.sky.utilities.Moment
-import com.stho.nyota.sky.utilities.PropertyKeyType
-import com.stho.nyota.sky.utilities.PropertyList
+import com.stho.nyota.sky.utilities.*
+import com.stho.nyota.sky.utilities.Topocentric.Companion.INVALID_DISTANCE
 import java.lang.Exception
 import java.util.*
 import kotlin.collections.ArrayList
@@ -13,6 +11,7 @@ import kotlin.collections.ArrayList
 /**
  * Created by shoedtke on 08.09.2016.
  */
+@Suppress("LocalVariableName")
 class Constellation internal constructor(val id: Long, val rank: Int, override val name: String, val abbreviation: String) : AbstractElement() {
 
     // TODO: make those lists immutable for public, and mutable private
@@ -136,10 +135,16 @@ class Constellation internal constructor(val id: Long, val rank: Int, override v
         map[symbol] ?: throw Exception("Star $symbol is not registered in constellation $name yet.")
 
     /**
-     * Retrieve a star by the name, if found, or null otherwise
+     * Retrieve a star by the key, if it can be found, or null otherwise
      */
-    fun findStarInConstellationByName(starName: String): Star? =
-        stars.find { star -> star.name == starName }
+    fun findStarInConstellationByKey(key: String): Star? =
+        when (Star.isValidKey(key)) {
+            true -> {
+                val HD = Star.hdFromKey(key)
+                get(HD)
+            }
+            false -> null
+        }
 
     override fun toString(): String =
         name
@@ -157,11 +162,36 @@ class Constellation internal constructor(val id: Long, val rank: Int, override v
         RA = CircularAverage.getCircularAverage(ra, length)
     }
 
+    override fun getBasics(moment: Moment): PropertyList =
+        super.getBasics(moment).apply {
+            translations.forEach { add(Language.languageImageId(it.key), it.key.toString(), it.value) }
+            stars.filter { s -> s.hasSymbol || s.hasFriendlyName }.forEach{ add(it) }
+        }
+
     override fun getDetails(moment: Moment): PropertyList =
         super.getDetails(moment).apply {
-            stars.forEach { add(it) }
-            translations.forEach { add(Language.languageImageId(it.key), it.key.toString(), it.value) }
+            stars.filter { s -> !s.hasSymbol && !s.hasFriendlyName }.forEach{ add(it) }
         }
+
+    fun findNearestStarByPosition(position: Topocentric, magnitude: Double, sensitivityAngle: Double): Star? {
+        val tolerance = Radian.toDegrees(sensitivityAngle)
+        var distance: Double = INVALID_DISTANCE
+        var brightness: Double = INVALID_MAGNITUDE
+        var star: Star? = null
+
+        for (s in stars) {
+            if (s.isBrighterThan(magnitude) && s.isNear(position, tolerance)) {
+                val b = s.magn
+                val d = s.distanceTo(position)
+                if (b < brightness || (b == brightness && d < distance)) {
+                    brightness = b
+                    distance = d
+                    star = s
+                }
+            }
+        }
+        return star
+    }
 
     companion object {
 

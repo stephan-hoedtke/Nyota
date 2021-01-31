@@ -2,16 +2,19 @@ package com.stho.nyota.ui.constellations
 
 import android.os.Bundle
 import android.view.*
+import androidx.core.os.bundleOf
+import androidx.navigation.fragment.findNavController
+import com.google.android.material.snackbar.Snackbar
 import com.stho.nyota.AbstractElementFragment
 import com.stho.nyota.AbstractViewModel
+import com.stho.nyota.ISkyViewListener
 import com.stho.nyota.R
 import com.stho.nyota.databinding.FragmentConstellationBinding
 import com.stho.nyota.sky.universe.Constellation
 import com.stho.nyota.sky.universe.IElement
 import com.stho.nyota.sky.universe.Star
-import com.stho.nyota.sky.utilities.IProperty
-import com.stho.nyota.sky.utilities.Moment
-import com.stho.nyota.sky.utilities.PropertyKeyType
+import com.stho.nyota.sky.utilities.*
+
 
 // TODO: show constellation in "real sky view", not just the Icon
 // see: https://en.wikipedia.org/wiki/Greek_alphabet (modern print)
@@ -45,6 +48,25 @@ class ConstellationFragment : AbstractElementFragment() {
         binding.timeVisibilityOverlay.currentVisibility.setOnClickListener { onToggleImage() }
         binding.buttonZoomIn.setOnClickListener { onZoomIn() }
         binding.buttonZoomOut.setOnClickListener { onZoomOut() }
+        binding.sky.registerListener(object : ISkyViewListener {
+            override fun onChangeCenter() {
+                // Ignore
+            }
+
+            override fun onChangeZoom() {
+                // Ignore
+            }
+
+            override fun onDoubleTap() {
+                binding.sky.setTippedStar(null)
+                binding.sky.setReferenceStar(null)
+                binding.sky.resetTransformation()
+            }
+
+            override fun onSingleTap(position: Topocentric) {
+                displaySnackbarForPosition(position)
+            }
+        })
         binding.image.alpha = 0f
 
         return binding.root
@@ -81,17 +103,10 @@ class ConstellationFragment : AbstractElementFragment() {
     override fun onPropertyClick(property: IProperty) {
         when (property.keyType) {
             PropertyKeyType.STAR ->
-                viewModel.constellation.stars.find { star -> star.name == property.name } ?.let {
-                    binding.sky.setStar(it)
+                viewModel.constellation.findStarInConstellationByKey(property.key)?.let {
+                    binding.sky.setReferenceStar(it)
                     binding.sky.invalidate()
                 }
-        }
-    }
-
-    @Suppress("NON_EXHAUSTIVE_WHEN")
-    override fun onPropertyLongClick(property: IProperty) {
-        when (property.keyType) {
-            PropertyKeyType.STAR -> onStar(property.key)
         }
     }
 
@@ -111,6 +126,34 @@ class ConstellationFragment : AbstractElementFragment() {
         updateActionBar(constellation.name, toLocalDateString(moment))
     }
 
+    private fun displaySnackbarForPosition(position: Topocentric) {
+        viewModel.constellation.findNearestStarByPosition(position, binding.sky.options.magnitude, binding.sky.sensitivityAngle)?.let {
+            displaySnackbarForStarAtPosition(position, it)
+            // TODO: select the respective list item
+        }
+    }
+
+    private fun displaySnackbarForStarAtPosition(position: Topocentric, star: Star) {
+        binding.sky.setTippedStar(star)
+
+        val message: String = messageTextForStar(position, star)
+
+        Snackbar.make(requireView(), message, Snackbar.LENGTH_INDEFINITE)
+            .setBackgroundTint(getColor(R.color.colorSignalBackground))
+            .setTextColor(getColor(R.color.colorSecondaryText))
+            .setDuration(3000)
+            .setAction(star.toString()) { onStar(star) }
+            .show()
+
+    }
+
+    private fun messageTextForStar(position: Topocentric, star: Star): String =
+        if (star.hasSymbol)
+            "Star ${star.symbol.greekSymbol} ${star.magnAsString} at $position"
+        else
+            "Star ${star.magnAsString} at $position "
+
+
     private fun onToggleImage() {
 
         // TODO: Use animation...
@@ -122,6 +165,9 @@ class ConstellationFragment : AbstractElementFragment() {
             binding.sky.visibility = View.VISIBLE
         }
     }
+
+    private fun onStar(star: Star) =
+        findNavController().navigate(R.id.action_global_nav_star, bundleOf("STAR" to star.key))
 
     private fun onZoomIn() {
         binding.sky.options.applyScale(1.1)

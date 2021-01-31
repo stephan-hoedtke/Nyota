@@ -296,18 +296,6 @@ class Moon : AbstractSolarSystemElement() {
     override fun getBasics(moment: Moment): PropertyList =
         super.getBasics(moment).apply {
             if (position?.isUp == true) {
-                add(com.stho.nyota.R.drawable.sunrise, "Rise", position?.riseTime, moment.timeZone)
-                add(com.stho.nyota.R.drawable.sunset, "Set", position?.setTime, moment.timeZone)
-            } else {
-                add(com.stho.nyota.R.drawable.sunset, "Set", position?.setTime, moment.timeZone)
-                add(com.stho.nyota.R.drawable.sunrise, "Rise", position?.riseTime, moment.timeZone)
-            }
-            add(com.stho.nyota.R.drawable.angle, "Diameter", Degree.fromDegree(diameter))
-        }
-
-    override fun getDetails(moment: Moment): PropertyList =
-        super.getDetails(moment).apply {
-            if (position?.isUp == true) {
                 add(com.stho.nyota.R.drawable.sunset, "Previous Set", position?.prevSetTime, moment.timeZone)
                 add(com.stho.nyota.R.drawable.sunrise, "Rise", position?.riseTime, moment.timeZone)
                 add(com.stho.nyota.R.drawable.sunset, "Set ", position?.setTime, moment.timeZone)
@@ -321,6 +309,10 @@ class Moon : AbstractSolarSystemElement() {
             add(com.stho.nyota.R.drawable.empty, "Age", Formatter.df2.format(age))
             add(com.stho.nyota.R.drawable.angle, "Diameter", Degree.fromDegree(diameter))
             add(com.stho.nyota.R.drawable.empty, "Magnitude", Formatter.df2.format(magn))
+        }
+
+    override fun getDetails(moment: Moment): PropertyList =
+        super.getDetails(moment).apply {
             add(com.stho.nyota.R.drawable.empty, "FV", Degree.fromDegree(FV))
             add(com.stho.nyota.R.drawable.empty, "Phase", Formatter.df3.format(phase))
             add(com.stho.nyota.R.drawable.empty, "Phase angle", Formatter.df0.format(phaseAngle))

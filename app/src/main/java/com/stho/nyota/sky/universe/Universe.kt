@@ -1,9 +1,7 @@
 package com.stho.nyota.sky.universe
 
 import androidx.core.text.isDigitsOnly
-import com.stho.nyota.sky.utilities.City
-import com.stho.nyota.sky.utilities.Moment
-import com.stho.nyota.sky.utilities.Topocentric
+import com.stho.nyota.sky.utilities.*
 import com.stho.nyota.sky.utilities.createDefaultBerlinBuch
 import java.text.FieldPosition
 import java.util.*
@@ -79,56 +77,60 @@ class Universe {
             ?: stars.findStarByKey(key)
             ?: targets.findTargetByKey(key)
 
-    fun findNearestElementByPosition(position: Topocentric, magnitude: Double): IElement? {
-        val tolerance = 10.0
-        var distance = Topocentric.INVALID_DISTANCE
+    fun findNearestElementByPosition(position: Topocentric, magnitude: Double, sensitivityAngle: Double): IElement? {
+        val tolerance = Radian.toDegrees(sensitivityAngle)
+        var distance: Double = Topocentric.INVALID_DISTANCE
+        var brightness: Double = AbstractElement.INVALID_MAGNITUDE
         var element: IElement? = null
 
         for (e in solarSystem.elements) {
             if (e.isNear(position, tolerance)) {
+                val b = e.magn
                 val d = e.distanceTo(position)
-                if (d < distance) {
+                if (b < brightness || (b == brightness && d < distance)) {
+                    brightness = b
                     distance = d
                     element = e
                 }
             }
         }
-        for (c in constellations.values) {
-            if (c.isNear(position, tolerance)) {
-                val d = c.distanceTo(position)
-                if (d < distance) {
-                    distance = d
-                    element = c
-                }
-            }
-        }
+
         for (s in stars.values) {
             if (s.isBrighterThan(magnitude) && s.isNear(position, tolerance)) {
+                val b = s.magn
                 val d = s.distanceTo(position)
-                if (d < distance) {
+                if (b < brightness || (b == brightness && d < distance)) {
+                    brightness = b
                     distance = d
                     element = s
                 }
            }
         }
+
         for (s in satellites.values) {
             if (s.isNear(position, tolerance)) {
+                val b = -10.0
                 val d = s.distanceTo(position)
-                if (d < distance) {
+                if (b < brightness || (b == brightness && d < distance)) {
+                    brightness = b
                     distance = d
                     element = s
                 }
             }
         }
+
         for (t in targets.values) {
             if (t.isNear(position, tolerance)) {
+                val b = -10.0
                 val d = t.distanceTo(position)
-                if (d < distance) {
+                if (b < brightness || (b == brightness && d < distance)) {
+                    brightness = b
                     distance = d
                     element = t
                 }
             }
         }
+
         return element
     }
 }

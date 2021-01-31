@@ -44,7 +44,7 @@ class SkyFragment : AbstractFragment() {
 
         binding.sky.setOptions(viewModel.repository.settings)
         binding.sky.setUniverse(viewModel.universe)
-        binding.sky.setElement(viewModel.element)
+        binding.sky.setReferenceElement(viewModel.element)
         binding.buttonZoomIn.setOnClickListener { onZoomIn() }
         binding.buttonZoomOut.setOnClickListener { onZoomOut() }
         binding.sky.registerListener(object: ISkyViewListener {
@@ -53,6 +53,11 @@ class SkyFragment : AbstractFragment() {
             }
             override fun onChangeZoom() {
                 updateDisplayZoom()
+            }
+            override fun onDoubleTap() {
+                binding.sky.setTippedElement(null)
+                binding.sky.setTippedConstellation(null)
+                binding.sky.resetTransformation()
             }
             override fun onSingleTap(position: Topocentric) {
                 displaySnackbarForPosition(position)
@@ -158,9 +163,12 @@ class SkyFragment : AbstractFragment() {
     private fun bind(moment: Moment) {
         bindTime(binding.timeOverlay, moment)
         binding.sky.notifyDataSetChanged()
-        updateActionBar(R.string.label_nyota, toLocalDateString(moment))
+        updateActionBar(title, toLocalDateString(moment))
         updateDisplayZoom()
     }
+
+    private val title: String
+        get() = viewModel.element?.toString() ?: getString(R.string.label_nyota) // Mind: lateinit viewModel
 
     private fun onZoomIn() {
         binding.sky.options.applyScale(1.1)
@@ -234,11 +242,10 @@ class SkyFragment : AbstractFragment() {
 
 
     private fun displaySnackbarForPosition(position: Topocentric) {
-        viewModel.universe.findNearestElementByPosition(position, binding.sky.options.magnitude)?.let {
+        viewModel.universe.findNearestElementByPosition(position, binding.sky.options.magnitude, binding.sky.sensitivityAngle)?.let {
             when (it) {
                 is Star -> displaySnackbarForStarAtPosition(position, it)
                 is AbstractPlanet -> displaySnackbarForPlanetAtPosition(position, it)
-                is Constellation -> displaySnackbarForConstellationAtPosition(position, it)
                 is Satellite -> displaySnackbarForSatelliteAtPosition(position, it)
                 is Moon -> displaySnackbarForMoonAtPosition(position, it)
                 is Sun -> displaySnackbarForSunAtPosition(position, it)
@@ -256,13 +263,10 @@ class SkyFragment : AbstractFragment() {
     }
 
     private fun displaySnackbarForStarAtPosition(position: Topocentric, star: Star) {
-        val message: String = star.referenceConstellation?.let {
-            binding.sky.setElement(it, false)
-            "$position in ${it.name}"
-        } ?: star.let {
-            binding.sky.setElement(it, false)
-            "$position (Star)"
-        }
+        binding.sky.setTippedElement(star)
+        binding.sky.setTippedConstellation(star.referenceConstellation)
+
+        val message: String = star.referenceConstellation?.let { messageTextForStarInConstellation(position, star, it) } ?: messageTextForStar(position, star)
 
         Snackbar.make(requireView(), message, Snackbar.LENGTH_INDEFINITE)
             .setBackgroundTint(getColor(R.color.colorSignalBackground))
@@ -272,11 +276,22 @@ class SkyFragment : AbstractFragment() {
             .show()
     }
 
+    private fun messageTextForStarInConstellation(position: Topocentric, star: Star, constellation: Constellation) =
+        if (star.hasSymbol)
+            "Star ${star.symbol.greekSymbol} ${star.magnAsString} at $position in ${constellation.name}"
+        else
+            "Star ${star.magnAsString} at $position in ${constellation.name}"
+
+    private fun messageTextForStar(position: Topocentric, star: Star): String =
+        if (star.hasSymbol)
+            "Star ${star.symbol.greekSymbol} ${star.magnAsString} at $position"
+        else
+            "Star ${star.magnAsString} at $position "
+
     private fun displaySnackbarForPlanetAtPosition(position: Topocentric, planet: AbstractPlanet) {
-        val message: String = planet.let {
-            binding.sky.setElement(it, false)
-            "$position (Planet)"
-        }
+        binding.sky.setTippedElement(planet)
+
+        val message: String = "Planet at $position"
 
         Snackbar.make(requireView(), message, Snackbar.LENGTH_INDEFINITE)
             .setBackgroundTint(getColor(R.color.colorSignalBackground))
@@ -286,25 +301,10 @@ class SkyFragment : AbstractFragment() {
             .show()
     }
 
-    private fun displaySnackbarForConstellationAtPosition(position: Topocentric, constellation: Constellation) {
-        val message: String = constellation.let {
-            binding.sky.setElement(it, false)
-            "$position (Constellation)"
-        }
-
-        Snackbar.make(requireView(), message, Snackbar.LENGTH_INDEFINITE)
-            .setBackgroundTint(getColor(R.color.colorSignalBackground))
-            .setTextColor(getColor(R.color.colorSecondaryText))
-            .setDuration(3000)
-            .setAction(constellation.name) { onConstellation(constellation) }
-            .show()
-    }
-
     private fun displaySnackbarForMoonAtPosition(position: Topocentric, moon: Moon) {
-        val message: String = moon.let {
-            binding.sky.setElement(it, false)
-            "$position"
-        }
+        binding.sky.setTippedElement(moon)
+
+        val message: String = "Moon at $position"
 
         Snackbar.make(requireView(), message, Snackbar.LENGTH_INDEFINITE)
             .setBackgroundTint(getColor(R.color.colorSignalBackground))
@@ -315,10 +315,9 @@ class SkyFragment : AbstractFragment() {
     }
 
     private fun displaySnackbarForSunAtPosition(position: Topocentric, sun: Sun) {
-        val message: String = sun.let {
-            binding.sky.setElement(it, false)
-            "$position"
-        }
+        binding.sky.setTippedElement(sun)
+
+        val message: String = "Sun at $position"
 
         Snackbar.make(requireView(), message, Snackbar.LENGTH_INDEFINITE)
             .setBackgroundTint(getColor(R.color.colorSignalBackground))
@@ -329,10 +328,9 @@ class SkyFragment : AbstractFragment() {
     }
 
     private fun displaySnackbarForSatelliteAtPosition(position: Topocentric, satellite: Satellite) {
-        val message: String = satellite.let {
-            binding.sky.setElement(it, false)
-            "$position (Satellite)"
-        }
+        binding.sky.setTippedElement(satellite)
+
+        val message: String = "Satellite at $position"
 
         Snackbar.make(requireView(), message, Snackbar.LENGTH_INDEFINITE)
             .setBackgroundTint(getColor(R.color.colorSignalBackground))
@@ -341,7 +339,6 @@ class SkyFragment : AbstractFragment() {
             .setAction(satellite.name) { onSatellite(satellite) }
             .show()
     }
-
 
     private fun onMoon() =
         findNavController().navigate(R.id.action_global_nav_moon)
@@ -357,9 +354,6 @@ class SkyFragment : AbstractFragment() {
 
     private fun onStar(star: Star) =
         findNavController().navigate(R.id.action_global_nav_star, bundleOf("STAR" to star.key))
-
-    private fun onConstellation(constellation: Constellation) =
-        findNavController().navigate(R.id.action_global_nav_constellation, bundleOf("CONSTELLATION" to constellation.key))
 }
 
 

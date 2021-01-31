@@ -36,7 +36,8 @@ class ConstellationListFragment : AbstractFragment() {
         bindingReference = FragmentConstellationListBinding.inflate(inflater, container, false)
 
         adapter = ConstellationListRecyclerViewAdapter()
-        adapter.onItemClick = { element -> openElement(element)}
+        adapter.onItemClick = { constellation -> onConstellation(constellation.key) }
+        adapter.onItemLongClick = { constellation -> showNextStepDialogForElement(constellation.key)}
 
         binding.constellations.layoutManager = LinearLayoutManager(requireContext())
         binding.constellations.adapter = adapter

@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.stho.nyota.databinding.FragmentElementListEntryBinding
 import com.stho.nyota.sky.universe.IElement
 import com.stho.nyota.sky.universe.SolarSystem
+import com.stho.nyota.sky.universe.Star
 
 
 class ElementsRecyclerViewAdapter : RecyclerView.Adapter<ElementsRecyclerViewAdapter.ViewHolder>() {
@@ -14,6 +15,7 @@ class ElementsRecyclerViewAdapter : RecyclerView.Adapter<ElementsRecyclerViewAda
     private var entries: List<IElement> = ArrayList()
 
     var onItemClick: ((IElement) -> Unit)? = null
+    var onItemLongClick: ((IElement) -> Unit)? = null
 
     private fun getElementByIndex(position: Int): IElement? =
         if (position >= 0 && position < entries.size) entries[position] else null
@@ -38,7 +40,15 @@ class ElementsRecyclerViewAdapter : RecyclerView.Adapter<ElementsRecyclerViewAda
             binding.image.setImageResource(element.imageId)
             binding.name.text = element.toString()
             binding.position.text = element.position.toString()
+            if (element is Star) {
+                binding.hints.text = element.magnAsString
+                binding.hints.visibility = View.VISIBLE
+            }
+            else {
+                binding.hints.visibility = View.INVISIBLE
+            }
             binding.root.setOnClickListener { getElementByIndex(adapterPosition)?.also { onItemClick?.invoke(it) } }
+            binding.root.setOnLongClickListener {  getElementByIndex(adapterPosition)?.also { onItemLongClick?.invoke(it) }; true }
         }
     }
 
@@ -49,10 +59,6 @@ class ElementsRecyclerViewAdapter : RecyclerView.Adapter<ElementsRecyclerViewAda
 
     fun updateElementsUseNewList(elements: List<IElement>) {
         entries = elements
-        notifyDataSetChanged()
-    }
-
-    fun updateElementsUseExistingList() {
         notifyDataSetChanged()
     }
 }

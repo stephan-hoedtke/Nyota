@@ -81,6 +81,9 @@
     <string name="action_view_options">Display</string>
     <string name="action_view_projections">Projections</string>
     <string name="action_view_live_mode">Live Mode</string>
+    <string name="action_open">Open</string>
+    <string name="action_sky">Sky</string>
+    <string name="action_finder">Finder</string>
     <!-- Menu -->
     <string name="menu_home">Home</string>
     <string name="menu_stars">Stars</string>
@@ -133,6 +136,7 @@
     <string name="default_altitude">0.483</string>
     <string name="default_geo_location">13.4°E 52.64° N</string>
     <string name="default_magnitude">2.0</string>
+    <string name="default_hint">[.?.]</string>
     <!-- Title -->
     <string name="title_city">Reference Location</string>
     <string name="title_choose_interval">Interval</string>

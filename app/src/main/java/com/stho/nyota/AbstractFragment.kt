@@ -7,23 +7,28 @@ import android.widget.TextView
 import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.LiveData
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
 import com.stho.nyota.databinding.TimeOverlayBinding
 import com.stho.nyota.databinding.TimeVisibilityOverlayBinding
+import com.stho.nyota.repository.Repository
 import com.stho.nyota.settings.Settings
 import com.stho.nyota.sky.universe.Universe
 import com.stho.nyota.sky.utilities.Formatter
 import com.stho.nyota.sky.utilities.IProperty
 import com.stho.nyota.sky.utilities.Moment
 import com.stho.nyota.sky.utilities.PropertyKeyType
+import com.stho.nyota.ui.constellations.ChooseNextStepDialog
 import java.util.*
 
 abstract class AbstractFragment : Fragment() {
 
     interface IAbstractViewModel {
+        val repository: Repository
         val settings: Settings
         val moment: Moment
         val universeLD: LiveData<Universe>
@@ -88,20 +93,21 @@ abstract class AbstractFragment : Fragment() {
         }
     }
 
-    // TODO: remove the action.
-    protected open fun onPropertyClick(property: IProperty) =
-        showSnackbar(property)
-
-    protected open fun onPropertyLongClick(property: IProperty) =
-        showSnackbar(property)
-
-    private fun showSnackbar(property: IProperty) {
+    @Suppress("NON_EXHAUSTIVE_WHEN")
+    protected open fun onPropertyClick(property: IProperty) {
         when (property.keyType) {
-            PropertyKeyType.NULL -> showSnackbar("Property ${property.name} with value ${property.value}")
-            PropertyKeyType.STAR -> showSnackbar("Star ${property.name} with value ${property.value} for key ${property.key}")
-            PropertyKeyType.CONSTELLATION -> showSnackbar("Constellation ${property.name} with value ${property.value} for key ${property.key}")
+            PropertyKeyType.CONSTELLATION -> onConstellation(property.key)
         }
     }
+
+    @Suppress("NON_EXHAUSTIVE_WHEN")
+    protected open fun onPropertyLongClick(property: IProperty) {
+        when (property.keyType) {
+            PropertyKeyType.STAR -> showNextStepDialogForElement(property.key)
+            PropertyKeyType.CONSTELLATION -> showNextStepDialogForElement(property.key)
+        }
+    }
+
     fun showSnackbar(message: String) {
         Snackbar.make(requireView(), message, Snackbar.LENGTH_LONG)
             .setBackgroundTint(getColor(R.color.colorSignalBackground))
@@ -154,6 +160,26 @@ abstract class AbstractFragment : Fragment() {
 
     protected fun getColor(resId: Int): Int =
         ContextCompat.getColor(requireContext(), resId)
+
+    protected fun showNextStepDialogForElement(key: String) {
+        abstractViewModel.repository.getElementByKey(key)?.also {
+            val fragmentManager: FragmentManager = requireActivity().supportFragmentManager
+            val tag = "choose_next_step_dialog"
+            ChooseNextStepDialog(it).show(fragmentManager, tag)
+        }
+    }
+
+    protected fun onSkyView(key: String) =
+        findNavController().navigate(R.id.action_global_nav_sky, bundleOf("ELEMENT" to key))
+
+    protected fun onFinderView(key: String) =
+        findNavController().navigate(R.id.action_global_nav_finder, bundleOf("ELEMENT" to key))
+
+    protected fun onStar(key: String) =
+        findNavController().navigate(R.id.action_global_nav_star, bundleOf("STAR" to key))
+
+    protected fun onConstellation(key: String) =
+        findNavController().navigate(R.id.action_global_nav_constellation, bundleOf("CONSTELLATION" to key))
 
     companion object {
         fun toLocalTimeString(moment: Moment): String {

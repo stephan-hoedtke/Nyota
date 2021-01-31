@@ -1,14 +1,13 @@
 package com.stho.software.nyota.views
 
 import android.content.Context
-import android.graphics.Canvas
 import android.util.AttributeSet
 import com.stho.nyota.sky.universe.*
 import com.stho.nyota.sky.utilities.Topocentric
-import com.stho.nyota.ui.sky.ISkyViewOptions
 import com.stho.nyota.ui.sky.ISkyViewSettings
 import com.stho.nyota.ui.sky.SkyFragmentViewOptions
 import com.stho.nyota.views.AbstractSkyView
+import com.stho.nyota.views.ReferenceType
 
 /**
  * Created by shoedtke on 07.09.2016.
@@ -16,7 +15,9 @@ import com.stho.nyota.views.AbstractSkyView
 class SkyView(context: Context?, attrs: AttributeSet?) : AbstractSkyView(context, attrs) {
 
     private var universe: Universe? = null
-    private var element: IElement? = null
+    private var tippedElement: IElement? = null
+    private var referenceElement: IElement? = null
+    private var tippedConstellation: IElement? = null
 
     fun notifyDataSetChanged() {
         invalidate()
@@ -30,8 +31,18 @@ class SkyView(context: Context?, attrs: AttributeSet?) : AbstractSkyView(context
         invalidate()
     }
 
-    fun setElement(element: IElement?, updateCenter: Boolean = true) {
-        this.element = element
+    fun setTippedElement(element: IElement?) {
+        this.tippedElement = element
+        invalidate()
+    }
+
+    fun setTippedConstellation(element: IElement?) {
+        this.tippedConstellation = element
+        invalidate()
+    }
+
+    fun setReferenceElement(element: IElement?, updateCenter: Boolean = true) {
+        this.referenceElement = element
         if (updateCenter) {
             setCenter(element?.position)
         }
@@ -39,17 +50,20 @@ class SkyView(context: Context?, attrs: AttributeSet?) : AbstractSkyView(context
     }
 
     override val referencePosition: Topocentric?
-        get() = element?.position
-
-    // TODO: mode to draw the universe with some alpha, and highlight a selected element
-    // TODO: mode to change colors, display text, display ...
+        get() = referenceElement?.position
 
     override fun onDrawElements() {
         universe?.let {
             onDrawUniverse(it)
         }
-        element?.let {
-            onDrawElement(it)
+        tippedConstellation?.let {
+            onDrawTippedElement(it)
+        }
+        referenceElement?.let {
+            onDrawReferenceElement(it)
+        }
+        tippedElement?.let {
+            onDrawTippedElement(it)
         }
     }
 
@@ -84,12 +98,20 @@ class SkyView(context: Context?, attrs: AttributeSet?) : AbstractSkyView(context
         super.drawZenit(universe.zenit)
     }
 
-    private fun onDrawElement(element: IElement) {
+    private fun onDrawTippedElement(element: IElement) {
         when (element) {
-            is Star -> super.drawStarAsReference(element)
-            is Constellation -> super.drawConstellationAsReference(element)
+            is Star -> super.drawStar(element, ReferenceType.Reference)
+            is Constellation -> super.drawConstellation(element, ReferenceType.Tipped)
         }
     }
+
+    private fun onDrawReferenceElement(element: IElement) {
+        when (element) {
+            is Star -> super.drawStar(element, ReferenceType.Reference)
+            is Constellation -> super.drawConstellation(element, ReferenceType.Reference)
+        }
+    }
+
 }
 
 

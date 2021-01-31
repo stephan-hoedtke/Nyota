@@ -2,7 +2,7 @@ package com.stho.nyota.sky.universe
 
 // TODO: move to another class and make symbol public
 enum class Symbol {
-    Empty,
+    NoSymbol,
     Alpha,
     Beta,
     Gamma,
@@ -39,14 +39,20 @@ enum class Symbol {
     Eleven,
     FortyOne;
 
-    fun isNotEmpty(): Boolean =
-        this != Empty
+    fun isSymbol(): Boolean =
+        this != NoSymbol
+
+    val greekSymbol: String
+        get() = Symbol.greekSymbolToString(this) // Mind, this is an enum class: do not define as greekSymbol using "="
+
+    val imageId: Int
+        get() = Symbol.greekSymbolImageId(this) // Mind, this is an enum class: do not define as imageId using "="
 
     companion object {
 
-        fun greekSymbolToString(symbol: Symbol): String =
+        private fun greekSymbolToString(symbol: Symbol): String =
             when (symbol) {
-                Symbol.Empty -> ""
+                Symbol.NoSymbol -> ""
                 Symbol.Alpha -> "α"
                 Symbol.Beta -> "β"
                 Symbol.Gamma -> "γ"
@@ -84,9 +90,9 @@ enum class Symbol {
                 Symbol.FortyOne -> "41"
             }
 
-        fun greekSymbolImageId(symbol: Symbol): Int =
+        private fun greekSymbolImageId(symbol: Symbol): Int =
             when (symbol) {
-                Symbol.Empty -> com.stho.nyota.R.drawable.empty
+                Symbol.NoSymbol -> com.stho.nyota.R.drawable.empty
                 Symbol.Alpha -> com.stho.nyota.R.drawable.greek_alpha
                 Symbol.Beta -> com.stho.nyota.R.drawable.greek_beta
                 Symbol.Gamma -> com.stho.nyota.R.drawable.greek_gamma
@@ -132,7 +138,7 @@ enum class Symbol {
                     // Ignore
                 }
             }
-            return Symbol.Empty
+            return Symbol.NoSymbol
         }
     }
 }

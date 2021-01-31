@@ -9,6 +9,7 @@ import com.stho.nyota.*
 import com.stho.nyota.databinding.FragmentHomeBinding
 import com.stho.nyota.sky.universe.*
 import com.stho.nyota.sky.utilities.Moment
+import com.stho.nyota.ui.constellations.ChooseNextStepDialog
 
 // TODO: display list more proper
 
@@ -35,6 +36,7 @@ class HomeFragment : AbstractFragment() {
 
         adapter = ElementsRecyclerViewAdapter()
         adapter.onItemClick = { element -> openTarget(element) }
+        adapter.onItemLongClick = { element -> showPopupMenuFor(element) }
 
         binding.targets.layoutManager = LinearLayoutManager(requireContext())
         binding.targets.adapter = adapter
@@ -90,6 +92,12 @@ class HomeFragment : AbstractFragment() {
                 it.getBoolean(TARGETS, viewModel.options.showTargets),
                 it.getBoolean(INVISIBLE_ELEMENTS, viewModel.options.showInvisibleElements))
         }
+    }
+
+    private fun showPopupMenuFor(element: IElement) {
+        val fragmentManager: FragmentManager = requireActivity().supportFragmentManager
+        val tag = "choose_next_step_dialog"
+        ChooseNextStepDialog(element).show(fragmentManager, tag)
     }
 
     private fun writeOptionsToBundle(bundle: Bundle) {

@@ -11,9 +11,9 @@ import com.stho.nyota.AbstractFragment.IAbstractViewModel
 import com.stho.nyota.settings.Settings
 import com.stho.nyota.sky.universe.Universe
 
-abstract class AbstractViewModel(application: Application, val repository: Repository) : AndroidViewModel(application), IAbstractViewModel {
+abstract class AbstractViewModel(application: Application, override val repository: Repository) : AndroidViewModel(application), IAbstractViewModel {
 
-    private val showDetailsLiveData: MutableLiveData<Boolean> = MutableLiveData<Boolean>().also { it.value = true }
+    private val showDetailsLiveData: MutableLiveData<Boolean> = MutableLiveData<Boolean>().also { it.value = false }
 
     override val interval: Interval
         get() = repository.settings.interval

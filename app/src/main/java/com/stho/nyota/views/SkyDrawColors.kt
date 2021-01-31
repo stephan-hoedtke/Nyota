@@ -17,6 +17,8 @@ interface ISkyDrawColors {
     val referenceLineColor: Paint
     val referenceNameColor: Paint
     val referenceSymbolColor: Paint
+    val tippedStarColor: Paint
+    val tippedLineColor: Paint
 }
 
 class SkyDrawColors: ISkyDrawColors {
@@ -99,7 +101,7 @@ class SkyDrawColors: ISkyDrawColors {
 
     override val referenceNameColor: Paint  = Paint().apply {
         color = Color.rgb(182, 60, 2) // Orange
-        alpha = 120
+        alpha = 210
         style = Paint.Style.FILL_AND_STROKE
         isAntiAlias = true
         textSize = 40f
@@ -107,8 +109,24 @@ class SkyDrawColors: ISkyDrawColors {
 
     override val referenceSymbolColor: Paint  = Paint().apply {
         color = Color.rgb(253, 106, 2) // Orange
-        alpha = 200
+        alpha = 210
         style = Paint.Style.FILL_AND_STROKE
+        isAntiAlias = true
+        textSize = 40f
+    }
+
+    override val tippedStarColor: Paint  = Paint().apply {
+        color = Color.rgb(45, 253, 15) // Green
+        alpha = 120
+        style = Paint.Style.FILL_AND_STROKE
+        isAntiAlias = true
+        textSize = 40f
+    }
+
+    override val tippedLineColor: Paint  = Paint().apply {
+        color = Color.rgb(45, 253, 15) // Green
+        alpha = 120
+        style = Paint.Style.STROKE
         isAntiAlias = true
         textSize = 40f
     }

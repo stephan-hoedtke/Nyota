@@ -2,7 +2,6 @@ package com.stho.nyota.sky.universe
 
 import com.stho.nyota.sky.utilities.Formatter
 import com.stho.nyota.sky.utilities.Moment
-import com.stho.nyota.sky.utilities.PropertyKeyType
 import com.stho.nyota.sky.utilities.PropertyList
 import com.stho.nyota.ui.sky.SkyViewOptions.Companion.MAX_MAGNITUDE
 
@@ -18,7 +17,7 @@ class Star private constructor(val id: Long, val HD: Int, override val name: Str
         HD > 0
 
     val hasSymbol: Boolean =
-        symbol.isNotEmpty()
+        symbol.isSymbol()
 
     val hasName: Boolean =
         name.isNotBlank()
@@ -36,7 +35,7 @@ class Star private constructor(val id: Long, val HD: Int, override val name: Str
         if (hasFriendlyName) {
             friendlyName
         } else if (hasSymbol && hasConstellation) {
-            constellations.first().let { "${Symbol.greekSymbolToString(symbol)} ${it.abbreviation}" }
+            constellations.first().let { "${symbol.greekSymbol} ${it.abbreviation}" }
         } else if (hasName) {
             name
         } else if (hasHenryDraperCatalogNumber) {
@@ -53,17 +52,18 @@ class Star private constructor(val id: Long, val HD: Int, override val name: Str
 
     override fun getBasics(moment: Moment): PropertyList =
         super.getBasics(moment).apply {
-            add(com.stho.nyota.R.drawable.empty, "Friendly Name", friendlyName)
-            add(com.stho.nyota.R.drawable.empty, "Name", name)
+            add(com.stho.nyota.R.drawable.empty, "Name", if (hasFriendlyName) friendlyName else name)
+            add(symbol.imageId, "Symbol", symbol.greekSymbol)
             add(com.stho.nyota.R.drawable.alpha_gray, "Magnitude", Formatter.df2.format(magn))
             add(com.stho.nyota.R.drawable.distance, "Distance (ly)", Formatter.df0.format(distance))
-            add(Symbol.greekSymbolImageId(symbol), "Symbol", Symbol.greekSymbolToString(symbol))
-            add(com.stho.nyota.R.drawable.empty, "Henry Draper", HD.toString())
+            constellations.forEach { add(it) }
+
         }
 
     override fun getDetails(moment: Moment): PropertyList =
         super.getDetails(moment).apply {
-            constellations.forEach { add(it) }
+            add(com.stho.nyota.R.drawable.empty, "Henry Draper", HD.toString())
+            add(com.stho.nyota.R.drawable.empty, "Name", name)
         }
 
     override val key: String =
@@ -71,6 +71,9 @@ class Star private constructor(val id: Long, val HD: Int, override val name: Str
 
     fun isBrighterThan(magnitude: Double): Boolean =
         magn <= magnitude || magnitude >= MAX_MAGNITUDE
+
+    val magnAsString: String =
+        Formatter.df2.format(magn)
 
     fun register(constellation: Constellation) {
         if (!constellations.contains(constellation)) {

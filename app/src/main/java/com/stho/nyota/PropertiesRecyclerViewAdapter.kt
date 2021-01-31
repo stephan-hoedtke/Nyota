@@ -10,7 +10,7 @@ import com.stho.nyota.sky.utilities.IProperty
 import com.stho.nyota.sky.utilities.PropertyList
 
 /**
- * [RecyclerView.Adapter] that can display a [Satellite].
+ * [RecyclerView.Adapter] that can display a [Satellite].F
  */
 class PropertiesRecyclerViewAdapter : RecyclerView.Adapter<PropertiesRecyclerViewAdapter.ViewHolder>() {
 
@@ -42,6 +42,8 @@ class PropertiesRecyclerViewAdapter : RecyclerView.Adapter<PropertiesRecyclerVie
             binding.image.setImageResource(entry.imageId)
             binding.name.text = entry.name
             binding.value.text = entry.value
+            binding.hints.text = entry.hints
+            binding.hints.visibility = if (entry.hasHints) View.VISIBLE else View.GONE
             binding.root.setOnClickListener { onPropertyClick(adapterPosition) }
             binding.root.setOnLongClickListener { onPropertyLongClick(adapterPosition); true }
         }

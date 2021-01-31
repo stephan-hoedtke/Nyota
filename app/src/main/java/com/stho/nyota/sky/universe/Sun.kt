@@ -111,17 +111,6 @@ class Sun : AbstractSolarSystemElement() {
     override fun getBasics(moment: Moment): PropertyList =
         super.getBasics(moment).apply {
             if (position?.isUp == true) {
-                add(com.stho.nyota.R.drawable.sunrise, "Rise", position?.riseTime, moment.timeZone)
-                add(com.stho.nyota.R.drawable.sunset, "Set", position?.setTime, moment.timeZone)
-            } else {
-                add(com.stho.nyota.R.drawable.sunset, "Set", position?.setTime, moment.timeZone)
-                add(com.stho.nyota.R.drawable.sunrise, "Rise", position?.riseTime, moment.timeZone)
-            }
-        }
-
-    override fun getDetails(moment: Moment): PropertyList =
-        super.getDetails(moment).apply {
-            if (position?.isUp == true) {
                 add(com.stho.nyota.R.drawable.sunset, "Previous Set", position?.prevSetTime, moment.timeZone)
                 add(com.stho.nyota.R.drawable.sunrise, "Rise", position?.riseTime, moment.timeZone)
                 add(com.stho.nyota.R.drawable.sunset, "Set ", position?.setTime, moment.timeZone)
@@ -134,6 +123,11 @@ class Sun : AbstractSolarSystemElement() {
             }
             add(com.stho.nyota.R.drawable.empty, "In south", position?.inSouth, moment.timeZone)
             add(com.stho.nyota.R.drawable.empty, "Culmination angle", Degree.fromDegree(position!!.culmination))
+        }
+
+    override fun getDetails(moment: Moment): PropertyList =
+        super.getDetails(moment).apply {
+            // nothing for now
         }
 
     companion object {

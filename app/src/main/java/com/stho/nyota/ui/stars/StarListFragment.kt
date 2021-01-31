@@ -34,6 +34,7 @@ class StarListFragment : AbstractFragment() {
 
         adapter = ElementsRecyclerViewAdapter()
         adapter.onItemClick = { element -> openTarget(element) }
+        adapter.onItemLongClick = { element -> showNextStepDialogForElement(element.key) }
 
         binding.stars.layoutManager = LinearLayoutManager(requireContext())
         binding.stars.adapter = adapter

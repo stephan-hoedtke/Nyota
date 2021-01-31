@@ -15,4 +15,6 @@ interface IProperty {
     val imageId: Int
     val name: String
     val value: String
+    val hints: String
+    val hasHints: Boolean
 }

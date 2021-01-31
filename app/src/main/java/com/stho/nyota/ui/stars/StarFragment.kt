@@ -1,17 +1,23 @@
 package com.stho.nyota.ui.stars
 
 import android.os.Bundle
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.PopupMenu
+import androidx.fragment.app.FragmentManager
 import com.stho.nyota.AbstractElementFragment
 import com.stho.nyota.AbstractViewModel
+import com.stho.nyota.R
 import com.stho.nyota.databinding.FragmentStarBinding
 import com.stho.nyota.sky.universe.IElement
 import com.stho.nyota.sky.universe.Star
 import com.stho.nyota.sky.utilities.IProperty
 import com.stho.nyota.sky.utilities.Moment
 import com.stho.nyota.sky.utilities.PropertyKeyType
+import com.stho.nyota.ui.constellations.ChooseNextStepDialog
+import com.stho.nyota.ui.sky.SkyFragmentLiveModeDialog
 
 
 class StarFragment : AbstractElementFragment() {
@@ -55,13 +61,6 @@ class StarFragment : AbstractElementFragment() {
 
     override val element: IElement
         get() = viewModel.star
-
-    @Suppress("NON_EXHAUSTIVE_WHEN")
-    override fun onPropertyLongClick(property: IProperty) {
-        when (property.keyType) {
-            PropertyKeyType.CONSTELLATION -> onConstellation(property.key)
-        }
-    }
 
     private fun updateStar(moment: Moment) {
         with(viewModel.star) {

@@ -31,6 +31,9 @@ abstract class AbstractSphereProjection: ISphereProjection {
         sin = Degree.sin(centerAltitude)
     }
 
+    override val sensibilityAngle: Double
+        get() = 1 / zoom
+
     override fun calculateZoomImagePoint(azimuth: Double, altitude: Double): SkyPointF? =
         calculateImagePoint(azimuth, altitude)?.let {
             val x3: Float = (zoom * it.x).toFloat()

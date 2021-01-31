@@ -8,6 +8,7 @@ import com.stho.nyota.sky.utilities.Topocentric
 import com.stho.nyota.sky.utilities.projections.Projection
 import com.stho.nyota.ui.sky.*
 import com.stho.nyota.views.AbstractSkyView
+import com.stho.nyota.views.ReferenceType
 
 /**
  * Created by shoedtke on 23.09.2016.
@@ -16,7 +17,8 @@ import com.stho.nyota.views.AbstractSkyView
 class ConstellationView(context: Context?, attrs: AttributeSet?) : AbstractSkyView(context, attrs) {
 
     private var constellation: Constellation? = null
-    private var star: Star? = null
+    private var referenceStar: Star? = null
+    private var tippedStar: Star? = null
 
     init {
         setOptions(object: SkyViewOptions(this@ConstellationView) {
@@ -38,8 +40,14 @@ class ConstellationView(context: Context?, attrs: AttributeSet?) : AbstractSkyVi
         invalidate()
     }
 
-    fun setStar(star: Star?) {
-        this.star = star
+    fun setReferenceStar(star: Star?) {
+        this.referenceStar = star
+        invalidate()
+    }
+
+    fun setTippedStar(star: Star?) {
+        this.tippedStar = star
+        invalidate()
     }
 
     fun notifyDataSetChanged() {
@@ -53,8 +61,11 @@ class ConstellationView(context: Context?, attrs: AttributeSet?) : AbstractSkyVi
         constellation?.let {
             drawConstellation(it)
         }
-        star?.let {
-            drawStarAsReference(it)
+        referenceStar?.let {
+            drawStar(it, ReferenceType.Reference)
+        }
+        tippedStar?.let {
+            drawStar(it, ReferenceType.Tipped)
         }
     }
 }

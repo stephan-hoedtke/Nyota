@@ -66,5 +66,8 @@ abstract class AbstractElement(var RA: Double = 0.0, var Decl: Double = 0.0, var
     override fun distanceTo(otherPosition: Topocentric): Double =
         position?.distanceTo(otherPosition) ?: INVALID_DISTANCE
 
+    companion object {
+        const val INVALID_MAGNITUDE: Double = 100.0
+    }
 }
 

@@ -31,7 +31,7 @@
         app:layout_constraintTop_toTopOf="parent"
         android:src="@drawable/constellation_virgo"
         android:scaleType="fitCenter"
-        />
+        android:contentDescription="@string/label_empty" />
 
     <TextView
         android:id="@+id/name"
