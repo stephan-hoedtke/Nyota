@@ -56,14 +56,14 @@ class SkyView(context: Context?, attrs: AttributeSet?) : AbstractSkyView(context
         universe?.let {
             onDrawUniverse(it)
         }
-        tippedConstellation?.let {
-            onDrawTippedElement(it)
-        }
         referenceElement?.let {
-            onDrawReferenceElement(it)
+            onDrawElement(it, ReferenceType.Reference)
+        }
+        tippedConstellation?.let {
+            onDrawElement(it, ReferenceType.TippedConstellation)
         }
         tippedElement?.let {
-            onDrawTippedElement(it)
+            onDrawElement(it, ReferenceType.TippedStar)
         }
     }
 
@@ -98,20 +98,12 @@ class SkyView(context: Context?, attrs: AttributeSet?) : AbstractSkyView(context
         super.drawZenit(universe.zenit)
     }
 
-    private fun onDrawTippedElement(element: IElement) {
+    private fun onDrawElement(element: IElement, referenceType: ReferenceType) {
         when (element) {
-            is Star -> super.drawStar(element, ReferenceType.Reference)
-            is Constellation -> super.drawConstellation(element, ReferenceType.Tipped)
+            is Star -> super.drawStar(element, referenceType)
+            is Constellation -> super.drawConstellation(element, referenceType)
         }
     }
-
-    private fun onDrawReferenceElement(element: IElement) {
-        when (element) {
-            is Star -> super.drawStar(element, ReferenceType.Reference)
-            is Constellation -> super.drawConstellation(element, ReferenceType.Reference)
-        }
-    }
-
 }
 
 

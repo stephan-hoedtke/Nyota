@@ -7,12 +7,10 @@ import android.view.*
 import androidx.navigation.fragment.findNavController
 import com.stho.nyota.AbstractFragment
 import com.stho.nyota.MainActivity
-import com.stho.nyota.PermissionManager
 import com.stho.nyota.R
 import com.stho.nyota.databinding.FragmentCityBinding
 import com.stho.nyota.sky.utilities.*
 import com.stho.nyota.sky.utilities.Formatter
-import java.sql.Time
 import java.util.*
 
 // TODO: get location on button click
@@ -105,7 +103,7 @@ class CityFragment : AbstractFragment() {
         binding.editLatitude.setText(Formatter.toString(city.latitude))
         binding.editLongitude.setText(Formatter.toString(city.longitude))
         binding.editAltitude.setText(Formatter.toString(city.altitude))
-        binding.textViewDistance.text =  Formatter.toDistanceString(city.distanceInKm)
+        binding.textViewDistance.text =  Formatter.toDistanceKmString(city.distanceInKm)
         binding.editTimeZone.setText(city.timeZone.id)
         binding.image.setImageResource(city.imageId)
         binding.copyright.text = city.copyright.text

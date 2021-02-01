@@ -1,7 +1,9 @@
 package com.stho.nyota.ui.constellations
 
 import android.os.Bundle
+import android.util.DisplayMetrics
 import android.view.*
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.os.bundleOf
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
@@ -68,6 +70,33 @@ class ConstellationFragment : AbstractElementFragment() {
             }
         })
         binding.image.alpha = 0f
+        binding.grip.setOnTouchListener(object: View.OnTouchListener {
+            private var active: Boolean = false
+            private var startY: Float = 0f
+            private var startBegin: Int = 0
+
+            override fun onTouch(v: View, event: MotionEvent): Boolean {
+                when (event.action) {
+                    MotionEvent.ACTION_DOWN -> {
+                        val params = binding.horizontalGuideline1.layoutParams as ConstraintLayout.LayoutParams
+                        startBegin = params.guideBegin
+                        startY = event.rawY
+                        active = true
+                    }
+                    MotionEvent.ACTION_MOVE -> {
+                        if (active) {
+                            val value = (event.rawY - startY) + startBegin
+                            val params = binding.horizontalGuideline1.layoutParams as ConstraintLayout.LayoutParams;
+                            params.guideBegin = value.toInt()
+                            binding.horizontalGuideline1.layoutParams = params
+                        }
+                    }
+                    MotionEvent.ACTION_OUTSIDE -> active = false
+                    MotionEvent.ACTION_CANCEL -> active = false
+                }
+                return true
+            }
+        })
 
         return binding.root
     }
@@ -107,6 +136,9 @@ class ConstellationFragment : AbstractElementFragment() {
                     binding.sky.setReferenceStar(it)
                     binding.sky.invalidate()
                 }
+            PropertyKeyType.AZIMUTH -> onSkyView()
+            PropertyKeyType.ALTITUDE -> onSkyView()
+            PropertyKeyType.DIRECTION -> onFinderView()
         }
     }
 
@@ -121,7 +153,6 @@ class ConstellationFragment : AbstractElementFragment() {
     private fun bind(moment: Moment, constellation: Constellation) {
         bindTime(binding.timeVisibilityOverlay, moment, constellation.visibility)
         binding.image.setImageResource(constellation.largeImageId)
-        binding.title.text = constellation.name
         binding.sky.notifyDataSetChanged()
         updateActionBar(constellation.name, toLocalDateString(moment))
     }

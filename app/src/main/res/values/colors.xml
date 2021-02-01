@@ -12,6 +12,7 @@
     <color name="colorSelectedBackground">#031747</color>
     <color name="colorPrimaryText">#fffde7</color>
     <color name="colorPrimaryDisabledText">#eeede7</color>
+    <color name="colorDarkText">#999999</color>
     <color name="colorSecondaryText">#00113c</color>
     <color name="colorErrorText">#FF6666</color>
     <color name="colorSignalBackground">#FF7777</color>

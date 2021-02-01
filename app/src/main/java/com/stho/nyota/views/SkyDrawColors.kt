@@ -3,131 +3,96 @@ package com.stho.nyota.views
 import android.graphics.Color
 import android.graphics.Paint
 
+interface IStarColors {
+    val forStar: Paint
+    val forName: Paint
+    val forSymbol: Paint
+}
+
+interface IConstellationColors {
+    val forName: Paint
+    val forLine: Paint
+}
 
 interface ISkyDrawColors {
     val visibleGridColor: Paint // Dark Green
     val invisibleGridColor: Paint // Dark Blue
     val bitmapColor: Paint // White
-    val starColor: Paint // White
-    val lineColor: Paint // Yellow
-    val nameColor: Paint // Orange
-    val symbolColor: Paint // Gray
-    val constellationNameColor: Paint // Orange
-    val referenceStarColor: Paint
-    val referenceLineColor: Paint
-    val referenceNameColor: Paint
-    val referenceSymbolColor: Paint
-    val tippedStarColor: Paint
-    val tippedLineColor: Paint
+
+    fun getStarColors(referenceType: ReferenceType): IStarColors
+    fun getConstellationColors(referenceType: ReferenceType): IConstellationColors
 }
+
+
+data class StarColors(override val forStar: Paint, override val forName: Paint, override val forSymbol: Paint) : IStarColors
+data class ConstellationColors(override val forName: Paint, override val forLine: Paint) : IConstellationColors
+
 
 class SkyDrawColors: ISkyDrawColors {
 
-     override val visibleGridColor: Paint = Paint().apply {
-        color = Color.rgb(4, 224, 52) // GREEN
-        alpha = 110
-        style = Paint.Style.FILL_AND_STROKE
-        isAntiAlias = true
-        textSize = 40f
-    }
+    private val defaultStarColors: IStarColors = StarColors(forStar = txt(white, 255), forName = txt(gray, 170), forSymbol = txt(gray, 200))
+    private val referenceStarColors: IStarColors = StarColors(forStar = txt(orange, 255), forName = txt(orange, 210), forSymbol = txt(orange, 210))
+    private val tippedStarColors: IStarColors = StarColors(forStar = txt(red, 200), forName = txt(red, 200), forSymbol = txt(red, 200))
+    private val tippedConstellationStarColors: IStarColors = StarColors(forStar = txt(green, 200), forName = txt(green, 200), forSymbol = txt(green, 200))
 
-    override val invisibleGridColor: Paint = Paint().apply {
-        color = Color.rgb(4, 52, 224) // BLUE
-        alpha = 140
-        style = Paint.Style.FILL_AND_STROKE
-        isAntiAlias = true
-        textSize = 40f
-    }
+    private val defaultConstellationColors: IConstellationColors = ConstellationColors(forName =  txt(yellow, 210), forLine = lnl(yellow, 170))
+    private val referenceConstellationColors: IConstellationColors = ConstellationColors(forName =  txt(orange, 210), forLine = lnl(orange, 170))
+    private val tippedConstellationColors: IConstellationColors = ConstellationColors(forName =  txt(green, 210), forLine = lnl(green, 210))
 
-    override val starColor: Paint = Paint().apply {
-        color = Color.WHITE
-        alpha = 255
-        style = Paint.Style.FILL_AND_STROKE
-        isAntiAlias = true
-    }
+    override val visibleGridColor: Paint = txt(green, 110)
+    override val invisibleGridColor: Paint = txt(blue, 140)
+    override val bitmapColor: Paint = txt(white, 255)
 
-    override val bitmapColor: Paint = Paint().apply {
-        color = Color.WHITE
-        alpha = 255
-        style = Paint.Style.FILL_AND_STROKE
-        isAntiAlias = true
-    }
+    override fun getStarColors(referenceType: ReferenceType): IStarColors =
+        when (referenceType) {
+            ReferenceType.Default -> defaultStarColors
+            ReferenceType.Reference -> referenceStarColors
+            ReferenceType.TippedStar -> tippedStarColors
+            ReferenceType.TippedConstellation -> tippedConstellationStarColors
+        }
 
-    override val lineColor: Paint = Paint().apply {
-        color = Color.YELLOW
-        alpha = 170
-        style = Paint.Style.STROKE
-    }
+    override fun getConstellationColors(referenceType: ReferenceType): IConstellationColors =
+        when (referenceType) {
+            ReferenceType.Default -> defaultConstellationColors
+            ReferenceType.Reference -> referenceConstellationColors
+            ReferenceType.TippedStar, ReferenceType.TippedConstellation -> tippedConstellationColors
+        }
 
-    override val symbolColor: Paint = Paint().apply {
-        color = Color.GRAY
-        alpha = 200
-        style = Paint.Style.FILL_AND_STROKE
-        isAntiAlias = true
-        textSize = 40f
-    }
+    companion object {
 
-    override val nameColor: Paint = Paint().apply {
-        color = Color.rgb(253, 106, 2) // Orange
-        alpha = 170
-        style = Paint.Style.FILL_AND_STROKE
-        isAntiAlias = true
-        textSize = 40f
-    }
+        private val blue: Int = Color.rgb(4, 52, 224) // BLUE
+        private val gray: Int = Color.GRAY
+        private val green: Int =  Color.rgb(4, 224, 52) // GREEN
+        private val orange: Int = Color.rgb(253, 106, 2) // Orange
+        private val red: Int = Color.rgb(253, 45, 15) // Red
+        private val white: Int = Color.WHITE
+        private val yellow: Int = Color.YELLOW
 
-    override val constellationNameColor: Paint = Paint().apply {
-        color = Color.rgb(242, 210 , 34) // Dark Yellow
-        alpha = 170
-        style = Paint.Style.FILL_AND_STROKE
-        isAntiAlias = true
-        textSize = 40f
-    }
+        /**
+         * Paint to be used for text (with stroke and fill)
+         */
+        private fun txt(color: Int, alpha: Int): Paint =
+            Paint().apply {
+                this.color = color
+                this.alpha = alpha
+                this.style = Paint.Style.FILL_AND_STROKE
+                this.isAntiAlias = true
+                this.textSize = 40f
+            }
 
-    override val referenceStarColor: Paint  = Paint().apply {
-        color = Color.rgb(253, 45, 15) // Red
-        alpha = 255
-        style = Paint.Style.FILL_AND_STROKE
-        isAntiAlias = true
-        textSize = 40f
-    }
+        /**
+         * Paint to be used for lines (only stoke, no fill)
+         */
+        private fun lnl(color: Int, alpha: Int): Paint =
+            Paint().apply {
+                this.color = color
+                this.alpha = alpha
+                this.style = Paint.Style.STROKE
+                this.isAntiAlias = true
+                this.textSize = 40f
+            }
 
-    override val referenceLineColor: Paint = Paint().apply {
-        color = Color.rgb(253, 106, 2) // Orange
-        alpha = 120
-        style = Paint.Style.STROKE
-        isAntiAlias = true
-        textSize = 40f
-    }
 
-    override val referenceNameColor: Paint  = Paint().apply {
-        color = Color.rgb(182, 60, 2) // Orange
-        alpha = 210
-        style = Paint.Style.FILL_AND_STROKE
-        isAntiAlias = true
-        textSize = 40f
-    }
 
-    override val referenceSymbolColor: Paint  = Paint().apply {
-        color = Color.rgb(253, 106, 2) // Orange
-        alpha = 210
-        style = Paint.Style.FILL_AND_STROKE
-        isAntiAlias = true
-        textSize = 40f
-    }
-
-    override val tippedStarColor: Paint  = Paint().apply {
-        color = Color.rgb(45, 253, 15) // Green
-        alpha = 120
-        style = Paint.Style.FILL_AND_STROKE
-        isAntiAlias = true
-        textSize = 40f
-    }
-
-    override val tippedLineColor: Paint  = Paint().apply {
-        color = Color.rgb(45, 253, 15) // Green
-        alpha = 120
-        style = Paint.Style.STROKE
-        isAntiAlias = true
-        textSize = 40f
     }
 }

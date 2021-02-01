@@ -54,8 +54,8 @@ class Star private constructor(val id: Long, val HD: Int, override val name: Str
         super.getBasics(moment).apply {
             add(com.stho.nyota.R.drawable.empty, "Name", if (hasFriendlyName) friendlyName else name)
             add(symbol.imageId, "Symbol", symbol.greekSymbol)
-            add(com.stho.nyota.R.drawable.alpha_gray, "Magnitude", Formatter.df2.format(magn))
-            add(com.stho.nyota.R.drawable.distance, "Distance (ly)", Formatter.df0.format(distance))
+            add(com.stho.nyota.R.drawable.alpha_gray, "Magnitude", magnAsString)
+            add(com.stho.nyota.R.drawable.distance, "Distance", Formatter.toDistanceLyString(distance))
             constellations.forEach { add(it) }
 
         }

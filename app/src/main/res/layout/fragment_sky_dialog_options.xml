@@ -23,18 +23,11 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <CheckBox
-            android:id="@+id/checkBoxDisplayMagnitude"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/label_display_magnitude"
-            app:layout_constraintTop_toBottomOf="@id/checkBoxDisplaySymbols" />
-
-        <CheckBox
             android:id="@+id/checkBoxDisplayConstellations"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/label_display_constellations"
-            app:layout_constraintTop_toBottomOf="@id/checkBoxDisplayMagnitude" />
+            app:layout_constraintTop_toBottomOf="@id/checkBoxDisplaySymbols" />
 
         <CheckBox
             android:id="@+id/checkBoxDisplayConstellationNames"

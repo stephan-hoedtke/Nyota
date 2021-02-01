@@ -12,6 +12,9 @@ class PropertyList : ArrayList<IProperty>() {
     fun add(imageId: Int, name: String, value: String) =
         add(Property(PropertyKeyType.NULL, "", imageId, name, value))
 
+    fun add(propertyKeyType: PropertyKeyType, imageId: Int, name: String, value: String) =
+        add(Property(propertyKeyType, "", imageId, name, value))
+
     fun add(star: Star) =
         add(Property(PropertyKeyType.STAR, star.key, star.symbol.imageId, star.toString(), star.position.toString(), star.magnAsString))
 
@@ -27,10 +30,22 @@ class PropertyList : ArrayList<IProperty>() {
             add(Property(PropertyKeyType.NULL, "", imageId, name, value))
         }
 
+    fun add(propertyKey: PropertyKeyType, imageId: Int, name: String, degree: Degree?) =
+        degree?.also {
+            val value = it.toString()
+            add(Property(propertyKey, "", imageId, name, value))
+        }
+
     fun add(imageId: Int, name: String, hour: Hour?) =
         hour?.also {
             val value = it.toString()
             add(Property(PropertyKeyType.NULL, "", imageId, name, value))
+        }
+
+    fun add(propertyKey: PropertyKeyType, imageId: Int, name: String, hour: Hour?) =
+        hour?.also {
+            val value = it.toString()
+            add(Property(propertyKey, "", imageId, name, value))
         }
 
     fun add(imageId: Int, name: String, utc: UTC?, timeZone: TimeZone) =

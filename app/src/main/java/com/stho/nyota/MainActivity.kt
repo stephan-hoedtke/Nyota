@@ -131,6 +131,7 @@ class MainActivity : AppCompatActivity(), ActivityCompat.OnRequestPermissionsRes
 
     override fun onResume() {
         super.onResume()
+        executeHandlerToSaveChanges()
         executeHandlerToUpdateUniverse()
         executeHandlerToUpdateOrientation()
 
@@ -148,7 +149,6 @@ class MainActivity : AppCompatActivity(), ActivityCompat.OnRequestPermissionsRes
         stopHandler()
         orientationSensorListener.onPause()
         locationServiceListener.onPause()
-        viewModel.repository.saveSettings(this)
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
@@ -179,6 +179,20 @@ class MainActivity : AppCompatActivity(), ActivityCompat.OnRequestPermissionsRes
         }
         handler.postDelayed(runnableCode, 200)
     }
+
+    private fun executeHandlerToSaveChanges() {
+        val runnableCode: Runnable = object : Runnable {
+            override fun run() {
+                CoroutineScope(Default).launch {
+                    if (viewModel.isDirty)
+                        viewModel.saveChanges()
+                }
+                handler.postDelayed(this, 10000)
+            }
+        }
+        handler.postDelayed(runnableCode, 200)
+    }
+
 
     private fun disableLocationListenerWhenCurrentLocationIsSure() {
         if (locationFilter.isStable) {

@@ -34,6 +34,16 @@
         />
 
     <ImageView
+        android:id="@+id/grip"
+        android:layout_width="@dimen/icon_size"
+        android:layout_height="@dimen/icon_size"
+        app:layout_constraintBottom_toBottomOf="@id/horizontal_guideline1"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:src="@drawable/grip"
+        android:contentDescription="@string/label_empty" />
+
+    <ImageView
         android:id="@+id/buttonZoomOut"
         android:layout_width="@dimen/button_size"
         android:layout_height="@dimen/button_size"
@@ -57,31 +67,20 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:fillViewport="true"
-        app:layout_constraintTop_toTopOf="@id/horizontal_guideline1"
+        app:layout_constraintTop_toBottomOf="@id/horizontal_guideline1"
         app:layout_constraintBottom_toTopOf="@id/time_interval_footer"
+        android:layout_marginTop="@dimen/text_margin"
         android:layout_marginBottom="@dimen/button_margin">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <TextView
-                android:id="@+id/title"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:layout_constraintTop_toTopOf="parent"
-                android:layout_margin="@dimen/activity_horizontal_margin"
-                android:text="@string/default_constellation_name"
-                android:textAlignment="center"
-                android:textStyle="bold"
-                android:textSize="@dimen/text_size_title"
-                />
-
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/basics"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:layout_constraintTop_toBottomOf="@+id/title"
+                app:layout_constraintTop_toTopOf="parent"
                 />
 
             <androidx.recyclerview.widget.RecyclerView

@@ -1,6 +1,7 @@
 package com.stho.nyota.ui.sky
 
 import android.view.View
+import com.stho.nyota.settings.Settings.Companion.DEFAULT_MAGNITUDE
 import com.stho.nyota.sky.utilities.projections.Projection
 
 // TODO: make ISkyViewSettings readonly (the view reads the data) and IMutableSkyViewSettings available to the fragment...
@@ -11,14 +12,16 @@ import com.stho.nyota.sky.utilities.projections.Projection
 interface ISkyViewSettings
 {
     var displaySymbols: Boolean
-    var displayMagnitude: Boolean
     var displayConstellations: Boolean
     var displayConstellationNames: Boolean
     var displayPlanetNames: Boolean
     var displayStarNames: Boolean
     var displayTargets: Boolean
     var displaySatellites: Boolean
+    var displayGrid: Boolean
     var sphereProjection: Projection
+    var magnitude: Double
+    fun touch()
 }
 
 /*
@@ -26,8 +29,6 @@ interface ISkyViewSettings
  */
 interface ISkyViewOptions: ISkyViewSettings {
     var zoomAngle: Double
-    var magnitude: Double
-    var displayGrid: Boolean
     fun applyScale(scaleFactor: Double)
 }
 
@@ -46,21 +47,6 @@ abstract class SkyViewOptions(private val view: View): ISkyViewOptions {
         zoomAngle /= scaleFactor
     }
 
-    override var magnitude: Double = DEFAULT_MAGNITUDE
-        set(value) {
-            val validMagnitude = value.coerceIn(MIN_MAGNITUDE, MAX_MAGNITUDE)
-            if (field != validMagnitude) {
-                field = validMagnitude
-                invalidate()
-            }
-        }
-
-    override var displayGrid: Boolean = true
-        set(value) {
-            field = value
-            invalidate()
-        }
-
     fun invalidate() =
         view.invalidate()
 
@@ -68,7 +54,6 @@ abstract class SkyViewOptions(private val view: View): ISkyViewOptions {
     companion object {
         const val MAX_MAGNITUDE: Double = 10.0
         const val MIN_MAGNITUDE: Double = 0.0
-        const val DEFAULT_MAGNITUDE = 10.0
         const val MIN_ZOOM_ANGLE = 0.5
         const val MAX_ZOOM_ANGLE = 120.0
         const val DEFAULT_ZOOM_ANGLE = 45.0

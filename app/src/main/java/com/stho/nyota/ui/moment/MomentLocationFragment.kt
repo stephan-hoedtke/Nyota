@@ -86,7 +86,7 @@ class MomentLocationFragment : AbstractFragment(),  DatePickerDialog.OnDateSetLi
         binding.editLatitude.paint.isUnderlineText = true
         binding.editLongitude.text = Angle.toString(moment.city.location.longitude, Angle.AngleType.LONGITUDE)
         binding.editLongitude.paint.isUnderlineText = true
-        binding.textViewDistance.text = Formatter.toDistanceString(moment.city.distanceInKm)
+        binding.textViewDistance.text = Formatter.toDistanceKmString(moment.city.distanceInKm)
         binding.image.setImageResource(moment.city.imageId)
         if (moment.city.isAutomatic) {
             binding.radioButtonFixedLocation.isChecked = false

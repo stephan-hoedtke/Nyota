@@ -64,7 +64,7 @@
         app:layout_constraintBottom_toBottomOf="@id/image"
         app:layout_constraintEnd_toEndOf="parent"
         android:textAppearance="?attr/textAppearanceListItem"
-        android:textColor="@color/colorPrimaryDisabledText"
+        android:textColor="@color/colorDarkText"
         android:text="@string/default_hint" />
 
     <Space

@@ -39,9 +39,9 @@ abstract class AbstractElement(var RA: Double = 0.0, var Decl: Double = 0.0, var
 
     override fun getBasics(moment: Moment): PropertyList =
         PropertyList().apply {
-            add(com.stho.nyota.R.drawable.compass, "Direction", position!!.toString())
-            add(com.stho.nyota.R.drawable.horizontal, "Azimuth", Hour.fromDegree(position!!.azimuth))
-            add(com.stho.nyota.R.drawable.horizontal, "Altitude", Degree.fromDegree(position!!.altitude))
+            add(PropertyKeyType.DIRECTION, com.stho.nyota.R.drawable.compass, "Direction", position!!.toString())
+            add(PropertyKeyType.AZIMUTH, com.stho.nyota.R.drawable.horizontal, "Azimuth", Hour.fromDegree(position!!.azimuth))
+            add(PropertyKeyType.ALTITUDE, com.stho.nyota.R.drawable.horizontal, "Altitude", Degree.fromDegree(position!!.altitude))
         }
 
     override fun getDetails(moment: Moment): PropertyList =

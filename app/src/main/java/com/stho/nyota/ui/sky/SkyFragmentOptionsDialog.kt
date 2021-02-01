@@ -15,17 +15,11 @@ class SkyFragmentOptionsDialog(val options: ISkyViewOptions): DialogFragment() {
     private var bindingReference: FragmentSkyDialogOptionsBinding? = null
     private val binding: FragmentSkyDialogOptionsBinding get() = bindingReference!!
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        // setStyle(DialogFragment.STYLE_NORMAL, R.style.MyTheme_Dialog);
-    }
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         bindingReference = FragmentSkyDialogOptionsBinding.inflate(inflater, container, false)
 
         binding.buttonOK.setOnClickListener { onOK() }
         binding.checkBoxDisplaySymbols.setOnCheckedChangeListener { v, isChecked -> options.displaySymbols = isChecked }
-        binding.checkBoxDisplayMagnitude.setOnCheckedChangeListener { v, isChecked -> options.displayMagnitude = isChecked }
         binding.checkBoxDisplayConstellations.setOnCheckedChangeListener { v, isChecked -> options.displayConstellations = isChecked }
         binding.checkBoxDisplayConstellationNames.setOnCheckedChangeListener { v, isChecked -> options.displayConstellationNames = isChecked }
         binding.checkBoxDisplayPlanetNames.setOnCheckedChangeListener { v, isChecked -> options.displayPlanetNames = isChecked }
@@ -55,7 +49,6 @@ class SkyFragmentOptionsDialog(val options: ISkyViewOptions): DialogFragment() {
 
     private fun updateOptions() {
         binding.checkBoxDisplaySymbols.isChecked = options.displaySymbols
-        binding.checkBoxDisplayMagnitude.isChecked = options.displayMagnitude
         binding.checkBoxDisplayConstellations.isChecked = options.displayConstellations
         binding.checkBoxDisplayConstellationNames.isChecked = options.displayConstellationNames
         binding.checkBoxDisplayPlanetNames.isChecked = options.displayPlanetNames

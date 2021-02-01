@@ -4,6 +4,9 @@ enum class PropertyKeyType() {
     NULL,
     STAR,
     CONSTELLATION,
+    AZIMUTH,
+    ALTITUDE,
+    DIRECTION,
 }
 
 /**

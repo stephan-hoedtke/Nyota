@@ -16,6 +16,8 @@ class Settings: ISkyViewSettings {
     private val updateLocationAutomaticallyLiveData: MutableLiveData<Boolean> = MutableLiveData()
     private val updateOrientationAutomaticallyLiveData: MutableLiveData<Boolean> = MutableLiveData()
 
+    var isDirty: Boolean = false
+
     val updateLocationAutomaticallyLD: LiveData<Boolean>
         get() = updateLocationAutomaticallyLiveData
 
@@ -52,18 +54,22 @@ class Settings: ISkyViewSettings {
     var currentLocation: String? = null
 
     override var displaySymbols: Boolean = true
-    override var displayMagnitude: Boolean = true
     override var displayConstellations: Boolean = true
     override var displayConstellationNames: Boolean = true
     override var displayPlanetNames: Boolean = true
     override var displayStarNames: Boolean = true
     override var displayTargets: Boolean = false
     override var displaySatellites: Boolean = true
+    override var displayGrid: Boolean = false
     override var sphereProjection: Projection = Projection.SPHERE
+    override var magnitude: Double = DEFAULT_MAGNITUDE
 
     val zoomLD: LiveData<Double>
         get() = zoomLiveData
 
+    /**
+     * Zoom level of the map view
+     */
     var zoom: Double
         get() = zoomLiveData.value ?: DEFAULT_ZOOM
         set(value) {
@@ -94,8 +100,13 @@ class Settings: ISkyViewSettings {
             }
         }
 
+    override fun touch() {
+        isDirty = true
+    }
+
     companion object {
         internal const val DEFAULT_ZOOM: Double = 7.0
+        internal const val DEFAULT_MAGNITUDE: Double = 10.0
         internal val DEFAULT_INTERVAL: Interval = Interval.HOUR
     }
 }

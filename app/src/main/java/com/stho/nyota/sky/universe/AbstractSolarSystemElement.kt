@@ -1,6 +1,5 @@
 package com.stho.nyota.sky.universe
 
-import android.util.Log
 import com.stho.nyota.sky.utilities.*
 import com.stho.nyota.sky.utilities.Degree
 import com.stho.nyota.sky.utilities.Degree.Companion.arcCos
@@ -172,7 +171,7 @@ abstract class AbstractSolarSystemElement : AbstractElement() {
 
     override fun getBasics(moment: Moment): PropertyList =
         super.getBasics(moment).apply {
-            add(com.stho.nyota.R.drawable.distance, "Distance", Formatter.toDistanceString(distanceInKm))
+            add(com.stho.nyota.R.drawable.distance, "Distance", Formatter.toDistanceKmString(distanceInKm))
         }
 
     override fun getDetails(moment: Moment): PropertyList =

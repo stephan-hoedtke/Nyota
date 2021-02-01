@@ -24,4 +24,12 @@ class MainViewModel(application: Application, repository: Repository) : Reposito
     fun updateOrientation(orientation: Orientation) =
         repository.updateOrientation(orientation)
 
+    fun saveChanges() {
+        if (repository.settings.isDirty) {
+            repository.saveSettings(getApplication())
+        }
+    }
+
+    val isDirty: Boolean
+        get() = repository.settings.isDirty
 }

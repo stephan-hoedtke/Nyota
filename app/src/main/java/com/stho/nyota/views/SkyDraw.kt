@@ -36,9 +36,10 @@ class SkyDraw() {
     fun drawSun(sun: IElement, bitmap: Bitmap) =
         getPosition(sun)?.let {
             if (isOnScreen(it)) {
+                val colors: IStarColors = colors.getStarColors(ReferenceType.Default)
                 drawImageAt(bitmap, it)
                 if (options.displayPlanetNames) {
-                    drawNameAt(sun.name, colors.nameColor, it)
+                    drawNameAt(sun.name, colors.forName, it)
                 }
             }
         }
@@ -46,9 +47,10 @@ class SkyDraw() {
     fun drawMoon(moon: IElement, bitmap: Bitmap) =
         getPosition(moon)?.let {
             if (isOnScreen(it)) {
+                val colors: IStarColors = colors.getStarColors(ReferenceType.Default)
                 drawImageAt(bitmap, it)
                 if (options.displayPlanetNames) {
-                    drawNameAt(moon.name, colors.nameColor, it)
+                    drawNameAt(moon.name, colors.forName, it)
                 }
             }
         }
@@ -56,9 +58,10 @@ class SkyDraw() {
     fun drawPlanet(planet: IElement, bitmap: Bitmap) =
         getPosition(planet)?.let {
             if (isOnScreen(it)) {
+                val colors: IStarColors = colors.getStarColors(ReferenceType.Default)
                 drawImageAt(bitmap, it)
                 if (options.displayPlanetNames) {
-                    drawNameAt(planet.name, colors.nameColor, it)
+                    drawNameAt(planet.name, colors.forName, it)
                 }
             }
         }
@@ -66,104 +69,56 @@ class SkyDraw() {
     fun drawTarget(target: com.stho.nyota.sky.universe.Target, bitmap: Bitmap) =
         getPosition(target)?.let {
             if (isOnScreen(it)) {
+                val colors: IStarColors = colors.getStarColors(ReferenceType.Default)
                 drawImageAt(bitmap, it)
-                drawNameAt(target.name, colors.nameColor, it)
+                drawNameAt(target.name, colors.forName, it)
             }
         }
 
     fun drawSpecial(special: SpecialElement) =
         getPosition(special)?.let {
             if (isOnScreen(it)) {
-                drawNameAt(special.name, colors.nameColor, it)
+                val colors: IStarColors = colors.getStarColors(ReferenceType.Default)
+                drawNameAt(special.name, colors.forName, it)
             }
         }
 
-    fun drawStar(star: Star, referenceType: ReferenceType = ReferenceType.None) =
+    fun drawStar(star: Star, referenceType: ReferenceType = ReferenceType.Default) =
         getPosition(star)?.let {
-            if (isOnScreen(it)) {
-                when (referenceType) {
-                    ReferenceType.Reference -> {
-                        if (star.isBrighterThan(options.magnitude)) {
-                            var r = 3f
-                            if (options.displayMagnitude) {
-                                colors.referenceStarColor.alpha = getStarAlpha(star.magn)
-                                r = getStarSize(star.magn)
-                            }
-                            drawCircleAt(r, colors.referenceStarColor, it)
-                            if (star.hasFriendlyName) {
-                                drawNameAt(star.friendlyName, colors.referenceNameColor, it)
-                            } else if (star.hasSymbol) {
-                                drawNameAt(star.symbol.greekSymbol, colors.referenceSymbolColor, it);
-                            }
-                        }
-                    }
-                    ReferenceType.Tipped -> {
-                        if (star.isBrighterThan(options.magnitude)) {
-                            var r = 3f
-                            if (options.displayMagnitude) {
-                                colors.tippedStarColor.alpha = getStarAlpha(star.magn)
-                                r = getStarSize(star.magn)
-                            }
-                            drawCircleAt(r, colors.tippedStarColor, it)
-                            if (star.hasFriendlyName) {
-                                drawNameAt(star.friendlyName, colors.tippedStarColor, it)
-                            } else if (star.hasSymbol) {
-                                drawNameAt(star.symbol.greekSymbol, colors.tippedStarColor, it);
-                            }
-                        }
-                    }
-                    ReferenceType.None -> {
-                        if (star.isBrighterThan(options.magnitude)) {
-                            var r = 3f
-                            if (options.displayMagnitude) {
-                                colors.starColor.alpha = getStarAlpha(star.magn)
-                                r = getStarSize(star.magn)
-                            }
-                            drawCircleAt(r, colors.starColor, it)
-                            if (options.displayStarNames && star.hasFriendlyName) {
-                                drawNameAt(star.friendlyName, colors.nameColor, it)
-                            } else if (options.displaySymbols && star.hasSymbol) {
-                                drawNameAt(star.symbol.greekSymbol, colors.symbolColor, it);
-                            }
-                        }
-                    }
+            if (isOnScreen(it) && star.isBrighterThan(options.magnitude)) {
+                val colors: IStarColors = colors.getStarColors(referenceType)
+                val radius: Float = getStarSize(star.magn)
+                val alpha: Int = getStarAlpha(star.magn)
+
+                drawCircleAt(radius, colors.forStar, alpha, it)
+
+                when {
+                    canDrawName(star) -> drawNameAt(star.friendlyName, colors.forName, it)
+                    canDrawSymbol(star) -> drawNameAt(star.symbol.greekSymbol, colors.forSymbol, it);
                 }
             }
         }
 
-    fun drawConstellation(constellation: Constellation, referenceType: ReferenceType = ReferenceType.None) {
-        when (referenceType) {
-            ReferenceType.Reference -> {
-                for (star: Star in constellation.stars) {
-                    drawStar(star, referenceType);
-                }
-                for (line in constellation.lines) {
-                    drawLine(line, colors.referenceLineColor);
-                }
-                drawName(constellation.position, constellation.name, colors.referenceNameColor)
+    private fun canDrawName(star: Star): Boolean =
+        options.displayStarNames && star.hasFriendlyName
+
+    private fun canDrawSymbol(star: Star): Boolean =
+        options.displaySymbols && star.hasSymbol
+
+    fun drawConstellation(constellation: Constellation, referenceType: ReferenceType = ReferenceType.Default) {
+        val colors = colors.getConstellationColors(referenceType)
+
+        for (star: Star in constellation.stars) {
+            drawStar(star, referenceType);
+        }
+
+        if (options.displayConstellations) {
+            for (line in constellation.lines) {
+                drawLine(line, colors.forLine);
             }
-            ReferenceType.Tipped -> {
-                for (star: Star in constellation.stars) {
-                    drawStar(star, referenceType);
-                }
-                for (line in constellation.lines) {
-                    drawLine(line, colors.tippedLineColor);
-                }
-                drawName(constellation.position, constellation.name, colors.tippedStarColor)
-            }
-            ReferenceType.None -> {
-                for (star: Star in constellation.stars) {
-                    drawStar(star, referenceType);
-                }
-                if (options.displayConstellations) {
-                    for (line in constellation.lines) {
-                        drawLine(line, colors.lineColor);
-                    }
-                }
-                if (options.displayConstellationNames) {
-                    drawName(constellation.position, constellation.name, colors.constellationNameColor)
-                }
-            }
+        }
+        if (options.displayConstellationNames) {
+            drawName(constellation.position, constellation.name, colors.forName)
         }
     }
 
@@ -194,8 +149,8 @@ class SkyDraw() {
         }
     }
 
-    private fun drawCircleAt(r: Float, color: Paint, p: SkyPointF) {
-        canvas.drawCircle(p.x, p.y, r, color);
+    private fun drawCircleAt(radius: Float, color: Paint, alpha: Int, p: SkyPointF) {
+        canvas.drawCircle(p.x, p.y, radius, color.apply { this.alpha = alpha });
     }
 
     private fun drawImageAt(bitmap: Bitmap, p: SkyPointF) {

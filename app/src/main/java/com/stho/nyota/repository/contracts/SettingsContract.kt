@@ -3,6 +3,7 @@ package com.stho.nyota.repository.contracts
 import android.content.ContentValues
 import android.database.sqlite.SQLiteDatabase
 import java.lang.Exception
+import java.util.*
 
 internal class SettingsContract(private val db: SQLiteDatabase) : BaseContract() {
     fun createTable() {
@@ -19,6 +20,10 @@ internal class SettingsContract(private val db: SQLiteDatabase) : BaseContract()
 
     fun write(name: String, value: Int) {
         write(name, serializeFromInt(value))
+    }
+
+    fun write(name: String, value: Double) {
+        write(name, serializeFromDouble(value))
     }
 
     fun write(name: String, value: String?) {
@@ -39,6 +44,9 @@ internal class SettingsContract(private val db: SQLiteDatabase) : BaseContract()
 
     fun readInt(name: String, defaultValue: Int): Int =
         deserializeIntoInt(readStringOrDefault(name), defaultValue)
+
+    fun readDouble(name: String, defaultValue: Double): Double =
+        deserializeIntoDouble(readStringOrDefault(name), defaultValue)
 
     private fun readStringOrDefault(name: String): String? {
         var value: String? = null
@@ -98,7 +106,17 @@ internal class SettingsContract(private val db: SQLiteDatabase) : BaseContract()
                 defaultValue
             }
 
+        private fun deserializeIntoDouble(value: String?, defaultValue: Double): Double =
+            try {
+                value?.toDouble() ?: defaultValue
+            } catch (ex: Exception) {
+                defaultValue
+            }
+
         private fun serializeFromInt(value: Int): String =
+            value.toString()
+
+        private fun serializeFromDouble(value: Double): String =
             value.toString()
     }
 }

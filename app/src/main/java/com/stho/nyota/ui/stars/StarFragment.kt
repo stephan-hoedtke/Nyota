@@ -59,6 +59,15 @@ class StarFragment : AbstractElementFragment() {
         bindingReference = null
     }
 
+    @Suppress("NON_EXHAUSTIVE_WHEN")
+    override fun onPropertyClick(property: IProperty) {
+        when (property.keyType) {
+            PropertyKeyType.AZIMUTH -> onSkyView()
+            PropertyKeyType.ALTITUDE -> onSkyView()
+            PropertyKeyType.DIRECTION -> onFinderView()
+        }
+    }
+
     override val element: IElement
         get() = viewModel.star
 
@@ -73,7 +82,6 @@ class StarFragment : AbstractElementFragment() {
     private fun bind(moment: Moment, star: Star) {
         bindTime(binding.timeVisibilityOverlay, moment, star.visibility)
         binding.image.setImageResource(star.largeImageId)
-        binding.title.text = star.name
         updateActionBar(star.toString(), toLocalDateString(moment))
     }
 

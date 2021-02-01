@@ -1,7 +1,6 @@
 package com.stho.nyota.ui.cities
 
 import android.content.Context
-import android.util.Log
 import android.view.*
 import android.view.GestureDetector.SimpleOnGestureListener
 import androidx.core.content.ContextCompat
@@ -103,7 +102,7 @@ class CityPickerRecyclerViewAdapter(private val fragment: CityPickerFragment, pr
             binding.radioButton.isChecked = isSelected
             binding.radioButton.setOnClickListener { onSelect(adapterPosition) }
             binding.textViewName.text = city.nameEx
-            binding.textViewDistance.text = Formatter.toDistanceString(city.distanceInKm)
+            binding.textViewDistance.text = Formatter.toDistanceKmString(city.distanceInKm)
             binding.root.isSelected = isSelected
             binding.root.setOnLongClickListener { onEdit(adapterPosition); true }
         }

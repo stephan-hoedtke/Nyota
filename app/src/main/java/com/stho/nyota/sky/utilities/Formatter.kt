@@ -49,8 +49,11 @@ object Formatter {
     fun toString(value: Double): String =
         String.format(Locale.ENGLISH, "%.4f", value)
 
-    fun toDistanceString(distance: Double): String =
+    fun toDistanceKmString(distance: Double): String =
         df0.format(distance) + " km"
+
+    fun toDistanceLyString(distance: Double): String =
+        df0.format(distance) + " ly"
 
     fun toSpeedString(speed: Double): String =
         df0.format(speed) + " km/h"
