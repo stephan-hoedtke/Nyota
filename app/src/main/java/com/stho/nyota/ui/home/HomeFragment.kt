@@ -44,11 +44,11 @@ class HomeFragment : AbstractFragment() {
         binding.buttonSkyView.setOnClickListener { onSkyView() }
         binding.buttonShowOptions.setOnClickListener { displayHomeFragmentOptionsDialog() }
         binding.imageSun.setOnClickListener { onSun() }
-        binding.imageSun.setOnLongClickListener { onSkyViewForElement(viewModel.sun); true }
+        binding.imageSun.setOnLongClickListener { onSkyView(viewModel.sun); true }
         binding.imageMoon.setOnClickListener { onMoon() }
-        binding.imageMoon.setOnLongClickListener { onSkyViewForElement(viewModel.moon); true }
+        binding.imageMoon.setOnLongClickListener { onSkyView(viewModel.moon); true }
         binding.imageIss.setOnClickListener { onIss() }
-        binding.imageIss.setOnLongClickListener { onSkyViewForElement(viewModel.iss); true }
+        binding.imageIss.setOnLongClickListener { onSkyView(viewModel.iss); true }
         binding.image.setOnClickListener { openConstellations() }
         binding.image.setOnLongClickListener { onSkyView(); true }
 
@@ -132,20 +132,15 @@ class HomeFragment : AbstractFragment() {
 
     private fun openTarget(element: IElement) {
         when (element) {
-            is AbstractPlanet -> openPlanet(element)
-            is Star -> openStar(element)
+            is Star -> onStar(element.key)
+            is Constellation -> onConstellation(element.key)
+            is AbstractPlanet -> onPlanet(element.key)
             else -> showSnackbar("See: ${element.name} ...")
         }
     }
 
     private fun openConstellations() =
         findNavController().navigate(HomeFragmentDirections.actionGlobalNavConstellations())
-
-    private fun openPlanet(planet: AbstractPlanet) =
-        findNavController().navigate(HomeFragmentDirections.actionNavHomeToNavPlanet(planet.name))
-
-    private fun openStar(star: Star) =
-        findNavController().navigate(HomeFragmentDirections.actionNavHomeToNavStar(star.key))
 
     private fun onSun() =
         findNavController().navigate(R.id.action_global_nav_sun)
@@ -159,8 +154,8 @@ class HomeFragment : AbstractFragment() {
     private fun onSkyView() =
         findNavController().navigate(HomeFragmentDirections.actionNavHomeToNavSky(null))
 
-    private fun onSkyViewForElement(element: IElement) =
-        findNavController().navigate(HomeFragmentDirections.actionNavHomeToNavSky(element.name))
+    private fun onSkyView(element: IElement) =
+        findNavController().navigate(HomeFragmentDirections.actionNavHomeToNavSky(element.key))
 
     private fun displayInfo() =
         findNavController().navigate(R.id.action_global_nav_info)

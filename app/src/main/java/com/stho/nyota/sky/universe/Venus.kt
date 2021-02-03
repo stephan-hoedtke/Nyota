@@ -11,7 +11,7 @@ import kotlin.math.pow
 class Venus : AbstractPlanet("Venus") {
 
     override val imageId: Int
-        get() = com.stho.nyota.R.mipmap.venus
+        get() = com.stho.nyota.R.drawable.planet_venus
 
     override val largeImageId: Int
         get() = com.stho.nyota.R.drawable.planet_venus

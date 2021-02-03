@@ -15,8 +15,6 @@ import com.stho.nyota.databinding.FragmentSkyBinding
 import com.stho.nyota.sky.universe.*
 import com.stho.nyota.sky.utilities.*
 
-
-// TODO: implement options in Sky view: show names, letters, lines, change colors, ...
 // TODO: implement styles
 // TODO: change updateMoment(...) into onObserveMoment(...) for all observers
 
@@ -39,10 +37,14 @@ class SkyFragment : AbstractFragment() {
         setHasOptionsMenu(true)
     }
 
+    private fun onTouchOptions() {
+        binding.sky.touch()
+    }
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         bindingReference = FragmentSkyBinding.inflate(inflater, container, false)
 
-        binding.sky.setOptions(viewModel.repository.settings)
+        binding.sky.setOptions(viewModel.options)
         binding.sky.setUniverse(viewModel.universe)
         binding.sky.setReferenceElement(viewModel.element)
         binding.buttonZoomIn.setOnClickListener { onZoomIn() }
@@ -79,6 +81,7 @@ class SkyFragment : AbstractFragment() {
         viewModel.skyOrientationLD.observe(viewLifecycleOwner, { arrow -> onObserveSkyOrientation(arrow) })
         viewModel.isLiveLD.observe(viewLifecycleOwner, { isLive -> onObserveIsLive(isLive) })
         viewModel.liveModeLD.observe(viewLifecycleOwner, { liveMode -> onObserveLiveMode(liveMode) })
+        viewModel.options.touchLD.observe(viewLifecycleOwner, { _ -> binding.sky.touch() })
     }
 
     override fun onDestroyView() {
@@ -96,6 +99,7 @@ class SkyFragment : AbstractFragment() {
             R.id.action_view_options -> displaySkyFragmentOptionsDialog()
             R.id.action_view_projections -> displaySkyFragmentProjectionsDialog()
             R.id.action_view_live_mode -> displaySkyFragmentLiveModeDialog()
+            R.id.action_view_luminosity -> displaySkyFragmentLuminosityDialog()
         }
         return super.onOptionsItemSelected(item)
     }
@@ -197,13 +201,19 @@ class SkyFragment : AbstractFragment() {
     private fun displaySkyFragmentProjectionsDialog() {
         val fragmentManager: FragmentManager = requireActivity().supportFragmentManager
         val tag = "fragment_sky_projections_dialog"
-        SkyFragmentChooseProjectionDialog(binding.sky.options).show(fragmentManager, tag)
+        SkyFragmentProjectionDialog(binding.sky.options).show(fragmentManager, tag)
     }
 
     private fun displaySkyFragmentLiveModeDialog() {
         val fragmentManager: FragmentManager = requireActivity().supportFragmentManager
         val tag = "fragment_sky_live_mode_dialog"
         SkyFragmentLiveModeDialog(viewModel.settings).show(fragmentManager, tag)
+    }
+
+    private fun displaySkyFragmentLuminosityDialog() {
+        val fragmentManager: FragmentManager = requireActivity().supportFragmentManager
+        val tag = "fragment_sky_luminosity_dialog"
+        SkyFragmentLuminosityDialog(viewModel.options).show(fragmentManager, tag)
     }
 
     /**

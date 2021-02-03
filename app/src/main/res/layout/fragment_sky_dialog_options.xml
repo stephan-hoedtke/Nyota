@@ -64,37 +64,13 @@
             android:text="@string/label_display_satellites"
             app:layout_constraintTop_toBottomOf="@id/checkBoxDisplayTargets" />
 
-        <TextView
-            android:id="@+id/labelBrightness"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/label_magnitude_filter"
-            app:layout_constraintTop_toBottomOf="@id/checkBoxDisplaySatellites"
-            android:layout_marginTop="@dimen/text_margin" />
-
-        <SeekBar
-            android:id="@+id/seekBarBrightness"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/properties_margin"
-            app:layout_constraintTop_toBottomOf="@id/labelBrightness" />
-
-        <TextView
-            android:id="@+id/textViewBrightness"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/default_magnitude"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/seekBarBrightness" />
-
         <ImageView
             android:id="@+id/buttonOK"
             android:layout_width="@dimen/button_size"
             android:layout_height="@dimen/button_size"
             android:src="@drawable/ok"
             android:contentDescription="@string/label_empty"
-            app:layout_constraintTop_toBottomOf="@id/seekBarBrightness"
+            app:layout_constraintTop_toBottomOf="@id/checkBoxDisplaySatellites"
             app:layout_constraintEnd_toEndOf="parent"
             android:layout_margin="@dimen/element_margin" />
 

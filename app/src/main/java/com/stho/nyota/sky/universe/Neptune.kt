@@ -10,7 +10,7 @@ import kotlin.math.log10
 class Neptune : AbstractPlanet("Neptune") {
 
     override val imageId: Int
-        get() = com.stho.nyota.R.mipmap.neptune
+        get() = com.stho.nyota.R.drawable.planet_neptune
 
     override val largeImageId: Int
         get() = com.stho.nyota.R.drawable.planet_neptune

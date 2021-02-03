@@ -4,10 +4,17 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
+        android:id="@+id/action_view_luminosity"
+        android:orderInCategory="100"
+        android:title="@string/action_view_luminosity"
+        android:icon="@drawable/seekbar"
+        app:showAsAction="ifRoom" />
+
+    <item
         android:id="@+id/action_view_options"
         android:orderInCategory="110"
         android:title="@string/action_view_options"
-        android:icon="@drawable/seekbar"
+        android:icon="@drawable/eye"
         app:showAsAction="ifRoom" />
 
     <item

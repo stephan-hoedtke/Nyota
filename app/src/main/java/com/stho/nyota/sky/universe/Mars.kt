@@ -10,7 +10,7 @@ import kotlin.math.log10
 class Mars : AbstractPlanet("Mars") {
 
     override val imageId: Int
-        get() = com.stho.nyota.R.mipmap.mars
+        get() = com.stho.nyota.R.drawable.planet_mars
 
     override val largeImageId
         get() = com.stho.nyota.R.drawable.planet_mars

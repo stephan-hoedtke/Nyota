@@ -13,7 +13,7 @@
         android:orientation="horizontal"
         app:layout_constraintGuide_begin="@dimen/image_size" />
 
-    <com.stho.software.nyota.views.ConstellationView
+    <com.stho.software.nyota.views.ConstellationSkyView
         android:id="@+id/sky"
         android:layout_width="match_parent"
         android:layout_height="0dp"

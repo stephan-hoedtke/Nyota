@@ -8,11 +8,13 @@ import com.stho.nyota.sky.utilities.projections.ISphereProjection
 import com.stho.nyota.ui.sky.ISkyViewOptions
 import java.util.*
 import kotlin.math.abs
+import kotlin.math.pow
 
 
 class SkyDraw() {
 
     private val positions: HashMap<IElement, SkyPointF> = HashMap()
+    private val luminos: HashMap<Star, Luminosity> = HashMap()
     private var colors: ISkyDrawColors = SkyDrawColors()
 
     lateinit var canvas: Canvas
@@ -30,6 +32,11 @@ class SkyDraw() {
         this.width = width
         this.height = height
         this.center = center
+        positions.clear()
+    }
+
+    fun touch() {
+        luminos.clear()
         positions.clear()
     }
 
@@ -86,23 +93,22 @@ class SkyDraw() {
     fun drawStar(star: Star, referenceType: ReferenceType = ReferenceType.Default) =
         getPosition(star)?.let {
             if (isOnScreen(it) && star.isBrighterThan(options.magnitude)) {
+                val luminosity = getLuminosity(star)
                 val colors: IStarColors = colors.getStarColors(referenceType)
-                val radius: Float = getStarSize(star.magn)
-                val alpha: Int = getStarAlpha(star.magn)
 
-                drawCircleAt(radius, colors.forStar, alpha, it)
+                drawCircleAt(luminosity.radius, colors.forStar, luminosity.alpha, it)
 
                 when {
-                    canDrawName(star) -> drawNameAt(star.friendlyName, colors.forName, it)
-                    canDrawSymbol(star) -> drawNameAt(star.symbol.greekSymbol, colors.forSymbol, it);
+                    canDrawStarName(star) -> drawNameAt(star.friendlyName, colors.forName, it)
+                    canDrawStarSymbol(star) -> drawNameAt(star.symbol.greekSymbol, colors.forSymbol, it);
                 }
             }
         }
 
-    private fun canDrawName(star: Star): Boolean =
+    private fun canDrawStarName(star: Star): Boolean =
         options.displayStarNames && star.hasFriendlyName
 
-    private fun canDrawSymbol(star: Star): Boolean =
+    private fun canDrawStarSymbol(star: Star): Boolean =
         options.displaySymbols && star.hasSymbol
 
     fun drawConstellation(constellation: Constellation, referenceType: ReferenceType = ReferenceType.Default) {
@@ -112,15 +118,21 @@ class SkyDraw() {
             drawStar(star, referenceType);
         }
 
-        if (options.displayConstellations) {
+        if (canDrawConstellationLines(referenceType)) {
             for (line in constellation.lines) {
                 drawLine(line, colors.forLine);
             }
         }
-        if (options.displayConstellationNames) {
+        if (canDrawConstellationName(referenceType)) {
             drawName(constellation.position, constellation.name, colors.forName)
         }
     }
+
+    private fun canDrawConstellationLines(referenceType: ReferenceType): Boolean =
+        options.displayConstellations || referenceType == ReferenceType.TippedConstellation || referenceType == ReferenceType.Reference
+
+    private fun canDrawConstellationName(referenceType: ReferenceType): Boolean =
+        options.displayConstellationNames
 
     fun drawZenit(zenit: Topocentric) =
         drawName(zenit, "Z", colors.visibleGridColor)
@@ -129,6 +141,20 @@ class SkyDraw() {
         calculatePosition(satellite.position)?.let {
             if (isOnScreen(it)) {
                 drawImageAt(bitmap, it)
+            }
+        }
+
+    fun drawName(position: Topocentric, name: String) =
+        drawName(position, name, colors.getStarColors(ReferenceType.Default).forName)
+
+    fun drawElement(position: Topocentric, name: String, luminosity: Luminosity) =
+        calculatePosition(position)?.let {
+            if (isOnScreen(it)) {
+                val colors = colors.getStarColors(ReferenceType.Default)
+                val fm = colors.forName.fontMetrics
+                val h = fm.descent - fm.ascent;
+                drawNameAt(name, colors.forName, SkyPointF(it.x + h, it.y + h / 2))
+                drawCircleAt(luminosity.radius, colors.forStar, luminosity.alpha, it)
             }
         }
 
@@ -209,34 +235,14 @@ class SkyDraw() {
         }
     }
 
-    private fun getStarAlpha(magnitude: Double) =
-        when {
-            magnitude > 9.0 -> 100
-            magnitude > 8.0 -> 115
-            magnitude > 7.0 -> 135
-            magnitude > 6.0 -> 155
-            magnitude > 5.0 -> 175
-            magnitude > 4.0 -> 195
-            magnitude > 3.0 -> 215
-            magnitude > 2.0 -> 235
-            else -> 255
-        }
-
-    private fun getStarSize(magnitude: Double): Float =
-        when {
-            magnitude > 6.0 -> 1f
-            magnitude > 5.0 -> 2f
-            magnitude > 3.0 -> 3f
-            magnitude > 1.0 -> 4f
-            magnitude > 0.0 -> 5f
-            else -> 6f
-        }
-
     private fun isOnScreen(p: SkyPointF): Boolean =
         (abs(p.x) < width) && (abs(p.y) < height)
 
     private val gridCenter: Topocentric
         get() = Topocentric(Ten.nearest15(center.azimuth), Ten.nearest10(center.altitude))
+
+    private fun getLuminosity(star: Star): Luminosity =
+        luminos[star] ?: Luminosity.create(star.magn, options).also { luminos[star] = it }
 
     private fun getPosition(element: IElement): SkyPointF? =
         positions[element] ?: calculatePosition(element.position)?.also { positions[element] = it }

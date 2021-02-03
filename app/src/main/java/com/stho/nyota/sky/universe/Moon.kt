@@ -37,7 +37,7 @@ class Moon : AbstractSolarSystemElement() {
         get() = "Moon"
 
     override val imageId: Int
-        get() = com.stho.nyota.R.mipmap.moon
+        get() = com.stho.nyota.R.drawable.moon
 
     override val largeImageId: Int
         get() = com.stho.nyota.R.drawable.moon

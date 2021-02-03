@@ -26,18 +26,6 @@ class SkyFragmentOptionsDialog(val options: ISkyViewOptions): DialogFragment() {
         binding.checkBoxDisplayStarNames.setOnCheckedChangeListener { v, isChecked -> options.displayStarNames = isChecked }
         binding.checkBoxDisplayTargets.setOnCheckedChangeListener { v, isChecked -> options.displayTargets = isChecked }
         binding.checkBoxDisplaySatellites.setOnCheckedChangeListener { v, isChecked -> options.displaySatellites = isChecked }
-        binding.seekBarBrightness.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
-            override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
-                options.magnitude = SkyViewOptions.percentToBrightness(progress)
-                binding.textViewBrightness.text = Formatter.df2.format(options.magnitude)
-            }
-            override fun onStartTrackingTouch(arg0: SeekBar) {
-                // Nothing
-            }
-            override fun onStopTrackingTouch(seekBar: SeekBar) {
-                // Nothing
-            }
-        })
 
         return binding.root
     }
@@ -55,8 +43,6 @@ class SkyFragmentOptionsDialog(val options: ISkyViewOptions): DialogFragment() {
         binding.checkBoxDisplayStarNames.isChecked = options.displayStarNames
         binding.checkBoxDisplayTargets.isChecked = options.displayTargets
         binding.checkBoxDisplaySatellites.isChecked = options.displaySatellites
-        binding.textViewBrightness.text = Formatter.df2.format(options.magnitude)
-        binding.seekBarBrightness.progress = SkyViewOptions.brightnessToPercent(options.magnitude)
     }
 
     private fun onOK() {

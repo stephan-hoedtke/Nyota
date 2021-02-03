@@ -4,6 +4,7 @@ import com.stho.nyota.sky.utilities.Formatter
 import com.stho.nyota.sky.utilities.Moment
 import com.stho.nyota.sky.utilities.PropertyList
 import com.stho.nyota.ui.sky.SkyViewOptions.Companion.MAX_MAGNITUDE
+import kotlin.math.pow
 
 /**
  * Created by shoedtke on 31.08.2016.
@@ -45,7 +46,7 @@ class Star private constructor(val id: Long, val HD: Int, override val name: Str
         }
 
     override val imageId: Int
-        get() = com.stho.nyota.R.mipmap.star
+        get() = com.stho.nyota.R.drawable.star
 
     override val largeImageId: Int
         get() = com.stho.nyota.R.drawable.star
@@ -91,7 +92,8 @@ class Star private constructor(val id: Long, val HD: Int, override val name: Str
         get() = constellations.firstOrNull()
 
     companion object {
-        /**
+
+         /**
          * create a new star as given by the star catalog
          * @id is the primary key in the database
          * @hd henry draper catalog number

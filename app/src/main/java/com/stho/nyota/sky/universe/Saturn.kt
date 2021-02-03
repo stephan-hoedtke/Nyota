@@ -14,7 +14,7 @@ class Saturn : AbstractPlanet("Saturn") {
     private var Nr = 0.0
 
     override val imageId: Int
-        get() = com.stho.nyota.R.mipmap.saturn
+        get() = com.stho.nyota.R.drawable.planet_saturn
 
     override val largeImageId: Int
         get() = com.stho.nyota.R.drawable.planet_saturn

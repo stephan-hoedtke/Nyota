@@ -53,15 +53,15 @@ class Settings: ISkyViewSettings {
 
     var currentLocation: String? = null
 
-    override var displaySymbols: Boolean = true
+    override var displaySymbols: Boolean = false
     override var displayConstellations: Boolean = true
-    override var displayConstellationNames: Boolean = true
+    override var displayConstellationNames: Boolean = false
     override var displayPlanetNames: Boolean = true
-    override var displayStarNames: Boolean = true
+    override var displayStarNames: Boolean = false
     override var displayTargets: Boolean = false
     override var displaySatellites: Boolean = true
     override var displayGrid: Boolean = false
-    override var sphereProjection: Projection = Projection.SPHERE
+    override var sphereProjection: Projection = Projection.STEREOGRAPHIC
     override var magnitude: Double = DEFAULT_MAGNITUDE
 
     val zoomLD: LiveData<Double>

@@ -32,6 +32,13 @@ abstract class AbstractSkyView(context: Context?, attrs: AttributeSet?): View(co
 
     fun setOptions(options: ISkyViewOptions) {
         this.options = options
+        this.draw.touch()
+        invalidate()
+    }
+
+    fun touch() {
+        this.draw.touch()
+        invalidate()
     }
 
     val path = Path()
@@ -219,6 +226,12 @@ abstract class AbstractSkyView(context: Context?, attrs: AttributeSet?): View(co
 
     protected fun drawSatellite(satellite: Satellite) =
         draw.drawSatellite(satellite, getScaledBitmap(satellite.imageId, 72, 72))
+
+    protected fun drawName(position: Topocentric, name: String) =
+        draw.drawName(position, name)
+
+    protected fun drawElement(position: Topocentric, name: String, luminosity: Luminosity) =
+        draw.drawElement(position, name, luminosity)
 
     /**
     get image from cache or create it

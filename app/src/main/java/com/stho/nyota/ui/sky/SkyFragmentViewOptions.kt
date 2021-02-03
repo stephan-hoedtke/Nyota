@@ -1,14 +1,14 @@
 package com.stho.nyota.ui.sky
 
-import android.view.View
 import com.stho.nyota.sky.utilities.projections.Projection
+import com.stho.nyota.views.AbstractSkyView
 
 
-class SkyFragmentViewOptions(view: View, val settings: ISkyViewSettings): SkyViewOptions(view), ISkyViewOptions, ISkyViewSettings {
+class SkyFragmentViewOptions(val settings: ISkyViewSettings): SkyViewOptions(), ISkyViewOptions, ISkyViewSettings {
 
     override fun touch() {
         settings.touch()
-        invalidate()
+        super.touch()
     }
 
     override var displaySymbols: Boolean

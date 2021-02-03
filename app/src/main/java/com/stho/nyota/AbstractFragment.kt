@@ -178,6 +178,9 @@ abstract class AbstractFragment : Fragment() {
     protected fun onStar(key: String) =
         findNavController().navigate(R.id.action_global_nav_star, bundleOf("STAR" to key))
 
+    protected fun onPlanet(key: String) =
+        findNavController().navigate(R.id.action_global_nav_star, bundleOf("PLANET" to key))
+
     protected fun onConstellation(key: String) =
         findNavController().navigate(R.id.action_global_nav_constellation, bundleOf("CONSTELLATION" to key))
 

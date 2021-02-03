@@ -82,6 +82,10 @@ class HomeViewModel(application: Application, repository: Repository) : Reposito
         if (options.showTargets)
             list.addAll(universe.targets.values)
 
+        // for investigating the transparent icon issue
+        list.add(universe.constellations[Constellation.Crux])
+        list.add(universe.constellations[Constellation.Cygnus])
+
         return list
     }
 }

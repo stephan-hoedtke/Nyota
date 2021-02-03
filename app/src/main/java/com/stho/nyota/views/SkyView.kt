@@ -23,9 +23,6 @@ class SkyView(context: Context?, attrs: AttributeSet?) : AbstractSkyView(context
         invalidate()
     }
 
-    fun setOptions(settings: ISkyViewSettings) =
-        super.setOptions(SkyFragmentViewOptions(this@SkyView, settings))
-
     fun setUniverse(universe: Universe) {
         this.universe = universe
         invalidate()

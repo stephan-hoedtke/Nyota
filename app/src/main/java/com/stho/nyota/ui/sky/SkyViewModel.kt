@@ -91,8 +91,10 @@ class SkyViewModel(application: Application, repository: Repository, val element
         isLiveLiveData.postValue(value)
     }
 
-    val universe: Universe
-        get() = repository.universe
+    val universe: Universe = repository.universe
+
+    val options: SkyFragmentViewOptions = SkyFragmentViewOptions(repository.settings)
+
 }
 
 
