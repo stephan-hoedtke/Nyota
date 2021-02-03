@@ -59,15 +59,6 @@ class StarFragment : AbstractElementFragment() {
         bindingReference = null
     }
 
-    @Suppress("NON_EXHAUSTIVE_WHEN")
-    override fun onPropertyClick(property: IProperty) {
-        when (property.keyType) {
-            PropertyKeyType.AZIMUTH -> onSkyView()
-            PropertyKeyType.ALTITUDE -> onSkyView()
-            PropertyKeyType.DIRECTION -> onFinderView()
-        }
-    }
-
     override val element: IElement
         get() = viewModel.star
 

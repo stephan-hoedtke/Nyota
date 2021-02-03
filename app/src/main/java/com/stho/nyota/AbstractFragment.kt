@@ -97,6 +97,7 @@ abstract class AbstractFragment : Fragment() {
     protected open fun onPropertyClick(property: IProperty) {
         when (property.keyType) {
             PropertyKeyType.CONSTELLATION -> onConstellation(property.key)
+            PropertyKeyType.STAR -> onStar(property.key)
         }
     }
 
@@ -179,7 +180,7 @@ abstract class AbstractFragment : Fragment() {
         findNavController().navigate(R.id.action_global_nav_star, bundleOf("STAR" to key))
 
     protected fun onPlanet(key: String) =
-        findNavController().navigate(R.id.action_global_nav_star, bundleOf("PLANET" to key))
+        findNavController().navigate(R.id.action_global_nav_planet, bundleOf("PLANET" to key))
 
     protected fun onConstellation(key: String) =
         findNavController().navigate(R.id.action_global_nav_constellation, bundleOf("CONSTELLATION" to key))

@@ -131,14 +131,11 @@ class ConstellationFragment : AbstractElementFragment() {
     @Suppress("NON_EXHAUSTIVE_WHEN")
     override fun onPropertyClick(property: IProperty) {
         when (property.keyType) {
-            PropertyKeyType.STAR ->
-                viewModel.constellation.findStarInConstellationByKey(property.key)?.let {
-                    binding.sky.setReferenceStar(it)
-                    binding.sky.invalidate()
-                }
-            PropertyKeyType.AZIMUTH -> onSkyView()
-            PropertyKeyType.ALTITUDE -> onSkyView()
-            PropertyKeyType.DIRECTION -> onFinderView()
+            PropertyKeyType.STAR -> viewModel.constellation.findStarInConstellationByKey(property.key)?.let {
+                binding.sky.setReferenceStar(it)
+                binding.sky.invalidate()
+            }
+            else -> super.onPropertyClick(property)
         }
     }
 
