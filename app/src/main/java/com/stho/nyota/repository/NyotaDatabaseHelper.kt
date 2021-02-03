@@ -71,7 +71,7 @@ class NyotaDatabaseHelper(private val context: Context) : SQLiteOpenHelper(conte
 
     companion object {
         private const val DATABASE_NAME = "nyota.sqlite"
-        private const val DATABASE_VERSION = 14
+        private const val DATABASE_VERSION = 15
         private const val ASSETS_PATH = "databases"
     }
 }

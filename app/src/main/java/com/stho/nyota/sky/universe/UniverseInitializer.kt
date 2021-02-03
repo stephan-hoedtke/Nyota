@@ -55,6 +55,7 @@ class UniverseInitializer(universe: Universe) : AbstractUniverseInitializer(univ
             registerUrsaMajor()
             registerUrsaMinor()
             registerVirgo()
+            registerBootes()
             registerSatellite()
             registerSpecialElements()
             registerGalaxies()
@@ -507,8 +508,16 @@ class UniverseInitializer(universe: Universe) : AbstractUniverseInitializer(univ
     // https://de.wikipedia.org/wiki/Eridanus_(Sternbild)
     // https://de.wikipedia.org/wiki/Achernar
     private fun registerEridanus() {
-        // val achernar = getStar("Achernar")
-        // TODO not ready
+        universe.constellations[Constellation.Eridanus]
+            .line(Symbol.Alpha, Symbol.Chi, Symbol.Phi, Symbol.Kappa, Symbol.Iota, Symbol.Delta, Symbol.Upsilon, Symbol.Tau)
+            .line(Symbol.Tau, Symbol.Eta, Symbol.Epsilon, Symbol.Delta, Symbol.Gamma, Symbol.Nu, Symbol.Mu, Symbol.Beta)
+    }
+
+    // https://de.wikipedia.org/wiki/B%C3%A4renh%C3%BCter#/media/Datei:Bootes_constellation_map.png
+    private fun registerBootes() {
+        universe.constellations[Constellation.Bootes]
+            .line(Symbol.Alpha, Symbol.Rho, Symbol.Gamma, Symbol.Beta, Symbol.Delta, Symbol.Epsilon, Symbol.Alpha)
+            .line(Symbol.Tau, Symbol.Eta, Symbol.Alpha, Symbol.Zeta)
     }
 
     // https://www.space.com/32054-satellite-tracker.html

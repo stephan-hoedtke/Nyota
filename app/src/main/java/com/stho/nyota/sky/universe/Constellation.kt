@@ -50,6 +50,8 @@ class Constellation internal constructor(val id: Long, val rank: Int, override v
         Auriga -> R.drawable.constellation_auriga
         Perseus -> R.drawable.constellation_perseus
         Pavo -> R.drawable.constellation_pavo
+        Bootes -> R.drawable.constellation_bootes
+        Eridanus -> R.drawable.constellation_eridanus
         else -> R.drawable.constellation
     }
 
@@ -223,7 +225,7 @@ class Constellation internal constructor(val id: Long, val rank: Int, override v
         const val Aquarius: Int = 10
         const val Ophiuchus: Int = 11
         const val Leo: Int = 12
-        const val Booetes: Int = 13
+        const val Bootes: Int = 13
         const val Pisces: Int = 14
         const val Sagittarius: Int = 15
         const val Cygnus: Int = 16
