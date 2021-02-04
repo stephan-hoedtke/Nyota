@@ -35,5 +35,7 @@ interface IElement {
 
     fun isNear(otherPosition: Topocentric, toleranceInDegree: Double = 0.01): Boolean
 
+    fun isNear(otherPosition: Topocentric, azimuthTolerance: Double, altitudeTolerance: Double): Boolean
+
     fun distanceTo(otherPosition: Topocentric): Double
 }

@@ -1,11 +1,10 @@
 package com.stho.nyota.sky.universe
 
-import androidx.core.text.isDigitsOnly
 import com.stho.nyota.sky.utilities.*
 import com.stho.nyota.sky.utilities.createDefaultBerlinBuch
-import java.text.FieldPosition
-import java.util.*
 import kotlin.collections.ArrayList
+import kotlin.math.abs
+import kotlin.math.cos
 
 // Implemented as static singleton. There is just one universe!
 class Universe {
@@ -14,10 +13,11 @@ class Universe {
     val constellations = Constellations()
     val stars = Stars(constellations)
     val satellites = Satellites()
-    val vip = ArrayList<Star>()
-    val extra = ArrayList<Star>()
+    val galaxies = Galaxies()
     val specials = ArrayList<SpecialElement>()
     val targets = Targets()
+    val any = ArrayList<Anything>()
+    val vip = ArrayList<Star>()
 
     fun setSatelliteTLE(satelliteName: String, elements: String) {
         satellites.findSatelliteByName(satelliteName)?.updateElements(elements)
@@ -55,11 +55,13 @@ class Universe {
             solarSystem.updatePhase(moment)
 
         // calculate azimuth + altitude for all objects
-        for (star in stars.values) star.updateAzimuthAltitude(moment)
-        for (satellite in satellites.values) satellite.updateFor(moment)
-        for (constellation in constellations.values) constellation.updateAzimuthAltitude(moment)
-        for (special in specials) special.updateAzimuthAltitude(moment)
-        for (target in targets.values) target.updateAzimuthAltitude(moment)
+        stars.values.forEach { star -> star.updateAzimuthAltitude(moment) }
+        satellites.values.forEach { satellite -> satellite.updateFor(moment) }
+        constellations.values.forEach { constellation -> constellation.updateAzimuthAltitude(moment) }
+        specials.forEach { special -> special.updateAzimuthAltitude(moment) }
+        targets.values.forEach { target -> target.updateAzimuthAltitude(moment) }
+        galaxies.values.forEach { galaxy -> galaxy.updateAzimuthAltitude(moment) }
+        any.forEach { anything -> anything.updateAzimuthAltitude(moment) }
 
         return this
     }
@@ -78,13 +80,13 @@ class Universe {
             ?: targets.findTargetByKey(key)
 
     fun findNearestElementByPosition(position: Topocentric, magnitude: Double, sensitivityAngle: Double): IElement? {
-        val tolerance = Radian.toDegrees(sensitivityAngle)
+        val azimuthTolerance = sensitivityAngle / position.azimuthDistanceFactor
         var distance: Double = Topocentric.INVALID_DISTANCE
         var brightness: Double = AbstractElement.INVALID_MAGNITUDE
         var element: IElement? = null
 
         for (e in solarSystem.elements) {
-            if (e.isNear(position, tolerance)) {
+            if (e.isNear(position, azimuthTolerance, sensitivityAngle)) {
                 val b = e.magn
                 val d = e.distanceTo(position)
                 if (b < brightness || (b == brightness && d < distance)) {
@@ -96,7 +98,7 @@ class Universe {
         }
 
         for (s in stars.values) {
-            if (s.isBrighterThan(magnitude) && s.isNear(position, tolerance)) {
+            if (s.isBrighterThan(magnitude) && s.isNear(position, azimuthTolerance, sensitivityAngle)) {
                 val b = s.magn
                 val d = s.distanceTo(position)
                 if (b < brightness || (b == brightness && d < distance)) {
@@ -108,7 +110,7 @@ class Universe {
         }
 
         for (s in satellites.values) {
-            if (s.isNear(position, tolerance)) {
+            if (s.isNear(position, azimuthTolerance, sensitivityAngle)) {
                 val b = -10.0
                 val d = s.distanceTo(position)
                 if (b < brightness || (b == brightness && d < distance)) {
@@ -120,13 +122,25 @@ class Universe {
         }
 
         for (t in targets.values) {
-            if (t.isNear(position, tolerance)) {
+            if (t.isNear(position, azimuthTolerance, sensitivityAngle)) {
                 val b = -10.0
                 val d = t.distanceTo(position)
                 if (b < brightness || (b == brightness && d < distance)) {
                     brightness = b
                     distance = d
                     element = t
+                }
+            }
+        }
+
+        for (g in galaxies.values) {
+            if (g.isNear(position, azimuthTolerance, sensitivityAngle)) {
+                val b = g.magn
+                val d = g.distanceTo(position)
+                if (b < brightness || (b == brightness && d < distance)) {
+                    brightness = b
+                    distance = d
+                    element = g
                 }
             }
         }

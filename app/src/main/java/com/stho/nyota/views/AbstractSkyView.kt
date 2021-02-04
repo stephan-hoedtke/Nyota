@@ -43,12 +43,22 @@ abstract class AbstractSkyView(context: Context?, attrs: AttributeSet?): View(co
 
     val path = Path()
     val center = Topocentric(0.0, 0.0)
+    var zoomAngle: Double = DEFAULT_ZOOM_ANGLE
+        set(value) {
+            val validZoomAngle = value.coerceIn(SkyViewOptions.MIN_ZOOM_ANGLE, SkyViewOptions.MAX_ZOOM_ANGLE)
+            if (field != validZoomAngle) {
+                field = validZoomAngle
+                touch()
+            }
+        }
 
     var scaleGestureDetector: ScaleGestureDetector? = null
     var gestureDetector: GestureDetector? = null
 
     var isScrollingEnabled: Boolean = true
     var isScalingEnabled: Boolean = true
+
+    var tippedPosition: Topocentric? = null
 
     private var listener: ISkyViewListener? = null
 
@@ -59,8 +69,8 @@ abstract class AbstractSkyView(context: Context?, attrs: AttributeSet?): View(co
     val sensitivityAngle: Double
         get() {
             val metrics: DisplayMetrics = resources.displayMetrics
-            val dp: Double = metrics.density * 13.0
-            return projection.sensibilityAngle * dp
+            val dp: Double = metrics.density * 17.0
+            return projection.sensitivityAngle * dp
         }
 
     fun registerListener(listener: ISkyViewListener?) {
@@ -92,7 +102,9 @@ abstract class AbstractSkyView(context: Context?, attrs: AttributeSet?): View(co
                 listener?.apply {
                     val p = SkyPointF.forMotionEvent(e, width, height)
                     projection.inverseZoomImagePoint(p)?.let {
+                        tippedPosition = it
                         onSingleTap(it);
+
                     }
                 }
                 return super.onSingleTapConfirmed(e)
@@ -116,6 +128,7 @@ abstract class AbstractSkyView(context: Context?, attrs: AttributeSet?): View(co
         if (isScrollingEnabled) {
             center.azimuth += projection.calculateAngle(dx)
             center.altitude -= projection.calculateAngle(dy)
+            tippedPosition = null
             raiseOnChangeCenter()
             invalidate()
         }
@@ -123,13 +136,15 @@ abstract class AbstractSkyView(context: Context?, attrs: AttributeSet?): View(co
 
     open fun applyScale(scaleFactor: Double) {
         if (isScalingEnabled) {
-            options.applyScale(scaleFactor)
+            zoomAngle /= scaleFactor
+            tippedPosition = null
             raiseOnChangeZoom()
         }
     }
 
     open fun resetTransformation() {
-        options.zoomAngle = SkyViewOptions.DEFAULT_ZOOM_ANGLE
+        tippedPosition = null
+        zoomAngle = DEFAULT_ZOOM_ANGLE
         referencePosition?.apply {
             center.azimuth = azimuth
             center.altitude = altitude
@@ -167,7 +182,7 @@ abstract class AbstractSkyView(context: Context?, attrs: AttributeSet?): View(co
         if (projection.projection != options.sphereProjection) {
             projection = ISphereProjection.create(options.sphereProjection)
         }
-        projection.setZoom(options.zoomAngle, width)
+        projection.setZoom(zoomAngle, width)
         projection.setCenter(center.azimuth, center.altitude)
     }
 
@@ -194,9 +209,6 @@ abstract class AbstractSkyView(context: Context?, attrs: AttributeSet?): View(co
         }
     }
 
-    protected fun drawStar(star: Star) =
-        draw.drawStar(star)
-
     protected fun drawSun(sun: IElement) =
         draw.drawSun(sun, getScaledBitmap(sun.imageId, 72, 72))
 
@@ -209,19 +221,19 @@ abstract class AbstractSkyView(context: Context?, attrs: AttributeSet?): View(co
     protected fun drawTarget(target: com.stho.nyota.sky.universe.Target) =
         draw.drawTarget(target, getScaledBitmap(target.imageId, 16, 16))
 
-    protected fun drawSpecial(special: SpecialElement) =
-        draw.drawSpecial(special)
+    protected fun drawNameOf(element: IElement) =
+        draw.drawNameOf(element)
 
-    protected fun drawConstellation(constellation: Constellation) =
-        draw.drawConstellation(constellation)
+    protected fun drawGalaxy(galaxy: Galaxy, referenceType: ReferenceType) =
+        draw.drawGalaxy(galaxy, referenceType)
 
     protected fun drawZenit(zenit: Topocentric) =
         draw.drawZenit(zenit)
 
-    protected fun drawStar(star: Star, referenceType: ReferenceType = ReferenceType.Reference) =
+    protected fun drawStar(star: Star, referenceType: ReferenceType) =
         draw.drawStar(star, referenceType)
 
-    protected fun drawConstellation(constellation: Constellation, referenceType: ReferenceType = ReferenceType.Reference) =
+    protected fun drawConstellation(constellation: Constellation, referenceType: ReferenceType) =
         draw.drawConstellation(constellation, referenceType)
 
     protected fun drawSatellite(satellite: Satellite) =
@@ -232,6 +244,9 @@ abstract class AbstractSkyView(context: Context?, attrs: AttributeSet?): View(co
 
     protected fun drawElement(position: Topocentric, name: String, luminosity: Luminosity) =
         draw.drawElement(position, name, luminosity)
+
+    fun drawSensitivityArea(position: Topocentric) =
+        draw.drawSensitivityArea(position, sensitivityAngle)
 
     /**
     get image from cache or create it
@@ -248,6 +263,10 @@ abstract class AbstractSkyView(context: Context?, attrs: AttributeSet?): View(co
         BitmapFactory.decodeResource(resources, resourceId).let {
             Bitmap.createScaledBitmap(it, newWidth, newHeight, false)
         }
+
+    companion object {
+        private const val DEFAULT_ZOOM_ANGLE = 45.0
+    }
 }
 
 

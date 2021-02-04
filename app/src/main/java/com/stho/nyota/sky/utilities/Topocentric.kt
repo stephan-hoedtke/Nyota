@@ -4,6 +4,7 @@ import java.io.Serializable
 import java.lang.Math.pow
 import java.text.FieldPosition
 import kotlin.math.abs
+import kotlin.math.cos
 import kotlin.math.sqrt
 
 /**
@@ -26,24 +27,29 @@ class Topocentric(var azimuth: Double, var altitude: Double, var distance: Doubl
     var inSouth: UTC? = null
     var culmination = 0.0
 
-    override fun toString(): String {
-        return Angle.toString(azimuth, Angle.AngleType.AZIMUTH) + Formatter.SPACE + Angle.toString(altitude, Angle.AngleType.ALTITUDE)
-    }
+    override fun toString(): String =
+        Angle.toString(azimuth, Angle.AngleType.AZIMUTH) + Formatter.SPACE + Angle.toString(altitude, Angle.AngleType.ALTITUDE)
 
-    val isVisible: Boolean =
-        altitude > 5.0 && altitude < 175.0
+    val isVisible: Boolean
+        get() = altitude > 5.0 && altitude < 175.0
 
-    val isAboveHorizon: Boolean =
-        altitude >= 0.0 && altitude <= 180.0
+    val isAboveHorizon: Boolean
+        get() = altitude >= 0.0 && altitude <= 180.0
 
-    val isBelowHorizon: Boolean =
-        altitude < 0.0 || altitude > 180.0
+    val isBelowHorizon: Boolean
+        get() = altitude < 0.0 || altitude > 180.0
 
-    val isDizzy: Boolean =
-        altitude >= 0.0 && altitude <= 5.0
+    val isDizzy: Boolean
+        get() = altitude >= 0.0 && altitude <= 5.0
+
+    val azimuthDistanceFactor: Double
+        get() = abs(Degree.cos(altitude)).coerceAtLeast(0.0001)
 
     fun isNear(position: Topocentric, toleranceInDegree: Double): Boolean =
-        abs(Degree.difference(azimuth, position.azimuth)) < toleranceInDegree && abs(Degree.difference(altitude, position.altitude)) < toleranceInDegree
+        isNear(position, toleranceInDegree / azimuthDistanceFactor, toleranceInDegree)
+
+    fun isNear(position: Topocentric, azimuthTolerance: Double, altitudeTolerance: Double): Boolean =
+        abs(Degree.difference(azimuth, position.azimuth)) < azimuthTolerance && abs(Degree.difference(altitude, position.altitude)) < altitudeTolerance
 
     fun distanceTo(position: Topocentric): Double {
         val x = Degree.difference(azimuth, position.azimuth)

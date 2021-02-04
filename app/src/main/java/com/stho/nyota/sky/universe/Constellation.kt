@@ -52,6 +52,11 @@ class Constellation internal constructor(val id: Long, val rank: Int, override v
         Pavo -> R.drawable.constellation_pavo
         Bootes -> R.drawable.constellation_bootes
         Eridanus -> R.drawable.constellation_eridanus
+        Centaurus -> R.drawable.constellation_centaurus
+        Chamaeleon -> R.drawable.constellation_chamaeleon
+        Musca -> R.drawable.constellation_musca
+        Antlia -> R.drawable.constellation_antlia
+        Apus -> R.drawable.constellation_apus
         else -> R.drawable.constellation
     }
 
@@ -88,7 +93,10 @@ class Constellation internal constructor(val id: Long, val rank: Int, override v
             star.register(this)
         }
         if (star.hasSymbol) {
-            map[star.symbol] = star
+            val existingStarForSymbol = map[star.symbol]
+            if (existingStarForSymbol == null || star.isBrighterThan(existingStarForSymbol.magn)) {
+                map[star.symbol] = star
+            }
         }
     }
 
@@ -176,13 +184,12 @@ class Constellation internal constructor(val id: Long, val rank: Int, override v
         }
 
     fun findNearestStarByPosition(position: Topocentric, magnitude: Double, sensitivityAngle: Double): Star? {
-        val tolerance = Radian.toDegrees(sensitivityAngle)
         var distance: Double = INVALID_DISTANCE
         var brightness: Double = INVALID_MAGNITUDE
         var star: Star? = null
 
         for (s in stars) {
-            if (s.isBrighterThan(magnitude) && s.isNear(position, tolerance)) {
+            if (s.isBrighterThan(magnitude) && s.isNear(position, sensitivityAngle)) {
                 val b = s.magn
                 val d = s.distanceTo(position)
                 if (b < brightness || (b == brightness && d < distance)) {

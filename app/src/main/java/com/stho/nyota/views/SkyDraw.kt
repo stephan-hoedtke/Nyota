@@ -1,6 +1,9 @@
 package com.stho.nyota.views
 
-import android.graphics.*
+import android.graphics.Bitmap
+import android.graphics.Canvas
+import android.graphics.Paint
+import android.graphics.Path
 import com.stho.nyota.sky.universe.*
 import com.stho.nyota.sky.utilities.Ten
 import com.stho.nyota.sky.utilities.Topocentric
@@ -8,7 +11,7 @@ import com.stho.nyota.sky.utilities.projections.ISphereProjection
 import com.stho.nyota.ui.sky.ISkyViewOptions
 import java.util.*
 import kotlin.math.abs
-import kotlin.math.pow
+import kotlin.math.cos
 
 
 class SkyDraw() {
@@ -43,10 +46,10 @@ class SkyDraw() {
     fun drawSun(sun: IElement, bitmap: Bitmap) =
         getPosition(sun)?.let {
             if (isOnScreen(it)) {
-                val colors: IStarColors = colors.getStarColors(ReferenceType.Default)
+                val clr: IStarColors = colors.getStarColors(ReferenceType.Default)
                 drawImageAt(bitmap, it)
                 if (options.displayPlanetNames) {
-                    drawNameAt(sun.name, colors.forName, it)
+                    drawNameAt(sun.name, clr.forName, it)
                 }
             }
         }
@@ -54,10 +57,10 @@ class SkyDraw() {
     fun drawMoon(moon: IElement, bitmap: Bitmap) =
         getPosition(moon)?.let {
             if (isOnScreen(it)) {
-                val colors: IStarColors = colors.getStarColors(ReferenceType.Default)
+                val clr: IStarColors = colors.getStarColors(ReferenceType.Default)
                 drawImageAt(bitmap, it)
                 if (options.displayPlanetNames) {
-                    drawNameAt(moon.name, colors.forName, it)
+                    drawNameAt(moon.name, clr.forName, it)
                 }
             }
         }
@@ -65,10 +68,10 @@ class SkyDraw() {
     fun drawPlanet(planet: IElement, bitmap: Bitmap) =
         getPosition(planet)?.let {
             if (isOnScreen(it)) {
-                val colors: IStarColors = colors.getStarColors(ReferenceType.Default)
+                val clr: IStarColors = colors.getStarColors(ReferenceType.Default)
                 drawImageAt(bitmap, it)
                 if (options.displayPlanetNames) {
-                    drawNameAt(planet.name, colors.forName, it)
+                    drawNameAt(planet.name, clr.forName, it)
                 }
             }
         }
@@ -76,31 +79,44 @@ class SkyDraw() {
     fun drawTarget(target: com.stho.nyota.sky.universe.Target, bitmap: Bitmap) =
         getPosition(target)?.let {
             if (isOnScreen(it)) {
-                val colors: IStarColors = colors.getStarColors(ReferenceType.Default)
+                val clr: IStarColors = colors.getStarColors(ReferenceType.Default)
                 drawImageAt(bitmap, it)
-                drawNameAt(target.name, colors.forName, it)
+                drawNameAt(target.name, clr.forName, it)
             }
         }
 
-    fun drawSpecial(special: SpecialElement) =
-        getPosition(special)?.let {
+    fun drawNameOf(element: IElement) =
+        getPosition(element)?.let {
             if (isOnScreen(it)) {
-                val colors: IStarColors = colors.getStarColors(ReferenceType.Default)
-                drawNameAt(special.name, colors.forName, it)
+                val clr: IStarColors = colors.getStarColors(ReferenceType.Default)
+                drawNameAt(element.name, clr.forName, it)
             }
         }
 
-    fun drawStar(star: Star, referenceType: ReferenceType = ReferenceType.Default) =
+    fun drawGalaxy(galaxy: Galaxy, referenceType: ReferenceType) =
+        getPosition(galaxy)?.let {
+            if (isOnScreen(it)) {
+                val clr: IStarColors = colors.getStarColors(referenceType)
+
+                drawCircleAt(5f, clr.forStar, 255, it)
+
+                when {
+                    options.displayPlanetNames -> drawNameAt(galaxy.name, colors.forGalaxy, it)
+                }
+            }
+        }
+
+    fun drawStar(star: Star, referenceType: ReferenceType) =
         getPosition(star)?.let {
             if (isOnScreen(it) && star.isBrighterThan(options.magnitude)) {
                 val luminosity = getLuminosity(star)
-                val colors: IStarColors = colors.getStarColors(referenceType)
+                val clr: IStarColors = colors.getStarColors(referenceType)
 
-                drawCircleAt(luminosity.radius, colors.forStar, luminosity.alpha, it)
+                drawCircleAt(luminosity.radius, clr.forStar, luminosity.alpha, it)
 
                 when {
-                    canDrawStarName(star) -> drawNameAt(star.friendlyName, colors.forName, it)
-                    canDrawStarSymbol(star) -> drawNameAt(star.symbol.greekSymbol, colors.forSymbol, it);
+                    canDrawStarName(star) -> drawNameAt(star.friendlyName, clr.forName, it)
+                    canDrawStarSymbol(star) -> drawNameAt(star.symbol.greekSymbol, clr.forSymbol, it);
                 }
             }
         }
@@ -111,8 +127,8 @@ class SkyDraw() {
     private fun canDrawStarSymbol(star: Star): Boolean =
         options.displaySymbols && star.hasSymbol
 
-    fun drawConstellation(constellation: Constellation, referenceType: ReferenceType = ReferenceType.Default) {
-        val colors = colors.getConstellationColors(referenceType)
+    fun drawConstellation(constellation: Constellation, referenceType: ReferenceType) {
+        val clr = colors.getConstellationColors(referenceType)
 
         for (star: Star in constellation.stars) {
             drawStar(star, referenceType);
@@ -120,11 +136,11 @@ class SkyDraw() {
 
         if (canDrawConstellationLines(referenceType)) {
             for (line in constellation.lines) {
-                drawLine(line, colors.forLine);
+                drawLine(line, clr.forLine);
             }
         }
         if (canDrawConstellationName(referenceType)) {
-            drawName(constellation.position, constellation.name, colors.forName)
+            drawName(constellation.position, constellation.name, clr.forName)
         }
     }
 
@@ -150,13 +166,28 @@ class SkyDraw() {
     fun drawElement(position: Topocentric, name: String, luminosity: Luminosity) =
         calculatePosition(position)?.let {
             if (isOnScreen(it)) {
-                val colors = colors.getStarColors(ReferenceType.Default)
-                val fm = colors.forName.fontMetrics
+                val clr = colors.getStarColors(ReferenceType.Default)
+                val fm = clr.forName.fontMetrics
                 val h = fm.descent - fm.ascent;
-                drawNameAt(name, colors.forName, SkyPointF(it.x + h, it.y + h / 2))
-                drawCircleAt(luminosity.radius, colors.forStar, luminosity.alpha, it)
+                drawNameAt(name, clr.forName, SkyPointF(it.x + h, it.y + h / 2))
+                drawCircleAt(luminosity.radius, clr.forStar, luminosity.alpha, it)
             }
         }
+
+    fun drawSensitivityArea(position: Topocentric, sensitivityAngle: Double) =
+        calculatePosition(position)?.let {
+            if (isOnScreen(it)) {
+                val azimuthSensitivity = sensitivityAngle / position.azimuthDistanceFactor
+                path.reset();
+                calculatePosition(position.azimuth + azimuthSensitivity, position.altitude + sensitivityAngle)?.apply { path.moveTo(this.x, this.y) }
+                calculatePosition(position.azimuth + azimuthSensitivity, position.altitude - sensitivityAngle)?.apply { path.lineTo(this.x, this.y) }
+                calculatePosition(position.azimuth - azimuthSensitivity, position.altitude - sensitivityAngle)?.apply { path.lineTo(this.x, this.y) }
+                calculatePosition(position.azimuth - azimuthSensitivity, position.altitude + sensitivityAngle)?.apply { path.lineTo(this.x, this.y) }
+                calculatePosition(position.azimuth + azimuthSensitivity, position.altitude + sensitivityAngle)?.apply { path.lineTo(this.x, this.y) }
+                canvas.drawPath(path, colors.forSensitivity);
+            }
+        }
+
 
     private fun drawName(position: Topocentric?, name: String, color: Paint) =
         calculatePosition(position)?.let {

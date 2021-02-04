@@ -28,6 +28,10 @@ class OptionsSkyView(context: Context?, attrs: AttributeSet?) : AbstractSkyView(
         drawElement(Topocentric(-10.0, -10.0), "+5.55 ...", Luminosity.create(5.55, options))
         drawElement(Topocentric(-10.0, -14.0), "+7.77 ...", Luminosity.create(7.77, options))
     }
+
+    override fun applyScale(scaleFactor: Double) {
+        super.applyScale(scaleFactor)
+    }
 }
 
 

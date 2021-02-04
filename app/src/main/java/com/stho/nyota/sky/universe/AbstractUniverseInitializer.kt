@@ -10,14 +10,15 @@ abstract class AbstractUniverseInitializer(protected var universe: Universe) {
     fun getStar(hd: Int): Star =
         universe.stars[hd] ?: throw Exception("Star $hd was not initialized yet")
 
-    fun getStar(name: String): Star =
-        universe.stars.findStarByName(name) ?: throw Exception("Star $name was not initialized yet")
-
     fun newGalaxy(name: String, imageId: Int, ascension: String, declination: String, brightness: Double, distance: Double): Galaxy =
-        newGalaxy(name, imageId, Hour.fromHour(ascension), Degree.fromDegree(declination), brightness, distance)
+        Galaxy(name, imageId, Hour.fromHour(ascension).angleInDegree, Degree.fromDegree(declination).angleInDegree, brightness, distance).also {
+            universe.galaxies.add(it)
+        }
 
-    private fun newGalaxy(name: String, imageId: Int, ascension: Hour, declination: Degree, brightness: Double, distance: Double): Galaxy =
-        Galaxy(name, imageId, ascension.angleInDegree, declination.angleInDegree, brightness, distance)
+    fun newAnything(name: String, ascension: String, declination: String, brightness: Double, distance: Double): Anything =
+        Anything(name, Hour.fromHour(ascension).angleInDegree, Degree.fromDegree(declination).angleInDegree, brightness, distance).also {
+            universe.any.add(it)
+        }
 
     fun newSatellite(name: String, displayName: String, noradSatelliteNumber: Int, elements: String): Satellite =
         universe.satellites.findSatelliteByName(name) ?:

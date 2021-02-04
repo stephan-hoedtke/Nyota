@@ -63,6 +63,9 @@ abstract class AbstractElement(var RA: Double = 0.0, var Decl: Double = 0.0, var
     override fun isNear(otherPosition: Topocentric, toleranceInDegree: Double): Boolean =
         position?.isNear(otherPosition, toleranceInDegree) ?: false
 
+    override fun isNear(otherPosition: Topocentric, azimuthTolerance: Double, altitudeTolerance: Double): Boolean =
+        position?.isNear(otherPosition, azimuthTolerance, altitudeTolerance) ?: false
+
     override fun distanceTo(otherPosition: Topocentric): Double =
         position?.distanceTo(otherPosition) ?: INVALID_DISTANCE
 

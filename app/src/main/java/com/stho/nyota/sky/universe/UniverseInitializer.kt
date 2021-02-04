@@ -29,7 +29,7 @@ class UniverseInitializer(universe: Universe) : AbstractUniverseInitializer(univ
             registerAra()
             registerAries()
             registerAuriga()
-            registerCamaeleon()
+            registerChamaeleon()
             registerCancer()
             registerCapricornus()
             registerCassiopeia()
@@ -47,7 +47,6 @@ class UniverseInitializer(universe: Universe) : AbstractUniverseInitializer(univ
             registerPegasus()
             registerPerseus()
             registerPisces()
-            registerPleiades()
             registerSagittarius()
             registerScorpius()
             registerTaurus()
@@ -56,9 +55,13 @@ class UniverseInitializer(universe: Universe) : AbstractUniverseInitializer(univ
             registerUrsaMinor()
             registerVirgo()
             registerBootes()
+            registerCentaurus()
+            registerAntlia()
+            registerApus()
             registerSatellite()
             registerSpecialElements()
             registerGalaxies()
+            registerAnything()
             rebuild()
         } catch (ex: Exception) {
             Log.d("ERROR", ex.toString())
@@ -239,13 +242,6 @@ class UniverseInitializer(universe: Universe) : AbstractUniverseInitializer(univ
     private fun registerCassiopeia() {
         universe.constellations[Constellation.Cassiopeia]
             .line(Symbol.Beta, Symbol.Alpha, Symbol.Gamma, Symbol.Delta, Symbol.Epsilon)
-    }
-
-    // seven sisters,
-    // https://en.wikipedia.org/wiki/Pleiades
-    private fun registerPleiades() {
-        // TODO: its not a constellation. How to register them...
-        // val pleiades = universe.constellations["Pleiades"]
     }
 
     // https://en.wikipedia.org/wiki/Pegasus_(constellation)
@@ -479,23 +475,24 @@ class UniverseInitializer(universe: Universe) : AbstractUniverseInitializer(univ
     // Musca = Fly
     // https://en.wikipedia.org/wiki/Musca#/media/File:Musca_IAU.svg
     private fun registerMusca() {
-        // Start alpha =
-        // newConstellation("Musca", R.drawable.musca)
-        //        .register(...);
-        // TODO
+        universe.constellations[Constellation.Musca]
+            .line(Symbol.Lambda, Symbol.Mu, Symbol.Epsilon, Symbol.Alpha, Symbol.Beta, Symbol.Delta, Symbol.Gamma, Symbol.Alpha)
     }
 
     // https://de.wikipedia.org/wiki/Cham%C3%A4leon_(Sternbild)
-    private fun registerCamaeleon() {
-        // Start alpha =
-        // newConstellation("Chamaeleon", R.drawable.chamaeleon)
-        //        .register(...);
-        // TODO
+    private fun registerChamaeleon() {
+        universe.constellations[Constellation.Chamaeleon]
+            .line(Symbol.Alpha, Symbol.Theta, Symbol.Gamma, Symbol.Delta, Symbol.Beta, Symbol.Epsilon, Symbol.Gamma)
     }
 
     // https://de.wikipedia.org/wiki/Zentaur_(Sternbild)
     private fun registerCentaurus() {
-        // TODO
+        universe.constellations[Constellation.Centaurus]
+            .line(Symbol.Pi, Symbol.Delta, Symbol.Sigma, Symbol.Rho, Symbol.Omicron)
+            .line(Symbol.Sigma, Symbol.Gamma, Symbol.Epsilon, Symbol.Beta, Symbol.Alpha)
+            .line(Symbol.Tau, Symbol.Zeta, Symbol.Mu, Symbol.Nu, Symbol.Theta, Symbol.Psi, Symbol.Chi, Symbol.Phi, Symbol.Upsilon, Symbol.Zeta, Symbol.Epsilon)
+            .line(Symbol.Iota, Symbol.Nu)
+            .line(Symbol.Phi, Symbol.Eta)
     }
 
     // https://de.wikipedia.org/wiki/Pfau_(Sternbild)
@@ -509,7 +506,7 @@ class UniverseInitializer(universe: Universe) : AbstractUniverseInitializer(univ
     // https://de.wikipedia.org/wiki/Achernar
     private fun registerEridanus() {
         universe.constellations[Constellation.Eridanus]
-            .line(Symbol.Alpha, Symbol.Chi, Symbol.Phi, Symbol.Kappa, Symbol.Iota, Symbol.Delta, Symbol.Upsilon, Symbol.Tau)
+            .line(Symbol.Alpha, Symbol.Chi, Symbol.Phi, Symbol.Kappa, Symbol.Iota, Symbol.Upsilon, Symbol.Tau)
             .line(Symbol.Tau, Symbol.Eta, Symbol.Epsilon, Symbol.Delta, Symbol.Gamma, Symbol.Nu, Symbol.Mu, Symbol.Beta)
     }
 
@@ -518,6 +515,17 @@ class UniverseInitializer(universe: Universe) : AbstractUniverseInitializer(univ
         universe.constellations[Constellation.Bootes]
             .line(Symbol.Alpha, Symbol.Rho, Symbol.Gamma, Symbol.Beta, Symbol.Delta, Symbol.Epsilon, Symbol.Alpha)
             .line(Symbol.Tau, Symbol.Eta, Symbol.Alpha, Symbol.Zeta)
+    }
+
+    // https://www.iau.org/public/themes/constellations/
+    private fun registerAntlia() {
+        universe.constellations[Constellation.Antlia]
+            .line(Symbol.Epsilon, Symbol.Alpha, Symbol.Iota)
+    }
+
+    private fun registerApus() {
+        universe.constellations[Constellation.Apus]
+            .line(Symbol.Alpha, Symbol.Delta, Symbol.Beta, Symbol.Gamma, Symbol.Delta)
     }
 
     // https://www.space.com/32054-satellite-tracker.html
@@ -551,6 +559,17 @@ class UniverseInitializer(universe: Universe) : AbstractUniverseInitializer(univ
 
         // TODO add other galaxies
         // TODO draw galaxies
+    }
+
+    private fun registerAnything() {
+
+        // seven sisters,
+        // https://en.wikipedia.org/wiki/Pleiades
+        newAnything("Pleiades", ascension = "03h 47m 24", "+24° 07′ 00", 1.6, 444.0)
+
+        // https://en.wikipedia.org/wiki/Orion_Nebula
+        newAnything("Orion Nebula", ascension = "05h 35m 17.3", "−05° 23′ 28", 4.0, 1344.0)
+
     }
 
     private fun registerSpecialElements() {

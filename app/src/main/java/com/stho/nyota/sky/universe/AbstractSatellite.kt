@@ -58,4 +58,14 @@ abstract class AbstractSatellite : IElement {
 
     override val isVisible: Boolean
         get() = Topocentric.isVisible(position)
+
+    override fun isNear(otherPosition: Topocentric, toleranceInDegree: Double): Boolean =
+        position?.isNear(otherPosition, toleranceInDegree) ?: false
+
+    override fun isNear(otherPosition: Topocentric, azimuthTolerance: Double, altitudeTolerance: Double): Boolean =
+        position?.isNear(otherPosition, azimuthTolerance, altitudeTolerance) ?: false
+
+    override fun distanceTo(otherPosition: Topocentric): Double =
+        position?.distanceTo(otherPosition) ?: Topocentric.INVALID_DISTANCE
+
 }

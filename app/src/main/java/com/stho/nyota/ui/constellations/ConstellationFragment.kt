@@ -198,11 +198,11 @@ class ConstellationFragment : AbstractElementFragment() {
         findNavController().navigate(R.id.action_global_nav_star, bundleOf("STAR" to star.key))
 
     private fun onZoomIn() {
-        binding.sky.options.applyScale(1.1)
+        binding.sky.applyScale(1.1)
     }
 
     private fun onZoomOut() {
-        binding.sky.options.applyScale(1 / 1.1)
+        binding.sky.applyScale(1 / 1.1)
     }
 
     private fun getKeyFromArguments(): String? =

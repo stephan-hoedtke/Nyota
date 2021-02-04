@@ -5,6 +5,7 @@ import android.os.Debug
 import android.util.Log
 import com.stho.nyota.sky.utilities.Degree
 import com.stho.nyota.sky.utilities.Point
+import com.stho.nyota.sky.utilities.Radian
 import com.stho.nyota.sky.utilities.Topocentric
 import com.stho.nyota.views.SkyPoint
 import com.stho.nyota.views.SkyPointF
@@ -31,8 +32,8 @@ abstract class AbstractSphereProjection: ISphereProjection {
         sin = Degree.sin(centerAltitude)
     }
 
-    override val sensibilityAngle: Double
-        get() = 1 / zoom
+    override val sensitivityAngle: Double
+        get() = Radian.toDegrees(1 / zoom)
 
     override fun calculateZoomImagePoint(azimuth: Double, altitude: Double): SkyPointF? =
         calculateImagePoint(azimuth, altitude)?.let {

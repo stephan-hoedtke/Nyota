@@ -62,22 +62,28 @@ class SkyView(context: Context?, attrs: AttributeSet?) : AbstractSkyView(context
         tippedElement?.let {
             onDrawElement(it, ReferenceType.TippedStar)
         }
+        tippedPosition?.let {
+            drawSensitivityArea(it)
+        }
     }
 
     private fun onDrawUniverse(universe: Universe) {
         for (special in universe.specials) {
-            super.drawSpecial(special)
+            super.drawNameOf(special)
+        }
+        for (anything in universe.any) {
+            super.drawNameOf(anything)
         }
         for (constellation in universe.constellations.values) {
-            super.drawConstellation(constellation)
+            super.drawConstellation(constellation, referenceType = ReferenceType.Default)
         }
         for (star in universe.vip) {
-            super.drawStar(star)
+            super.drawStar(star, referenceType = ReferenceType.Default)
         }
-        for (star in universe.extra) {
-            super.drawStar(star)
+        for (galaxy in universe.galaxies.values) {
+            super.drawGalaxy(galaxy, referenceType = ReferenceType.Default)
         }
-        for (planet in universe.solarSystem.planets) {
+         for (planet in universe.solarSystem.planets) {
             super.drawPlanet(planet)
         }
         if (options.displayTargets) {
@@ -99,6 +105,7 @@ class SkyView(context: Context?, attrs: AttributeSet?) : AbstractSkyView(context
         when (element) {
             is Star -> super.drawStar(element, referenceType)
             is Constellation -> super.drawConstellation(element, referenceType)
+            is Galaxy -> super.drawGalaxy(element, referenceType)
         }
     }
 }

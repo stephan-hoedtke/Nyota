@@ -62,13 +62,16 @@ class ConstellationSkyView(context: Context?, attrs: AttributeSet?) : AbstractSk
 
     override fun onDrawElements() {
         constellation?.let {
-            drawConstellation(it)
+            drawConstellation(it, ReferenceType.Default)
         }
         referenceStar?.let {
             drawStar(it, ReferenceType.Reference)
         }
         tippedStar?.let {
             drawStar(it, ReferenceType.TippedStar)
+        }
+        tippedPosition?.let {
+            drawSensitivityArea(it)
         }
     }
 }

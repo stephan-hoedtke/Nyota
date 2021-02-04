@@ -42,7 +42,7 @@ class Satellites {
             null
 
     fun findSatelliteByName(satelliteName: String?): Satellite? =
-        array.find { s -> s.name == satelliteName }
+        satelliteName?.let { array.find { s -> s.name == it } }
 
     fun findSatelliteByKey(key: String): Satellite? =
         when (Satellite.isValidKey(key)) {
@@ -52,9 +52,6 @@ class Satellites {
             }
             false -> null
         }
-
-    fun first(): Satellite =
-        array.first()
 
     val values: List<Satellite>
         get() = array

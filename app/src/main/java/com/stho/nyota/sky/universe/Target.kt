@@ -50,10 +50,10 @@ class Target(override val name: String, val friendlyName: String, ra: Double, de
         private fun toKey(name: String) =
             "TARGET:$name"
 
-        fun isValidKey(key: String) =
+        fun isValidKey(key: String): Boolean =
             key.startsWith("TARGET:")
 
-        fun nameFromKey(key: String) =
+        fun nameFromKey(key: String): String =
             key.substring(7)
 
         fun createWithId(id: Long, name: String, friendlyName: String, ra: Double, decl: Double): Target {

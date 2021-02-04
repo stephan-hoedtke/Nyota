@@ -2,6 +2,7 @@ package com.stho.nyota.views
 
 import android.graphics.Color
 import android.graphics.Paint
+import kotlin.math.ln
 
 interface IStarColors {
     val forStar: Paint
@@ -18,6 +19,8 @@ interface ISkyDrawColors {
     val visibleGridColor: Paint // Dark Green
     val invisibleGridColor: Paint // Dark Blue
     val bitmapColor: Paint // White
+    val forGalaxy: Paint // Gray
+    val forSensitivity: Paint // Gray
 
     fun getStarColors(referenceType: ReferenceType): IStarColors
     fun getConstellationColors(referenceType: ReferenceType): IConstellationColors
@@ -42,6 +45,8 @@ class SkyDrawColors: ISkyDrawColors {
     override val visibleGridColor: Paint = txt(green, 110)
     override val invisibleGridColor: Paint = txt(blue, 140)
     override val bitmapColor: Paint = txt(white, 255)
+    override val forGalaxy: Paint = txt(gray, 150)
+    override val forSensitivity: Paint = lnl(gray, alpha = 150)
 
     override fun getStarColors(referenceType: ReferenceType): IStarColors =
         when (referenceType) {

@@ -30,11 +30,9 @@ interface ISkyViewSettings
     Implement by SkyViewOptions and SimpleSkyViewOptions, not persisted
  */
 interface ISkyViewOptions: ISkyViewSettings {
-    var zoomAngle: Double
     var radius: Double
     var gamma: Double
     var alpha: Double
-    fun applyScale(scaleFactor: Double)
 }
 
 abstract class SkyViewOptions: ISkyViewOptions {
@@ -76,19 +74,6 @@ abstract class SkyViewOptions: ISkyViewOptions {
             }
         }
 
-    override var zoomAngle: Double = DEFAULT_ZOOM_ANGLE
-        set(value) {
-            val validZoomAngle = value.coerceIn(MIN_ZOOM_ANGLE, MAX_ZOOM_ANGLE)
-            if (field != validZoomAngle) {
-                field = validZoomAngle
-                touch()
-            }
-        }
-
-    override fun applyScale(scaleFactor: Double) {
-        zoomAngle /= scaleFactor
-    }
-
     companion object {
         const val MAX_MAGNITUDE: Double = 10.0
         const val MIN_MAGNITUDE: Double = 0.0
@@ -100,8 +85,6 @@ abstract class SkyViewOptions: ISkyViewOptions {
         const val MAX_GAMMA: Double = 20.0
         const val MIN_ALPHA: Double = 0.01
         const val MAX_ALPHA: Double = 1.00
-
-        const val DEFAULT_ZOOM_ANGLE = 45.0
 
         internal fun brightnessToPercent(f: Double): Int =
             valueToPercent(f, MIN_MAGNITUDE, MAX_MAGNITUDE)
