@@ -36,10 +36,10 @@ class LuminosityCalculator(private val r0: Double, private val Mt: Double, priva
             LuminosityCalculator(options.radius, targetMagnitude(zoomAngle).pow(options.lambda), 1.0, options.gamma)
 
         private fun targetMagnitude(zoomAngle: Double): Double =
-        // 10 --> 10.0
-        // 20 --> 5.0
-        // 30 --> 4.0
-        // 45 --> 3.0
+            // 10 --> 10.0
+            // 20 --> 5.0
+            // 30 --> 4.0
+            // 45 --> 3.0
             // 90 --> 2.0
             when {
                 zoomAngle > 90.0 -> 2.0

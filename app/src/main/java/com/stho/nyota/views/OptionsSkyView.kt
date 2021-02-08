@@ -31,10 +31,6 @@ class OptionsSkyView(context: Context?, attrs: AttributeSet?) : AbstractSkyView(
         draw(-14.0, 7.77)
     }
 
-    override fun applyScale(scaleFactor: Double) {
-        super.applyScale(scaleFactor)
-    }
-
     private fun draw(altitude: Double, magnitude: Double) {
         val calculator = LuminosityCalculator.create(zoomAngle, options)
         val luminosity = calculator.calculate(magnitude)

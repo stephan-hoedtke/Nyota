@@ -27,7 +27,6 @@ class Constellation internal constructor(val id: Long, val rank: Int, override v
         UrsaMajor -> R.drawable.constellation_urs_major
         UrsaMinor -> R.drawable.constellation_urs_minor
         Cassiopeia -> R.drawable.constellation_cassiopeia
-        //TODO Pleiades -> R.drawable.constellation_pleiades
         Pegasus -> R.drawable.constellation_pegasus
         Andromeda -> R.drawable.constellation_andromeda
         Aquila -> R.drawable.constellation_aquila
@@ -57,6 +56,10 @@ class Constellation internal constructor(val id: Long, val rank: Int, override v
         Musca -> R.drawable.constellation_musca
         Antlia -> R.drawable.constellation_antlia
         Apus -> R.drawable.constellation_apus
+        Puppis -> R.drawable.constellation_puppis
+        CanisMajor -> R.drawable.constellation_canis_major
+        CanisMinor -> R.drawable.constellation_canis_minor
+        Dorado -> R.drawable.constellation_dorado
         else -> R.drawable.constellation
     }
 

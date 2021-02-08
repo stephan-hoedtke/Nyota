@@ -58,6 +58,10 @@ class UniverseInitializer(universe: Universe) : AbstractUniverseInitializer(univ
             registerCentaurus()
             registerAntlia()
             registerApus()
+            registerPuppis()
+            registerCanisMajor()
+            registerCanisMinor()
+            registerDorado()
             registerSatellite()
             registerSpecialElements()
             registerGalaxies()
@@ -527,6 +531,32 @@ class UniverseInitializer(universe: Universe) : AbstractUniverseInitializer(univ
         universe.constellations[Constellation.Apus]
             .line(Symbol.Alpha, Symbol.Delta, Symbol.Beta, Symbol.Gamma, Symbol.Delta)
     }
+
+    private fun registerPuppis() {
+        universe.constellations[Constellation.Puppis]
+            .line(Symbol.Rho, Symbol.Xi, Symbol.Pi, Symbol.Nu, Symbol.Tau, Symbol.Sigma, Symbol.Zeta, Symbol.Pi)
+    }
+
+    private fun registerCanisMajor() {
+        universe.constellations[Constellation.CanisMajor]
+            .line(Symbol.Beta, Symbol.Alpha, Symbol.Delta, Symbol.Eta)
+            .line(Symbol.Delta, Symbol.Epsilon, Symbol.Zeta)
+    }
+
+    private fun registerCanisMinor() {
+        universe.constellations[Constellation.CanisMinor]
+            .line(Symbol.Alpha, Symbol.Beta)
+    }
+
+    private fun registerDorado() {
+        val dorado = universe.constellations[Constellation.Dorado]
+
+        getStar(40409).also { dorado.register(Symbol.One, it) }
+
+        dorado
+            .line(Symbol.Gamma, Symbol.Alpha, Symbol.Zeta, Symbol.Beta, Symbol.One, Symbol.Delta, Symbol.Beta, Symbol.Alpha)
+    }
+
 
     // https://www.space.com/32054-satellite-tracker.html
     // https://www.space.com/6870-spot-satellites.html
