@@ -11,11 +11,11 @@ import com.stho.nyota.sky.utilities.projections.ISphereProjection
 import com.stho.nyota.ui.sky.ISkyViewOptions
 import java.util.*
 import kotlin.math.abs
-import kotlin.math.cos
 
 
 class SkyDraw() {
 
+    private var calculator: LuminosityCalculator? = null
     private val positions: HashMap<IElement, SkyPointF> = HashMap()
     private val luminos: HashMap<Star, Luminosity> = HashMap()
     private var colors: ISkyDrawColors = SkyDrawColors()
@@ -39,6 +39,7 @@ class SkyDraw() {
     }
 
     fun touch() {
+        calculator = null
         luminos.clear()
         positions.clear()
     }
@@ -273,7 +274,10 @@ class SkyDraw() {
         get() = Topocentric(Ten.nearest15(center.azimuth), Ten.nearest10(center.altitude))
 
     private fun getLuminosity(star: Star): Luminosity =
-        luminos[star] ?: Luminosity.create(star.magn, options).also { luminos[star] = it }
+        luminos[star] ?: getLuminosityCalculator().calculate(star.magn).also { luminos[star] = it }
+
+    private fun getLuminosityCalculator(): LuminosityCalculator =
+        calculator ?: LuminosityCalculator.create(projection.zoomAngle, options).also { calculator = it }
 
     private fun getPosition(element: IElement): SkyPointF? =
         positions[element] ?: calculatePosition(element.position)?.also { positions[element] = it }

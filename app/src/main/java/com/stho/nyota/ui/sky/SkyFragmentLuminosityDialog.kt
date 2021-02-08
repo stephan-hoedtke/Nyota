@@ -32,9 +32,9 @@ class SkyFragmentLuminosityDialog(private val options: SkyViewOptions): DialogFr
             options.gamma = SkyViewOptions.percentToGamma(progress)
             binding.textViewGamma.text = Formatter.df2.format(options.gamma)
         })
-        binding.seekBarAlpha.setOnSeekBarChangeListener(SeekBarAdapter() { progress ->
-            options.alpha = SkyViewOptions.percentToAlpha(progress)
-            binding.textViewAlpha.text = Formatter.df2.format(options.alpha)
+        binding.seekBarLambda.setOnSeekBarChangeListener(SeekBarAdapter() { progress ->
+            options.lambda = SkyViewOptions.percentToLambda(progress)
+            binding.textViewLambda.text = Formatter.df2.format(options.lambda)
         })
 
         return binding.root
@@ -53,8 +53,8 @@ class SkyFragmentLuminosityDialog(private val options: SkyViewOptions): DialogFr
         binding.seekBarRadius.progress = SkyViewOptions.radiusToPercent(options.radius)
         binding.textViewGamma.text = Formatter.df2.format(options.gamma)
         binding.seekBarGamma.progress = SkyViewOptions.gammaToPercent(options.gamma)
-        binding.textViewAlpha.text = Formatter.df2.format(options.alpha)
-        binding.seekBarAlpha.progress = SkyViewOptions.alphaToPercent(options.alpha)
+        binding.textViewLambda.text = Formatter.df2.format(options.lambda)
+        binding.seekBarLambda.progress = SkyViewOptions.lambdaToPercent(options.lambda)
     }
 
     private fun onOK() {

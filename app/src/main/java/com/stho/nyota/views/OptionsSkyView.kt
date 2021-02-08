@@ -3,11 +3,13 @@ package com.stho.software.nyota.views
 import android.content.Context
 import android.util.AttributeSet
 import com.stho.nyota.sky.universe.*
+import com.stho.nyota.sky.utilities.Formatter
 import com.stho.nyota.sky.utilities.Topocentric
 import com.stho.nyota.ui.sky.ISkyViewSettings
 import com.stho.nyota.ui.sky.SkyFragmentViewOptions
 import com.stho.nyota.views.AbstractSkyView
 import com.stho.nyota.views.Luminosity
+import com.stho.nyota.views.LuminosityCalculator
 import com.stho.nyota.views.ReferenceType
 
 /**
@@ -19,18 +21,25 @@ class OptionsSkyView(context: Context?, attrs: AttributeSet?) : AbstractSkyView(
         Topocentric(0.0, 0.0)
 
     override fun onDrawElements() {
-        drawElement(Topocentric(-10.0, 14.0), "-0.72 - Canopus", Luminosity.create(-0.72, options))
-        drawElement(Topocentric(-10.0, 10.0), "+0.03 - Vega", Luminosity.create(0.03, options))
-        drawElement(Topocentric(-10.0, 6.0), "+0.85 - Aldebaran", Luminosity.create(0.85, options))
-        drawElement(Topocentric(-10.0, 2.0), "+0.98 - Spica", Luminosity.create(0.98, options))
-        drawElement(Topocentric(-10.0, -2.0), "+2.02 - Polaris", Luminosity.create(2.02, options))
-        drawElement(Topocentric(-10.0, -6.0), "+4.36 - Yildun", Luminosity.create(4.36, options))
-        drawElement(Topocentric(-10.0, -10.0), "+5.55 ...", Luminosity.create(5.55, options))
-        drawElement(Topocentric(-10.0, -14.0), "+7.77 ...", Luminosity.create(7.77, options))
+        draw(14.0, -0.72)
+        draw(10.0, 0.03)
+        draw(6.0, 0.85)
+        draw(2.0, 0.98)
+        draw(-2.0, 2.02)
+        draw(-6.0, 4.36)
+        draw(-10.0, 5.55)
+        draw(-14.0, 7.77)
     }
 
     override fun applyScale(scaleFactor: Double) {
         super.applyScale(scaleFactor)
+    }
+
+    private fun draw(altitude: Double, magnitude: Double) {
+        val calculator = LuminosityCalculator.create(zoomAngle, options)
+        val luminosity = calculator.calculate(magnitude)
+        val fullName = "${Formatter.df2.format(magnitude)}:  α=${Formatter.df3.format(luminosity.alpha)}  r=${Formatter.df3.format(luminosity.radius)}"
+        drawElement(Topocentric(-20.0, altitude), fullName, luminosity)
     }
 }
 

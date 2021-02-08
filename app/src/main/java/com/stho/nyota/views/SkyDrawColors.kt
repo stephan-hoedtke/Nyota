@@ -35,8 +35,8 @@ class SkyDrawColors: ISkyDrawColors {
 
     private val defaultStarColors: IStarColors = StarColors(forStar = txt(white, 255), forName = txt(gray, 170), forSymbol = txt(gray, 200))
     private val referenceStarColors: IStarColors = StarColors(forStar = txt(orange, 255), forName = txt(orange, 210), forSymbol = txt(orange, 210))
-    private val tippedStarColors: IStarColors = StarColors(forStar = txt(red, 200), forName = txt(red, 200), forSymbol = txt(red, 200))
-    private val tippedConstellationStarColors: IStarColors = StarColors(forStar = txt(green, 200), forName = txt(green, 200), forSymbol = txt(green, 200))
+    private val tippedStarColors: IStarColors = StarColors(forStar = txt(red, 255), forName = txt(red, 200), forSymbol = txt(red, 200))
+    private val tippedConstellationStarColors: IStarColors = StarColors(forStar = txt(green, 255), forName = txt(green, 200), forSymbol = txt(green, 200))
 
     private val defaultConstellationColors: IConstellationColors = ConstellationColors(forName =  txt(yellow, 210), forLine = lnl(yellow, 170))
     private val referenceConstellationColors: IConstellationColors = ConstellationColors(forName =  txt(orange, 210), forLine = lnl(orange, 170))

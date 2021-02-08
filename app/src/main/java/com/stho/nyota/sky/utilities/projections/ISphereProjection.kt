@@ -13,6 +13,7 @@ interface ISphereProjection {
     fun calculateAngle(delta: Double): Double
     fun inverseZoomImagePoint(p: SkyPointF): Topocentric?
     val sensitivityAngle: Double
+    val zoomAngle: Double
 
     companion object {
         fun create(projection: Projection) =

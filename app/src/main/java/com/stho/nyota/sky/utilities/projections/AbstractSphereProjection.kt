@@ -16,14 +16,27 @@ import kotlin.math.sqrt
 abstract class AbstractSphereProjection: ISphereProjection {
 
     protected var zoom: Double = 1.0
+        private set
+
     protected var centerAzimuth = 0.0
+        private set
+
     protected var centerAltitude = 0.0
+        private set
+
     protected var cos = 0.0
+        private set
+
     protected var sin = 0.0
+        private set
 
     override fun setZoom(zoomAngle: Double, width: Int) {
-        zoom = 0.5 * width / Degree.tan(0.5 * zoomAngle)
+        this.zoomAngle = zoomAngle
+        this.zoom = 0.5 * width / Degree.tan(0.5 * zoomAngle)
     }
+
+    override var zoomAngle: Double = 0.0
+        protected set
 
     override fun setCenter(centerAzimuth: Double, centerAltitude: Double) {
         this.centerAzimuth = centerAzimuth

@@ -2,9 +2,7 @@ package com.stho.nyota.ui.sky
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.stho.nyota.sky.utilities.IProperty
 import com.stho.nyota.sky.utilities.projections.Projection
-import com.stho.nyota.views.AbstractSkyView
 
 // TODO: make ISkyViewSettings readonly (the view reads the data) and IMutableSkyViewSettings available to the fragment...
 
@@ -32,7 +30,7 @@ interface ISkyViewSettings
 interface ISkyViewOptions: ISkyViewSettings {
     var radius: Double
     var gamma: Double
-    var alpha: Double
+    var lambda: Double
 }
 
 abstract class SkyViewOptions: ISkyViewOptions {
@@ -56,7 +54,7 @@ abstract class SkyViewOptions: ISkyViewOptions {
             }
         }
 
-    override var gamma: Double = 15.0
+    override var gamma: Double = 0.4
         set(value) {
             val validGamma = value.coerceIn(MIN_GAMMA, MAX_GAMMA)
             if (field != validGamma) {
@@ -65,11 +63,11 @@ abstract class SkyViewOptions: ISkyViewOptions {
             }
         }
 
-    override var alpha: Double = 0.36
+    override var lambda: Double = 1.3
         set(value) {
-            val validAlpha = value.coerceIn(MIN_ALPHA, MAX_ALPHA)
-            if (field != validAlpha) {
-                field = validAlpha
+            val validLambda = value.coerceIn(MIN_LAMBDA, MAX_LAMBDA)
+            if (field != validLambda) {
+                field = validLambda
                 touch()
             }
         }
@@ -82,9 +80,9 @@ abstract class SkyViewOptions: ISkyViewOptions {
         const val MIN_RADIUS: Double = 1.0
         const val MAX_RADIUS: Double = 10.0
         const val MIN_GAMMA: Double = 0.01
-        const val MAX_GAMMA: Double = 20.0
-        const val MIN_ALPHA: Double = 0.01
-        const val MAX_ALPHA: Double = 1.00
+        const val MAX_GAMMA: Double = 3.00
+        const val MIN_LAMBDA: Double = 0.01
+        const val MAX_LAMBDA: Double = 3.00
 
         internal fun brightnessToPercent(f: Double): Int =
             valueToPercent(f, MIN_MAGNITUDE, MAX_MAGNITUDE)
@@ -104,11 +102,11 @@ abstract class SkyViewOptions: ISkyViewOptions {
         internal fun percentToGamma(i: Int): Double =
             percentToValue(i, MIN_GAMMA, MAX_GAMMA)
 
-        internal fun alphaToPercent(f: Double): Int =
-            valueToPercent(f, MIN_ALPHA, MAX_ALPHA)
+        internal fun lambdaToPercent(f: Double): Int =
+            valueToPercent(f, MIN_LAMBDA, MAX_LAMBDA)
 
-        internal fun percentToAlpha(i: Int): Double =
-            percentToValue(i, MIN_ALPHA, MAX_ALPHA)
+        internal fun percentToLambda(i: Int): Double =
+            percentToValue(i, MIN_LAMBDA, MAX_LAMBDA)
 
         private fun valueToPercent(f: Double, min: Double, max: Double): Int =
             (100 * (f - min) / (max - min) + 0.5).toInt()
