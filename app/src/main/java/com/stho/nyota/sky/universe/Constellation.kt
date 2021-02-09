@@ -21,45 +21,55 @@ class Constellation internal constructor(val id: Long, val rank: Int, override v
     private val translations: EnumMap<Language, String> = EnumMap(Language::class.java)
 
     override val imageId: Int = when (rank) {
-        Crux -> R.drawable.constellation_cross
-        TriangulumAustrale -> R.drawable.constellation_triangulum_australe
-        Orion -> R.drawable.constellation_orion
-        UrsaMajor -> R.drawable.constellation_urs_major
-        UrsaMinor -> R.drawable.constellation_urs_minor
-        Cassiopeia -> R.drawable.constellation_cassiopeia
-        Pegasus -> R.drawable.constellation_pegasus
         Andromeda -> R.drawable.constellation_andromeda
-        Aquila -> R.drawable.constellation_aquila
-        Cygnus -> R.drawable.constellation_cygnus
-        Lacerta -> R.drawable.constellation_lacerta
-        Ara -> R.drawable.constellation_ara
-        Hydra -> R.drawable.constellation_hydra
-        Aries -> R.drawable.constellation_aries
-        Taurus -> R.drawable.constellation_taurus
-        Gemini -> R.drawable.constellation_gemini
-        Cancer -> R.drawable.constellation_cancer
-        Leo -> R.drawable.constellation_leo
-        Virgo -> R.drawable.constellation_virgo
-        Libra -> R.drawable.constellation_libra
-        Scorpius -> R.drawable.constellation_scorpius
-        Sagittarius -> R.drawable.constellation_sagittarius
-        Capricornus -> R.drawable.constellation_capricornus
-        Aquarius -> R.drawable.constellation_aquarius
-        Pisces -> R.drawable.constellation_pisces
-        Auriga -> R.drawable.constellation_auriga
-        Perseus -> R.drawable.constellation_perseus
-        Pavo -> R.drawable.constellation_pavo
-        Bootes -> R.drawable.constellation_bootes
-        Eridanus -> R.drawable.constellation_eridanus
-        Centaurus -> R.drawable.constellation_centaurus
-        Chamaeleon -> R.drawable.constellation_chamaeleon
-        Musca -> R.drawable.constellation_musca
         Antlia -> R.drawable.constellation_antlia
         Apus -> R.drawable.constellation_apus
-        Puppis -> R.drawable.constellation_puppis
+        Aquarius -> R.drawable.constellation_aquarius
+        Aquila -> R.drawable.constellation_aquila
+        Ara -> R.drawable.constellation_ara
+        Aries -> R.drawable.constellation_aries
+        Auriga -> R.drawable.constellation_auriga
+        Bootes -> R.drawable.constellation_bootes
+        Caelum -> R.drawable.constellation_caelum
+        Camelopardalis -> R.drawable.constellation_camelopardalis
+        Cancer -> R.drawable.constellation_cancer
+        CanesVenatici -> R.drawable.constellation_canes_venatici
         CanisMajor -> R.drawable.constellation_canis_major
         CanisMinor -> R.drawable.constellation_canis_minor
+        Capricornus -> R.drawable.constellation_capricornus
+        Carina -> R.drawable.constellation_carina
+        Cassiopeia -> R.drawable.constellation_cassiopeia
+        Centaurus -> R.drawable.constellation_centaurus
+        Cepheus -> R.drawable.constellation_cepheus
+        Chamaeleon -> R.drawable.constellation_chamaeleon
+        Crater -> R.drawable.constellation_crater
+        Crux -> R.drawable.constellation_cross
+        Cygnus -> R.drawable.constellation_cygnus
         Dorado -> R.drawable.constellation_dorado
+        Eridanus -> R.drawable.constellation_eridanus
+        Fornax -> R.drawable.constellation_fornax
+        Gemini -> R.drawable.constellation_gemini
+        Hydra -> R.drawable.constellation_hydra
+        Lacerta -> R.drawable.constellation_lacerta
+        Leo -> R.drawable.constellation_leo
+        Libra -> R.drawable.constellation_libra
+        Musca -> R.drawable.constellation_musca
+        Orion -> R.drawable.constellation_orion
+        Pavo -> R.drawable.constellation_pavo
+        Pegasus -> R.drawable.constellation_pegasus
+        Perseus -> R.drawable.constellation_perseus
+        Pisces -> R.drawable.constellation_pisces
+        Puppis -> R.drawable.constellation_puppis
+        Sagittarius -> R.drawable.constellation_sagittarius
+        Scorpius -> R.drawable.constellation_scorpius
+        Sculptor -> R.drawable.constellation_sculpture
+        Taurus -> R.drawable.constellation_taurus
+        Triangulum -> R.drawable.constellation_triangulum
+        TriangulumAustrale -> R.drawable.constellation_triangulum_australe
+        UrsaMajor -> R.drawable.constellation_urs_major
+        UrsaMinor -> R.drawable.constellation_urs_minor
+        Virgo -> R.drawable.constellation_virgo
+        Vulpecula -> R.drawable.constellation_vulpecula
         else -> R.drawable.constellation
     }
 
@@ -109,12 +119,13 @@ class Constellation internal constructor(val id: Long, val rank: Int, override v
      *      HD 358 "Alpheratz" = Alpha Andromeda = Delta Pegasus
      *      HD 212593 = 1 Lacerta
      */
-    fun register(symbol: Symbol, star: Star) {
+    fun register(symbol: Symbol, star: Star): Constellation {
         if (!stars.contains(star)) {
             stars.add(star)
             star.register(this)
         }
         map[symbol] = star
+        return this
     }
 
     fun build(): Constellation {

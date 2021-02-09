@@ -23,47 +23,9 @@ class UniverseInitializer(universe: Universe) : AbstractUniverseInitializer(univ
     fun initialize() {
         try {
             registerVIP()
-            registerAndromeda()
-            registerAquarius()
-            registerAquila()
-            registerAra()
-            registerAries()
-            registerAuriga()
-            registerChamaeleon()
-            registerCancer()
-            registerCapricornus()
-            registerCassiopeia()
-            registerCrux()
-            registerCygnus()
-            registerEridanus()
-            registerGemini()
-            registerHydra()
-            registerLacerta()
-            registerLeo()
-            registerLibra()
-            registerMusca()
-            registerOrion()
-            registerPavo()
-            registerPegasus()
-            registerPerseus()
-            registerPisces()
-            registerSagittarius()
-            registerScorpius()
-            registerTaurus()
-            registerTriangulumAustrale()
-            registerUrsaMajor()
-            registerUrsaMinor()
-            registerVirgo()
-            registerBootes()
-            registerCentaurus()
-            registerAntlia()
-            registerApus()
-            registerPuppis()
-            registerCanisMajor()
-            registerCanisMinor()
-            registerDorado()
-            registerSatellite()
+            registerConstellations()
             registerSpecialElements()
+            registerSatellites()
             registerGalaxies()
             registerAnything()
             rebuild()
@@ -72,6 +34,58 @@ class UniverseInitializer(universe: Universe) : AbstractUniverseInitializer(univ
             throw ex
         }
      }
+
+    private fun registerConstellations() {
+        registerAndromeda()
+        registerAntlia()
+        registerApus()
+        registerAquarius()
+        registerAquila()
+        registerAra()
+        registerAries()
+        registerAuriga()
+        registerBootes()
+        registerCaelum()
+        registerCamelopardalis()
+        registerCancer()
+        registerCanesVenatici()
+        registerCanisMajor()
+        registerCanisMinor()
+        registerCapricornus()
+        registerCarina()
+        registerCassiopeia()
+        registerCentaurus()
+        registerCepheus()
+        registerChamaeleon()
+        registerCrater()
+        registerCrux()
+        registerCygnus()
+        registerDorado()
+        registerEridanus()
+        registerFornax()
+        registerGemini()
+        registerHydra()
+        registerLacerta()
+        registerLeo()
+        registerLibra()
+        registerMusca()
+        registerOrion()
+        registerPavo()
+        registerPegasus()
+        registerPerseus()
+        registerPisces()
+        registerPuppis()
+        registerSculptor()
+        registerSagittarius()
+        registerScorpius()
+        registerTaurus()
+        registerTriangulum()
+        registerTriangulumAustrale()
+        registerUrsaMajor()
+        registerUrsaMinor()
+        registerVirgo()
+        registerVulpecula()
+    }
 
     // Right ascension "RA" is measured at the celestial equator (which is defined by earth equator) positive from vernal equinox (in March) into the east
     // - measured in hours (not in degree), 360° = 24 hours
@@ -250,13 +264,8 @@ class UniverseInitializer(universe: Universe) : AbstractUniverseInitializer(univ
 
     // https://en.wikipedia.org/wiki/Pegasus_(constellation)
     private fun registerPegasus() {
-
-        // register the star HD 358 (Alpheratz) = Alpha Andromeda in constellation Pegasus as Delta
-        val alpheratz = getStar(358)
-        val pegasus = universe.constellations[Constellation.Pegasus]
-
-        pegasus.register(Symbol.Delta, alpheratz)
-        pegasus
+        universe.constellations[Constellation.Pegasus]
+            .register(Symbol.Delta, getStar(358)) // register HD 358 (Alpheratz) = Alpha Andromeda in constellation Pegasus as Delta
             .line(Symbol.Epsilon, Symbol.Theta, Symbol.Zeta, Symbol.Alpha, Symbol.Gamma, Symbol.Delta, Symbol.Beta, Symbol.Eta, Symbol.Pi)
             .line(Symbol.Beta, Symbol.Mu, Symbol.Lambda, Symbol.Iota, Symbol.Kappa)
             .line(Symbol.Alpha, Symbol.Beta)
@@ -287,19 +296,16 @@ class UniverseInitializer(universe: Universe) : AbstractUniverseInitializer(univ
     // Eidechse
     // https://en.wikipedia.org/wiki/Lacerta
     private fun registerLacerta() {
-        val lacerta = universe.constellations[Constellation.Lacerta]
-
-        getStar(212593).also { lacerta.register(Symbol.Four, it) }
-        getStar(213310).also { lacerta.register(Symbol.Five, it) }
-        getStar(212120).also { lacerta.register(Symbol.Two, it) }
-        getStar(211388).also { lacerta.register(Symbol.One, it) }
-        getStar(213420).also { lacerta.register(Symbol.Six, it) }
-        getStar(214868).also { lacerta.register(Symbol.Eleven, it) }
-        getStar(211073).also { lacerta.register(Symbol.Xi, it) }
-
-        lacerta
-            .line(Symbol.Beta, Symbol.Alpha,  Symbol.Four,  Symbol.Five,  Symbol.Two,  Symbol.Six,  Symbol.Xi,  Symbol.One)
-            .line( Symbol.Six,  Symbol.Eleven,  Symbol.Five)
+        universe.constellations[Constellation.Lacerta]
+            .register(Symbol.Four, getStar(212593))
+            .register(Symbol.Five, getStar(213310))
+            .register(Symbol.Two, getStar(212120))
+            .register(Symbol.One, getStar(211388))
+            .register(Symbol.Six, getStar(213420))
+            .register(Symbol.Eleven, getStar(214868))
+            .register(Symbol.Xi, getStar(211073))
+            .line(Symbol.Beta, Symbol.Alpha, Symbol.Four, Symbol.Five, Symbol.Two, Symbol.Six, Symbol.Xi, Symbol.One)
+            .line(Symbol.Six, Symbol.Eleven, Symbol.Five)
     }
 
     // Altar
@@ -321,11 +327,8 @@ class UniverseInitializer(universe: Universe) : AbstractUniverseInitializer(univ
     // https://wissen.naanoo.de/esoterik/sternzeichen-widder
     // (1) 21. März – 20. April
     private fun registerAries() {
-        val aries = universe.constellations[Constellation.Aries]
-
-        getStar(17573).also { aries.register(Symbol.FortyOne, it) }
-
-        aries
+        universe.constellations[Constellation.Aries]
+            .register(Symbol.FortyOne, getStar(17573))
             .line(Symbol.Epsilon, Symbol.FortyOne, Symbol.Alpha, Symbol.Beta, Symbol.Gamma)
     }
 
@@ -549,14 +552,73 @@ class UniverseInitializer(universe: Universe) : AbstractUniverseInitializer(univ
     }
 
     private fun registerDorado() {
-        val dorado = universe.constellations[Constellation.Dorado]
-
-        getStar(40409).also { dorado.register(Symbol.One, it) }
-
-        dorado
+        universe.constellations[Constellation.Dorado]
+            .register(Symbol.One, getStar(40409))
             .line(Symbol.Gamma, Symbol.Alpha, Symbol.Zeta, Symbol.Beta, Symbol.One, Symbol.Delta, Symbol.Beta, Symbol.Alpha)
     }
 
+    private fun  registerSculptor() {
+        universe.constellations[Constellation.Sculptor]
+            .line(Symbol.Alpha, Symbol.Iota, Symbol.Delta, Symbol.Gamma, Symbol.Beta)
+    }
+
+    private fun registerTriangulum() {
+        universe.constellations[Constellation.Triangulum]
+            .line(Symbol.Alpha, Symbol.Beta, Symbol.Gamma)
+    }
+
+    private fun registerCrater() {
+        universe.constellations[Constellation.Crater]
+            .line(Symbol.Theta, Symbol.Epsilon, Symbol.Delta, Symbol.Alpha, Symbol.Beta, Symbol.Gamma, Symbol.Zeta, Symbol.Eta)
+            .line(Symbol.Gamma, Symbol.Delta)
+    }
+
+    private fun registerFornax() {
+        universe.constellations[Constellation.Fornax]
+            .line(Symbol.Alpha, Symbol.Beta, Symbol.Nu)
+    }
+
+    private fun registerCaelum() {
+        universe.constellations[Constellation.Caelum]
+            .line(Symbol.Delta, Symbol.Alpha, Symbol.Beta, Symbol.Gamma)
+    }
+
+    private fun registerCamelopardalis() {
+        universe.constellations[Constellation.Camelopardalis]
+            .register(Symbol.One, getStar(42818))
+            .register(Symbol.Two, getStar(49878))
+            .register(Symbol.Three, getStar(31278))
+            .register(Symbol.Four, getStar(23475))
+            .register(Symbol.Five, getStar(21291))
+            .line(Symbol.Alpha, Symbol.One, Symbol.Two)
+            .line(Symbol.Three, Symbol.Beta, Symbol.Alpha, Symbol.Gamma, Symbol.Four, Symbol.Five)
+    }
+
+    private fun registerCanesVenatici() {
+        universe.constellations[Constellation.CanesVenatici]
+            .line(Symbol.Alpha, Symbol.Beta)
+    }
+
+    private fun registerCarina() {
+        universe.constellations[Constellation.Carina]
+            .register(Symbol.P, getStar(91465))
+            .register(Symbol.Q, getStar(89388))
+            .line(Symbol.Alpha, Symbol.Epsilon, Symbol.Iota, Symbol.Upsilon, Symbol.Beta, Symbol.Omega, Symbol.Theta, Symbol.P, Symbol.Q, Symbol.Iota)
+    }
+
+    private fun registerCepheus() {
+        universe.constellations[Constellation.Cepheus]
+            .line(Symbol.Eta, Symbol.Alpha, Symbol.Beta, Symbol.Gamma, Symbol.Iota, Symbol.Delta, Symbol.Zeta, Symbol.Alpha)
+    }
+
+    private fun registerVulpecula() {
+        universe.constellations[Constellation.Vulpecula]
+            .register(Symbol.One, getStar(180554))      // 1 VUL
+            .register(Symbol.Two, getStar(188260))      // 13 VUL
+            .register(Symbol.Three, getStar(192806))    // 23 VUL
+            .register(Symbol.Four, getStar(197752))     // 30 VUL
+            .line(Symbol.One, Symbol.Alpha, Symbol.Two, Symbol.Three, Symbol.Four)
+    }
 
     // https://www.space.com/32054-satellite-tracker.html
     // https://www.space.com/6870-spot-satellites.html
@@ -572,7 +634,7 @@ class UniverseInitializer(universe: Universe) : AbstractUniverseInitializer(univ
     // ALOS (Japan)
     // Landsat 8
     // NOAA-19
-    private fun registerSatellite() {
+    private fun registerSatellites() {
 
         // TLE from NORAD, Jan 18 2017, 19:27
         newSatellite("ISS", "International Space Station", 25544, "1 25544U 98067A   17018.16759178  .00002139  00000-0  39647-4 0  9999\r\n2 25544  51.6445  66.1799 0007746  95.7219  10.7210 15.54083144 38425")

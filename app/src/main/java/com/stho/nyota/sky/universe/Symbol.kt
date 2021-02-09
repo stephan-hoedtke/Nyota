@@ -37,7 +37,9 @@ enum class Symbol {
     Eight,
     Nine,
     Eleven,
-    FortyOne;
+    FortyOne,
+    P,
+    Q;
 
     fun isSymbol(): Boolean =
         this != NoSymbol
@@ -88,6 +90,8 @@ enum class Symbol {
                 Symbol.Nine -> "9"
                 Symbol.Eleven -> "11"
                 Symbol.FortyOne -> "41"
+                Symbol.P -> "P"
+                Symbol.Q -> "Q"
             }
 
         private fun greekSymbolImageId(symbol: Symbol): Int =
@@ -117,17 +121,7 @@ enum class Symbol {
                 Symbol.Chi -> com.stho.nyota.R.drawable.greek_chi
                 Symbol.Psi -> com.stho.nyota.R.drawable.greek_psi
                 Symbol.Omega -> com.stho.nyota.R.drawable.greek_omega
-                Symbol.One -> com.stho.nyota.R.drawable.star
-                Symbol.Two -> com.stho.nyota.R.drawable.star
-                Symbol.Three -> com.stho.nyota.R.drawable.star
-                Symbol.Four -> com.stho.nyota.R.drawable.star
-                Symbol.Five -> com.stho.nyota.R.drawable.star
-                Symbol.Six -> com.stho.nyota.R.drawable.star
-                Symbol.Seven -> com.stho.nyota.R.drawable.star
-                Symbol.Eight -> com.stho.nyota.R.drawable.star
-                Symbol.Nine -> com.stho.nyota.R.drawable.star
-                Symbol.Eleven -> com.stho.nyota.R.drawable.star
-                Symbol.FortyOne -> com.stho.nyota.R.drawable.star
+                else -> com.stho.nyota.R.drawable.star
             }
 
         fun fromString(symbol: String): Symbol {

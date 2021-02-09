@@ -310,7 +310,7 @@ class SkyFragment : AbstractFragment() {
         Snackbar.make(requireView(), message, Snackbar.LENGTH_INDEFINITE)
             .setBackgroundTint(getColor(R.color.colorSignalBackground))
             .setTextColor(getColor(R.color.colorSecondaryText))
-            .setDuration(3000)
+            .setDuration(13000)
             .setAction(name, action)
             .show()
 
@@ -320,7 +320,7 @@ class SkyFragment : AbstractFragment() {
         Snackbar.make(requireView(), message, Snackbar.LENGTH_INDEFINITE)
             .setBackgroundTint(getColor(R.color.colorSignalBackground))
             .setTextColor(getColor(R.color.colorSecondaryText))
-            .setDuration(5000)
+            .setDuration(13000)
             .show()
     }
 
