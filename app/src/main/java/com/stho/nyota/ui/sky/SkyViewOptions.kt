@@ -77,6 +77,7 @@ abstract class SkyViewOptions: ISkyViewOptions {
         const val MIN_MAGNITUDE: Double = 0.0
         const val MIN_ZOOM_ANGLE = 0.5
         const val MAX_ZOOM_ANGLE = 120.0
+        const val DEFAULT_ZOOM_ANGLE: Double = 45.0
         const val MIN_RADIUS: Double = 1.0
         const val MAX_RADIUS: Double = 10.0
         const val MIN_GAMMA: Double = 0.01

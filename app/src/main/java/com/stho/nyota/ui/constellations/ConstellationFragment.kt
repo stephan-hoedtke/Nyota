@@ -52,11 +52,11 @@ class ConstellationFragment : AbstractElementFragment() {
         binding.buttonZoomOut.setOnClickListener { onZoomOut() }
         binding.sky.registerListener(object : ISkyViewListener {
             override fun onChangeCenter() {
-                // Ignore
+                viewModel.setCenter(binding.sky.center)
             }
 
             override fun onChangeZoom() {
-                // Ignore
+                viewModel.setZoomAngle(binding.sky.zoomAngle)
             }
 
             override fun onDoubleTap() {
@@ -104,6 +104,8 @@ class ConstellationFragment : AbstractElementFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel.universeLD.observe(viewLifecycleOwner, { universe -> onUpdateConstellation(universe.moment) })
+        viewModel.zoomAngleLD.observe(viewLifecycleOwner, { zoomAngle -> onObserveZoomAngle(zoomAngle) })
+        viewModel.centerLD.observe(viewLifecycleOwner, { center -> onObserveCenter(center) })
     }
 
     override fun onDestroyView() {
@@ -145,6 +147,14 @@ class ConstellationFragment : AbstractElementFragment() {
             detailsAdapter.updateProperties(it.getDetails(moment))
             bind(moment, it)
         }
+    }
+
+    private fun onObserveZoomAngle(zoomAngle: Double) {
+        binding.sky.zoomAngle = zoomAngle
+    }
+
+    private fun onObserveCenter(center: Topocentric) {
+        binding.sky.setCenter(center)
     }
 
     private fun bind(moment: Moment, constellation: Constellation) {
@@ -198,11 +208,11 @@ class ConstellationFragment : AbstractElementFragment() {
         findNavController().navigate(R.id.action_global_nav_star, bundleOf("STAR" to star.key))
 
     private fun onZoomIn() {
-        binding.sky.applyScale(1.1)
+        viewModel.applyScale(1.1)
     }
 
     private fun onZoomOut() {
-        binding.sky.applyScale(1 / 1.1)
+        viewModel.applyScale(1 / 1.1)
     }
 
     private fun getKeyFromArguments(): String? =

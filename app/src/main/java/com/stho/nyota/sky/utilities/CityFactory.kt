@@ -83,7 +83,7 @@ private fun City.Companion.createDefaultSalamanca(): City {
 private fun City.Companion.createDefaultParis(): City {
     val location = Location(48.8566, 2.3522, 0.035)
     val timeZone = TimeZone.getTimeZone("CET") // Central European Standard Time
-    return City.createNewCity("Salamanca", location, timeZone)
+    return City.createNewCity("Paris", location, timeZone)
 }
 
 private fun City.Companion.createDefaultHamburg(): City {

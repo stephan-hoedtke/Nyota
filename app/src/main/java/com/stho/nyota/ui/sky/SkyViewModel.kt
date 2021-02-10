@@ -11,6 +11,7 @@ import com.stho.nyota.sky.utilities.Degree
 import com.stho.nyota.sky.utilities.LiveMode
 import com.stho.nyota.sky.utilities.Orientation
 import com.stho.nyota.sky.utilities.Topocentric
+import com.stho.nyota.views.AbstractSkyView
 import kotlin.math.abs
 
 class SkyViewModel(application: Application, repository: Repository, val element: IElement?) : RepositoryViewModelArgs(application, repository)
@@ -46,6 +47,8 @@ class SkyViewModel(application: Application, repository: Repository, val element
 
     private val isLiveLiveData: MutableLiveData<Boolean> = MutableLiveData<Boolean>().apply { value = false }
     private val skyOrientationLiveData: MutableLiveData<SkyOrientation> = MutableLiveData<SkyOrientation>().apply { value = SkyOrientation.getOK() }
+    private val zoomAngleLiveData: MutableLiveData<Double> = MutableLiveData<Double>().apply { value = SkyViewOptions.DEFAULT_ZOOM_ANGLE }
+    private val centerLiveData: MutableLiveData<Topocentric> = MutableLiveData<Topocentric>().apply { value = element?.position ?: Topocentric(0.0, 0.0) }
 
     val isLiveLD: LiveData<Boolean>
         get() = isLiveLiveData
@@ -74,6 +77,12 @@ class SkyViewModel(application: Application, repository: Repository, val element
                 else -> LiveMode.Off
             }
 
+    val zoomAngleLD: LiveData<Double>
+        get() = zoomAngleLiveData
+
+    val centerLD: LiveData<Topocentric>
+        get() = centerLiveData
+
     fun onUpdateOrientation(orientation: Orientation, center: Topocentric) {
         val value = when (isLive) {
             true -> SkyOrientation.getSkyOrientation(orientation, center)
@@ -91,10 +100,26 @@ class SkyViewModel(application: Application, repository: Repository, val element
         isLiveLiveData.postValue(value)
     }
 
+    fun setZoomAngle(zoomAngle: Double) =
+        zoomAngle.coerceIn(SkyViewOptions.MIN_ZOOM_ANGLE, SkyViewOptions.MAX_ZOOM_ANGLE).also {
+            if (zoomAngleLiveData.value != it) {
+                zoomAngleLiveData.postValue(it)
+            }
+        }
+
+
+    fun setCenter(center: Topocentric) {
+        centerLiveData.postValue(center)
+    }
+
+    fun applyScale(scaleFactor: Double) {
+        val zoomAngle = zoomAngleLiveData.value ?: SkyViewOptions.DEFAULT_ZOOM_ANGLE
+        setZoomAngle(zoomAngle / scaleFactor)
+    }
+
     val universe: Universe = repository.universe
 
     val options: SkyFragmentViewOptions = SkyFragmentViewOptions(repository.settings)
-
 }
 
 

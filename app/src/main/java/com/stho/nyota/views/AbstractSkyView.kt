@@ -43,7 +43,7 @@ abstract class AbstractSkyView(context: Context?, attrs: AttributeSet?): View(co
 
     val path = Path()
     val center = Topocentric(0.0, 0.0)
-    var zoomAngle: Double = DEFAULT_ZOOM_ANGLE
+    var zoomAngle: Double = SkyViewOptions.DEFAULT_ZOOM_ANGLE
         set(value) {
             val validZoomAngle = value.coerceIn(SkyViewOptions.MIN_ZOOM_ANGLE, SkyViewOptions.MAX_ZOOM_ANGLE)
             if (field != validZoomAngle) {
@@ -54,10 +54,6 @@ abstract class AbstractSkyView(context: Context?, attrs: AttributeSet?): View(co
 
     var scaleGestureDetector: ScaleGestureDetector? = null
     var gestureDetector: GestureDetector? = null
-
-    var isScrollingEnabled: Boolean = true
-    var isScalingEnabled: Boolean = true
-
     var tippedPosition: Topocentric? = null
 
     private var listener: ISkyViewListener? = null
@@ -125,26 +121,23 @@ abstract class AbstractSkyView(context: Context?, attrs: AttributeSet?): View(co
     }
 
     open fun applyScrolling(dx: Double, dy: Double) {
-        if (isScrollingEnabled) {
-            center.azimuth += projection.calculateAngle(dx)
-            center.altitude -= projection.calculateAngle(dy)
-            tippedPosition = null
-            raiseOnChangeCenter()
-            invalidate()
-        }
+        center.azimuth += projection.calculateAngle(dx)
+        center.altitude -= projection.calculateAngle(dy)
+        tippedPosition = null
+        raiseOnChangeCenter()
+        invalidate()
     }
 
     open fun applyScale(scaleFactor: Double) {
-        if (isScalingEnabled) {
-            zoomAngle /= scaleFactor
-            tippedPosition = null
-            raiseOnChangeZoom()
-        }
+        zoomAngle /= scaleFactor
+        tippedPosition = null
+        raiseOnChangeZoom()
     }
 
     open fun resetTransformation() {
         tippedPosition = null
-        zoomAngle = DEFAULT_ZOOM_ANGLE
+        zoomAngle = SkyViewOptions.DEFAULT_ZOOM_ANGLE
+        raiseOnChangeZoom()
         referencePosition?.apply {
             center.azimuth = azimuth
             center.altitude = altitude
@@ -263,10 +256,6 @@ abstract class AbstractSkyView(context: Context?, attrs: AttributeSet?): View(co
         BitmapFactory.decodeResource(resources, resourceId).let {
             Bitmap.createScaledBitmap(it, newWidth, newHeight, false)
         }
-
-    companion object {
-        private const val DEFAULT_ZOOM_ANGLE = 45.0
-    }
 }
 
 

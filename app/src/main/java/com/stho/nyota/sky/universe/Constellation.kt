@@ -41,6 +41,7 @@ class Constellation internal constructor(val id: Long, val rank: Int, override v
         Cassiopeia -> R.drawable.constellation_cassiopeia
         Centaurus -> R.drawable.constellation_centaurus
         Cepheus -> R.drawable.constellation_cepheus
+        Cetus -> R.drawable.constellation_cetus
         Chamaeleon -> R.drawable.constellation_chamaeleon
         Crater -> R.drawable.constellation_crater
         Crux -> R.drawable.constellation_cross
@@ -53,7 +54,9 @@ class Constellation internal constructor(val id: Long, val rank: Int, override v
         Lacerta -> R.drawable.constellation_lacerta
         Leo -> R.drawable.constellation_leo
         Libra -> R.drawable.constellation_libra
+        Lupus -> R.drawable.constellation_lupus
         Musca -> R.drawable.constellation_musca
+        Norma -> R.drawable.constellation_norma
         Orion -> R.drawable.constellation_orion
         Pavo -> R.drawable.constellation_pavo
         Pegasus -> R.drawable.constellation_pegasus

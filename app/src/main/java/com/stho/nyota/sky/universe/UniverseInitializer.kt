@@ -56,6 +56,7 @@ class UniverseInitializer(universe: Universe) : AbstractUniverseInitializer(univ
         registerCassiopeia()
         registerCentaurus()
         registerCepheus()
+        registerCetus()
         registerChamaeleon()
         registerCrater()
         registerCrux()
@@ -68,6 +69,8 @@ class UniverseInitializer(universe: Universe) : AbstractUniverseInitializer(univ
         registerLacerta()
         registerLeo()
         registerLibra()
+        registerLupus()
+        registerNorma()
         registerMusca()
         registerOrion()
         registerPavo()
@@ -368,6 +371,7 @@ class UniverseInitializer(universe: Universe) : AbstractUniverseInitializer(univ
             .line(Symbol.Delta, Symbol.Alpha)
     }
 
+
     // Löwe
     // https://en.wikipedia.org/wiki/Leo_(constellation)
     // https://wissen.naanoo.de/esoterik/sternzeichen-loewe
@@ -479,6 +483,13 @@ class UniverseInitializer(universe: Universe) : AbstractUniverseInitializer(univ
             .line(Symbol.Epsilon, Symbol.Beta)
     }
 
+    private fun registerCetus() {
+        universe.constellations[Constellation.Cetus]
+            .line(Symbol.Eta, Symbol.Iota, Symbol.Beta, Symbol.Eta, Symbol.Theta, Symbol.Zeta, Symbol.Tau, Symbol.Upsilon)
+            .line(Symbol.Zeta, Symbol.Omicron, Symbol.Delta, Symbol.Gamma, Symbol.Alpha, Symbol.Lambda, Symbol.Mu, Symbol.Xi, Symbol.Nu, Symbol.Gamma)
+    }
+
+
     // Musca = Fly
     // https://en.wikipedia.org/wiki/Musca#/media/File:Musca_IAU.svg
     private fun registerMusca() {
@@ -533,6 +544,18 @@ class UniverseInitializer(universe: Universe) : AbstractUniverseInitializer(univ
     private fun registerApus() {
         universe.constellations[Constellation.Apus]
             .line(Symbol.Alpha, Symbol.Delta, Symbol.Beta, Symbol.Gamma, Symbol.Delta)
+    }
+
+    private fun registerLupus() {
+        universe.constellations[Constellation.Lupus]
+            .line(Symbol.Alpha, Symbol.Beta, Symbol.Delta, Symbol.Phi)
+            .line(Symbol.Zeta, Symbol.Kappa, Symbol.Epsilon, Symbol.Gamma, Symbol.Eta)
+            .line(Symbol.Gamma, Symbol.Delta)
+    }
+
+    private fun registerNorma() {
+        universe.constellations[Constellation.Norma]
+            .line(Symbol.Epsilon, Symbol.Gamma, Symbol.Iota, Symbol.Eta, Symbol.Delta)
     }
 
     private fun registerPuppis() {

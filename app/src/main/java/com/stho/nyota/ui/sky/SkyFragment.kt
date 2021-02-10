@@ -37,10 +37,6 @@ class SkyFragment : AbstractFragment() {
         setHasOptionsMenu(true)
     }
 
-    private fun onTouchOptions() {
-        binding.sky.touch()
-    }
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         bindingReference = FragmentSkyBinding.inflate(inflater, container, false)
 
@@ -51,10 +47,12 @@ class SkyFragment : AbstractFragment() {
         binding.buttonZoomOut.setOnClickListener { onZoomOut() }
         binding.sky.registerListener(object: ISkyViewListener {
             override fun onChangeCenter() {
-                updateDisplayZoom()
+                viewModel.setCenter(binding.sky.center)
+                binding.direction.text = binding.sky.center.toString() // TODO: check if really required
             }
             override fun onChangeZoom() {
-                updateDisplayZoom()
+                viewModel.setZoomAngle(binding.sky.zoomAngle)
+                binding.zoom.text = getString(R.string.label_zoom_angle, binding.sky.zoomAngle) // TODO: check if really required
             }
             override fun onDoubleTap() {
                 binding.sky.setTippedElement(null)
@@ -82,6 +80,8 @@ class SkyFragment : AbstractFragment() {
         viewModel.isLiveLD.observe(viewLifecycleOwner, { isLive -> onObserveIsLive(isLive) })
         viewModel.liveModeLD.observe(viewLifecycleOwner, { liveMode -> onObserveLiveMode(liveMode) })
         viewModel.options.touchLD.observe(viewLifecycleOwner, { _ -> binding.sky.touch() })
+        viewModel.zoomAngleLD.observe(viewLifecycleOwner, { zoomAngle -> onObserveZoomAngle(zoomAngle) })
+        viewModel.centerLD.observe(viewLifecycleOwner, { center -> onObserveCenter(center) })
     }
 
     override fun onDestroyView() {
@@ -160,6 +160,16 @@ class SkyFragment : AbstractFragment() {
         }
     }
 
+    private fun onObserveZoomAngle(zoomAngle: Double) {
+        binding.sky.zoomAngle = zoomAngle
+        binding.zoom.text = getString(R.string.label_zoom_angle, zoomAngle)
+    }
+
+    private fun onObserveCenter(center: Topocentric) {
+        binding.sky.setCenter(center)
+        binding.direction.text = center.toString()
+    }
+
     private fun updateMoment(moment: Moment) {
         bind(moment)
     }
@@ -168,25 +178,17 @@ class SkyFragment : AbstractFragment() {
         bindTime(binding.timeOverlay, moment)
         binding.sky.notifyDataSetChanged()
         updateActionBar(title, toLocalDateString(moment))
-        updateDisplayZoom()
     }
 
     private val title: String
         get() = viewModel.element?.toString() ?: getString(R.string.label_nyota) // Mind: lateinit viewModel
 
     private fun onZoomIn() {
-        binding.sky.applyScale(1.1)
-        updateDisplayZoom()
+        viewModel.applyScale(1.1)
     }
 
     private fun onZoomOut() {
-        binding.sky.applyScale(1 / 1.1)
-        updateDisplayZoom()
-    }
-
-    private fun updateDisplayZoom() {
-        binding.direction.text = binding.sky.center.toString()
-        binding.zoom.text = getString(R.string.label_zoom_angle, binding.sky.zoomAngle)
+        viewModel.applyScale(1 / 1.1)
     }
 
     private fun getElementKeyFromArguments(): String? =
