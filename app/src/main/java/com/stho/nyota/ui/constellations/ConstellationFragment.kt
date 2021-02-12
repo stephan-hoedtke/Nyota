@@ -166,30 +166,30 @@ class ConstellationFragment : AbstractElementFragment() {
 
     private fun displaySnackbarForPosition(position: Topocentric) {
         viewModel.constellation.findNearestStarByPosition(position, binding.sky.options.magnitude, binding.sky.sensitivityAngle)?.let {
-            displaySnackbarForStarAtPosition(position, it)
+            displaySnackbarForStar(it)
             // TODO: select the respective list item
         }
     }
 
-    private fun displaySnackbarForStarAtPosition(position: Topocentric, star: Star) {
+    private fun displaySnackbarForStar(star: Star) {
         binding.sky.setTippedStar(star)
 
-        val message: String = messageTextForStar(position, star)
+        val message: String = messageTextForStar(star)
 
         Snackbar.make(requireView(), message, Snackbar.LENGTH_INDEFINITE)
             .setBackgroundTint(getColor(R.color.colorSignalBackground))
             .setTextColor(getColor(R.color.colorSecondaryText))
-            .setDuration(3000)
+            .setDuration(13000)
             .setAction(star.toString()) { onStar(star) }
             .show()
 
     }
 
-    private fun messageTextForStar(position: Topocentric, star: Star): String =
+    private fun messageTextForStar(star: Star): String =
         if (star.hasSymbol)
-            "Star ${star.symbol.greekSymbol} ${star.magnAsString} at $position"
+            "Star ${star.symbol.greekSymbol} ${star.magnAsString}"
         else
-            "Star ${star.magnAsString} at $position "
+            "Star ${star.magnAsString}"
 
 
     private fun onToggleImage() {

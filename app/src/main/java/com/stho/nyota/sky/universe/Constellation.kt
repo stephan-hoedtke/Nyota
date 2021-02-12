@@ -5,6 +5,7 @@ import com.stho.nyota.R
 import com.stho.nyota.sky.utilities.*
 import com.stho.nyota.sky.utilities.Topocentric.Companion.INVALID_DISTANCE
 import java.lang.Exception
+import java.security.InvalidParameterException
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -43,37 +44,73 @@ class Constellation internal constructor(val id: Long, val rank: Int, override v
         Cepheus -> R.drawable.constellation_cepheus
         Cetus -> R.drawable.constellation_cetus
         Chamaeleon -> R.drawable.constellation_chamaeleon
+        Circinus -> R.drawable.constellation_circinus
+        Columba -> R.drawable.constellation_columba
+        ComaBerenices -> R.drawable.constellation_coma_berenices
+        CoronaAustralis -> R.drawable.constellation_corona_australis
+        CoronaBorealis -> R.drawable.constellation_corona_borealis
+        Corvus -> R.drawable.constellation_corvus
         Crater -> R.drawable.constellation_crater
         Crux -> R.drawable.constellation_cross
         Cygnus -> R.drawable.constellation_cygnus
+        Delphinus -> R.drawable.constellation_delphinus
         Dorado -> R.drawable.constellation_dorado
+        Draco -> R.drawable.constellation_draco
+        Equuleus -> R.drawable.constellation_equuleus
         Eridanus -> R.drawable.constellation_eridanus
         Fornax -> R.drawable.constellation_fornax
         Gemini -> R.drawable.constellation_gemini
+        Grus -> R.drawable.constellation_grus
+        Hercules -> R.drawable.constellation_hercules
+        Horologium -> R.drawable.constellation_horologium
         Hydra -> R.drawable.constellation_hydra
+        Hydrus -> R.drawable.constellation_hydrus
+        Indus -> R.drawable.constellation_indus
         Lacerta -> R.drawable.constellation_lacerta
         Leo -> R.drawable.constellation_leo
+        LeoMinor -> R.drawable.constellation_leo_minor
+        Lepus -> R.drawable.constellation_lepus
         Libra -> R.drawable.constellation_libra
         Lupus -> R.drawable.constellation_lupus
+        Lynx -> R.drawable.constellation_lynx
+        Lyra -> R.drawable.constellation_lyra
+        Mensa -> R.drawable.constellation_mensa
+        Microscopium -> R.drawable.constellation_microscopium
+        Monoceros -> R.drawable.constellation_monoceros
         Musca -> R.drawable.constellation_musca
         Norma -> R.drawable.constellation_norma
+        Octans -> R.drawable.constellation_octans
+        Ophiuchus -> R.drawable.constellation_ophiuchus
         Orion -> R.drawable.constellation_orion
         Pavo -> R.drawable.constellation_pavo
         Pegasus -> R.drawable.constellation_pegasus
         Perseus -> R.drawable.constellation_perseus
+        Phoenix -> R.drawable.constellation_phoenix
+        Pictor -> R.drawable.constellation_pictor
         Pisces -> R.drawable.constellation_pisces
+        PiscisAustrinus -> R.drawable.constellation_piscis_austrinus
         Puppis -> R.drawable.constellation_puppis
+        Pyxis -> R.drawable.constellation_pyxis
+        Reticulum -> R.drawable.constellation_reticulum
+        Sagitta -> R.drawable.constellation_sagitta
         Sagittarius -> R.drawable.constellation_sagittarius
         Scorpius -> R.drawable.constellation_scorpius
-        Sculptor -> R.drawable.constellation_sculpture
+        Sculptor -> R.drawable.constellation_sculptor
+        Scutum -> R.drawable.constellation_scutum
+        Serpens -> R.drawable.constellation_serpens
+        Sextans -> R.drawable.constellation_sextans
         Taurus -> R.drawable.constellation_taurus
+        Telescopium -> R.drawable.constellation_telescopium
         Triangulum -> R.drawable.constellation_triangulum
         TriangulumAustrale -> R.drawable.constellation_triangulum_australe
+        Tucana -> R.drawable.constellation_tucana
         UrsaMajor -> R.drawable.constellation_urs_major
         UrsaMinor -> R.drawable.constellation_urs_minor
+        Vela -> R.drawable.constellation_vela
         Virgo -> R.drawable.constellation_virgo
+        Volans -> R.drawable.constellation_volans
         Vulpecula -> R.drawable.constellation_vulpecula
-        else -> R.drawable.constellation
+        else -> throw Exception("Invalid constellation rank $rank")
     }
 
     override val largeImageId: Int
@@ -193,6 +230,9 @@ class Constellation internal constructor(val id: Long, val rank: Int, override v
         super.getBasics(moment).apply {
             translations.forEach { add(Language.languageImageId(it.key), it.key.toString(), it.value) }
             stars.filter { s -> s.hasSymbol || s.hasFriendlyName }.forEach{ add(it) }
+            if (modernZodiacSignNo > 0) {
+                add(R.drawable.empty, "Zodiac sign $modernZodiacSignNo", modernZodiacInfo ?: "")
+            }
         }
 
     override fun getDetails(moment: Moment): PropertyList =
@@ -217,6 +257,38 @@ class Constellation internal constructor(val id: Long, val rank: Int, override v
             }
         }
         return star
+    }
+
+    val modernZodiacSignNo: Int = when (rank) {
+        Aries -> 1
+        Taurus -> 2
+        Gemini -> 3
+        Cancer -> 4
+        Leo -> 5
+        Virgo -> 6
+        Libra -> 7
+        Scorpius -> 8
+        Sagittarius -> 9
+        Capricornus -> 10
+        Aquarius -> 11
+        Pisces -> 12
+        else -> 0
+    }
+
+    val modernZodiacInfo: String? = when (rank) {
+        Aries -> "Feb 20 - Mar 21"
+        Taurus -> "Apr 21 - May 20"
+        Gemini -> "May 21 - Jun 21"
+        Cancer -> "Jun 22 - Jul 22"
+        Leo -> "Jul 23 - Aug 23"
+        Virgo -> "Aug 24 - Sep 23"
+        Libra -> "Sep 24 - Oct 23"
+        Scorpius -> "Oct 24 - Nov 22"
+        Sagittarius -> "Nov 23 - Dec 21"
+        Capricornus -> "Jan 20 - Dec 22"
+        Aquarius -> "Jan 21 - Feb 19"
+        Pisces -> "Feb 20 - Mar 20"
+        else -> null
     }
 
     companion object {
@@ -326,5 +398,8 @@ class Constellation internal constructor(val id: Long, val rank: Int, override v
         const val Equuleus = 87
         const val Crux = 88
 
+        val zodiacSign: Array<Int> = arrayOf(
+
+        )
     }
 }

@@ -248,63 +248,63 @@ class SkyFragment : AbstractFragment() {
     private fun displaySnackbarForPosition(position: Topocentric) {
         viewModel.universe.findNearestElementByPosition(position, binding.sky.options.magnitude, binding.sky.sensitivityAngle)?.let {
             when (it) {
-                is Star -> displaySnackbarForStarAtPosition(position, it)
-                is AbstractPlanet -> displaySnackbarForPlanetAtPosition(position, it)
-                is Satellite -> displaySnackbarForSatelliteAtPosition(position, it)
-                is Moon -> displaySnackbarForMoonAtPosition(position, it)
-                is Sun -> displaySnackbarForSunAtPosition(position, it)
-                is Galaxy -> displaySnackbarForGalaxyAtPosition(position, it)
-                else -> displaySnackbar("${it.name} at $position")
+                is Star -> displaySnackbarForStar(it)
+                is AbstractPlanet -> displaySnackbarForPlanet(it)
+                is Satellite -> displaySnackbarForSatellite(it)
+                is Moon -> displaySnackbarForMoon(it)
+                is Sun -> displaySnackbarForSun(it)
+                is Galaxy -> displaySnackbarForGalaxy(it)
+                else -> displaySnackbar("${it.name}")
             }
         } ?: displaySnackbar("$position")
     }
 
-    private fun displaySnackbarForStarAtPosition(position: Topocentric, star: Star) {
+    private fun displaySnackbarForStar(star: Star) {
         binding.sky.setTippedElement(star)
         binding.sky.setTippedConstellation(star.referenceConstellation)
-        val message: String = star.referenceConstellation?.let { messageTextForStarInConstellation(position, star, it) } ?: messageTextForStar(position, star)
+        val message: String = star.referenceConstellation?.let { messageTextForStarInConstellation(star, it) } ?: messageTextForStar(star)
         displaySnackBar(message, star.toString()) { onStar(star) }
     }
 
-    private fun messageTextForStarInConstellation(position: Topocentric, star: Star, constellation: Constellation) =
+    private fun messageTextForStarInConstellation(star: Star, constellation: Constellation) =
         if (star.hasSymbol)
-            "Star ${star.symbol.greekSymbol} ${star.magnAsString} at $position in ${constellation.name}"
+            "Star ${star.symbol.greekSymbol} ${star.magnAsString} in ${constellation.name}"
         else
-            "Star ${star.magnAsString} at $position in ${constellation.name}"
+            "Star ${star.magnAsString} in ${constellation.name}"
 
-    private fun messageTextForStar(position: Topocentric, star: Star): String =
+    private fun messageTextForStar(star: Star): String =
         if (star.hasSymbol)
-            "Star ${star.symbol.greekSymbol} ${star.magnAsString} at $position"
+            "Star ${star.symbol.greekSymbol} ${star.magnAsString}"
         else
-            "Star ${star.magnAsString} at $position "
+            "Star ${star.magnAsString}"
 
-    private fun displaySnackbarForPlanetAtPosition(position: Topocentric, planet: AbstractPlanet) {
+    private fun displaySnackbarForPlanet(planet: AbstractPlanet) {
         binding.sky.setTippedElement(planet)
-        val message = "Planet at $position"
+        val message = "Planet"
         displaySnackBar(message, planet.name) { onPlanet(planet) }
     }
 
-    private fun displaySnackbarForMoonAtPosition(position: Topocentric, moon: Moon) {
+    private fun displaySnackbarForMoon(moon: Moon) {
         binding.sky.setTippedElement(moon)
-        val message = "Moon at $position"
+        val message = "Moon"
         displaySnackBar(message, moon.name) { onMoon() }
     }
 
-    private fun displaySnackbarForSunAtPosition(position: Topocentric, sun: Sun) {
+    private fun displaySnackbarForSun(sun: Sun) {
         binding.sky.setTippedElement(sun)
-        val message = "Sun at $position"
+        val message = "Sun"
         displaySnackBar(message, sun.name) { onSun() }
     }
 
-    private fun displaySnackbarForSatelliteAtPosition(position: Topocentric, satellite: Satellite) {
+    private fun displaySnackbarForSatellite(satellite: Satellite) {
         binding.sky.setTippedElement(satellite)
-        val message = "Satellite at $position"
+        val message = "Satellite"
         displaySnackBar(message, satellite.name) { onSatellite(satellite) }
     }
 
-    private fun displaySnackbarForGalaxyAtPosition(position: Topocentric, galaxy: Galaxy) {
+    private fun displaySnackbarForGalaxy(galaxy: Galaxy) {
         binding.sky.setTippedElement(galaxy)
-        val message = "Galaxy ${galaxy.magnAsString} at $position"
+        val message = "Galaxy ${galaxy.magnAsString}"
         displaySnackBar(message, galaxy.name) { onGalaxy(galaxy) }
     }
 
