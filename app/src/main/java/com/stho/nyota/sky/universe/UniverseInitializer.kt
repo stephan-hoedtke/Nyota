@@ -37,6 +37,7 @@ class UniverseInitializer(universe: Universe) : AbstractUniverseInitializer(univ
 
     // https://en.wikipedia.org/wiki/IAU_designated_constellations
     // https://deepsky.astronomie.info/Tau/index.de.php !
+    // https://physik.cosmos-indirekt.de/Physik-Schule/Sternbild
     private fun registerConstellations() {
         registerAndromeda()
         registerAntlia()
@@ -673,9 +674,11 @@ class UniverseInitializer(universe: Universe) : AbstractUniverseInitializer(univ
             .line(Symbol.Zeta, Symbol.Epsilon, Symbol.Delta)
     }
 
+    // https://physik.cosmos-indirekt.de/Physik-Schule/Pfau_(Sternbild)
     private fun registerPavo() {
         universe.constellations[Constellation.Pavo]
             .line(Symbol.Alpha, Symbol.Beta, Symbol.Delta, Symbol.Lambda, Symbol.Eta, Symbol.Zeta, Symbol.Epsilon, Symbol.Beta)
+            .line(Symbol.Beta, Symbol.Gamma)
     }
 
     private fun registerPegasus() {

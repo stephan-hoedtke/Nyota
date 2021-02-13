@@ -13,7 +13,7 @@ import kotlin.collections.ArrayList
  * Created by shoedtke on 08.09.2016.
  */
 @Suppress("LocalVariableName")
-class Constellation internal constructor(val id: Long, val rank: Int, override val name: String, val abbreviation: String) : AbstractElement() {
+class Constellation internal constructor(val id: Long, val rank: Int, override val name: String, val abbreviation: String, val author: String, val year: Int, val brightness: Double) : AbstractElement() {
 
     // TODO: make those lists immutable for public, and mutable private
     val stars: ArrayList<Star> = ArrayList()
@@ -293,12 +293,16 @@ class Constellation internal constructor(val id: Long, val rank: Int, override v
 
     companion object {
 
-        fun createWithId(id: Long, rank: Int, name: String, abbreviation: String, english: String, german: String, link: String) =
-            Constellation(id, rank, name, abbreviation)
+        fun createWithId(id: Long, rank: Int, name: String, abbreviation: String, english: String, german: String, french: String, greek: String, author: String, year: Int, brightness: Double, visibility: String, map: String, link: String) =
+            Constellation(id, rank, name, abbreviation, author, year, brightness)
                 .translate(Language.Latin, name)
                 .translate(Language.German, german)
                 .translate(Language.English, english)
+                .translate(Language.French, french)
+                .translate(Language.Greek, greek)
                 .link(link)
+                // TODO: Visibility
+                // TODO: Map
 
         private fun toKey(rank: Int) =
             "CONSTELLATION:${rank}"

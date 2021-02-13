@@ -39,8 +39,8 @@ class Constellations {
     fun first(): Constellation =
         array.first()
 
-    fun createWithId(id: Long, rank: Int, name: String, abbreviation: String, english: String, german: String, link: String) {
-        Constellation.createWithId(id, rank, name, abbreviation, english, german, link).also {
+    fun createWithId(id: Long, rank: Int, name: String, abbreviation: String, english: String, german: String, french: String, greek: String, author: String, year: Int, brightness: Double, visibility: String, map: String, link: String) {
+        Constellation.createWithId(id, rank, name, abbreviation, english, german, french, greek, author, year, brightness, visibility, map, link).also {
             add(it)
         }
     }
