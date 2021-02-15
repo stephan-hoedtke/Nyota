@@ -15,17 +15,19 @@
         android:id="@+id/buttonZoomOut"
         android:layout_width="@dimen/button_size"
         android:layout_height="@dimen/button_size"
-        android:contentDescription="@string/label_empty"
+        app:layout_constraintBottom_toTopOf="@id/time_interval_footer"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginVertical="@dimen/icon_size"
         android:src="@drawable/minus"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        android:contentDescription="@string/label_empty" />
 
     <ImageView
         android:id="@+id/buttonZoomIn"
         android:layout_width="@dimen/button_size"
         android:layout_height="@dimen/button_size"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/time_interval_footer"
+        android:layout_marginVertical="@dimen/icon_size"
         android:src="@drawable/plus"
         android:contentDescription="@string/label_empty" />
 
@@ -61,6 +63,18 @@
         android:contentDescription="@string/label_empty" />
 
     <include android:id="@+id/time_overlay" layout="@layout/time_overlay" />
+
+    <ImageView
+        android:id="@+id/buttonToggleStyle"
+        android:layout_width="@dimen/icon_size"
+        android:layout_height="@dimen/icon_size"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="@dimen/image_margin"
+        android:src="@drawable/view"
+        android:contentDescription="@string/label_empty"
+        />
 
     <ImageView
         android:id="@+id/compass"
@@ -125,6 +139,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         android:alpha="0.7" />
 
+    <include android:id="@+id/time_interval_footer" layout="@layout/time_interval_footer"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -9,6 +9,7 @@ import com.stho.nyota.sky.utilities.Ten
 import com.stho.nyota.sky.utilities.Topocentric
 import com.stho.nyota.sky.utilities.projections.ISphereProjection
 import com.stho.nyota.ui.sky.ISkyViewOptions
+import com.stho.nyota.ui.sky.SkyViewOptions
 import java.util.*
 import kotlin.math.abs
 
@@ -123,10 +124,16 @@ class SkyDraw() {
         }
 
     private fun canDrawStarName(star: Star): Boolean =
-        options.displayStarNames && star.hasFriendlyName
+        when (options.style) {
+            SkyViewOptions.Style.Normal -> options.displayStarNames && star.hasFriendlyName
+            SkyViewOptions.Style.Plain -> false
+        }
 
     private fun canDrawStarSymbol(star: Star): Boolean =
-        options.displaySymbols && star.hasSymbol
+        when (options.style) {
+            SkyViewOptions.Style.Normal -> options.displaySymbols && star.hasSymbol
+            SkyViewOptions.Style.Plain -> false
+        }
 
     fun drawConstellation(constellation: Constellation, referenceType: ReferenceType) {
         val clr = colors.getConstellationColors(referenceType)
@@ -146,7 +153,10 @@ class SkyDraw() {
     }
 
     private fun canDrawConstellationLines(referenceType: ReferenceType): Boolean =
-        options.displayConstellations || referenceType == ReferenceType.TippedConstellation || referenceType == ReferenceType.Reference
+        when (options.style) {
+            SkyViewOptions.Style.Normal -> options.displayConstellations || referenceType == ReferenceType.TippedConstellation || referenceType == ReferenceType.Reference
+            SkyViewOptions.Style.Plain -> referenceType == ReferenceType.TippedConstellation
+        }
 
     private fun canDrawConstellationName(referenceType: ReferenceType): Boolean =
         options.displayConstellationNames
@@ -205,6 +215,59 @@ class SkyDraw() {
             drawGridPointsDownwards(c.azimuth + x, c.altitude)
             drawGridPointsDownwards(c.azimuth - x, c.altitude)
         }
+    }
+
+    fun drawLight() {
+        val t = Topocentric(center.azimuth, 0.0)
+        calculatePosition(t)?.also {
+            if (isOnScreen(it)) {
+                drawLightAbove(it)
+            }
+            else if (it.y > 0) {
+                drawLightEverywhere()
+            }
+        } ?: if (center.altitude > 0) {
+                drawLightEverywhere()
+        }
+    }
+
+    private fun drawLightEverywhere() {
+        val x = 0.5f * width
+        val y = 0.5f * height
+        canvas.drawRect(-x, -y, x, y, colors.forSky)
+    }
+
+    private fun drawLightAbove(it: SkyPointF) {
+        val x = 0.5f * width
+        val y = 0.5f * height
+        canvas.drawRect(-x, -y, x, it.y, colors.forSky)
+    }
+
+    fun drawEcliptic(ecliptic: Collection<Topocentric>) {
+        var previousPoint: SkyPointF? = null
+        path.reset()
+        ecliptic.forEach { p ->
+            calculatePosition(p.azimuth, p.altitude)?.also {
+                if (isOnScreen(it)) {
+                    if (previousPoint == null) {
+                        path.moveTo(it.x, it.y)
+                    }
+                    else {
+                        val dx = it.x - (previousPoint?.x ?: 0f)
+                        val dy = it.y - (previousPoint?.y ?: 0f)
+                        if (abs(dx) > width / 2 || abs(dy) > height / 2) {
+                            path.moveTo(it.x, it.y)
+                        } else {
+                            path.lineTo(it.x, it.y)
+                        }
+                    }
+                    previousPoint = it
+                } else {
+                    previousPoint = null
+                }
+            }
+        }
+        canvas.drawPath(path, colors.forEcliptic)
     }
 
     private fun drawCircleAt(radius: Float, color: Paint, alpha: Int, p: SkyPointF) {
@@ -289,6 +352,4 @@ class SkyDraw() {
 
     private fun calculatePosition(azimuth: Double, altitude: Double): SkyPointF? =
         projection.calculateZoomImagePoint(azimuth, altitude)
-
-
 }

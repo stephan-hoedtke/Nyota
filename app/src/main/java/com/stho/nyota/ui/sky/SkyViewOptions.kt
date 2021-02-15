@@ -19,6 +19,7 @@ interface ISkyViewSettings
     var displayTargets: Boolean
     var displaySatellites: Boolean
     var displayGrid: Boolean
+    var displayEcliptic: Boolean
     var sphereProjection: Projection
     var magnitude: Double
     fun touch()
@@ -31,9 +32,15 @@ interface ISkyViewOptions: ISkyViewSettings {
     var radius: Double
     var gamma: Double
     var lambda: Double
+    val style: SkyViewOptions.Style
 }
 
 abstract class SkyViewOptions: ISkyViewOptions {
+
+    enum class Style {
+        Normal,
+        Plain,
+    }
 
     private val touchLiveData: MutableLiveData<Long> = MutableLiveData<Long>().apply { value = 0 }
 
@@ -43,6 +50,21 @@ abstract class SkyViewOptions: ISkyViewOptions {
     override fun touch() {
         val v = touchLiveData.value ?: 0
         touchLiveData.postValue(v + 1)
+    }
+
+    override var style: Style = Style.Normal
+        set(value) {
+            if (field != value) {
+                field = value
+                touch()
+            }
+        }
+
+    fun toggleStyle() {
+        style = when (style) {
+            Style.Normal -> Style.Plain
+            Style.Plain -> Style.Normal
+        }
     }
 
     override var radius: Double = 6.0

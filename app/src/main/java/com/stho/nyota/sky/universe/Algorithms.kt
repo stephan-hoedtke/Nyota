@@ -142,9 +142,9 @@ object Algorithms {
         val C = 1 / sqrt(1 + f * (f - 2) * sin(phi) * sin(phi))
         val S = (1 - f) * (1 - f) * C
         return Vector(
-                a * C * cos(phi) * cos(theta),
-                a * C * cos(phi) * sin(theta),
-                a * S * sin(phi)
+            a * C * cos(phi) * cos(theta),
+            a * C * cos(phi) * sin(theta),
+            a * S * sin(phi)
         )
     }
 
@@ -219,6 +219,23 @@ object Algorithms {
         return alpha * EARTH_RADIUS
     }
 
+    @Suppress("SpellCheckingInspection")
+    fun calculateAzimuthAltitude(RA: Double, Decl: Double, moment: IMoment): Topocentric {
+        val HA = Degree.normalizeTo180(15 * moment.lst - RA) // Hour Angle (HA) is usually given in the interval -12 to +12 angleInHours, or -180 to +180 degrees
+        val x = Degree.cos(HA) * Degree.cos(Decl)
+        val y = Degree.sin(HA) * Degree.cos(Decl)
+        val z = Degree.sin(Decl)
+        val latitude = moment.location.latitude
+        val xhor = x * Degree.sin(latitude) - z * Degree.cos(latitude)
+        val zhor = x * Degree.cos(latitude) + z * Degree.sin(latitude)
+        val azimuth = Degree.arcTan2(y, xhor) + 180 // measure from north eastward
+        val altitude = Degree.arcTan2(zhor, sqrt(xhor * xhor + y * y))
+        // This completes our calculation of the local azimuth and altitude.
+        // Note that azimuth is 0 at North, 90 deg at East, 180 deg at South and 270 deg at West.
+        // Altitude is of course 0 at the (mathematical) horizon, 90 deg at zenith, and negative below the horizon.
+        return Topocentric(azimuth, altitude)
+    }
+
     /// <summary>
     /// Move by distance into the direction of the bearing angle
     /// </summary>
@@ -243,7 +260,11 @@ object Algorithms {
         val c = 2 * atan2(sqrt(a), sqrt(1 - a))
         return Earth.RADIUS * c
     }
+
+    fun calculateEclipticDeclination(obliquity: Double, rightAscension: Double): Double =
+        Degree.arcTan(Degree.tan(obliquity) * Degree.sin(rightAscension))
 }
+
 
 internal fun Double.polynomial(C0: Double, C1: Double, C2: Double) =
     this * (this * C2 + C1) + C0

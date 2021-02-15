@@ -12,6 +12,7 @@ import android.view.GestureDetector.SimpleOnGestureListener
 import android.view.ScaleGestureDetector.SimpleOnScaleGestureListener
 import com.stho.nyota.ISkyViewListener
 import com.stho.nyota.sky.universe.*
+import com.stho.nyota.sky.utilities.Degree
 import com.stho.nyota.sky.utilities.Topocentric
 import com.stho.nyota.sky.utilities.projections.ISphereProjection
 import com.stho.nyota.sky.utilities.projections.SphereProjection
@@ -121,8 +122,8 @@ abstract class AbstractSkyView(context: Context?, attrs: AttributeSet?): View(co
     }
 
     open fun applyScrolling(dx: Double, dy: Double) {
-        center.azimuth += projection.calculateAngle(dx)
-        center.altitude -= projection.calculateAngle(dy)
+        center.azimuth = Degree.normalize(center.azimuth + projection.calculateAngle(dx))
+        center.altitude = (center.altitude - projection.calculateAngle(dy)).coerceIn(-90.0, 90.0)
         tippedPosition = null
         raiseOnChangeCenter()
         invalidate()
@@ -201,6 +202,12 @@ abstract class AbstractSkyView(context: Context?, attrs: AttributeSet?): View(co
             invalidate()
         }
     }
+
+    protected fun drawLight() =
+        draw.drawLight()
+
+    protected fun drawEcliptic(ecliptic: Collection<Topocentric>) =
+        draw.drawEcliptic(ecliptic)
 
     protected fun drawSun(sun: IElement) =
         draw.drawSun(sun, getScaledBitmap(sun.imageId, 72, 72))

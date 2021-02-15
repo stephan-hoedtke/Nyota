@@ -100,6 +100,6 @@ abstract class AbstractSphereProjection: ISphereProjection {
      * to avoid projection of points "behind the observer"
      */
     companion object {
-        private const val TOLERANCE = 0.17364818 // cos(80°)
+        private const val TOLERANCE = 0.0174524064372 // cos(89°)
     }
 }

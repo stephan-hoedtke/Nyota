@@ -51,11 +51,18 @@
             app:layout_constraintTop_toBottomOf="@id/checkBoxDisplayPlanetNames" />
 
         <CheckBox
+            android:id="@+id/checkBoxDisplayEcliptic"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/label_display_ecliptic"
+            app:layout_constraintTop_toBottomOf="@id/checkBoxDisplayStarNames" />
+
+        <CheckBox
             android:id="@+id/checkBoxDisplayTargets"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/label_display_targets"
-            app:layout_constraintTop_toBottomOf="@id/checkBoxDisplayStarNames" />
+            app:layout_constraintTop_toBottomOf="@id/checkBoxDisplayEcliptic" />
 
         <CheckBox
             android:id="@+id/checkBoxDisplaySatellites"

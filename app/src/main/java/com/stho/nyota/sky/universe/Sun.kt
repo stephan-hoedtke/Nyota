@@ -149,5 +149,25 @@ class Sun : AbstractSolarSystemElement() {
             sun.updateGeocentricAscensionDeclination()
             return sun
         }
+
+        /**
+          * ε = 23° 26′ 21″.406 − 46″.836769 T − 0″.0001831 T^2 + 0″.00200340 T^3 − 0″.576×10−6 T^4 − 4″.34×10−8 T^5
+         * with T = Julian centuries since J2000.0
+         */
+        private fun getObliquityFor(T: Double): Double =
+            23.0 + 26.0 / 60.0 + (21.406 - 46.836769 * T - 0.0001831 * T * T + 0.00200340 * T * T * T) / 3600.0
+
+        fun eclipticFor(moment: IMoment): Collection<Topocentric> {
+            val ecliptic = ArrayList<Topocentric>()
+            val obliquity = getObliquityFor(moment.utc.centuriesSince2000)
+            for (x in 0..355 step 5) {
+                val rightAscension: Double = x.toDouble()
+                val declination: Double = Algorithms.calculateEclipticDeclination(obliquity, rightAscension)
+                val position = Algorithms.calculateAzimuthAltitude(rightAscension, declination, moment)
+                ecliptic.add(position)
+            }
+            return ecliptic
+        }
     }
 }
+

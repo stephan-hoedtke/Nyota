@@ -50,6 +50,9 @@ class SkyView(context: Context?, attrs: AttributeSet?) : AbstractSkyView(context
         get() = referenceElement?.position
 
     override fun onDrawElements() {
+
+        drawLight()
+
         universe?.let {
             onDrawUniverse(it)
         }
@@ -68,32 +71,35 @@ class SkyView(context: Context?, attrs: AttributeSet?) : AbstractSkyView(context
     }
 
     private fun onDrawUniverse(universe: Universe) {
-        for (special in universe.specials) {
-            super.drawNameOf(special)
+        if (options.displayEcliptic) {
+            super.drawEcliptic(Sun.eclipticFor(universe.moment))
         }
-        for (anything in universe.any) {
-            super.drawNameOf(anything)
+        universe.specials.forEach {
+            super.drawNameOf(it)
         }
-        for (constellation in universe.constellations.values) {
-            super.drawConstellation(constellation, referenceType = ReferenceType.Default)
+        universe.any.forEach {
+            super.drawNameOf(it)
         }
-        for (star in universe.vip) {
-            super.drawStar(star, referenceType = ReferenceType.Default)
+        universe.constellations.values.forEach {
+            super.drawConstellation(it, referenceType = ReferenceType.Default)
         }
-        for (galaxy in universe.galaxies.values) {
-            super.drawGalaxy(galaxy, referenceType = ReferenceType.Default)
+        universe.vip.forEach {
+            super.drawStar(it, referenceType = ReferenceType.Default)
         }
-         for (planet in universe.solarSystem.planets) {
-            super.drawPlanet(planet)
+        universe.galaxies.values.forEach {
+            super.drawGalaxy(it, referenceType = ReferenceType.Default)
+        }
+        universe.solarSystem.planets.forEach {
+            super.drawPlanet(it)
         }
         if (options.displayTargets) {
-            for (target in universe.targets.values) {
-                super.drawTarget(target)
+            universe.targets.values.forEach {
+                super.drawTarget(it)
             }
         }
         if (options.displaySatellites) {
-            for (satellite in universe.satellites.values) {
-                super.drawSatellite(satellite)
+            universe.satellites.values.forEach {
+                super.drawSatellite(it)
             }
         }
         super.drawMoon(universe.solarSystem.moon)

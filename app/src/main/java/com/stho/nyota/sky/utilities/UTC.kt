@@ -88,6 +88,14 @@ class UTC : ITime {
         get() = (JD - JULIAN_DAY_2000_JAN_FIRST) / JULIAN_DAYS_PER_YEAR
 
     /**
+     * Centuries since 2000 Jan 1st
+     *
+     * @return centuries and fraction
+     */
+    val centuriesSince2000: Double
+        get() = 0.01 * yearsSince2000
+
+    /**
      * Returns the local sidereal time in angleInHours [0 ; 24]
      * The sidereal time is measured by the rotation of the Earth, with respect to the stars (rather than relative to the Sun).
      * Local sidereal time is the right ascension (RA, an equatorial coordinate) of a star on the observers meridian.

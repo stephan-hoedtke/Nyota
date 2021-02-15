@@ -5,6 +5,7 @@ import android.util.DisplayMetrics
 import android.view.*
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.os.bundleOf
+import androidx.fragment.app.FragmentManager
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
 import com.stho.nyota.AbstractElementFragment
@@ -16,6 +17,7 @@ import com.stho.nyota.sky.universe.Constellation
 import com.stho.nyota.sky.universe.IElement
 import com.stho.nyota.sky.universe.Star
 import com.stho.nyota.sky.utilities.*
+import com.stho.nyota.ui.sky.SkyFragmentOptionsDialog
 
 
 // TODO: show constellation in "real sky view", not just the Icon
@@ -44,12 +46,14 @@ class ConstellationFragment : AbstractElementFragment() {
         super.setupBasics(binding.basics)
         super.setupDetails(binding.details)
 
+        binding.sky.setOptions(viewModel.options)
         binding.sky.setConstellation(viewModel.constellation)
         binding.buttonSkyView.setOnClickListener { onSkyView() }
         binding.buttonFinderView.setOnClickListener { onFinderView() }
         binding.timeVisibilityOverlay.currentVisibility.setOnClickListener { onToggleImage() }
         binding.buttonZoomIn.setOnClickListener { onZoomIn() }
         binding.buttonZoomOut.setOnClickListener { onZoomOut() }
+        binding.buttonToggleStyle.setOnClickListener { onToggleStyle() }
         binding.sky.registerListener(object : ISkyViewListener {
             override fun onChangeCenter() {
                 viewModel.setCenter(binding.sky.center)
@@ -106,6 +110,7 @@ class ConstellationFragment : AbstractElementFragment() {
         viewModel.universeLD.observe(viewLifecycleOwner, { universe -> onUpdateConstellation(universe.moment) })
         viewModel.zoomAngleLD.observe(viewLifecycleOwner, { zoomAngle -> onObserveZoomAngle(zoomAngle) })
         viewModel.centerLD.observe(viewLifecycleOwner, { center -> onObserveCenter(center) })
+        viewModel.options.touchLD.observe(viewLifecycleOwner, { _ -> binding.sky.touch() })
     }
 
     override fun onDestroyView() {
@@ -119,9 +124,8 @@ class ConstellationFragment : AbstractElementFragment() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (item.itemId == R.id.action_display) {
-            // TODO: Show dialog to set otions... https://guides.codepath.com/android/using-dialogfragment
-            showSnackbar("Show Display Option Dialog here...")
+        when (item.itemId) {
+            R.id.action_display -> displaySkyFragmentOptionsDialog()
         }
         return super.onOptionsItemSelected(item)
     }
@@ -213,6 +217,16 @@ class ConstellationFragment : AbstractElementFragment() {
 
     private fun onZoomOut() {
         viewModel.applyScale(1 / 1.1)
+    }
+
+    private fun onToggleStyle() {
+        viewModel.options.toggleStyle()
+    }
+
+    private fun displaySkyFragmentOptionsDialog() {
+        val fragmentManager: FragmentManager = requireActivity().supportFragmentManager
+        val tag = "fragment_constellation_options_dialog"
+        ConstellationFragmentOptionsDialog(viewModel.options).show(fragmentManager, tag)
     }
 
     private fun getKeyFromArguments(): String? =

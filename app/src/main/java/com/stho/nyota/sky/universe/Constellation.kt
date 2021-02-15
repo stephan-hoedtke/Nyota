@@ -127,8 +127,7 @@ class Constellation internal constructor(val id: Long, val rank: Int, override v
             require(symbols.size > 1) { "A line must have at least 2 stars" }
             lines.add(getStarsFor(*symbols))
             return this
-        }
-        catch(ex: Exception) {
+        } catch (ex: Exception) {
             Log.d("ERROR", ex.toString())
             throw ex
         }
@@ -213,6 +212,31 @@ class Constellation internal constructor(val id: Long, val rank: Int, override v
     override fun toString(): String =
         name
 
+    /**
+     * Zodiac = Tierkreis = ζῳδιακός
+     */
+    data class Zodiac(val number: Int, val fromMonth: Int, val fromDay: Int, val toMonth: Int, val toDay: Int) {
+        override fun toString(): String {
+            return "$fromDay.${fromMonth + 1} - $toDay.${toMonth + 1}"
+        }
+    }
+
+    private val zodiac: Zodiac? = when (rank) {
+        Aries -> Zodiac(1, Calendar.MARCH, 21, Calendar.APRIL, 20)
+        Taurus -> Zodiac(2, Calendar.APRIL, 21, Calendar.MAY, 20)
+        Gemini -> Zodiac(3, Calendar.MAY, 21, Calendar.JUNE, 21)
+        Cancer -> Zodiac(4, Calendar.JUNE, 22, Calendar.JULY, 22)
+        Leo -> Zodiac(5, Calendar.JULY, 23, Calendar.AUGUST, 23)
+        Virgo -> Zodiac(6, Calendar.AUGUST, 24, Calendar.SEPTEMBER, 23)
+        Libra -> Zodiac(7, Calendar.SEPTEMBER, 24, Calendar.OCTOBER, 23)
+        Scorpius -> Zodiac(8, Calendar.OCTOBER, 24, Calendar.NOVEMBER, 22)
+        Sagittarius -> Zodiac(9, Calendar.NOVEMBER, 23, Calendar.DECEMBER, 21)
+        Capricornus -> Zodiac(10, Calendar.DECEMBER, 22, Calendar.JANUARY, 20)
+        Aquarius -> Zodiac(11, Calendar.JANUARY, 21, Calendar.FEBRUARY, 19)
+        Pisces -> Zodiac(12, Calendar.FEBRUARY, 20, Calendar.MARCH, 20)
+        else -> null
+    }
+
     private fun calculateAveragePosition() {
         val length = stars.size
         val decl = DoubleArray(length)
@@ -228,16 +252,23 @@ class Constellation internal constructor(val id: Long, val rank: Int, override v
 
     override fun getBasics(moment: Moment): PropertyList =
         super.getBasics(moment).apply {
-            translations.forEach { add(Language.languageImageId(it.key), it.key.toString(), it.value) }
-            stars.filter { s -> s.hasSymbol || s.hasFriendlyName }.forEach{ add(it) }
-            if (modernZodiacSignNo > 0) {
-                add(R.drawable.empty, "Zodiac sign $modernZodiacSignNo", modernZodiacInfo ?: "")
+            translations.forEach {
+                add(Language.languageImageId(it.key), it.key.toString(), it.value)
+            }
+            add(R.drawable.empty, author, year.toString())
+            zodiac?.also {
+                add(R.drawable.empty, "Zodiac sign ${it.number}", it.toString())
+            }
+            stars.filter { s -> s.hasSymbol || s.hasFriendlyName }.forEach {
+                add(it)
             }
         }
 
     override fun getDetails(moment: Moment): PropertyList =
         super.getDetails(moment).apply {
-            stars.filter { s -> !s.hasSymbol && !s.hasFriendlyName }.forEach{ add(it) }
+            stars.filter { s -> !s.hasSymbol && !s.hasFriendlyName }.forEach {
+                add(it)
+            }
         }
 
     fun findNearestStarByPosition(position: Topocentric, magnitude: Double, sensitivityAngle: Double): Star? {
@@ -245,53 +276,22 @@ class Constellation internal constructor(val id: Long, val rank: Int, override v
         var brightness: Double = INVALID_MAGNITUDE
         var star: Star? = null
 
-        for (s in stars) {
-            if (s.isBrighterThan(magnitude) && s.isNear(position, sensitivityAngle)) {
-                val b = s.magn
-                val d = s.distanceTo(position)
+        stars.forEach {
+            if (it.isBrighterThan(magnitude) && it.isNear(position, sensitivityAngle)) {
+                val b = it.magn
+                val d = it.distanceTo(position)
                 if (b < brightness || (b == brightness && d < distance)) {
                     brightness = b
                     distance = d
-                    star = s
+                    star = it
                 }
             }
         }
+
         return star
     }
 
-    val modernZodiacSignNo: Int = when (rank) {
-        Aries -> 1
-        Taurus -> 2
-        Gemini -> 3
-        Cancer -> 4
-        Leo -> 5
-        Virgo -> 6
-        Libra -> 7
-        Scorpius -> 8
-        Sagittarius -> 9
-        Capricornus -> 10
-        Aquarius -> 11
-        Pisces -> 12
-        else -> 0
-    }
-
-    val modernZodiacInfo: String? = when (rank) {
-        Aries -> "Feb 20 - Mar 21"
-        Taurus -> "Apr 21 - May 20"
-        Gemini -> "May 21 - Jun 21"
-        Cancer -> "Jun 22 - Jul 22"
-        Leo -> "Jul 23 - Aug 23"
-        Virgo -> "Aug 24 - Sep 23"
-        Libra -> "Sep 24 - Oct 23"
-        Scorpius -> "Oct 24 - Nov 22"
-        Sagittarius -> "Nov 23 - Dec 21"
-        Capricornus -> "Jan 20 - Dec 22"
-        Aquarius -> "Jan 21 - Feb 19"
-        Pisces -> "Feb 20 - Mar 20"
-        else -> null
-    }
-
-    companion object {
+     companion object {
 
         fun createWithId(id: Long, rank: Int, name: String, abbreviation: String, english: String, german: String, french: String, greek: String, author: String, year: Int, brightness: Double, visibility: String, map: String, link: String) =
             Constellation(id, rank, name, abbreviation, author, year, brightness)
@@ -301,8 +301,8 @@ class Constellation internal constructor(val id: Long, val rank: Int, override v
                 .translate(Language.French, french)
                 .translate(Language.Greek, greek)
                 .link(link)
-                // TODO: Visibility
-                // TODO: Map
+        // TODO: Visibility
+        // TODO: Map
 
         private fun toKey(rank: Int) =
             "CONSTELLATION:${rank}"

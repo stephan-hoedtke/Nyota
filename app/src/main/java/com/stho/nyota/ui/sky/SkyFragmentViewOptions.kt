@@ -83,6 +83,15 @@ class SkyFragmentViewOptions(val settings: ISkyViewSettings): SkyViewOptions(), 
             }
         }
 
+    override var displayEcliptic: Boolean
+        get() = settings.displayEcliptic
+        set(value) {
+            if (settings.displayEcliptic != value) {
+                settings.displayEcliptic = value
+                touch()
+            }
+        }
+
     override var sphereProjection: Projection
         get() = settings.sphereProjection
         set(value) {

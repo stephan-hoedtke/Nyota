@@ -38,6 +38,7 @@ class UniverseInitializer(universe: Universe) : AbstractUniverseInitializer(univ
     // https://en.wikipedia.org/wiki/IAU_designated_constellations
     // https://deepsky.astronomie.info/Tau/index.de.php !
     // https://physik.cosmos-indirekt.de/Physik-Schule/Sternbild
+    // https://physik.cosmos-indirekt.de/Physik-Schule/Datei:Constellations_ecliptic_equirectangular_plot.svg
     private fun registerConstellations() {
         registerAndromeda()
         registerAntlia()
@@ -265,18 +266,25 @@ class UniverseInitializer(universe: Universe) : AbstractUniverseInitializer(univ
 
     private fun registerAndromeda() {
         universe.constellations[Constellation.Andromeda]
+            .register(Symbol.Q, getStar(9927)) // 51 And
             .line(Symbol.Alpha, Symbol.Delta, Symbol.Beta, Symbol.Gamma)
             .line(Symbol.Eta, Symbol.Zeta, Symbol.Epsilon, Symbol.Delta, Symbol.Pi, Symbol.Iota, Symbol.Kappa, Symbol.Lambda)
+            .line(Symbol.Iota, Symbol.Omicron)
+            .line(Symbol.Pi, Symbol.Beta)
+            .line(Symbol.Beta, Symbol.Mu, Symbol.Nu, Symbol.Phi, Symbol.Q)
     }
 
     private fun registerAquila() {
         universe.constellations[Constellation.Aquila]
             .line(Symbol.Alpha, Symbol.Zeta, Symbol.Delta, Symbol.Alpha, Symbol.Theta, Symbol.Eta, Symbol.Delta, Symbol.Lambda)
+            .line(Symbol.Alpha, Symbol.Gamma)
     }
 
     private fun registerAra() {
         universe.constellations[Constellation.Ara]
-            .line(Symbol.Alpha, Symbol.Beta, Symbol.Gamma, Symbol.Delta, Symbol.Eta, Symbol.Zeta, Symbol.Epsilon, Symbol.Alpha)
+            .line(Symbol.Alpha, Symbol.Beta, Symbol.Gamma, Symbol.Delta)
+            .line(Symbol.Epsilon, Symbol.Zeta, Symbol.Eta)
+            .line(Symbol.Beta, Symbol.Zeta)
     }
 
     private fun registerAntlia() {
@@ -449,10 +457,15 @@ class UniverseInitializer(universe: Universe) : AbstractUniverseInitializer(univ
         universe.constellations[Constellation.Corvus]
             .line(Symbol.Alpha, Symbol.Gamma, Symbol.Delta, Symbol.Beta, Symbol.Epsilon)
     }
+
     private fun registerCrater() {
         universe.constellations[Constellation.Crater]
-            .line(Symbol.Theta, Symbol.Epsilon, Symbol.Delta, Symbol.Alpha, Symbol.Beta, Symbol.Gamma, Symbol.Zeta, Symbol.Eta)
+            .register(Symbol.P, getStar(100407)) // Xi Hya
+            .register(Symbol.Q, getStar(93813)) // N Hya
+            .line(Symbol.Theta, Symbol.Epsilon, Symbol.Delta, Symbol.Alpha)
+            .line(Symbol.Beta, Symbol.Gamma, Symbol.Zeta, Symbol.Eta)
             .line(Symbol.Gamma, Symbol.Delta)
+            .line(Symbol.P, Symbol.Beta, Symbol.Alpha, Symbol.Q)
     }
 
     private fun registerCrux() {
@@ -471,7 +484,7 @@ class UniverseInitializer(universe: Universe) : AbstractUniverseInitializer(univ
 
     private fun registerDelphinus() {
         universe.constellations[Constellation.Delphinus]
-            .line(Symbol.Epsilon, Symbol.Beta, Symbol.Alpha, Symbol.Gamma, Symbol.Delta, Symbol.Beta)
+            .line(Symbol.Epsilon, Symbol.Eta, Symbol.Beta, Symbol.Alpha, Symbol.Gamma, Symbol.Delta, Symbol.Beta)
     }
 
     private fun registerDorado() {
@@ -481,7 +494,8 @@ class UniverseInitializer(universe: Universe) : AbstractUniverseInitializer(univ
     }
     private fun registerDraco() {
         universe.constellations[Constellation.Draco]
-            .line(Symbol.Lambda, Symbol.Kappa, Symbol.Alpha, Symbol.Iota, Symbol.Theta, Symbol.Eta, Symbol.Zeta, Symbol.Omega, Symbol.Phi, Symbol.Delta)
+            .line(Symbol.Lambda, Symbol.Kappa, Symbol.Alpha, Symbol.Iota, Symbol.Theta, Symbol.Eta, Symbol.Zeta, Symbol.Omega, Symbol.Phi, Symbol.Chi)
+            .line(Symbol.Phi, Symbol.Delta)
             .line(Symbol.Epsilon, Symbol.Delta, Symbol.Xi, Symbol.Nu, Symbol.Beta, Symbol.Gamma, Symbol.Xi)
     }
 
@@ -492,8 +506,16 @@ class UniverseInitializer(universe: Universe) : AbstractUniverseInitializer(univ
 
     private fun registerEridanus() {
         universe.constellations[Constellation.Eridanus]
-            .line(Symbol.Alpha, Symbol.Chi, Symbol.Phi, Symbol.Kappa, Symbol.Iota, Symbol.Upsilon, Symbol.Tau)
-            .line(Symbol.Tau, Symbol.Eta, Symbol.Epsilon, Symbol.Delta, Symbol.Gamma, Symbol.Nu, Symbol.Mu, Symbol.Beta)
+            .register(Symbol.Q, getStar(29291)) // Y Eri
+            .register(Symbol.One, getStar(17206)) // Tau 1 Eri
+            .register(Symbol.Two, getStar(17824)) // Tau 2 Eri
+            .register(Symbol.Three, getStar(18978)) // Tau 3 Eri
+            .register(Symbol.Four, getStar(20720)) // Tau 4 Eri
+            .register(Symbol.Five, getStar(22203)) // Tau 5 Eri
+            .register(Symbol.Six, getStar(23754)) // Tau 6 Eri
+            .line(Symbol.Alpha, Symbol.Chi, Symbol.Phi, Symbol.Kappa, Symbol.Iota, Symbol.Theta, Symbol.Upsilon, Symbol.Q)
+            .line(Symbol.Q, Symbol.Six, Symbol.Five, Symbol.Four, Symbol.Three, Symbol.Two, Symbol.One, Symbol.Eta)
+            .line(Symbol.Eta, Symbol.Zeta, Symbol.Epsilon, Symbol.Delta, Symbol.Pi, Symbol.Gamma, Symbol.Omicron, Symbol.Nu, Symbol.Mu, Symbol.Beta)
     }
 
     private fun registerFornax() {
@@ -549,7 +571,6 @@ class UniverseInitializer(universe: Universe) : AbstractUniverseInitializer(univ
             .line(Symbol.Alpha, Symbol.Eta, Symbol.Delta, Symbol.Theta, Symbol.Alpha)
     }
 
-
     private fun registerLacerta() {
         universe.constellations[Constellation.Lacerta]
             .register(Symbol.Four, getStar(212593))
@@ -559,8 +580,9 @@ class UniverseInitializer(universe: Universe) : AbstractUniverseInitializer(univ
             .register(Symbol.Six, getStar(213420))
             .register(Symbol.Eleven, getStar(214868))
             .register(Symbol.Xi, getStar(211073))
-            .line(Symbol.Beta, Symbol.Alpha, Symbol.Four, Symbol.Five, Symbol.Two, Symbol.Six, Symbol.Xi, Symbol.One)
+            .line(Symbol.Beta, Symbol.Alpha, Symbol.Five, Symbol.Two, Symbol.Six, Symbol.Xi, Symbol.One)
             .line(Symbol.Six, Symbol.Eleven, Symbol.Five)
+            .line(Symbol.Beta, Symbol.Four, Symbol.Five)
     }
 
     // Löwe
@@ -635,7 +657,8 @@ class UniverseInitializer(universe: Universe) : AbstractUniverseInitializer(univ
             .register(Symbol.One, getStar(49293))       // 18 Mon
             .register(Symbol.Two, getStar(46300))       // 13 Mon
             .register(Symbol.Three, getStar(47839))     // S Mon
-            .line(Symbol.Alpha, Symbol.Zeta, Symbol.Delta, Symbol.Beta, Symbol.Gamma, Symbol.One, Symbol.Epsilon, Symbol.Two, Symbol.Three)
+            .line(Symbol.Alpha, Symbol.Zeta, Symbol.Delta, Symbol.Beta, Symbol.Gamma)
+            .line(Symbol.Delta, Symbol.One, Symbol.Epsilon, Symbol.Two, Symbol.Three)
             .line(Symbol.One, Symbol.Two)
     }
 

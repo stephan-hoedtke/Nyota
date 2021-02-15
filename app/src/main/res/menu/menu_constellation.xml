@@ -5,7 +5,7 @@
         android:id="@+id/action_display"
         android:orderInCategory="100"
         android:title="@string/action_display"
-        android:icon="@drawable/menu_navigation"
-        app:showAsAction="never" />
+         android:icon="@drawable/eye"
+        app:showAsAction="ifRoom" />
 
 </menu>

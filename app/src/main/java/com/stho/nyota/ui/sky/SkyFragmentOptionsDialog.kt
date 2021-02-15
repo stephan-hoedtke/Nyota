@@ -24,6 +24,7 @@ class SkyFragmentOptionsDialog(val options: ISkyViewOptions): DialogFragment() {
         binding.checkBoxDisplayConstellationNames.setOnCheckedChangeListener { v, isChecked -> options.displayConstellationNames = isChecked }
         binding.checkBoxDisplayPlanetNames.setOnCheckedChangeListener { v, isChecked -> options.displayPlanetNames = isChecked }
         binding.checkBoxDisplayStarNames.setOnCheckedChangeListener { v, isChecked -> options.displayStarNames = isChecked }
+        binding.checkBoxDisplayEcliptic.setOnCheckedChangeListener { v, isChecked -> options.displayEcliptic = isChecked }
         binding.checkBoxDisplayTargets.setOnCheckedChangeListener { v, isChecked -> options.displayTargets = isChecked }
         binding.checkBoxDisplaySatellites.setOnCheckedChangeListener { v, isChecked -> options.displaySatellites = isChecked }
 
@@ -41,6 +42,7 @@ class SkyFragmentOptionsDialog(val options: ISkyViewOptions): DialogFragment() {
         binding.checkBoxDisplayConstellationNames.isChecked = options.displayConstellationNames
         binding.checkBoxDisplayPlanetNames.isChecked = options.displayPlanetNames
         binding.checkBoxDisplayStarNames.isChecked = options.displayStarNames
+        binding.checkBoxDisplayEcliptic.isChecked = options.displayEcliptic
         binding.checkBoxDisplayTargets.isChecked = options.displayTargets
         binding.checkBoxDisplaySatellites.isChecked = options.displaySatellites
     }

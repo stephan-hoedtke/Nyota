@@ -45,6 +45,7 @@ class SkyFragment : AbstractFragment() {
         binding.sky.setReferenceElement(viewModel.element)
         binding.buttonZoomIn.setOnClickListener { onZoomIn() }
         binding.buttonZoomOut.setOnClickListener { onZoomOut() }
+        binding.buttonToggleStyle.setOnClickListener { onToggleStyle() }
         binding.sky.registerListener(object: ISkyViewListener {
             override fun onChangeCenter() {
                 viewModel.setCenter(binding.sky.center)
@@ -191,19 +192,23 @@ class SkyFragment : AbstractFragment() {
         viewModel.applyScale(1 / 1.1)
     }
 
+    private fun onToggleStyle() {
+        viewModel.options.toggleStyle()
+    }
+
     private fun getElementKeyFromArguments(): String? =
         arguments?.getString("ELEMENT")
 
     private fun displaySkyFragmentOptionsDialog() {
         val fragmentManager: FragmentManager = requireActivity().supportFragmentManager
         val tag = "fragment_sky_options_dialog"
-        SkyFragmentOptionsDialog(binding.sky.options).show(fragmentManager, tag)
+        SkyFragmentOptionsDialog(viewModel.options).show(fragmentManager, tag)
     }
 
     private fun displaySkyFragmentProjectionsDialog() {
         val fragmentManager: FragmentManager = requireActivity().supportFragmentManager
         val tag = "fragment_sky_projections_dialog"
-        SkyFragmentProjectionDialog(binding.sky.options).show(fragmentManager, tag)
+        SkyFragmentProjectionDialog(viewModel.options).show(fragmentManager, tag)
     }
 
     private fun displaySkyFragmentLiveModeDialog() {
@@ -254,7 +259,7 @@ class SkyFragment : AbstractFragment() {
                 is Moon -> displaySnackbarForMoon(it)
                 is Sun -> displaySnackbarForSun(it)
                 is Galaxy -> displaySnackbarForGalaxy(it)
-                else -> displaySnackbar("${it.name}")
+                else -> displaySnackbar(it.name)
             }
         } ?: displaySnackbar("$position")
     }

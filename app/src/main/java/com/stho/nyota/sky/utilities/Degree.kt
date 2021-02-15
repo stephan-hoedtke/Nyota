@@ -94,6 +94,10 @@ class Degree {
             return RADEG * kotlin.math.atan2(y, x)
         }
 
+        fun arcTan(x: Double): Double {
+            return RADEG * kotlin.math.atan(x)
+        }
+
         fun arcSin(x: Double): Double {
             return RADEG * kotlin.math.asin(x)
         }

@@ -80,6 +80,7 @@ class NyotaDatabaseAdapter(private val db: SQLiteDatabase) {
         settings.displayTargets = contract.readBoolean(DisplayTargets, settings.displayTargets)
         settings.displaySatellites = contract.readBoolean(DisplaySatellites, settings.displaySatellites)
         settings.displayGrid = contract.readBoolean(DisplayGrid, settings.displayGrid)
+        settings.displayEcliptic = contract.readBoolean(DisplayEcliptic, settings.displayEcliptic)
         settings.sphereProjection = Projection.deserialize(contract.readString(SphereProjectionParameter, settings.sphereProjection.serialize()))
         settings.magnitude = contract.readDouble(Magnitude, settings.magnitude)
         settings.liveMode = LiveMode.deserialize(contract.readString(LiveModeParameter, settings.liveMode.serialize()))
@@ -100,6 +101,7 @@ class NyotaDatabaseAdapter(private val db: SQLiteDatabase) {
         contract.write(DisplayTargets, settings.displayTargets)
         contract.write(DisplaySatellites, settings.displaySatellites)
         contract.write(DisplayGrid, settings.displayGrid)
+        contract.write(DisplayEcliptic, settings.displayEcliptic)
         contract.write(SphereProjectionParameter, settings.sphereProjection.serialize())
         contract.write(Magnitude, settings.magnitude)
         contract.write(LiveModeParameter, settings.liveMode.serialize())
@@ -119,6 +121,7 @@ class NyotaDatabaseAdapter(private val db: SQLiteDatabase) {
         private const val DisplayTargets = "DisplayTargets"
         private const val DisplaySatellites = "DisplaySatellites"
         private const val DisplayGrid = "DisplayGrid"
+        private const val DisplayEcliptic = "DisplayEcliptic"
         private const val SphereProjectionParameter = "SphereProjection"
         private const val Magnitude = "Magnitude"
         private const val LiveModeParameter = "LiveMode"
