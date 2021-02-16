@@ -43,9 +43,9 @@ enum class Projection {
     companion object {
         fun deserialize(value: String): Projection {
             return try {
-                Projection.valueOf(value)
+                valueOf(value)
             } catch (ex: Exception) {
-                Projection.GNOMONIC
+                GNOMONIC
             }
         }
     }

@@ -1,23 +1,20 @@
 package com.stho.nyota.ui.home
 
-import android.R
 import android.os.Bundle
-import android.view.*
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
-import com.stho.nyota.createViewModel
 import com.stho.nyota.databinding.FragmentHomeDialogOptionsBinding
 
 
-class HomeFragmentOptionsDialog: DialogFragment() {
+class HomeFragmentOptionsDialog(private var viewModel: HomeViewModel): DialogFragment() {
 
-    // HomeFragment and HomeFragmentOptionsDialog share the view model instance, which is created with the activity as owner.
-    private lateinit var viewModel: HomeViewModel
     private var bindingReference: FragmentHomeDialogOptionsBinding? = null
     private val binding: FragmentHomeDialogOptionsBinding get() = bindingReference!!
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        viewModel = createViewModel(HomeViewModel::class.java)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {

@@ -38,15 +38,8 @@ class HomeViewModel(application: Application, repository: Repository) : Reposito
     val optionsLD: LiveData<Options>
         get() = optionsLiveData
 
-    private var elements: List<IElement>? = null
-
-    val visibleElements: List<IElement>
-        get() = with (elements ?: createElementList(options)) {
-            return if (options.showInvisibleElements)
-                this
-            else
-                this.filter { element -> element.isVisible }
-        }
+    val elementsLD: LiveData<List<IElement>>
+        get() = Transformations.map(optionsLiveData) { options -> createElementList(options) }
 
     val options: Options
         get() = optionsLiveData.value ?: Options()
@@ -63,8 +56,6 @@ class HomeViewModel(application: Application, repository: Repository) : Reposito
 
     private fun updateOptions(options: Options) {
         optionsLiveData.postValue(options)
-        elements = createElementList(options)
-        repository.touchMoment()
     }
 
     private fun createElementList(options: Options): List<IElement> {
@@ -89,6 +80,10 @@ class HomeViewModel(application: Application, repository: Repository) : Reposito
         list.add(universe.constellations[Constellation.Crux])
         list.add(universe.constellations[Constellation.Cygnus])
 
-        return list
+        return if (options.showInvisibleElements)
+            list
+        else
+            list.filter { element -> element.isVisible }
     }
 }
+

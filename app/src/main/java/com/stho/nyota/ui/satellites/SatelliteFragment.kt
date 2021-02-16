@@ -29,8 +29,8 @@ class SatelliteFragment : AbstractElementFragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val satelliteName: String? = getSatelliteNameFromArguments()
-        viewModel = createSatelliteViewModel(satelliteName)
+        val satelliteKey: String? = getSatelliteKeyFromArguments()
+        viewModel = createSatelliteViewModel(satelliteKey)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
@@ -81,19 +81,17 @@ class SatelliteFragment : AbstractElementFragment() {
         updateActionBar(satellite.name, toLocalDateString(moment))
     }
 
-    private fun getSatelliteNameFromArguments(): String? {
+    private fun getSatelliteKeyFromArguments(): String? {
        return arguments?.getString("SATELLITE")
     }
 
     private fun onEarthView() {
-        val satelliteName: String = viewModel.satellite.name
-        val action = SatelliteFragmentDirections.actionNavSatelliteToNavSatelliteEarth(satelliteName)
+        val action = SatelliteFragmentDirections.actionNavSatelliteToNavSatelliteEarth(viewModel.satellite.key)
         findNavController().navigate(action)
     }
 
     private fun onUpdateTle() {
-        val satelliteName: String = viewModel.satellite.name
-        val action = SatelliteFragmentDirections.actionNavSatelliteToNavSatelliteDownloadElements(satelliteName)
+        val action = SatelliteFragmentDirections.actionNavSatelliteToNavSatelliteDownloadElements(viewModel.satellite.key)
         findNavController().navigate(action)
     }
 }

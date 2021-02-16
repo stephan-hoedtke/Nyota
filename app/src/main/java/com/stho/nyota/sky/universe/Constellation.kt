@@ -237,6 +237,12 @@ class Constellation internal constructor(val id: Long, val rank: Int, override v
         else -> null
     }
 
+    val isZodiac: Boolean =
+        (zodiac != null)
+
+    val isPtolemaeus: Boolean =
+        (year < 200)
+
     private fun calculateAveragePosition() {
         val length = stars.size
         val decl = DoubleArray(length)

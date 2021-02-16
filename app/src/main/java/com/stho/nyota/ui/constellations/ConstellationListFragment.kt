@@ -1,17 +1,16 @@
 package com.stho.nyota.ui.constellations
 
+import android.content.Context
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
+import androidx.fragment.app.FragmentManager
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.stho.nyota.*
 import com.stho.nyota.databinding.FragmentConstellationListBinding
-import com.stho.nyota.sky.universe.AbstractElement
-import com.stho.nyota.sky.universe.Constellation
-import com.stho.nyota.sky.universe.Universe
+import com.stho.nyota.sky.universe.*
 import com.stho.nyota.sky.utilities.Moment
+import com.stho.nyota.ui.home.HomeFragment
 
 
 /**
@@ -30,6 +29,8 @@ class ConstellationListFragment : AbstractFragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         viewModel = createViewModel(ConstellationListViewModel::class.java)
+        setHasOptionsMenu(true)
+        loadOptions()
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
@@ -49,6 +50,7 @@ class ConstellationListFragment : AbstractFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel.universeLD.observe(viewLifecycleOwner, { universe -> updateUniverse(universe) })
+        viewModel.constellationsLD.observe(viewLifecycleOwner, { constellations -> onObserveConstellations(constellations) })
     }
 
     override fun onDestroyView() {
@@ -56,25 +58,61 @@ class ConstellationListFragment : AbstractFragment() {
         bindingReference = null
     }
 
-    private fun openElement(element: AbstractElement) {
-        when (element) {
-            is Constellation -> openConstellation(element)
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.menu_constellation_list, menu)
+        super.onCreateOptionsMenu(menu, inflater)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.action_filter -> displayConstellationListFragmentFilterDialog()
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
+    override fun onPause() {
+        super.onPause()
+        saveOptions()
+    }
+
+    private fun loadOptions() {
+        requireContext().getSharedPreferences(KEY, Context.MODE_PRIVATE).apply {
+            viewModel.updateOptions(
+                Constellations.Filter.deserialize(getString(FILTER, null) ?: viewModel.options.filter.serialize())
+            )
         }
     }
 
-    private fun openConstellation(constellation: Constellation) {
-        val action = ConstellationListFragmentDirections.actionNavConstellationsToNavConstellation(constellation.key)
-        findNavController().navigate(action)
+    private fun saveOptions() {
+        requireContext().getSharedPreferences(KEY, Context.MODE_PRIVATE).edit().apply {
+            putString(FILTER, viewModel.options.filter.serialize())
+            apply()
+        }
     }
 
     private fun updateUniverse(universe: Universe) {
-        adapter.updateConstellations(universe.constellations)
+        adapter.notifyDataSetChanged() // Do not change the list. Only attributes of list elements have changed
         bind(universe.moment)
+    }
+
+    private fun onObserveConstellations(constellations: List<Constellation>) {
+        adapter.updateConstellations(constellations)
     }
 
     private fun bind(moment: Moment) {
         bindTime(binding.timeOverlay, moment)
         updateActionBar(R.string.label_constellations, toLocalDateString(moment))
+    }
+
+    private fun displayConstellationListFragmentFilterDialog() {
+        val fragmentManager: FragmentManager = requireActivity().supportFragmentManager
+        val tag = "fragment_constellation_list_filter_dialog" // TODO: simplify tags for dialogs
+        ConstellationListFragmentFilterDialog(viewModel).show(fragmentManager, tag)
+    }
+
+    companion object {
+        private const val KEY = "ConstellationListFragment"
+        private const val FILTER = "Filter"
     }
 }
 

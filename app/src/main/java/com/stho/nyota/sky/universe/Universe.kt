@@ -19,10 +19,6 @@ class Universe {
     val any = ArrayList<Anything>()
     val vip = ArrayList<Star>()
 
-    fun setSatelliteTLE(satelliteName: String, elements: String) {
-        satellites.findSatelliteByName(satelliteName)?.updateElements(elements)
-    }
-
     /**
      * Returns the moment (observer + UTC) for which the Universe was calculated last
      * @return

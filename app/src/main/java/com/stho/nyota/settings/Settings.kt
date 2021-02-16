@@ -3,6 +3,7 @@ package com.stho.nyota.settings
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.stho.nyota.Interval
+import com.stho.nyota.sky.universe.Constellations
 import com.stho.nyota.sky.utilities.LiveMode
 import com.stho.nyota.sky.utilities.projections.Projection
 import com.stho.nyota.ui.sky.ISkyViewSettings

@@ -13,7 +13,7 @@ import com.stho.nyota.sky.universe.IElement
 
 class ConstellationListRecyclerViewAdapter : RecyclerView.Adapter<ConstellationListRecyclerViewAdapter.ViewHolder>() {
 
-    private var entries: List<Constellation> = ArrayList<Constellation>()
+    private var constellations: List<Constellation> = ArrayList<Constellation>()
 
     var onItemClick: ((Constellation) -> Unit)? = null
     var onItemLongClick: ((Constellation) -> Unit)? = null
@@ -24,7 +24,7 @@ class ConstellationListRecyclerViewAdapter : RecyclerView.Adapter<ConstellationL
     }
 
     private fun getConstellationByIndex(position: Int): Constellation? =
-        if (position >= 0 && position < entries.size) entries[position] else null
+        if (position >= 0 && position < constellations.size) constellations[position] else null
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         getConstellationByIndex(position)?.also {
@@ -32,7 +32,7 @@ class ConstellationListRecyclerViewAdapter : RecyclerView.Adapter<ConstellationL
         }
     }
 
-    override fun getItemCount(): Int = entries.size
+    override fun getItemCount(): Int = constellations.size
 
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         private val binding: FragmentConstellationListEntryBinding = FragmentConstellationListEntryBinding.bind(view)
@@ -46,8 +46,8 @@ class ConstellationListRecyclerViewAdapter : RecyclerView.Adapter<ConstellationL
         }
     }
 
-    fun updateConstellations(constellations: Constellations) {
-        entries = constellations.values.toList()
+    fun updateConstellations(constellations: List<Constellation>) {
+        this.constellations = constellations
         notifyDataSetChanged()
     }
 }

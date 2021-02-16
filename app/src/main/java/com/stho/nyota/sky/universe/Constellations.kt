@@ -1,11 +1,31 @@
 package com.stho.nyota.sky.universe
 
+import com.stho.nyota.sky.utilities.projections.Projection
 import java.lang.Exception
 import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
 
 class Constellations {
+
+    enum class Filter {
+        Ptolemaeus,
+        Zodiac,
+        IAU;
+
+        fun serialize(): String =
+            toString()
+
+        companion object {
+            fun deserialize(value: String): Filter {
+                return try {
+                    valueOf(value)
+                } catch (ex: Exception) {
+                    IAU
+                }
+            }
+        }
+    }
 
     private val array: ArrayList<Constellation> = ArrayList()
     private val map: HashMap<Int, Constellation> = HashMap()

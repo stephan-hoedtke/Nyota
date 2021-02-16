@@ -2,6 +2,7 @@ package com.stho.nyota.ui.sky
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.stho.nyota.sky.universe.Constellations
 import com.stho.nyota.sky.utilities.projections.Projection
 
 // TODO: make ISkyViewSettings readonly (the view reads the data) and IMutableSkyViewSettings available to the fragment...

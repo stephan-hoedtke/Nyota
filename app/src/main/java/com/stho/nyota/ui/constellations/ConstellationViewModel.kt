@@ -7,6 +7,7 @@ import com.stho.nyota.RepositoryViewModelArgs
 import com.stho.nyota.repository.Repository
 import com.stho.nyota.settings.Settings
 import com.stho.nyota.sky.universe.Constellation
+import com.stho.nyota.sky.universe.Constellations
 import com.stho.nyota.sky.universe.Universe
 import com.stho.nyota.sky.utilities.Topocentric
 import com.stho.nyota.sky.utilities.projections.Projection

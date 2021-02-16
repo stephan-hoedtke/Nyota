@@ -51,8 +51,8 @@ class SatelliteEarthFragment : AbstractFragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val satelliteName: String? = getSatelliteNameFromArguments()
-        viewModel = createSatelliteEarthViewModel(satelliteName)
+        val satelliteKey: String? = getSatelliteKeyFromArguments()
+        viewModel = createSatelliteEarthViewModel(satelliteKey)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
@@ -134,7 +134,7 @@ class SatelliteEarthFragment : AbstractFragment() {
         clearMarkers()
     }
 
-    private fun getSatelliteNameFromArguments(): String? {
+    private fun getSatelliteKeyFromArguments(): String? {
         return arguments?.getString("SATELLITE")
     }
 

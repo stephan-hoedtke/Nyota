@@ -80,6 +80,9 @@
     <string name="label_gamma">Gamma</string>
     <string name="label_lambda">Lambda</string>
     <string name="label_zoom_angle">%.0f°</string>
+    <string name="label_filter_ptolemaeus">Ptolemaeus"</string>
+    <string name="label_filter_zodiac">Zodiac (12)</string>
+    <string name="label_filter_iau">IAU (88)</string>
 
     <!-- Actions -->
     <string name="action_time">Date and Time</string>
@@ -97,6 +100,7 @@
     <string name="action_sky">Sky</string>
     <string name="action_finder">Finder</string>
     <string name="action_info">Info</string>
+    <string name="action_filter">Filter</string>
 
     <!-- Menu -->
     <string name="menu_home">Home</string>

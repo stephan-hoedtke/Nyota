@@ -33,27 +33,27 @@ class SatelliteViewModelFactory(private val application: Application, private va
     }
 }
 
-fun SatelliteFragment.createSatelliteViewModel(satelliteName: String?): SatelliteViewModel {
+fun SatelliteFragment.createSatelliteViewModel(satelliteKey: String?): SatelliteViewModel {
     val repository = Repository.requireRepository(this.requireContext())
-    val satellite: Satellite = repository.getSatelliteOrDefault(satelliteName)
+    val satellite: Satellite = repository.getSatelliteOrDefault(satelliteKey)
     val activity = this.requireActivity()
     val application = activity.application
     val viewModelFactory = SatelliteViewModelFactory(application, repository, satellite)
     return ViewModelProvider(this, viewModelFactory).get(SatelliteViewModel::class.java)
 }
 
-fun SatelliteEarthFragment.createSatelliteEarthViewModel(satelliteName: String?): SatelliteEarthViewModel {
+fun SatelliteEarthFragment.createSatelliteEarthViewModel(satelliteKey: String?): SatelliteEarthViewModel {
     val repository = Repository.requireRepository(this.requireContext())
-    val satellite: Satellite = repository.getSatelliteOrDefault(satelliteName)
+    val satellite: Satellite = repository.getSatelliteOrDefault(satelliteKey)
     val activity = this.requireActivity()
     val application = activity.application
     val viewModelFactory = SatelliteViewModelFactory(application, repository, satellite)
     return ViewModelProvider(this, viewModelFactory).get(SatelliteEarthViewModel::class.java)
 }
 
-fun SatelliteDownloadElementsFragment.createSatelliteViewModel(satelliteName: String?): SatelliteDownloadElementsViewModel {
+fun SatelliteDownloadElementsFragment.createSatelliteViewModel(satelliteKey: String?): SatelliteDownloadElementsViewModel {
     val repository = Repository.requireRepository(this.requireContext())
-    val satellite: Satellite = repository.getSatelliteOrDefault(satelliteName)
+    val satellite: Satellite = repository.getSatelliteOrDefault(satelliteKey)
     val activity = this.requireActivity()
     val application = activity.application
     val viewModelFactory = SatelliteViewModelFactory(application, repository, satellite)

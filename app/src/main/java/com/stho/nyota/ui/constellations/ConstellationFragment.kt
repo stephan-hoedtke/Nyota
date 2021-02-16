@@ -125,7 +125,7 @@ class ConstellationFragment : AbstractElementFragment() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.action_display -> displaySkyFragmentOptionsDialog()
+            R.id.action_display -> displayConstellationFragmentOptionsDialog()
         }
         return super.onOptionsItemSelected(item)
     }
@@ -223,7 +223,7 @@ class ConstellationFragment : AbstractElementFragment() {
         viewModel.options.toggleStyle()
     }
 
-    private fun displaySkyFragmentOptionsDialog() {
+    private fun displayConstellationFragmentOptionsDialog() {
         val fragmentManager: FragmentManager = requireActivity().supportFragmentManager
         val tag = "fragment_constellation_options_dialog"
         ConstellationFragmentOptionsDialog(viewModel.options).show(fragmentManager, tag)

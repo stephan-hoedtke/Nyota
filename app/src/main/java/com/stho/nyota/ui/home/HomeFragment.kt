@@ -1,5 +1,7 @@
 package com.stho.nyota.ui.home
 
+import android.content.Context
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.*
 import androidx.fragment.app.FragmentManager
@@ -27,8 +29,8 @@ class HomeFragment : AbstractFragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         viewModel = createViewModel(HomeViewModel::class.java)
-        loadOptionsFromBundle(savedInstanceState)
         setHasOptionsMenu(true)
+        loadOptions()
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
@@ -58,6 +60,7 @@ class HomeFragment : AbstractFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel.universeLD.observe(viewLifecycleOwner, { universe -> updateUniverse(universe.moment) })
+        viewModel.elementsLD.observe(viewLifecycleOwner, { elements -> onObserveElements(elements) })
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -78,19 +81,31 @@ class HomeFragment : AbstractFragment() {
         bindingReference = null
     }
 
-    override fun onSaveInstanceState(outState: Bundle) {
-        writeOptionsToBundle(outState)
-        super.onSaveInstanceState(outState)
+    override fun onPause() {
+        super.onPause()
+        saveOptions()
     }
 
-    private fun loadOptionsFromBundle(bundle: Bundle?) {
-        bundle?.also {
+    private fun loadOptions() {
+        requireContext().getSharedPreferences(KEY, Context.MODE_PRIVATE).apply {
             viewModel.updateOptions(
-                it.getBoolean(STARS, viewModel.options.showStars),
-                it.getBoolean(PLANETS, viewModel.options.showPlanets),
-                it.getBoolean(SATELLITES, viewModel.options.showSatellites),
-                it.getBoolean(TARGETS, viewModel.options.showTargets),
-                it.getBoolean(INVISIBLE_ELEMENTS, viewModel.options.showInvisibleElements))
+                getBoolean(STARS, viewModel.options.showStars),
+                getBoolean(PLANETS, viewModel.options.showPlanets),
+                getBoolean(SATELLITES, viewModel.options.showSatellites),
+                getBoolean(TARGETS, viewModel.options.showTargets),
+                getBoolean(INVISIBLE_ELEMENTS, viewModel.options.showInvisibleElements)
+            )
+        }
+    }
+
+    private fun saveOptions() {
+        requireContext().getSharedPreferences(KEY, Context.MODE_PRIVATE).edit().apply {
+            putBoolean(STARS, viewModel.options.showStars)
+            putBoolean(PLANETS, viewModel.options.showPlanets)
+            putBoolean(SATELLITES, viewModel.options.showSatellites)
+            putBoolean(TARGETS, viewModel.options.showTargets)
+            putBoolean(INVISIBLE_ELEMENTS, viewModel.options.showInvisibleElements)
+            apply()
         }
     }
 
@@ -100,25 +115,19 @@ class HomeFragment : AbstractFragment() {
         ChooseNextStepDialog(element).show(fragmentManager, tag)
     }
 
-    private fun writeOptionsToBundle(bundle: Bundle) {
-        bundle.also {
-            it.putBoolean(STARS, viewModel.options.showStars)
-            it.putBoolean(PLANETS, viewModel.options.showPlanets)
-            it.putBoolean(SATELLITES, viewModel.options.showSatellites)
-            it.putBoolean(TARGETS, viewModel.options.showTargets)
-            it.putBoolean(INVISIBLE_ELEMENTS, viewModel.options.showInvisibleElements)
-        }
-    }
-
     private fun displayHomeFragmentOptionsDialog() {
         val fragmentManager: FragmentManager = requireActivity().supportFragmentManager
         val tag = "fragment_home_options_dialog"
-        HomeFragmentOptionsDialog().show(fragmentManager, tag)
+        HomeFragmentOptionsDialog(viewModel).show(fragmentManager, tag)
     }
 
     private fun updateUniverse(moment: Moment) {
-        adapter.updateElementsUseNewList(viewModel.visibleElements)
+        adapter.notifyDataSetChanged() // Do not change the list. Only attributes of list elements have changed
         bind(moment, viewModel.moon, viewModel.sun, viewModel.iss)
+    }
+
+    private fun onObserveElements(elements: List<IElement>) {
+        adapter.updateElementsUseNewList(elements)
     }
 
     private fun bind(moment: Moment, moon: Moon, sun: Sun, iss: Satellite) {
@@ -161,10 +170,11 @@ class HomeFragment : AbstractFragment() {
         findNavController().navigate(R.id.action_global_nav_info)
 
     companion object {
-        private const val STARS = "STARS"
-        private const val PLANETS = "PLANETS"
-        private const val SATELLITES = "SATELLITES"
-        private const val TARGETS = "TARGETS"
-        private const val INVISIBLE_ELEMENTS = "INVISIBLE"
+        private const val KEY = "HomeFragment"
+        private const val STARS = "Stars"
+        private const val PLANETS = "Planets"
+        private const val SATELLITES = "Satellites"
+        private const val TARGETS = "Targets"
+        private const val INVISIBLE_ELEMENTS = "Invisible"
     }
 }

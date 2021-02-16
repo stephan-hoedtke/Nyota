@@ -65,8 +65,7 @@ class SatelliteListFragment : AbstractFragment() {
     }
 
     private fun openSatellite(satellite: Satellite) {
-        val satelliteName: String = satellite.name
-        val action = SatelliteListFragmentDirections.actionNavSatellitesToNavSatellite(satelliteName)
+        val action = SatelliteListFragmentDirections.actionNavSatellitesToNavSatellite(satellite.key)
         findNavController().navigate(action)
     }
 }

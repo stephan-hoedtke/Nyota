@@ -28,8 +28,8 @@ class SatelliteDownloadElementsFragment : AbstractFragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val satelliteName: String? = getSatelliteNameFromArguments()
-        viewModel = createSatelliteViewModel(satelliteName)
+        val satelliteKey: String? = getSatelliteKeyFromArguments()
+        viewModel = createSatelliteViewModel(satelliteKey)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
@@ -96,12 +96,11 @@ class SatelliteDownloadElementsFragment : AbstractFragment() {
     }
 
     private fun onClickEarthView() {
-        val satelliteName: String = viewModel.satellite.name
-        val action = SatelliteDownloadElementsFragmentDirections.actionNavSatelliteDownloadElementsToNavSatelliteEarth(satelliteName)
+        val action = SatelliteDownloadElementsFragmentDirections.actionNavSatelliteDownloadElementsToNavSatelliteEarth(viewModel.satellite.key)
         findNavController().navigate(action)
     }
 
-    private fun getSatelliteNameFromArguments(): String? {
+    private fun getSatelliteKeyFromArguments(): String? {
         return arguments?.getString("SATELLITE")
     }
 }
