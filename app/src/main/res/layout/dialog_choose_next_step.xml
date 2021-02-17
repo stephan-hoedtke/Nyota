@@ -34,13 +34,14 @@
 
         <TextView
             android:id="@+id/open"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             app:layout_constraintTop_toTopOf="@id/imageOpen"
             app:layout_constraintBottom_toBottomOf="@id/imageOpen"
             app:layout_constraintStart_toEndOf="@id/imageOpen"
+            app:layout_constraintEnd_toEndOf="parent"
             android:layout_marginStart="@dimen/text_margin"
-            android:text="Open" />
+            android:text="@string/label_open" />
 
         <ImageView
             android:id="@+id/imageSkyView"
@@ -54,13 +55,14 @@
 
         <TextView
             android:id="@+id/skyView"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             app:layout_constraintTop_toTopOf="@id/imageSkyView"
             app:layout_constraintBottom_toBottomOf="@id/imageSkyView"
             app:layout_constraintStart_toEndOf="@id/imageSkyView"
+            app:layout_constraintEnd_toEndOf="parent"
             android:layout_marginStart="@dimen/text_margin"
-            android:text="Sky" />
+            android:text="@string/label_sky" />
 
         <ImageView
             android:id="@+id/imageFinderView"
@@ -74,13 +76,14 @@
 
         <TextView
             android:id="@+id/finder"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             app:layout_constraintTop_toTopOf="@id/imageFinderView"
             app:layout_constraintBottom_toBottomOf="@id/imageFinderView"
             app:layout_constraintStart_toEndOf="@id/imageFinderView"
+            app:layout_constraintEnd_toEndOf="parent"
             android:layout_marginStart="@dimen/text_margin"
-            android:text="Finder" />
+            android:text="@string/label_finder" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

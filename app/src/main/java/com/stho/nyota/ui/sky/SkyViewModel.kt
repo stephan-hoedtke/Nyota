@@ -46,12 +46,16 @@ class SkyViewModel(application: Application, repository: Repository, val element
     }
 
     private val isLiveLiveData: MutableLiveData<Boolean> = MutableLiveData<Boolean>().apply { value = false }
+    private val showZoomLiveData: MutableLiveData<Boolean> = MutableLiveData<Boolean>().apply { value = false }
     private val skyOrientationLiveData: MutableLiveData<SkyOrientation> = MutableLiveData<SkyOrientation>().apply { value = SkyOrientation.getOK() }
     private val zoomAngleLiveData: MutableLiveData<Double> = MutableLiveData<Double>().apply { value = SkyViewOptions.DEFAULT_ZOOM_ANGLE }
     private val centerLiveData: MutableLiveData<Topocentric> = MutableLiveData<Topocentric>().apply { value = element?.position ?: Topocentric(0.0, 0.0) }
 
     val isLiveLD: LiveData<Boolean>
         get() = isLiveLiveData
+
+    val showZoomLD: LiveData<Boolean>
+        get() = showZoomLiveData
 
     val liveModeLD: LiveData<LiveMode>
         get() = repository.settings.liveModeLD
@@ -76,6 +80,14 @@ class SkyViewModel(application: Application, repository: Repository, val element
                 true -> repository.settings.liveMode
                 else -> LiveMode.Off
             }
+
+    var showZoom: Boolean
+        get() = showZoomLiveData.value ?: false
+        set(value) {
+            if (showZoomLiveData.value != value) {
+                showZoomLiveData.postValue(value)
+            }
+        }
 
     val zoomAngleLD: LiveData<Double>
         get() = zoomAngleLiveData

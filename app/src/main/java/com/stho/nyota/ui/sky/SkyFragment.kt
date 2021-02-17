@@ -46,6 +46,10 @@ class SkyFragment : AbstractFragment() {
         binding.buttonZoomIn.setOnClickListener { onZoomIn() }
         binding.buttonZoomOut.setOnClickListener { onZoomOut() }
         binding.buttonToggleStyle.setOnClickListener { onToggleStyle() }
+        binding.orientation.setOnClickListener { onZoomOn() }
+        binding.orientation.setOnLongClickListener { onZoomOff(); true }
+        binding.compass.setOnLongClickListener { onZoomOff(); true }
+        binding.direction.setOnLongClickListener { onZoomOff(); true }
         binding.sky.registerListener(object: ISkyViewListener {
             override fun onChangeCenter() {
                 viewModel.setCenter(binding.sky.center)
@@ -83,6 +87,7 @@ class SkyFragment : AbstractFragment() {
         viewModel.options.touchLD.observe(viewLifecycleOwner, { _ -> binding.sky.touch() })
         viewModel.zoomAngleLD.observe(viewLifecycleOwner, { zoomAngle -> onObserveZoomAngle(zoomAngle) })
         viewModel.centerLD.observe(viewLifecycleOwner, { center -> onObserveCenter(center) })
+        viewModel.showZoomLD.observe(viewLifecycleOwner, { showZoom -> onObserveShowZoom(showZoom) })
     }
 
     override fun onDestroyView() {
@@ -171,6 +176,11 @@ class SkyFragment : AbstractFragment() {
         binding.direction.text = center.toString()
     }
 
+    private fun onObserveShowZoom(showZoom: Boolean) {
+        binding.zoomOverlay.visibility = if (showZoom) View.VISIBLE else View.GONE
+        binding.zoomOverlay.layoutParams?.height = if (showZoom) 0 else android.app.ActionBar.LayoutParams.WRAP_CONTENT
+    }
+
     private fun updateMoment(moment: Moment) {
         bind(moment)
     }
@@ -179,6 +189,14 @@ class SkyFragment : AbstractFragment() {
         bindTime(binding.timeOverlay, moment)
         binding.sky.notifyDataSetChanged()
         updateActionBar(title, toLocalDateString(moment))
+    }
+
+    private fun onZoomOff() {
+        viewModel.showZoom = false
+    }
+
+    private fun onZoomOn() {
+        viewModel.showZoom = true
     }
 
     private val title: String

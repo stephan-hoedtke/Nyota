@@ -1,11 +1,14 @@
 package com.stho.nyota
 
 import android.os.Bundle
+import android.text.Layout
 import android.view.View
+import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AppCompatActivity
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
@@ -52,6 +55,8 @@ abstract class AbstractFragment : Fragment() {
         val buttonNext: ImageView? = view.findViewById<ImageView>(R.id.buttonNext)
         val buttonPrevious: ImageView? = view.findViewById<ImageView>(R.id.buttonPrevious)
         val imageTime: ImageView? = view.findViewById<ImageView>(R.id.imageTime)
+        val currentTime: TextView? = view.findViewById<TextView>(R.id.currentTime)
+        val timeIntervalFooter: ViewGroup? = view.findViewById<ViewGroup>(R.id.time_interval_footer)
     }
 
     private val supportActionBar: ActionBar?
@@ -75,6 +80,8 @@ abstract class AbstractFragment : Fragment() {
         binding.interval?.setOnLongClickListener { onIntervalReset(); true }
         binding.buttonNext?.setOnClickListener { onButtonNext() }
         binding.buttonPrevious?.setOnClickListener { onButtonPrevious() }
+        binding.currentTime?.setOnClickListener { onTime() }
+        binding.currentTime?.setOnLongClickListener { onIntervalReset(); true }
         binding.imageTime?.setOnLongClickListener { onIntervalReset(); true }
         abstractViewModel.intervalLD.observe(viewLifecycleOwner) { interval -> updateUpdateInterval(interval) }
         abstractViewModel.settings.updateLocationAutomaticallyLD.observe(viewLifecycleOwner) { value -> updateLocationAutomatically(value) }
@@ -132,12 +139,18 @@ abstract class AbstractFragment : Fragment() {
         binding.interval?.text = interval.name
     }
 
+    private fun onTime() {
+        abstractViewModel.settings.updateTimeAutomatically = false
+    }
+
     private fun updateLocationAutomatically(value: Boolean) {
         // TODO nothing
     }
 
     private fun updateTimeAutomatically(value: Boolean) {
         binding.imageTime?.isEnabled = !value
+        binding.timeIntervalFooter?.visibility = if (value) View.GONE else View.VISIBLE
+        binding.timeIntervalFooter?.layoutParams?.height = if (value) 0 else android.app.ActionBar.LayoutParams.WRAP_CONTENT
     }
 
     protected fun bindTime(overlay: TimeOverlayBinding, moment: Moment) {

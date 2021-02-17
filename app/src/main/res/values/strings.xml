@@ -185,4 +185,7 @@
     <string name="message_permission_was_granted">The permission: %s was granted.</string>
     <string name="message_permission_was_refused">The permission: %s was rejected.</string>
     <string name="message_city_was_deleted">City was deleted</string>
+    <string name="label_open">Open</string>
+    <string name="label_sky">Sky</string>
+    <string name="label_finder">Finder</string>
 </resources>
