@@ -33,6 +33,14 @@ class SkyView(context: Context?, attrs: AttributeSet?) : AbstractSkyView(context
         invalidate()
     }
 
+    fun removeTippedElement(element: IElement?) {
+        if (this.tippedElement == element) {
+            this.tippedElement = null
+            this.tippedConstellation = null
+            invalidate()
+        }
+    }
+
     fun setTippedConstellation(element: IElement?) {
         this.tippedConstellation = element
         invalidate()

@@ -286,7 +286,7 @@ class SkyFragment : AbstractFragment() {
         binding.sky.setTippedElement(star)
         binding.sky.setTippedConstellation(star.referenceConstellation)
         val message: String = star.referenceConstellation?.let { messageTextForStarInConstellation(star, it) } ?: messageTextForStar(star)
-        displaySnackBar(message, star.toString()) { onStar(star) }
+        displaySnackBar(star, message, star.toString()) { onStar(star) }
     }
 
     private fun messageTextForStarInConstellation(star: Star, constellation: Constellation) =
@@ -304,39 +304,45 @@ class SkyFragment : AbstractFragment() {
     private fun displaySnackbarForPlanet(planet: AbstractPlanet) {
         binding.sky.setTippedElement(planet)
         val message = "Planet"
-        displaySnackBar(message, planet.name) { onPlanet(planet) }
+        displaySnackBar(planet, message, planet.name) { onPlanet(planet) }
     }
 
     private fun displaySnackbarForMoon(moon: Moon) {
         binding.sky.setTippedElement(moon)
         val message = "Moon"
-        displaySnackBar(message, moon.name) { onMoon() }
+        displaySnackBar(moon, message, moon.name) { onMoon() }
     }
 
     private fun displaySnackbarForSun(sun: Sun) {
         binding.sky.setTippedElement(sun)
         val message = "Sun"
-        displaySnackBar(message, sun.name) { onSun() }
+        displaySnackBar(sun, message, sun.name) { onSun() }
     }
 
     private fun displaySnackbarForSatellite(satellite: Satellite) {
         binding.sky.setTippedElement(satellite)
         val message = "Satellite"
-        displaySnackBar(message, satellite.name) { onSatellite(satellite) }
+        displaySnackBar(satellite, message, satellite.name) { onSatellite(satellite) }
     }
 
     private fun displaySnackbarForGalaxy(galaxy: Galaxy) {
         binding.sky.setTippedElement(galaxy)
         val message = "Galaxy ${galaxy.magnAsString}"
-        displaySnackBar(message, galaxy.name) { onGalaxy(galaxy) }
+        displaySnackBar(galaxy, message, galaxy.name) { onGalaxy(galaxy) }
     }
 
-    private fun displaySnackBar(message: String, name: String, action: View.OnClickListener ) {
+    private fun displaySnackBar(element: IElement, message: String, name: String, action: View.OnClickListener ) {
         Snackbar.make(requireView(), message, Snackbar.LENGTH_INDEFINITE)
             .setBackgroundTint(getColor(R.color.colorSignalBackground))
             .setTextColor(getColor(R.color.colorSecondaryText))
             .setDuration(13000)
             .setAction(name, action)
+            .addCallback(object: Snackbar.Callback() {
+                override fun onDismissed(transientBottomBar: Snackbar?, event: Int) {
+                    super.onDismissed(transientBottomBar, event)
+                    binding.sky.removeTippedElement(element)
+                }
+            })
             .show()
 
     }
