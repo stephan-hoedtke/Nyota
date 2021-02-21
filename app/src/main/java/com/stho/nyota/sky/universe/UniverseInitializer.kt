@@ -162,7 +162,7 @@ class UniverseInitializer(universe: Universe) : AbstractUniverseInitializer(univ
         asVIP(setFriendlyNameTo(128620,"Alpha Centauri"))
         asVIP(setFriendlyNameTo(187642, Altair))
         asVIP(setFriendlyNameTo(148478, "Antares"))
-        asVIP(setFriendlyNameTo(124897, "Arcturus"))
+        asVIP(setFriendlyNameTo(124897, Arcturus))
         asVIP(setFriendlyNameTo(111123, "Becrux"))
         asVIP(setFriendlyNameTo(39801,Betelgeuse).setColor(Star.Color.Red))
         asVIP(setFriendlyNameTo(60179, "Castor"))
@@ -171,7 +171,7 @@ class UniverseInitializer(universe: Universe) : AbstractUniverseInitializer(univ
         asVIP(setFriendlyNameTo(197345, Deneb))
         asVIP(setFriendlyNameTo(108903, "Gacrux"))
         asVIP(setFriendlyNameTo(122451, "Hadar"))
-        asVIP(setFriendlyNameTo(216956, "Fomalhaut"))
+        asVIP(setFriendlyNameTo(216956, Fomalhaut))
         asVIP(setFriendlyNameTo(52089, "Adhara"))
         asVIP(setFriendlyNameTo(8890, Polaris))
         asVIP(setFriendlyNameTo(62509, "Pollux"))
@@ -180,7 +180,7 @@ class UniverseInitializer(universe: Universe) : AbstractUniverseInitializer(univ
         asVIP(setFriendlyNameTo(34085, Rigel).setColor(Star.Color.BlueWhite))
         asVIP(setFriendlyNameTo(48915, Sirius))
         asVIP(setFriendlyNameTo(158926, "Shaula"))
-        asVIP(setFriendlyNameTo(116658, "Spica"))
+        asVIP(setFriendlyNameTo(116658, Spica))
         asVIP(setFriendlyNameTo(172167, Vega))
         asVIP(setFriendlyNameTo(35468, "Bellatrix"))
     }
@@ -938,6 +938,18 @@ class UniverseInitializer(universe: Universe) : AbstractUniverseInitializer(univ
 
         newHint("Ursa Major -> Polaris", getStar(Constellation.UrsaMajor, Symbol.Alpha), getStar(Polaris))
         newHint("Ursa Major -> Leo", getStar(Constellation.UrsaMajor, Symbol.Beta), getStar(Regulus))
+        newHint("Ursa Major -> Arcturus (Bootes)", getStar(Constellation.UrsaMajor, Symbol.Eta), getStar(Arcturus))
+        newHint("Ursa Major -> Spica (Virgo)", getStar(Arcturus), getStar(Spica))
+
+        newHint("Bootes -> Hercules", getStar(Arcturus), getStar(Constellation.Hercules, Symbol.Zeta))
+        newHint("Bootes -> Vega (Lyr)", getStar(Constellation.Hercules, Symbol.Zeta), getStar(Vega))
+
+        newHint("Pegasus -> Fomalhaut (Pisces Australis)", getStar(Constellation.Pegasus, Symbol.Alpha), getStar(Fomalhaut))
+        newHint("Pegasus -> Lacerta", getStar(Constellation.Pegasus, Symbol.Beta), getStar(Constellation.Lacerta, Symbol.Alpha))
+        newHint("Pegasus -> Cassiopeia", getStar(Constellation.Pegasus, Symbol.Delta), getStar(Constellation.Cassiopeia, Symbol.Alpha))
+        newHint("Pegasus -> Andromeda", getStar(Constellation.Pegasus, Symbol.Delta), getStar(Constellation.Andromeda, Symbol.Beta))
+        newHint("Pegasus -> Cetus", getStar(Constellation.Pegasus, Symbol.Gamma), getStar(Constellation.Cetus, Symbol.Beta))
+
 
         newTriangle("Winter Triangle", getStar(Sirius), getStar(Procyon), getStar(Betelgeuse))
         newTriangle("Summer Triangle", getStar(Vega), getStar(Deneb), getStar(Altair))
@@ -953,16 +965,19 @@ class UniverseInitializer(universe: Universe) : AbstractUniverseInitializer(univ
     }
 
     companion object {
-        private const val Aldebaran: String = "Aldebaran"
-        private const val Altair: String = "Altair"
-        private const val Betelgeuse: String = "Betelgeuse"
-        private const val Capella: String = "Capella"
-        private const val Deneb: String = "Deneb"
-        private const val Polaris: String = "Polaris"
-        private const val Procyon: String = "Procyon"
-        private const val Regulus: String = "Regulus"
-        private const val Rigel: String = "Rigel"
-        private const val Sirius: String = "Sirius"
-        private const val Vega: String = "Vega"
+        private const val Aldebaran = "Aldebaran"
+        private const val Altair = "Altair"
+        private const val Arcturus = "Arcturus"
+        private const val Betelgeuse = "Betelgeuse"
+        private const val Capella = "Capella"
+        private const val Deneb = "Deneb"
+        private const val Fomalhaut = "Fomalhaut"
+        private const val Polaris = "Polaris"
+        private const val Procyon = "Procyon"
+        private const val Regulus = "Regulus"
+        private const val Rigel = "Rigel"
+        private const val Sirius = "Sirius"
+        private const val Spica = "Spica"
+        private const val Vega = "Vega"
     }
 }
