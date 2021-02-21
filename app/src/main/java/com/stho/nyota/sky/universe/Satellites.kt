@@ -1,16 +1,15 @@
 package com.stho.nyota.sky.universe
 
-import com.stho.nyota.sky.utilities.City
 import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
 
 class Satellites {
 
-    private val array: ArrayList<Satellite> = ArrayList<Satellite>()
+    private val list: ArrayList<Satellite> = ArrayList<Satellite>()
     private val norad: HashMap<Int, Satellite> = HashMap<Int, Satellite>()
 
     val size: Int
-        get() = array.size
+        get() = list.size
 
     fun addAll(collection: Collection<Satellite>) {
         for (satellite in collection) {
@@ -22,12 +21,12 @@ class Satellites {
         val noradSatelliteNumber = satellite.noradSatelliteNumber
         val existingSatellite = norad[satellite.noradSatelliteNumber]
         if (existingSatellite != null) {
-            val index = array.indexOf(existingSatellite)
-            array[index] = satellite
+            val index = list.indexOf(existingSatellite)
+            list[index] = satellite
             norad[noradSatelliteNumber] = satellite
         }
         else {
-            array.add(satellite)
+            list.add(satellite)
             norad[noradSatelliteNumber] = satellite
         }
     }
@@ -36,13 +35,13 @@ class Satellites {
         norad[noradSatelliteNumber]
 
     fun findSatelliteByIndex(index: Int): Satellite? =
-        if (0 <= index && index < array.size)
-            array[index]
+        if (0 <= index && index < list.size)
+            list[index]
         else
             null
 
     fun findSatelliteByName(satelliteName: String?): Satellite? =
-        satelliteName?.let { array.find { s -> s.name == it } }
+        satelliteName?.let { list.find { s -> s.name == it } }
 
     fun findSatelliteByKey(key: String): Satellite? =
         when (Satellite.isValidKey(key)) {
@@ -54,7 +53,7 @@ class Satellites {
         }
 
     val values: List<Satellite>
-        get() = array
+        get() = list
 
     internal fun createWithId(id: Long, name: String, displayName: String, noradSatelliteNumber: Int, elements: String) =
         Satellite.createSatelliteWithId(id, name, displayName, noradSatelliteNumber, elements).also { add(it) }

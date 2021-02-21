@@ -10,6 +10,12 @@ abstract class AbstractUniverseInitializer(protected var universe: Universe) {
     fun getStar(hd: Int): Star =
         universe.stars[hd] ?: throw Exception("Star $hd was not initialized yet")
 
+    fun getStar(starName: String): Star =
+        universe.stars[starName] ?: throw Exception("Star $starName was not initialized yet")
+
+    fun getStar(rank: Int, symbol: Symbol): Star =
+        universe.constellations[rank][symbol] // throws an exception if rank or symbol were not initialized
+
     fun newGalaxy(name: String, imageId: Int, ascension: String, declination: String, brightness: Double, distance: Double): Galaxy =
         Galaxy(name, imageId, Hour.fromHour(ascension).angleInDegree, Degree.fromDegree(declination).angleInDegree, brightness, distance).also {
             universe.galaxies.add(it)
@@ -18,6 +24,16 @@ abstract class AbstractUniverseInitializer(protected var universe: Universe) {
     fun newAnything(name: String, ascension: String, declination: String, brightness: Double, distance: Double): Anything =
         Anything(name, Hour.fromHour(ascension).angleInDegree, Degree.fromDegree(declination).angleInDegree, brightness, distance).also {
             universe.any.add(it)
+        }
+
+    fun newHint(description: String, from: Star, to: Star): Hint =
+        Hint.create(description, from, to).also {
+            universe.hints.add(it)
+        }
+
+    fun newTriangle(description: String, one: Star, two: Star, three: Star): Hint =
+        Hint.create(description, one, two, three).also {
+            universe.hints.add(it)
         }
 
     fun newSatellite(name: String, displayName: String, noradSatelliteNumber: Int, elements: String): Satellite =
@@ -31,14 +47,14 @@ abstract class AbstractUniverseInitializer(protected var universe: Universe) {
             universe.specials.add(it)
         }
 
-    fun setFriendlyNameTo(hd: Int, name: String): Star? =
-        universe.stars[hd]?.setFriendlyName(name)
+    fun setFriendlyNameTo(hd: Int, friendlyName: String): Star =
+        getStar(hd).also {
+            universe.stars.setFriendlyName(it, friendlyName)
+        }
 
-    fun asVIP(star: Star?) {
-        star?.also {
-            if (!universe.vip.contains(it)) {
-                universe.vip.add(it)
-            }
+    fun asVIP(star: Star) {
+        if (!universe.vip.contains(star)) {
+            universe.vip.add(star)
         }
     }
 }

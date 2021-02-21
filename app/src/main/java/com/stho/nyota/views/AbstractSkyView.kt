@@ -230,6 +230,9 @@ abstract class AbstractSkyView(context: Context?, attrs: AttributeSet?): View(co
     protected fun drawZenit(zenit: Topocentric) =
         draw.drawZenit(zenit)
 
+    protected fun drawNadir(nadir: Topocentric) =
+        draw.drawNadir(nadir)
+
     protected fun drawStar(star: Star, referenceType: ReferenceType) =
         draw.drawStar(star, referenceType)
 
@@ -241,6 +244,9 @@ abstract class AbstractSkyView(context: Context?, attrs: AttributeSet?): View(co
 
     protected fun drawName(position: Topocentric, name: String) =
         draw.drawName(position, name)
+
+    protected fun drawHint(hint: Hint) =
+        draw.drawHint(hint)
 
     protected fun drawElement(position: Topocentric, name: String, luminosity: Luminosity) =
         draw.drawElement(position, name, luminosity)

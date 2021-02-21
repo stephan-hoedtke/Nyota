@@ -18,17 +18,11 @@ import com.stho.nyota.views.ReferenceType
 class ConstellationSkyView(context: Context?, attrs: AttributeSet?) : AbstractSkyView(context, attrs) {
 
     private var constellation: Constellation? = null
-    private var referenceStar: Star? = null
     private var tippedStar: Star? = null
 
     fun setConstellation(constellation: Constellation) {
         this.constellation = constellation
         setCenter(constellation.position!!)
-        invalidate()
-    }
-
-    fun setReferenceStar(star: Star?) {
-        this.referenceStar = star
         invalidate()
     }
 
@@ -47,9 +41,6 @@ class ConstellationSkyView(context: Context?, attrs: AttributeSet?) : AbstractSk
     override fun onDrawElements() {
         constellation?.let {
             drawConstellation(it, ReferenceType.Default)
-        }
-        referenceStar?.let {
-            drawStar(it, ReferenceType.Reference)
         }
         tippedStar?.let {
             drawStar(it, ReferenceType.TippedStar)

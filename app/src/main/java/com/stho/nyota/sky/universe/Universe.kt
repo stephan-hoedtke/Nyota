@@ -18,6 +18,7 @@ class Universe {
     val targets = Targets()
     val any = ArrayList<Anything>()
     val vip = ArrayList<Star>()
+    val hints = ArrayList<Hint>()
 
     /**
      * Returns the moment (observer + UTC) for which the Universe was calculated last
@@ -65,8 +66,8 @@ class Universe {
     val zenit: Topocentric
         get() = Topocentric(0.0, 90.0)
 
-    fun findPlanetByName(name: String?): AbstractPlanet? =
-        name?.let { solarSystem.findPlanetByName(it) }
+    val nadir: Topocentric
+        get() = Topocentric(0.0, -90.0)
 
     fun findElementByKey(key: String): IElement? =
         solarSystem.findElementByKey(key)

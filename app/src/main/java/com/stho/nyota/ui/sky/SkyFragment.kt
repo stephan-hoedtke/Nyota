@@ -88,6 +88,7 @@ class SkyFragment : AbstractFragment() {
         viewModel.zoomAngleLD.observe(viewLifecycleOwner, { zoomAngle -> onObserveZoomAngle(zoomAngle) })
         viewModel.centerLD.observe(viewLifecycleOwner, { center -> onObserveCenter(center) })
         viewModel.showZoomLD.observe(viewLifecycleOwner, { showZoom -> onObserveShowZoom(showZoom) })
+        viewModel.tipLD.observe(viewLifecycleOwner, { tip -> onObserveTip(tip) })
     }
 
     override fun onDestroyView() {
@@ -179,6 +180,11 @@ class SkyFragment : AbstractFragment() {
     private fun onObserveShowZoom(showZoom: Boolean) {
         binding.zoomOverlay.visibility = if (showZoom) View.VISIBLE else View.GONE
         binding.zoomOverlay.layoutParams?.height = if (showZoom) 0 else android.app.ActionBar.LayoutParams.WRAP_CONTENT
+    }
+
+    private fun onObserveTip(tip: SkyViewModel.Tip) {
+        binding.sky.setTippedElement(tip.element)
+        binding.sky.setTippedConstellation(tip.constellation)
     }
 
     private fun updateMoment(moment: Moment) {
@@ -283,8 +289,7 @@ class SkyFragment : AbstractFragment() {
     }
 
     private fun displaySnackbarForStar(star: Star) {
-        binding.sky.setTippedElement(star)
-        binding.sky.setTippedConstellation(star.referenceConstellation)
+        viewModel.setTippedElement(star, star.referenceConstellation)
         val message: String = star.referenceConstellation?.let { messageTextForStarInConstellation(star, it) } ?: messageTextForStar(star)
         displaySnackBar(star, message, star.toString()) { onStar(star) }
     }
@@ -302,31 +307,31 @@ class SkyFragment : AbstractFragment() {
             "Star ${star.magnAsString}"
 
     private fun displaySnackbarForPlanet(planet: AbstractPlanet) {
-        binding.sky.setTippedElement(planet)
+        viewModel.setTippedElement(planet)
         val message = "Planet"
         displaySnackBar(planet, message, planet.name) { onPlanet(planet) }
     }
 
     private fun displaySnackbarForMoon(moon: Moon) {
-        binding.sky.setTippedElement(moon)
+        viewModel.setTippedElement(moon)
         val message = "Moon"
         displaySnackBar(moon, message, moon.name) { onMoon() }
     }
 
     private fun displaySnackbarForSun(sun: Sun) {
-        binding.sky.setTippedElement(sun)
+        viewModel.setTippedElement(sun)
         val message = "Sun"
         displaySnackBar(sun, message, sun.name) { onSun() }
     }
 
     private fun displaySnackbarForSatellite(satellite: Satellite) {
-        binding.sky.setTippedElement(satellite)
+        viewModel.setTippedElement(satellite)
         val message = "Satellite"
         displaySnackBar(satellite, message, satellite.name) { onSatellite(satellite) }
     }
 
     private fun displaySnackbarForGalaxy(galaxy: Galaxy) {
-        binding.sky.setTippedElement(galaxy)
+        viewModel.setTippedElement(galaxy)
         val message = "Galaxy ${galaxy.magnAsString}"
         displaySnackBar(galaxy, message, galaxy.name) { onGalaxy(galaxy) }
     }
@@ -340,7 +345,7 @@ class SkyFragment : AbstractFragment() {
             .addCallback(object: Snackbar.Callback() {
                 override fun onDismissed(transientBottomBar: Snackbar?, event: Int) {
                     super.onDismissed(transientBottomBar, event)
-                    binding.sky.removeTippedElement(element)
+                    viewModel.undoTip(element)
                 }
             })
             .show()

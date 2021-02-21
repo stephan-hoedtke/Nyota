@@ -17,7 +17,9 @@ interface IConstellationColors {
 
 interface ISkyDrawColors {
     val forSky: Paint // Dark Blue, nearly Black, just a bit of light
-    val forEcliptic: Paint // Orange
+    val forEcliptic: Paint // Red
+    val forHints: Paint // Fire
+    val forTriangle: Paint // Green
     val visibleGridColor: Paint // Dark Green
     val invisibleGridColor: Paint // Dark Blue
     val bitmapColor: Paint // White
@@ -46,6 +48,8 @@ class SkyDrawColors: ISkyDrawColors {
 
     override val forSky: Paint = txt(blue, alpha = 30)
     override val forEcliptic: Paint = lnl(red, 210)
+    override val forHints: Paint = txt(fire, alpha = 255)
+    override val forTriangle: Paint = lnl(green, alpha = 210)
     override val visibleGridColor: Paint = txt(green, 110)
     override val invisibleGridColor: Paint = txt(blue, 140)
     override val bitmapColor: Paint = txt(white, 255)
@@ -74,6 +78,7 @@ class SkyDrawColors: ISkyDrawColors {
         private val green: Int =  Color.rgb(4, 224, 52) // GREEN
         private val orange: Int = Color.rgb(253, 106, 2) // Orange
         private val red: Int = Color.rgb(253, 45, 15) // Red
+        private val fire: Int = Color.rgb(255, 39, 0) // Fire Red
         private val white: Int = Color.WHITE
         private val yellow: Int = Color.YELLOW
 
@@ -86,6 +91,7 @@ class SkyDrawColors: ISkyDrawColors {
                 this.alpha = alpha
                 this.style = Paint.Style.FILL_AND_STROKE
                 this.isAntiAlias = true
+                this.strokeWidth = 1f
                 this.textSize = 40f
             }
 
@@ -97,6 +103,7 @@ class SkyDrawColors: ISkyDrawColors {
                 this.color = color
                 this.alpha = alpha
                 this.style = Paint.Style.STROKE
+                this.strokeWidth = 1f
                 this.isAntiAlias = true
                 this.textSize = 40f
             }

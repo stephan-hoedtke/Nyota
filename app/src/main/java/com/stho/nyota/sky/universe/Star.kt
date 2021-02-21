@@ -12,6 +12,12 @@ import kotlin.math.pow
  */
 class Star private constructor(val id: Long, val HD: Int, override val name: String, val symbol: Symbol, RA: Double, Decl: Double, magn: Double, val distance: Double) : AbstractElement(RA, Decl, magn) {
 
+    enum class Color {
+        BlueWhite,
+        Red,
+        White,
+    }
+
     private val constellations: ArrayList<Constellation> = ArrayList()
 
     private val hasHenryDraperCatalogNumber: Boolean =
@@ -32,6 +38,9 @@ class Star private constructor(val id: Long, val HD: Int, override val name: Str
     var friendlyName: String = name
         private set
 
+    var color: Color = Color.White
+        private set
+
     override fun toString(): String =
         if (hasFriendlyName) {
             friendlyName
@@ -46,10 +55,14 @@ class Star private constructor(val id: Long, val HD: Int, override val name: Str
         }
 
     override val imageId: Int
-        get() = com.stho.nyota.R.drawable.star
+        get() = when (color) {
+            Color.BlueWhite -> com.stho.nyota.R.drawable.star_blue_white
+            Color.White -> com.stho.nyota.R.drawable.star_white
+            Color.Red -> com.stho.nyota.R.drawable.star_red
+        }
 
     override val largeImageId: Int
-        get() = com.stho.nyota.R.drawable.star
+        get() = imageId
 
     override fun getBasics(moment: Moment): PropertyList =
         super.getBasics(moment).apply {
@@ -82,12 +95,16 @@ class Star private constructor(val id: Long, val HD: Int, override val name: Str
         }
     }
 
-    fun setFriendlyName(name: String): Star {
-        friendlyName = name
-        hasFriendlyName = true
+    fun setFriendlyName(friendlyName: String): Star {
+        this.friendlyName = friendlyName
+        this.hasFriendlyName = true
         return this
     }
 
+    fun setColor(color: Color): Star {
+        this.color = color
+        return this
+    }
     val referenceConstellation: Constellation?
         get() = constellations.firstOrNull()
 

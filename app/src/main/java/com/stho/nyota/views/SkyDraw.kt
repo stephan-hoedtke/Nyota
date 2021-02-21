@@ -11,7 +11,9 @@ import com.stho.nyota.sky.utilities.projections.ISphereProjection
 import com.stho.nyota.ui.sky.ISkyViewOptions
 import com.stho.nyota.ui.sky.SkyViewOptions
 import java.util.*
+import kotlin.collections.HashMap
 import kotlin.math.abs
+import kotlin.math.sqrt
 
 
 class SkyDraw() {
@@ -164,6 +166,10 @@ class SkyDraw() {
     fun drawZenit(zenit: Topocentric) =
         drawName(zenit, "Z", colors.visibleGridColor)
 
+    fun drawNadir(nadir: Topocentric) =
+        drawName(nadir, "R", colors.visibleGridColor)
+
+
     fun drawSatellite(satellite: Satellite, bitmap: Bitmap) =
         calculatePosition(satellite.position)?.let {
             if (isOnScreen(it)) {
@@ -270,8 +276,62 @@ class SkyDraw() {
         canvas.drawPath(path, colors.forEcliptic)
     }
 
+    fun drawHint(hint: Hint) {
+        when (hint.size) {
+            2 -> {
+                getPosition(hint[0])?.also { a ->
+                    getPosition(hint[1])?.also { b ->
+                        if (isOnScreen(a) && isOnScreen(b)) {
+                            drawArrow(a, b, colors.forHints)
+                        }
+                    }
+                }
+            }
+            3 -> {
+                getPosition(hint[0])?.also { a ->
+                    getPosition(hint[1])?.also { b ->
+                        getPosition(hint[2])?.also { c ->
+                            if (isOnScreen(a) && isOnScreen(b) && isOnScreen(c)) {
+                                drawTriangle(a, b, c, colors.forTriangle)
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
     private fun drawCircleAt(radius: Float, color: Paint, alpha: Int, p: SkyPointF) {
         canvas.drawCircle(p.x, p.y, radius, color.apply { this.alpha = alpha });
+    }
+
+    private fun drawArrow(from: SkyPointF, to: SkyPointF, color: Paint) {
+        val dx = (to.x - from.x).toDouble()
+        val dy = (to.y - from.y).toDouble()
+        val l = sqrt(dx * dx + dy * dy)
+        val c = 70 / l
+        val a = 27 / l
+        val b = 7 / l
+        val p = from.plus(c * dx,c * dy)
+        val q = to.minus(c * dx,c * dy)
+        val s = q.minus(a * dx, a * dy).plus(b * dy, -b * dx)
+        val t = q.minus(a * dx, a * dy).plus(-b * dy, b * dx)
+        path.reset()
+        path.moveTo(p.x, p.y)
+        path.lineTo(q.x, q.y)
+        path.lineTo(s.x, s.y)
+        path.lineTo(t.x, t.y)
+        path.lineTo(q.x, q.y)
+        canvas.drawPath(path, color)
+    }
+
+    private fun drawTriangle(a: SkyPointF, b: SkyPointF, c: SkyPointF, color: Paint) {
+        path.reset()
+        path.moveTo(a.x, a.y)
+        path.lineTo(b.x, b.y)
+        path.lineTo(c.x, c.y)
+        path.lineTo(a.x, a.y)
+        canvas.drawPath(path, color)
     }
 
     private fun drawImageAt(bitmap: Bitmap, p: SkyPointF) {

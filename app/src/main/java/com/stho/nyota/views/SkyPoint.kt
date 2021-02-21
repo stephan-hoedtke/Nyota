@@ -25,6 +25,12 @@ data class SkyPoint(val x: Double, val y: Double, val z: Double = 0.0) {
  */
 data class SkyPointF(val x: Float, val y: Float) {
 
+    fun plus(dx: Double, dy: Double): SkyPointF =
+        SkyPointF(x + dx.toFloat(), y + dy.toFloat())
+
+    fun minus(dx: Double, dy: Double): SkyPointF =
+        SkyPointF(x - dx.toFloat(), y - dy.toFloat())
+
     companion object {
         fun forMotionEvent(e: MotionEvent, width: Int, height: Int): SkyPointF =
             SkyPointF(e.x - width / 2, e.y - height / 2)

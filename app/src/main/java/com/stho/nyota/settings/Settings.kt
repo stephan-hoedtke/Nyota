@@ -63,6 +63,7 @@ class Settings: ISkyViewSettings {
     override var displaySatellites: Boolean = true
     override var displayGrid: Boolean = false
     override var displayEcliptic: Boolean = false
+    override var displayHints: Boolean = false
     override var sphereProjection: Projection = Projection.STEREOGRAPHIC
     override var magnitude: Double = DEFAULT_MAGNITUDE
 

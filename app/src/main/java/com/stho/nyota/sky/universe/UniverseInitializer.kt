@@ -3,7 +3,9 @@ package com.stho.nyota.sky.universe
 import android.util.Log
 import com.stho.nyota.sky.utilities.Degree
 import com.stho.nyota.sky.utilities.Hour
+import com.stho.nyota.sky.utilities.UTC
 import java.lang.Exception
+import java.util.*
 
 
 // TODO Make the UniverseInitialize a set of internal and private methods in Universe
@@ -28,6 +30,7 @@ class UniverseInitializer(universe: Universe) : AbstractUniverseInitializer(univ
             registerSatellites()
             registerGalaxies()
             registerAnything()
+            registerHints()
             rebuild()
         } catch (ex: Exception) {
             Log.d("ERROR", ex.toString())
@@ -155,30 +158,30 @@ class UniverseInitializer(universe: Universe) : AbstractUniverseInitializer(univ
     private fun registerVIP() {
         asVIP(setFriendlyNameTo(10144,"Achernar"))
         asVIP(setFriendlyNameTo(108248,"Acrux"))
-        asVIP(setFriendlyNameTo(29139, "Aldebaran"))
+        asVIP(setFriendlyNameTo(29139, Aldebaran))
         asVIP(setFriendlyNameTo(128620,"Alpha Centauri"))
-        asVIP(setFriendlyNameTo(187642, "Altair"))
+        asVIP(setFriendlyNameTo(187642, Altair))
         asVIP(setFriendlyNameTo(148478, "Antares"))
         asVIP(setFriendlyNameTo(124897, "Arcturus"))
         asVIP(setFriendlyNameTo(111123, "Becrux"))
-        asVIP(setFriendlyNameTo(39801,"Betelgeuse"))
+        asVIP(setFriendlyNameTo(39801,Betelgeuse).setColor(Star.Color.Red))
         asVIP(setFriendlyNameTo(60179, "Castor"))
         asVIP(setFriendlyNameTo(45348, "Canopus"))
-        asVIP(setFriendlyNameTo(34029, "Capella"))
-        asVIP(setFriendlyNameTo(197345, "Deneb"))
+        asVIP(setFriendlyNameTo(34029, Capella))
+        asVIP(setFriendlyNameTo(197345, Deneb))
         asVIP(setFriendlyNameTo(108903, "Gacrux"))
         asVIP(setFriendlyNameTo(122451, "Hadar"))
         asVIP(setFriendlyNameTo(216956, "Fomalhaut"))
         asVIP(setFriendlyNameTo(52089, "Adhara"))
-        asVIP(setFriendlyNameTo(8890, "Polaris"))
+        asVIP(setFriendlyNameTo(8890, Polaris))
         asVIP(setFriendlyNameTo(62509, "Pollux"))
-        asVIP(setFriendlyNameTo(61421, "Procyon"))
-        asVIP(setFriendlyNameTo(87901, "Regulus"))
-        asVIP(setFriendlyNameTo(34085, "Rigel"))
-        asVIP(setFriendlyNameTo(48915, "Sirius"))
+        asVIP(setFriendlyNameTo(61421, Procyon))
+        asVIP(setFriendlyNameTo(87901, Regulus))
+        asVIP(setFriendlyNameTo(34085, Rigel).setColor(Star.Color.BlueWhite))
+        asVIP(setFriendlyNameTo(48915, Sirius))
         asVIP(setFriendlyNameTo(158926, "Shaula"))
         asVIP(setFriendlyNameTo(116658, "Spica"))
-        asVIP(setFriendlyNameTo(172167, "Vega"))
+        asVIP(setFriendlyNameTo(172167, Vega))
         asVIP(setFriendlyNameTo(35468, "Bellatrix"))
     }
 
@@ -928,6 +931,18 @@ class UniverseInitializer(universe: Universe) : AbstractUniverseInitializer(univ
 
     }
 
+    private fun registerHints() {
+        newHint("Orion -> Aldebaran (Taurus)", getStar(Constellation.Orion, Symbol.Delta), getStar(Aldebaran))
+        newHint("Orion -> Sirius (Canis Major)", getStar(Constellation.Orion, Symbol.Zeta), getStar(Sirius))
+        newHint("Orion -> Capella (Auriga)", getStar(Constellation.Orion, Symbol.Lambda), getStar(Capella))
+
+        newHint("Ursa Major -> Polaris", getStar(Constellation.UrsaMajor, Symbol.Alpha), getStar(Polaris))
+        newHint("Ursa Major -> Leo", getStar(Constellation.UrsaMajor, Symbol.Beta), getStar(Regulus))
+
+        newTriangle("Winter Triangle", getStar(Sirius), getStar(Procyon), getStar(Betelgeuse))
+        newTriangle("Summer Triangle", getStar(Vega), getStar(Deneb), getStar(Altair))
+    }
+
     private fun registerSpecialElements() {
         newSpecialElement("S", Hour.fromDegree(0.0), Degree.fromNegative(90, 0, 0.0))
         newSpecialElement("N", Hour.fromDegree(0.0), Degree.fromPositive(90, 0, 0.0))
@@ -935,5 +950,19 @@ class UniverseInitializer(universe: Universe) : AbstractUniverseInitializer(univ
 
     private fun rebuild() {
         universe.constellations.values.forEach { it.build() }
+    }
+
+    companion object {
+        private const val Aldebaran: String = "Aldebaran"
+        private const val Altair: String = "Altair"
+        private const val Betelgeuse: String = "Betelgeuse"
+        private const val Capella: String = "Capella"
+        private const val Deneb: String = "Deneb"
+        private const val Polaris: String = "Polaris"
+        private const val Procyon: String = "Procyon"
+        private const val Regulus: String = "Regulus"
+        private const val Rigel: String = "Rigel"
+        private const val Sirius: String = "Sirius"
+        private const val Vega: String = "Vega"
     }
 }

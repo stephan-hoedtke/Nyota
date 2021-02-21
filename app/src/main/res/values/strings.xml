@@ -51,6 +51,7 @@
     <string name="label_display_planet_names">Planet Names</string>
     <string name="label_display_star_names">Star Names</string>
     <string name="label_display_ecliptic">Ecliptic</string>
+    <string name="label_display_hints">Hints</string>
     <string name="label_display_targets">Targets</string>
     <string name="label_display_satellites">Satellites</string>
     <string name="label_magnitude_filter">Magnitude Filter</string>

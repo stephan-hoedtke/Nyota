@@ -1,8 +1,6 @@
 package com.stho.nyota.sky.universe
 
-import com.stho.nyota.sky.utilities.projections.Projection
 import java.lang.Exception
-import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
 
@@ -27,23 +25,23 @@ class Constellations {
         }
     }
 
-    private val array: ArrayList<Constellation> = ArrayList()
-    private val map: HashMap<Int, Constellation> = HashMap()
+    private val list: ArrayList<Constellation> = ArrayList()
+    private val ranks: HashMap<Int, Constellation> = HashMap()
 
     val size: Int
-        get() = array.size
+        get() = list.size
 
     fun add(constellation: Constellation) {
-        array.add(constellation)
-        map[constellation.rank] = constellation
+        list.add(constellation)
+        ranks[constellation.rank] = constellation
     }
 
     operator fun get(rank: Int): Constellation =
-        map[rank] ?: throw Exception("Constellation $rank is not registered yet.")
+        ranks[rank] ?: throw Exception("Constellation $rank is not registered yet.")
 
     fun findConstellationById(constellationId: Long): Constellation? =
         if (constellationId > 0)
-            array.find { x -> x.id == constellationId }
+            list.find { x -> x.id == constellationId }
         else
             null
 
@@ -57,7 +55,7 @@ class Constellations {
         }
 
     fun first(): Constellation =
-        array.first()
+        list.first()
 
     fun createWithId(id: Long, rank: Int, name: String, abbreviation: String, english: String, german: String, french: String, greek: String, author: String, year: Int, brightness: Double, visibility: String, map: String, link: String) {
         Constellation.createWithId(id, rank, name, abbreviation, english, german, french, greek, author, year, brightness, visibility, map, link).also {
@@ -66,6 +64,6 @@ class Constellations {
     }
 
     val values: Collection<Constellation>
-        get() = array
+        get() = list
 
 }

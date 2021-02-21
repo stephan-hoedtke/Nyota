@@ -58,11 +58,18 @@
             app:layout_constraintTop_toBottomOf="@id/checkBoxDisplayStarNames" />
 
         <CheckBox
+            android:id="@+id/checkBoxDisplayHints"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/label_display_hints"
+            app:layout_constraintTop_toBottomOf="@id/checkBoxDisplayEcliptic" />
+
+        <CheckBox
             android:id="@+id/checkBoxDisplayTargets"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/label_display_targets"
-            app:layout_constraintTop_toBottomOf="@id/checkBoxDisplayEcliptic" />
+            app:layout_constraintTop_toBottomOf="@id/checkBoxDisplayHints" />
 
         <CheckBox
             android:id="@+id/checkBoxDisplaySatellites"

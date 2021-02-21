@@ -2,17 +2,20 @@ package com.stho.nyota.sky.universe
 
 class Stars(private val constellations: Constellations) {
 
-    private val array: ArrayList<Star> = ArrayList()
-    private val map: HashMap<String, Star> = HashMap()
+    private val list: ArrayList<Star> = ArrayList()
+    private val names: HashMap<String, Star> = HashMap()
     private val catalog: HashMap<Int, Star> = HashMap()
 
     val size: Int
-        get() = array.size
+        get() = list.size
 
     fun add(star: Star) {
-        array.add(star)
+        list.add(star)
         if (star.hasName) {
-            map[star.name] = star
+            names[star.name] = star
+        }
+        if (star.hasFriendlyName) {
+            names[star.friendlyName] = star
         }
         if (star.HD > 0) {
             catalog[star.HD] = star
@@ -23,10 +26,13 @@ class Stars(private val constellations: Constellations) {
         catalog[HD]
 
     operator fun get(starName: String): Star? =
-        map[starName]
+        names[starName]
+
+    fun setFriendlyName(star: Star, friendlyName: String) =
+        star.setFriendlyName(friendlyName).also { names[friendlyName] = star }
 
     fun findStarByName(starName: String?): Star? =
-        starName?.let { map[it] }
+        starName?.let { names[it] }
 
     fun findStarByKey(key: String): Star? =
         when (Star.isValidKey(key)) {
@@ -47,6 +53,6 @@ class Stars(private val constellations: Constellations) {
     }
 
     val values: Collection<Star>
-        get() = array
+        get() = list
 
 }

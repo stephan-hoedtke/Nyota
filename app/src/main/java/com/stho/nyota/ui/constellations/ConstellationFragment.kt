@@ -65,7 +65,6 @@ class ConstellationFragment : AbstractElementFragment() {
 
             override fun onDoubleTap() {
                 binding.sky.setTippedStar(null)
-                binding.sky.setReferenceStar(null)
                 binding.sky.resetTransformation()
             }
 
@@ -111,6 +110,7 @@ class ConstellationFragment : AbstractElementFragment() {
         viewModel.zoomAngleLD.observe(viewLifecycleOwner, { zoomAngle -> onObserveZoomAngle(zoomAngle) })
         viewModel.centerLD.observe(viewLifecycleOwner, { center -> onObserveCenter(center) })
         viewModel.options.touchLD.observe(viewLifecycleOwner, { _ -> binding.sky.touch() })
+        viewModel.tipLD.observe(viewLifecycleOwner, { tip -> onObserveTip(tip) })
     }
 
     override fun onDestroyView() {
@@ -138,8 +138,7 @@ class ConstellationFragment : AbstractElementFragment() {
     override fun onPropertyClick(property: IProperty) {
         when (property.keyType) {
             PropertyKeyType.STAR -> viewModel.constellation.findStarInConstellationByKey(property.key)?.let {
-                binding.sky.setReferenceStar(it)
-                binding.sky.invalidate()
+                viewModel.setTippedStar(it)
             }
             else -> super.onPropertyClick(property)
         }
@@ -161,6 +160,10 @@ class ConstellationFragment : AbstractElementFragment() {
         binding.sky.setCenter(center)
     }
 
+    private fun onObserveTip(tip: ConstellationViewModel.Tip) {
+        binding.sky.setTippedStar(tip.star)
+    }
+
     private fun bind(moment: Moment, constellation: Constellation) {
         bindTime(binding.timeVisibilityOverlay, moment, constellation.visibility)
         binding.image.setImageResource(constellation.largeImageId)
@@ -171,12 +174,11 @@ class ConstellationFragment : AbstractElementFragment() {
     private fun displaySnackbarForPosition(position: Topocentric) {
         viewModel.constellation.findNearestStarByPosition(position, binding.sky.options.magnitude, binding.sky.sensitivityAngle)?.let {
             displaySnackbarForStar(it)
-            // TODO: select the respective list item
         }
     }
 
     private fun displaySnackbarForStar(star: Star) {
-        binding.sky.setTippedStar(star)
+        viewModel.setTippedStar(star)
 
         val message: String = messageTextForStar(star)
 
@@ -185,6 +187,12 @@ class ConstellationFragment : AbstractElementFragment() {
             .setTextColor(getColor(R.color.colorSecondaryText))
             .setDuration(13000)
             .setAction(star.toString()) { onStar(star) }
+            .addCallback(object: Snackbar.Callback() {
+                override fun onDismissed(transientBottomBar: Snackbar?, event: Int) {
+                    super.onDismissed(transientBottomBar, event)
+                    viewModel.undoTip(star)
+                }
+            })
             .show()
 
     }

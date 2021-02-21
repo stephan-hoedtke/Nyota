@@ -21,6 +21,7 @@ interface ISkyViewSettings
     var displaySatellites: Boolean
     var displayGrid: Boolean
     var displayEcliptic: Boolean
+    var displayHints: Boolean
     var sphereProjection: Projection
     var magnitude: Double
     fun touch()

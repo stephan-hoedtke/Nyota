@@ -110,9 +110,15 @@ class SkyView(context: Context?, attrs: AttributeSet?) : AbstractSkyView(context
                 super.drawSatellite(it)
             }
         }
+        if (options.displayHints) {
+            universe.hints.forEach {
+                super.drawHint(it)
+            }
+        }
         super.drawMoon(universe.solarSystem.moon)
         super.drawSun(universe.solarSystem.sun)
         super.drawZenit(universe.zenit)
+        super.drawNadir(universe.nadir)
     }
 
     private fun onDrawElement(element: IElement, referenceType: ReferenceType) {

@@ -92,6 +92,15 @@ class SkyFragmentViewOptions(val settings: ISkyViewSettings): SkyViewOptions(), 
             }
         }
 
+    override var displayHints: Boolean
+        get() = settings.displayHints
+        set(value) {
+            if (settings.displayHints != value) {
+                settings.displayHints = value
+                touch()
+            }
+        }
+
     override var sphereProjection: Projection
         get() = settings.sphereProjection
         set(value) {

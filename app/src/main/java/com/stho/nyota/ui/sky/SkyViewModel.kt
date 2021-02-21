@@ -5,6 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.stho.nyota.RepositoryViewModelArgs
 import com.stho.nyota.repository.Repository
+import com.stho.nyota.sky.universe.Constellation
 import com.stho.nyota.sky.universe.IElement
 import com.stho.nyota.sky.universe.Universe
 import com.stho.nyota.sky.utilities.Degree
@@ -45,11 +46,14 @@ class SkyViewModel(application: Application, repository: Repository, val element
         }
     }
 
+    data class Tip(val element: IElement? = null, var constellation: Constellation? = null)
+
     private val isLiveLiveData: MutableLiveData<Boolean> = MutableLiveData<Boolean>().apply { value = false }
     private val showZoomLiveData: MutableLiveData<Boolean> = MutableLiveData<Boolean>().apply { value = false }
     private val skyOrientationLiveData: MutableLiveData<SkyOrientation> = MutableLiveData<SkyOrientation>().apply { value = SkyOrientation.getOK() }
     private val zoomAngleLiveData: MutableLiveData<Double> = MutableLiveData<Double>().apply { value = SkyViewOptions.DEFAULT_ZOOM_ANGLE }
     private val centerLiveData: MutableLiveData<Topocentric> = MutableLiveData<Topocentric>().apply { value = element?.position ?: Topocentric(0.0, 0.0) }
+    private val tipLiveData: MutableLiveData<Tip> = MutableLiveData<Tip>().apply { value = Tip() }
 
     val isLiveLD: LiveData<Boolean>
         get() = isLiveLiveData
@@ -80,6 +84,20 @@ class SkyViewModel(application: Application, repository: Repository, val element
                 true -> repository.settings.liveMode
                 else -> LiveMode.Off
             }
+
+    val tipLD: LiveData<Tip>
+        get() = tipLiveData
+
+    fun setTippedElement(element: IElement, constellation: Constellation? = null) =
+        tipLiveData.postValue(Tip(element, constellation))
+
+    fun undoTip(element: IElement) {
+        tipLiveData.value?.also {
+            if (it.element == element) {
+                tipLiveData.postValue(Tip(null))
+            }
+        }
+    }
 
     var showZoom: Boolean
         get() = showZoomLiveData.value ?: false

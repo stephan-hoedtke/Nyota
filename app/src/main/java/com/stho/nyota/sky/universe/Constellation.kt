@@ -5,7 +5,6 @@ import com.stho.nyota.R
 import com.stho.nyota.sky.utilities.*
 import com.stho.nyota.sky.utilities.Topocentric.Companion.INVALID_DISTANCE
 import java.lang.Exception
-import java.security.InvalidParameterException
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -18,7 +17,8 @@ class Constellation internal constructor(val id: Long, val rank: Int, override v
     // TODO: make those lists immutable for public, and mutable private
     val stars: ArrayList<Star> = ArrayList()
     val lines: ArrayList<Collection<Star>> = ArrayList()
-    private val map: EnumMap<Symbol, Star> = EnumMap(Symbol::class.java)
+
+    private val symbols: EnumMap<Symbol, Star> = EnumMap(Symbol::class.java)
     private val translations: EnumMap<Language, String> = EnumMap(Language::class.java)
 
     override val imageId: Int = when (rank) {
@@ -145,9 +145,9 @@ class Constellation internal constructor(val id: Long, val rank: Int, override v
             star.register(this)
         }
         if (star.hasSymbol) {
-            val existingStarForSymbol = map[star.symbol]
+            val existingStarForSymbol = symbols[star.symbol]
             if (existingStarForSymbol == null || star.isBrighterThan(existingStarForSymbol.magn)) {
-                map[star.symbol] = star
+                symbols[star.symbol] = star
             }
         }
     }
@@ -163,7 +163,7 @@ class Constellation internal constructor(val id: Long, val rank: Int, override v
             stars.add(star)
             star.register(this)
         }
-        map[symbol] = star
+        symbols[symbol] = star
         return this
     }
 
@@ -195,7 +195,7 @@ class Constellation internal constructor(val id: Long, val rank: Int, override v
      * Retrieve a star by the symbol; raising an exception if not found.
      */
     operator fun get(symbol: Symbol): Star =
-        map[symbol] ?: throw Exception("Star $symbol is not registered in constellation $name yet.")
+        symbols[symbol] ?: throw Exception("Star $symbol is not registered in constellation $name yet.")
 
     /**
      * Retrieve a star by the key, if it can be found, or null otherwise

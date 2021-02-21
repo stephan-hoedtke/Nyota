@@ -4,11 +4,11 @@ import java.util.*
 
 class Targets {
 
-    private val map: HashMap<String, Target> = HashMap<String, Target>()
-    private val array: ArrayList<Target> = ArrayList<Target>()
+    private val list: ArrayList<Target> = ArrayList<Target>()
+    private val names: HashMap<String, Target> = HashMap<String, Target>()
 
     val size: Int
-        get() = array.size
+        get() = list.size
 
     fun addAll(collection: Collection<Target>) {
         for (target in collection) {
@@ -18,29 +18,29 @@ class Targets {
 
     fun add(target: Target) {
         val targetName = target.name
-        val existingTarget = map[targetName]
+        val existingTarget = names[targetName]
         if (existingTarget != null) {
-            val index = array.indexOf(existingTarget)
-            array[index] = target
-            map[targetName] = target
+            val index = list.indexOf(existingTarget)
+            list[index] = target
+            names[targetName] = target
         } else {
-            array.add(target)
-            map[targetName] = target
+            list.add(target)
+            names[targetName] = target
         }
     }
 
     fun isValidIndex(index: Int) =
-        0 <= index && index < array.size
+        0 <= index && index < list.size
 
     operator fun get(index: Int): Target =
-        array[index]
+        list[index]
 
     operator fun get(targetName: String): Target? {
-        return map[targetName]
+        return names[targetName]
     }
 
     fun findTargetById(id: Long): Target? =
-        map.values.find { it.id == id }
+        names.values.find { it.id == id }
 
     fun findTargetByKey(key: String): Target? =
         when (Target.isValidKey(key)) {
@@ -52,7 +52,7 @@ class Targets {
         }
 
     val values: List<Target>
-        get() = array
+        get() = list
 
     internal fun createWithId(id: Long, name: String, friendlyName: String, ra: Double, decl: Double) =
         Target.createWithId(id, name, friendlyName, ra, decl).also { add(it) }
