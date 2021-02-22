@@ -44,7 +44,7 @@ class PermissionManager(val activity: FragmentActivity) : ActivityCompat.OnReque
         builder.apply {
             setMessage(activity.getString(R.string.message_permission_is_required, name))
             setTitle(activity.getString(R.string.title_permission_request))
-            setPositiveButton(activity.getString(R.string.label_ok)) { dialog, which ->
+            setPositiveButton(activity.getString(R.string.label_ok)) { _, _ ->
                 ActivityCompat.requestPermissions(activity, arrayOf(permission), requestCode)
             }
         }

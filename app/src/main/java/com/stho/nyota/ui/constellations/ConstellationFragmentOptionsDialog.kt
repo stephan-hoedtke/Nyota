@@ -19,9 +19,9 @@ class ConstellationFragmentOptionsDialog(val options: ISkyViewOptions): DialogFr
         bindingReference = FragmentConstellationDialogOptionsBinding.inflate(inflater, container, false)
 
         binding.buttonOK.setOnClickListener { onOK() }
-        binding.checkBoxDisplaySymbols.setOnCheckedChangeListener { v, isChecked -> options.displaySymbols = isChecked }
-        binding.checkBoxDisplayStarNames.setOnCheckedChangeListener { v, isChecked -> options.displayStarNames = isChecked }
-        binding.checkBoxDisplayConstellations.setOnCheckedChangeListener { v, isChecked -> options.displayConstellations = isChecked }
+        binding.checkBoxDisplaySymbols.setOnCheckedChangeListener { _, isChecked -> options.displaySymbols = isChecked }
+        binding.checkBoxDisplayStarNames.setOnCheckedChangeListener { _, isChecked -> options.displayStarNames = isChecked }
+        binding.checkBoxDisplayConstellations.setOnCheckedChangeListener { _, isChecked -> options.displayConstellations = isChecked }
 
         return binding.root
     }

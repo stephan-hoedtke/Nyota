@@ -14,7 +14,6 @@ import kotlin.collections.ArrayList
 @Suppress("LocalVariableName")
 class Constellation internal constructor(val id: Long, val rank: Int, override val name: String, val abbreviation: String, val author: String, val year: Int, val brightness: Double) : AbstractElement() {
 
-    // TODO: make those lists immutable for public, and mutable private
     val stars: ArrayList<Star> = ArrayList()
     val lines: ArrayList<Collection<Star>> = ArrayList()
 

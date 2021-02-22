@@ -17,9 +17,6 @@ class FinderViewModel(application: Application, repository: Repository, val elem
     val ringAngleLD: LiveData<Double>
         get() = ringAngleLiveData
 
-    val ringAngle: Double
-        get() = ringAngleLiveData.value ?: 0.0
-
     val orientationLD: LiveData<Orientation>
         get() = repository.currentOrientationLD
 
@@ -41,7 +38,10 @@ class FinderViewModel(application: Application, repository: Repository, val elem
         getRotationToTargetAutomaticallyFor(orientation, element)
 
     fun getRotationToTarget(): Float =
-        if (refreshAutomatically) getRotationToTargetAutomaticallyFor(orientation) else getRotationToTargetManuallyFor(ringAngle)
+        if (refreshAutomatically)
+            getRotationToTargetAutomaticallyFor(orientation)
+        else
+            getRotationToTargetManuallyFor(ringAngleLiveData.value ?: 0.0)
 
     var refreshAutomatically: Boolean
         get() = refreshAutomaticallyLiveData.value ?: true

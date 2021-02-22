@@ -24,9 +24,9 @@ class SkyFragmentLiveModeDialog(val settings: Settings): DialogFragment() {
         bindingReference = FragmentSkyDialogLiveModeBinding.inflate(inflater, container, false)
 
         binding.buttonOK.setOnClickListener { onOK() }
-        binding.radioButtonOff.setOnCheckedChangeListener { v, isChecked -> if (isChecked) settings.liveMode = LiveMode.Off }
-        binding.radioButtonHints.setOnCheckedChangeListener { v, isChecked -> if (isChecked) settings.liveMode = LiveMode.Hints }
-        binding.radioButtonMoveCenter.setOnCheckedChangeListener { v, isChecked -> if (isChecked) settings.liveMode = LiveMode.MoveCenter }
+        binding.radioButtonOff.setOnCheckedChangeListener { _, isChecked -> if (isChecked) settings.liveMode = LiveMode.Off }
+        binding.radioButtonHints.setOnCheckedChangeListener { _, isChecked -> if (isChecked) settings.liveMode = LiveMode.Hints }
+        binding.radioButtonMoveCenter.setOnCheckedChangeListener { _, isChecked -> if (isChecked) settings.liveMode = LiveMode.MoveCenter }
 
         return binding.root
     }

@@ -20,6 +20,9 @@ abstract class AbstractPlanet(override val name: String) : AbstractSolarSystemEl
         phase = (1 + cos(FV)) / 2
     }
 
+    private val magnAsString: String
+        get() = Formatter.df2.format(magn)
+
     abstract fun calculateMagnitude()
 
     override fun getBasics(moment: Moment): PropertyList =
@@ -27,15 +30,15 @@ abstract class AbstractPlanet(override val name: String) : AbstractSolarSystemEl
             if (position?.isUp == true) {
                 add(com.stho.nyota.R.drawable.sunset, "Previous Set", position?.prevSetTime, moment.timeZone)
                 add(com.stho.nyota.R.drawable.sunrise, "Rise", position?.riseTime, moment.timeZone)
-                add(com.stho.nyota.R.drawable.sunset, "Set ", position?.setTime, moment.timeZone)
+                add(com.stho.nyota.R.drawable.sunset, "Set", position?.setTime, moment.timeZone)
                 add(com.stho.nyota.R.drawable.sunrise, "Next Rise", position?.nextRiseTime, moment.timeZone)
             } else {
                 add(com.stho.nyota.R.drawable.sunrise, "Previous Rise", position?.prevRiseTime, moment.timeZone)
-                add(com.stho.nyota.R.drawable.sunset, "Set ", position?.setTime, moment.timeZone)
+                add(com.stho.nyota.R.drawable.sunset, "Set", position?.setTime, moment.timeZone)
                 add(com.stho.nyota.R.drawable.sunrise, "Rise", position?.riseTime, moment.timeZone)
                 add(com.stho.nyota.R.drawable.sunset, "Next Set", position?.nextSetTime, moment.timeZone)
             }
-            add(com.stho.nyota.R.drawable.empty, "Magnitude", Formatter.df2.format(magn))
+            add(com.stho.nyota.R.drawable.empty, "Magnitude", magnAsString)
             add(com.stho.nyota.R.drawable.empty, "In south", position?.inSouth, moment.timeZone)
             add(com.stho.nyota.R.drawable.empty, "Culmination angle", Degree.fromDegree(position!!.culmination))
         }

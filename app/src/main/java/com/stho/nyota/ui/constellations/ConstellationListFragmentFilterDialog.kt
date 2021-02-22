@@ -22,9 +22,9 @@ class ConstellationListFragmentFilterDialog(private val viewModel: Constellation
         bindingReference = FragmentConstellationListDialogFilterBinding.inflate(inflater, container, false)
 
         binding.buttonOK.setOnClickListener { onOK() }
-        binding.radioButtonPtolemaus.setOnCheckedChangeListener { v, isChecked -> if (isChecked) bindRadioButtons(Constellations.Filter.Ptolemaeus) }
-        binding.radioButtonZodiac.setOnCheckedChangeListener { v, isChecked -> if (isChecked) bindRadioButtons(Constellations.Filter.Zodiac) }
-        binding.radioButtonIAU.setOnCheckedChangeListener { v, isChecked -> if (isChecked) bindRadioButtons(Constellations.Filter.IAU) }
+        binding.radioButtonPtolemaus.setOnCheckedChangeListener { _, isChecked -> if (isChecked) bindRadioButtons(Constellations.Filter.Ptolemaeus) }
+        binding.radioButtonZodiac.setOnCheckedChangeListener { _, isChecked -> if (isChecked) bindRadioButtons(Constellations.Filter.Zodiac) }
+        binding.radioButtonIAU.setOnCheckedChangeListener { _, isChecked -> if (isChecked) bindRadioButtons(Constellations.Filter.IAU) }
 
         return binding.root
     }

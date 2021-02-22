@@ -17,7 +17,7 @@ class SphereProjection : AbstractSphereProjection(), ISphereProjection {
         val x2 = factor * x1
         val y2 = factor * y1
         val lambda = atan(x2)
-        val phi = atan(y2 * cos(lambda)) // TODO make it better! (a)  atan(y2 * cos(lambda)) or (b) atan(y2)
+        val phi = atan(y2 * cos(lambda))
         return SkyPoint(lambda, phi)
     }
 

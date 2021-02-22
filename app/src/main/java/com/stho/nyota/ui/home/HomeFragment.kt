@@ -111,13 +111,13 @@ class HomeFragment : AbstractFragment() {
 
     private fun showPopupMenuFor(element: IElement) {
         val fragmentManager: FragmentManager = requireActivity().supportFragmentManager
-        val tag = "choose_next_step_dialog"
+        val tag = "DIALOG"
         ChooseNextStepDialog(element).show(fragmentManager, tag)
     }
 
     private fun displayHomeFragmentOptionsDialog() {
         val fragmentManager: FragmentManager = requireActivity().supportFragmentManager
-        val tag = "fragment_home_options_dialog"
+        val tag = "DIALOG"
         HomeFragmentOptionsDialog(viewModel).show(fragmentManager, tag)
     }
 

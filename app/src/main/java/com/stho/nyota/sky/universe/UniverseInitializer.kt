@@ -8,7 +8,6 @@ import java.lang.Exception
 import java.util.*
 
 
-// TODO Make the UniverseInitialize a set of internal and private methods in Universe
 /**
  * Created by shoedtke on 31.08.2016.
  */
@@ -945,12 +944,11 @@ class UniverseInitializer(universe: Universe) : AbstractUniverseInitializer(univ
         newHint("Arcturus (Bootes)", ursaMajor[Symbol.Eta], getStar(Arcturus))
 
         newHint("Spica (Virgo)", getStar(Arcturus), getStar(Spica))
-
-        // Bootes
         newHint("Hercules", getStar(Arcturus), getStar(Constellation.Hercules, Symbol.Zeta))
         newHint("Vega (Lyr)", getStar(Constellation.Hercules, Symbol.Zeta), getStar(Vega))
+        newHint("Canopus (Carina)", getStar(Sirius), getStar(Canopus))
+        newHint("Achernar (Eridanus)", getStar(Canopus), getStar(Achernar))
 
-        // Pegasus
         val pegasus = universe.constellations[Constellation.Pegasus]
         newRectangle("Pegasus", pegasus[Symbol.Alpha], pegasus[Symbol.Beta], pegasus[Symbol.Delta], pegasus[Symbol.Gamma])
         newHint("Fomalhaut (Pisces Australis)", pegasus[Symbol.Alpha], getStar(Fomalhaut))
@@ -959,10 +957,6 @@ class UniverseInitializer(universe: Universe) : AbstractUniverseInitializer(univ
         newHint("Andromeda", pegasus[Symbol.Delta], getStar(Constellation.Andromeda, Symbol.Beta))
         newHint("Cetus", pegasus[Symbol.Gamma], getStar(Constellation.Cetus, Symbol.Beta))
 
-        newHint("Canopus (Carina)", getStar(Sirius), getStar(Canopus))
-        newHint("Achernar (Eridanus)", getStar(Canopus), getStar(Achernar))
-
-        // Crux
         val crux = universe.constellations[Constellation.Crux]
         newHint("Crux", crux)
         newHint("Canopus (Carina)", crux[Symbol.Alpha], getStar(Canopus))

@@ -84,7 +84,6 @@ abstract class AbstractFragment : Fragment() {
         binding.currentTime?.setOnLongClickListener { onIntervalReset(); true }
         binding.imageTime?.setOnLongClickListener { onIntervalReset(); true }
         abstractViewModel.intervalLD.observe(viewLifecycleOwner) { interval -> updateUpdateInterval(interval) }
-        abstractViewModel.settings.updateLocationAutomaticallyLD.observe(viewLifecycleOwner) { value -> updateLocationAutomatically(value) }
         abstractViewModel.settings.updateTimeAutomaticallyLD.observe(viewLifecycleOwner) { value -> updateTimeAutomatically(value) }
     }
 
@@ -143,10 +142,6 @@ abstract class AbstractFragment : Fragment() {
         abstractViewModel.settings.updateTimeAutomatically = false
     }
 
-    private fun updateLocationAutomatically(value: Boolean) {
-        // TODO nothing
-    }
-
     private fun updateTimeAutomatically(value: Boolean) {
         binding.imageTime?.isEnabled = !value
         binding.timeIntervalFooter?.visibility = if (value) View.GONE else View.VISIBLE
@@ -178,7 +173,7 @@ abstract class AbstractFragment : Fragment() {
     protected fun showNextStepDialogForElement(key: String) {
         abstractViewModel.repository.getElementByKey(key)?.also {
             val fragmentManager: FragmentManager = requireActivity().supportFragmentManager
-            val tag = "choose_next_step_dialog"
+            val tag = "DIALOG"
             ChooseNextStepDialog(it).show(fragmentManager, tag)
         }
     }

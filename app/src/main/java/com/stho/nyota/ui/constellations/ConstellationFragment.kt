@@ -20,10 +20,6 @@ import com.stho.nyota.sky.utilities.*
 import com.stho.nyota.ui.sky.SkyFragmentOptionsDialog
 
 
-// TODO: show constellation in "real sky view", not just the Icon
-// see: https://en.wikipedia.org/wiki/Greek_alphabet (modern print)
-
-
 class ConstellationFragment : AbstractElementFragment() {
 
     private lateinit var viewModel: ConstellationViewModel
@@ -89,7 +85,7 @@ class ConstellationFragment : AbstractElementFragment() {
                     MotionEvent.ACTION_MOVE -> {
                         if (active) {
                             val value = (event.rawY - startY) + startBegin
-                            val params = binding.horizontalGuideline1.layoutParams as ConstraintLayout.LayoutParams;
+                            val params = binding.horizontalGuideline1.layoutParams as ConstraintLayout.LayoutParams
                             params.guideBegin = value.toInt()
                             binding.horizontalGuideline1.layoutParams = params
                         }
@@ -205,8 +201,6 @@ class ConstellationFragment : AbstractElementFragment() {
 
 
     private fun onToggleImage() {
-
-        // TODO: Use animation...
         if (binding.image.alpha < 1f) {
             binding.image.alpha = 1f
             binding.sky.visibility = View.INVISIBLE
@@ -233,7 +227,7 @@ class ConstellationFragment : AbstractElementFragment() {
 
     private fun displayConstellationFragmentOptionsDialog() {
         val fragmentManager: FragmentManager = requireActivity().supportFragmentManager
-        val tag = "fragment_constellation_options_dialog"
+        val tag = "DIALOG"
         ConstellationFragmentOptionsDialog(viewModel.options).show(fragmentManager, tag)
     }
 

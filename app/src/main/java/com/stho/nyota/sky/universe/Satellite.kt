@@ -3,8 +3,9 @@ package com.stho.nyota.sky.universe
 import com.stho.nyota.sky.universe.Algorithms.getECI
 import com.stho.nyota.sky.universe.Algorithms.getLocationForECI
 import com.stho.nyota.sky.universe.Algorithms.getTopocentricFromPosition
-import com.stho.nyota.sky.utilities.*
-import com.stho.nyota.sky.utilities.Formatter
+import com.stho.nyota.sky.utilities.IDBObject
+import com.stho.nyota.sky.utilities.Moment
+import com.stho.nyota.sky.utilities.UTC
 import java.util.*
 
 /**
@@ -82,9 +83,6 @@ class Satellite private constructor(override var id: Long, override val name: St
             CHEOPS -> com.stho.nyota.R.drawable.satellite_cheops128
             else -> com.stho.nyota.R.drawable.satellite128
         }
-
-    val updated: Calendar
-        get() = UTC.forJulianDay(tle.Epoch).getGmt()
 
     fun updateFor(moment: Moment) {
         val julianDay: Double = moment.utc.julianDay

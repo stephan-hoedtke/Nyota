@@ -12,9 +12,7 @@ import com.stho.nyota.sky.utilities.City
 import com.stho.nyota.sky.utilities.Formatter
 import com.stho.nyota.sky.utilities.createDefaultBerlinBuch
 
-// TODO: onTouchLister without PerformClick
-
-class CityPickerRecyclerViewAdapter(private val fragment: CityPickerFragment, private val recyclerView: RecyclerView) : RecyclerView.Adapter<CityPickerRecyclerViewAdapter.ViewHolder>(), ISwipeToDeleteAdapter {
+class CityPickerRecyclerViewAdapter(fragment: CityPickerFragment, private val recyclerView: RecyclerView) : RecyclerView.Adapter<CityPickerRecyclerViewAdapter.ViewHolder>(), ISwipeToDeleteAdapter {
 
     private val context: Context = fragment.requireContext()
     private var gestureDetector: GestureDetector

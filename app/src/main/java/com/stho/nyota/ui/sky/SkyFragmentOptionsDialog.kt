@@ -19,15 +19,15 @@ class SkyFragmentOptionsDialog(val options: ISkyViewOptions): DialogFragment() {
         bindingReference = FragmentSkyDialogOptionsBinding.inflate(inflater, container, false)
 
         binding.buttonOK.setOnClickListener { onOK() }
-        binding.checkBoxDisplaySymbols.setOnCheckedChangeListener { v, isChecked -> options.displaySymbols = isChecked }
-        binding.checkBoxDisplayConstellations.setOnCheckedChangeListener { v, isChecked -> options.displayConstellations = isChecked }
-        binding.checkBoxDisplayConstellationNames.setOnCheckedChangeListener { v, isChecked -> options.displayConstellationNames = isChecked }
-        binding.checkBoxDisplayPlanetNames.setOnCheckedChangeListener { v, isChecked -> options.displayPlanetNames = isChecked }
-        binding.checkBoxDisplayStarNames.setOnCheckedChangeListener { v, isChecked -> options.displayStarNames = isChecked }
-        binding.checkBoxDisplayEcliptic.setOnCheckedChangeListener { v, isChecked -> options.displayEcliptic = isChecked }
-        binding.checkBoxDisplayHints.setOnCheckedChangeListener { v, isChecked -> options.displayHints = isChecked }
-        binding.checkBoxDisplayTargets.setOnCheckedChangeListener { v, isChecked -> options.displayTargets = isChecked }
-        binding.checkBoxDisplaySatellites.setOnCheckedChangeListener { v, isChecked -> options.displaySatellites = isChecked }
+        binding.checkBoxDisplaySymbols.setOnCheckedChangeListener { _, isChecked -> options.displaySymbols = isChecked }
+        binding.checkBoxDisplayConstellations.setOnCheckedChangeListener { _, isChecked -> options.displayConstellations = isChecked }
+        binding.checkBoxDisplayConstellationNames.setOnCheckedChangeListener { _, isChecked -> options.displayConstellationNames = isChecked }
+        binding.checkBoxDisplayPlanetNames.setOnCheckedChangeListener { _, isChecked -> options.displayPlanetNames = isChecked }
+        binding.checkBoxDisplayStarNames.setOnCheckedChangeListener { _, isChecked -> options.displayStarNames = isChecked }
+        binding.checkBoxDisplayEcliptic.setOnCheckedChangeListener { _, isChecked -> options.displayEcliptic = isChecked }
+        binding.checkBoxDisplayHints.setOnCheckedChangeListener { _, isChecked -> options.displayHints = isChecked }
+        binding.checkBoxDisplayTargets.setOnCheckedChangeListener { _, isChecked -> options.displayTargets = isChecked }
+        binding.checkBoxDisplaySatellites.setOnCheckedChangeListener { _, isChecked -> options.displaySatellites = isChecked }
 
         return binding.root
     }

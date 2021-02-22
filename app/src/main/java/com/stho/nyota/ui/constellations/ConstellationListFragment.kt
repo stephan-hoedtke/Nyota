@@ -106,7 +106,7 @@ class ConstellationListFragment : AbstractFragment() {
 
     private fun displayConstellationListFragmentFilterDialog() {
         val fragmentManager: FragmentManager = requireActivity().supportFragmentManager
-        val tag = "fragment_constellation_list_filter_dialog" // TODO: simplify tags for dialogs
+        val tag = "DIALOG"
         ConstellationListFragmentFilterDialog(viewModel).show(fragmentManager, tag)
     }
 

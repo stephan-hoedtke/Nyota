@@ -225,25 +225,25 @@ class SkyFragment : AbstractFragment() {
 
     private fun displaySkyFragmentOptionsDialog() {
         val fragmentManager: FragmentManager = requireActivity().supportFragmentManager
-        val tag = "fragment_sky_options_dialog"
+        val tag = "DIALOG"
         SkyFragmentOptionsDialog(viewModel.options).show(fragmentManager, tag)
     }
 
     private fun displaySkyFragmentProjectionsDialog() {
         val fragmentManager: FragmentManager = requireActivity().supportFragmentManager
-        val tag = "fragment_sky_projections_dialog"
+        val tag = "DIALOG"
         SkyFragmentProjectionDialog(viewModel.options).show(fragmentManager, tag)
     }
 
     private fun displaySkyFragmentLiveModeDialog() {
         val fragmentManager: FragmentManager = requireActivity().supportFragmentManager
-        val tag = "fragment_sky_live_mode_dialog"
+        val tag = "DIALOG"
         SkyFragmentLiveModeDialog(viewModel.settings).show(fragmentManager, tag)
     }
 
     private fun displaySkyFragmentLuminosityDialog() {
         val fragmentManager: FragmentManager = requireActivity().supportFragmentManager
-        val tag = "fragment_sky_luminosity_dialog"
+        val tag = "DIALOG"
         SkyFragmentLuminosityDialog(viewModel.options).show(fragmentManager, tag)
     }
 

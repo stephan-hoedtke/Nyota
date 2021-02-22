@@ -293,22 +293,28 @@ class Moon : AbstractSolarSystemElement() {
     override val distanceInKm: Double
         get() = Algorithms.EARTH_RADIUS * R
 
+    private val magnAsString: String
+        get() = Formatter.df2.format(magn)
+
+    private val ageAsString: String
+        get() = Formatter.df2.format(age)
+
     override fun getBasics(moment: Moment): PropertyList =
         super.getBasics(moment).apply {
             if (position?.isUp == true) {
                 add(com.stho.nyota.R.drawable.sunset, "Previous Set", position?.prevSetTime, moment.timeZone)
                 add(com.stho.nyota.R.drawable.sunrise, "Rise", position?.riseTime, moment.timeZone)
-                add(com.stho.nyota.R.drawable.sunset, "Set ", position?.setTime, moment.timeZone)
+                add(com.stho.nyota.R.drawable.sunset, "Set", position?.setTime, moment.timeZone)
                 add(com.stho.nyota.R.drawable.sunrise, "Next Rise", position?.nextRiseTime, moment.timeZone)
             } else {
                 add(com.stho.nyota.R.drawable.sunrise, "Previous Rise", position?.prevRiseTime, moment.timeZone)
-                add(com.stho.nyota.R.drawable.sunset, "Set ", position?.setTime, moment.timeZone)
+                add(com.stho.nyota.R.drawable.sunset, "Set", position?.setTime, moment.timeZone)
                 add(com.stho.nyota.R.drawable.sunrise, "Rise", position?.riseTime, moment.timeZone)
                 add(com.stho.nyota.R.drawable.sunset, "Next Set", position?.nextSetTime, moment.timeZone)
             }
-            add(com.stho.nyota.R.drawable.empty, "Age", Formatter.df2.format(age))
+            add(com.stho.nyota.R.drawable.empty, "Age", ageAsString)
             add(com.stho.nyota.R.drawable.angle, "Diameter", Degree.fromDegree(diameter))
-            add(com.stho.nyota.R.drawable.empty, "Magnitude", Formatter.df2.format(magn))
+            add(com.stho.nyota.R.drawable.empty, "Magnitude", magnAsString)
         }
 
     override fun getDetails(moment: Moment): PropertyList =
@@ -331,8 +337,6 @@ class Moon : AbstractSolarSystemElement() {
         const val RADIUS = 1737.0 // in km
 
         private const val TOLERANCE = 0.001
-
-        // TODO better usage of "getTimeFor(), store values in a dictionary ??
 
         fun getNewMoon(utc: UTC, shift: Int): UTC =
             UTC.forJulianDay(getJulianDayFor(utc, Phase.NEW, shift))
