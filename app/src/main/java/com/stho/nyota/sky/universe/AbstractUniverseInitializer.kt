@@ -16,6 +16,9 @@ abstract class AbstractUniverseInitializer(protected var universe: Universe) {
     fun getStar(rank: Int, symbol: Symbol): Star =
         universe.constellations[rank][symbol] // throws an exception if rank or symbol were not initialized
 
+    fun getConstellation(rank: Int): Constellation =
+        universe.constellations[rank] // throws an exception if rank was not initialized
+
     fun newGalaxy(name: String, imageId: Int, ascension: String, declination: String, brightness: Double, distance: Double): Galaxy =
         Galaxy(name, imageId, Hour.fromHour(ascension).angleInDegree, Degree.fromDegree(declination).angleInDegree, brightness, distance).also {
             universe.galaxies.add(it)
@@ -24,6 +27,11 @@ abstract class AbstractUniverseInitializer(protected var universe: Universe) {
     fun newAnything(name: String, ascension: String, declination: String, brightness: Double, distance: Double): Anything =
         Anything(name, Hour.fromHour(ascension).angleInDegree, Degree.fromDegree(declination).angleInDegree, brightness, distance).also {
             universe.any.add(it)
+        }
+
+    fun newHint(description: String, at: IElement): Hint =
+        Hint.create(description, at).also {
+            universe.hints.add(it)
         }
 
     fun newHint(description: String, from: Star, to: Star): Hint =
@@ -35,6 +43,12 @@ abstract class AbstractUniverseInitializer(protected var universe: Universe) {
         Hint.create(description, one, two, three).also {
             universe.hints.add(it)
         }
+
+    fun newRectangle(description: String, one: Star, two: Star, three: Star, four: Star): Hint =
+        Hint.create(description, one, two, three, four).also {
+            universe.hints.add(it)
+        }
+
 
     fun newSatellite(name: String, displayName: String, noradSatelliteNumber: Int, elements: String): Satellite =
         universe.satellites.findSatelliteByName(name) ?:

@@ -160,7 +160,7 @@ class Sun : AbstractSolarSystemElement() {
         fun eclipticFor(moment: IMoment): Collection<Topocentric> {
             val ecliptic = ArrayList<Topocentric>()
             val obliquity = getObliquityFor(moment.utc.centuriesSince2000)
-            for (x in 0..355 step 5) {
+            for (x in 0..360 step 5) {
                 val rightAscension: Double = x.toDouble()
                 val declination: Double = Algorithms.calculateEclipticDeclination(obliquity, rightAscension)
                 val position = Algorithms.calculateAzimuthAltitude(rightAscension, declination, moment)

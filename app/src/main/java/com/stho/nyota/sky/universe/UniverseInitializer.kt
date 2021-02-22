@@ -156,17 +156,17 @@ class UniverseInitializer(universe: Universe) : AbstractUniverseInitializer(univ
     //          Lat.:52.6400° Lon.:13.4900° Hgt.: 55.0m LST:UT+1h ΔT=69s
     //              2018-12-04 0:00:00--> Alt: 53 14 10, Azi: 359 30 16, Hour angle: 21 58 50
     private fun registerVIP() {
-        asVIP(setFriendlyNameTo(10144,"Achernar"))
-        asVIP(setFriendlyNameTo(108248,"Acrux"))
+        asVIP(setFriendlyNameTo(10144, Achernar)) // Eridanus
+        asVIP(setFriendlyNameTo(108248,Acrux))
         asVIP(setFriendlyNameTo(29139, Aldebaran))
-        asVIP(setFriendlyNameTo(128620,"Alpha Centauri"))
+        asVIP(setFriendlyNameTo(128620,AlphaCentauri))
         asVIP(setFriendlyNameTo(187642, Altair))
-        asVIP(setFriendlyNameTo(148478, "Antares"))
+        asVIP(setFriendlyNameTo(148478, Antares))
         asVIP(setFriendlyNameTo(124897, Arcturus))
         asVIP(setFriendlyNameTo(111123, "Becrux"))
         asVIP(setFriendlyNameTo(39801,Betelgeuse).setColor(Star.Color.Red))
-        asVIP(setFriendlyNameTo(60179, "Castor"))
-        asVIP(setFriendlyNameTo(45348, "Canopus"))
+        asVIP(setFriendlyNameTo(60179, Castor)) // Gemini
+        asVIP(setFriendlyNameTo(45348, Canopus))
         asVIP(setFriendlyNameTo(34029, Capella))
         asVIP(setFriendlyNameTo(197345, Deneb))
         asVIP(setFriendlyNameTo(108903, "Gacrux"))
@@ -932,24 +932,42 @@ class UniverseInitializer(universe: Universe) : AbstractUniverseInitializer(univ
     }
 
     private fun registerHints() {
-        newHint("Orion -> Aldebaran (Taurus)", getStar(Constellation.Orion, Symbol.Delta), getStar(Aldebaran))
-        newHint("Orion -> Sirius (Canis Major)", getStar(Constellation.Orion, Symbol.Zeta), getStar(Sirius))
-        newHint("Orion -> Capella (Auriga)", getStar(Constellation.Orion, Symbol.Lambda), getStar(Capella))
 
-        newHint("Ursa Major -> Polaris", getStar(Constellation.UrsaMajor, Symbol.Alpha), getStar(Polaris))
-        newHint("Ursa Major -> Leo", getStar(Constellation.UrsaMajor, Symbol.Beta), getStar(Regulus))
-        newHint("Ursa Major -> Arcturus (Bootes)", getStar(Constellation.UrsaMajor, Symbol.Eta), getStar(Arcturus))
-        newHint("Ursa Major -> Spica (Virgo)", getStar(Arcturus), getStar(Spica))
+        val orion = universe.constellations[Constellation.Orion]
+        newHint("Aldebaran (Taurus)", orion[Symbol.Delta], getStar(Aldebaran))
+        newHint("Sirius (Canis Major)", orion[Symbol.Zeta], getStar(Sirius))
+        newHint("Capella (Auriga)", orion[Symbol.Lambda], getStar(Capella))
+        newHint("Castor (Gemini)", getStar(Betelgeuse), getStar(Castor))
 
-        newHint("Bootes -> Hercules", getStar(Arcturus), getStar(Constellation.Hercules, Symbol.Zeta))
-        newHint("Bootes -> Vega (Lyr)", getStar(Constellation.Hercules, Symbol.Zeta), getStar(Vega))
+        val ursaMajor = universe.constellations[Constellation.UrsaMajor]
+        newHint("Polaris", ursaMajor[Symbol.Alpha], getStar(Polaris))
+        newHint("Regulus (Leo)", ursaMajor[Symbol.Beta], getStar(Regulus))
+        newHint("Arcturus (Bootes)", ursaMajor[Symbol.Eta], getStar(Arcturus))
 
-        newHint("Pegasus -> Fomalhaut (Pisces Australis)", getStar(Constellation.Pegasus, Symbol.Alpha), getStar(Fomalhaut))
-        newHint("Pegasus -> Lacerta", getStar(Constellation.Pegasus, Symbol.Beta), getStar(Constellation.Lacerta, Symbol.Alpha))
-        newHint("Pegasus -> Cassiopeia", getStar(Constellation.Pegasus, Symbol.Delta), getStar(Constellation.Cassiopeia, Symbol.Alpha))
-        newHint("Pegasus -> Andromeda", getStar(Constellation.Pegasus, Symbol.Delta), getStar(Constellation.Andromeda, Symbol.Beta))
-        newHint("Pegasus -> Cetus", getStar(Constellation.Pegasus, Symbol.Gamma), getStar(Constellation.Cetus, Symbol.Beta))
+        newHint("Spica (Virgo)", getStar(Arcturus), getStar(Spica))
 
+        // Bootes
+        newHint("Hercules", getStar(Arcturus), getStar(Constellation.Hercules, Symbol.Zeta))
+        newHint("Vega (Lyr)", getStar(Constellation.Hercules, Symbol.Zeta), getStar(Vega))
+
+        // Pegasus
+        val pegasus = universe.constellations[Constellation.Pegasus]
+        newRectangle("Pegasus", pegasus[Symbol.Alpha], pegasus[Symbol.Beta], pegasus[Symbol.Delta], pegasus[Symbol.Gamma])
+        newHint("Fomalhaut (Pisces Australis)", pegasus[Symbol.Alpha], getStar(Fomalhaut))
+        newHint("Lacerta", pegasus[Symbol.Beta], getStar(Constellation.Lacerta, Symbol.Alpha))
+        newHint("Cassiopeia", pegasus[Symbol.Delta], getStar(Constellation.Cassiopeia, Symbol.Alpha))
+        newHint("Andromeda", pegasus[Symbol.Delta], getStar(Constellation.Andromeda, Symbol.Beta))
+        newHint("Cetus", pegasus[Symbol.Gamma], getStar(Constellation.Cetus, Symbol.Beta))
+
+        newHint("Canopus (Carina)", getStar(Sirius), getStar(Canopus))
+        newHint("Achernar (Eridanus)", getStar(Canopus), getStar(Achernar))
+
+        // Crux
+        val crux = universe.constellations[Constellation.Crux]
+        newHint("Crux", crux)
+        newHint("Canopus (Carina)", crux[Symbol.Alpha], getStar(Canopus))
+        newHint("Antares (Scorpius)", crux[Symbol.Beta], getStar(Antares))
+        newHint("Alpha Centauri", crux[Symbol.Beta], getStar(AlphaCentauri))
 
         newTriangle("Winter Triangle", getStar(Sirius), getStar(Procyon), getStar(Betelgeuse))
         newTriangle("Summer Triangle", getStar(Vega), getStar(Deneb), getStar(Altair))
@@ -965,11 +983,17 @@ class UniverseInitializer(universe: Universe) : AbstractUniverseInitializer(univ
     }
 
     companion object {
+        private const val Achernar = "Achernar"
+        private const val Acrux = "Acrux"
         private const val Aldebaran = "Aldebaran"
+        private const val AlphaCentauri = "Alpha Centauri"
         private const val Altair = "Altair"
+        private const val Antares = "Antares"
         private const val Arcturus = "Arcturus"
         private const val Betelgeuse = "Betelgeuse"
+        private const val Canopus = "Canopus"
         private const val Capella = "Capella"
+        private const val Castor = "Castor"
         private const val Deneb = "Deneb"
         private const val Fomalhaut = "Fomalhaut"
         private const val Polaris = "Polaris"

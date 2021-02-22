@@ -17,7 +17,7 @@ interface IConstellationColors {
 
 interface ISkyDrawColors {
     val forSky: Paint // Dark Blue, nearly Black, just a bit of light
-    val forEcliptic: Paint // Red
+    val forEcliptic: Paint // Yellow
     val forHints: Paint // Fire
     val forTriangle: Paint // Green
     val visibleGridColor: Paint // Dark Green
@@ -47,7 +47,7 @@ class SkyDrawColors: ISkyDrawColors {
     private val tippedConstellationColors: IConstellationColors = ConstellationColors(forName =  txt(green, 210), forLine = lnl(green, 210))
 
     override val forSky: Paint = txt(blue, alpha = 30)
-    override val forEcliptic: Paint = lnl(red, 210)
+    override val forEcliptic: Paint = lnl(yellow, 180)
     override val forHints: Paint = txt(fire, alpha = 255)
     override val forTriangle: Paint = lnl(green, alpha = 210)
     override val visibleGridColor: Paint = txt(green, 110)

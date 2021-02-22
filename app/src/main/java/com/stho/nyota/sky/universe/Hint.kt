@@ -18,6 +18,11 @@ class Hint private constructor(private val description: String) {
         description
 
     companion object {
+        fun create(description: String, at: IElement): Hint =
+            Hint(description).apply {
+                elements.add(at)
+            }
+
         fun create(description: String, from: Star, to: Star): Hint =
             Hint(description).apply {
                 elements.add(from)
@@ -29,6 +34,14 @@ class Hint private constructor(private val description: String) {
                 elements.add(one)
                 elements.add(two)
                 elements.add(three)
+            }
+
+        fun create(description: String, one: Star, two: Star, three: Star, four: Star): Hint =
+            Hint(description).apply {
+                elements.add(one)
+                elements.add(two)
+                elements.add(three)
+                elements.add(four)
             }
     }
 }

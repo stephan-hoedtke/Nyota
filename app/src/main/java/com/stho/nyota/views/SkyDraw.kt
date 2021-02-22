@@ -278,11 +278,19 @@ class SkyDraw() {
 
     fun drawHint(hint: Hint) {
         when (hint.size) {
+            1 -> {
+                getPosition(hint[0])?.also { a ->
+                    if (isOnScreen(a)) {
+                        drawNameAt(hint.toString(), colors.forHints, a)
+                    }
+                }
+            }
             2 -> {
                 getPosition(hint[0])?.also { a ->
                     getPosition(hint[1])?.also { b ->
                         if (isOnScreen(a) && isOnScreen(b)) {
                             drawArrow(a, b, colors.forHints)
+                            drawNameAt(hint.toString(), colors.forHints, b)
                         }
                     }
                 }
@@ -293,6 +301,25 @@ class SkyDraw() {
                         getPosition(hint[2])?.also { c ->
                             if (isOnScreen(a) && isOnScreen(b) && isOnScreen(c)) {
                                 drawTriangle(a, b, c, colors.forTriangle)
+                                val x = (a.x + b.x + c.x) / 3
+                                val y = (a.y + b.y + c.y) / 3
+                                drawNameAt(hint.toString(), colors.forHints, SkyPointF(x, y))
+                            }
+                        }
+                    }
+                }
+            }
+            4 -> {
+                getPosition(hint[0])?.also { a ->
+                    getPosition(hint[1])?.also { b ->
+                        getPosition(hint[2])?.also { c ->
+                            getPosition(hint[3])?.also { d ->
+                                if (isOnScreen(a) && isOnScreen(b) && isOnScreen(c) && isOnScreen(d)) {
+                                    drawRectangle(a, b, c, d, colors.forTriangle)
+                                    val x = (a.x + b.x + c.x + d.x) / 4
+                                    val y = (a.y + b.y + c.y + d.y) / 4
+                                    drawNameAt(hint.toString(), colors.forHints, SkyPointF(x, y))
+                                }
                             }
                         }
                     }
@@ -330,6 +357,16 @@ class SkyDraw() {
         path.moveTo(a.x, a.y)
         path.lineTo(b.x, b.y)
         path.lineTo(c.x, c.y)
+        path.lineTo(a.x, a.y)
+        canvas.drawPath(path, color)
+    }
+
+    private fun drawRectangle(a: SkyPointF, b: SkyPointF, c: SkyPointF, d: SkyPointF, color: Paint) {
+        path.reset()
+        path.moveTo(a.x, a.y)
+        path.lineTo(b.x, b.y)
+        path.lineTo(c.x, c.y)
+        path.lineTo(d.x, d.y)
         path.lineTo(a.x, a.y)
         canvas.drawPath(path, color)
     }
