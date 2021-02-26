@@ -19,6 +19,7 @@ class Universe {
     val any = ArrayList<Anything>()
     val vip = ArrayList<Star>()
     val hints = ArrayList<Hint>()
+    var timeInSeconds: Double = 0.0
 
     /**
      * Returns the moment (observer + UTC) for which the Universe was calculated last
@@ -41,6 +42,7 @@ class Universe {
     @JvmOverloads
     fun updateFor(moment: Moment, calculatePhase: Boolean = false): Universe {
         this.moment = moment
+        val timeCounter = TimeCounter()
 
         // calculate RA + Decl
         solarSystem.update(moment.utc)
@@ -60,6 +62,7 @@ class Universe {
         galaxies.values.forEach { galaxy -> galaxy.updateAzimuthAltitude(moment) }
         any.forEach { anything -> anything.updateAzimuthAltitude(moment) }
 
+        timeInSeconds = timeCounter.timeInSeconds
         return this
     }
 

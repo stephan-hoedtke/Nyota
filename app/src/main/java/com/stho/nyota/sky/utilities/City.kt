@@ -31,7 +31,7 @@ class City private constructor(override var id: Long, var name: String, var loca
         get() = if (isAutomatic) "$name*" else name
 
     override fun toString(): String =
-        "$name $location $timeZone"
+        "$name $location ${Formatter.toString(timeZone)}"
 
     val imageId: Int by lazy {
         when {

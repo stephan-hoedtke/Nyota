@@ -15,17 +15,21 @@ interface IConstellationColors {
     val forLine: Paint
 }
 
+interface IHintColors {
+    val forName: Paint
+    val forLine: Paint
+    val forArrow: Paint
+}
+
 interface ISkyDrawColors {
     val forSky: Paint // Dark Blue, nearly Black, just a bit of light
     val forEcliptic: Paint // Yellow
-    val forHints: Paint // Fire
-    val forTriangle: Paint // Green
     val visibleGridColor: Paint // Dark Green
     val invisibleGridColor: Paint // Dark Blue
     val bitmapColor: Paint // White
     val forGalaxy: Paint // Gray
     val forSensitivity: Paint // Gray
-
+    val hintColors: IHintColors
     fun getStarColors(referenceType: ReferenceType): IStarColors
     fun getConstellationColors(referenceType: ReferenceType): IConstellationColors
 }
@@ -33,6 +37,7 @@ interface ISkyDrawColors {
 
 data class StarColors(override val forStar: Paint, override val forName: Paint, override val forSymbol: Paint) : IStarColors
 data class ConstellationColors(override val forName: Paint, override val forLine: Paint) : IConstellationColors
+data class HintColors(override val forName: Paint, override val forLine: Paint, override val forArrow: Paint) : IHintColors
 
 
 class SkyDrawColors: ISkyDrawColors {
@@ -48,8 +53,7 @@ class SkyDrawColors: ISkyDrawColors {
 
     override val forSky: Paint = txt(blue, alpha = 30)
     override val forEcliptic: Paint = lnl(yellow, 180)
-    override val forHints: Paint = txt(fire, alpha = 255)
-    override val forTriangle: Paint = lnl(green, alpha = 210)
+    override val hintColors: IHintColors = HintColors(forArrow = txt(fire, alpha = 255), forName = txt(fire, alpha = 130), forLine = lnl(green, alpha = 130))
     override val visibleGridColor: Paint = txt(green, 110)
     override val invisibleGridColor: Paint = txt(blue, 140)
     override val bitmapColor: Paint = txt(white, 255)

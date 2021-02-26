@@ -14,9 +14,9 @@ import com.stho.nyota.sky.utilities.*
 
 class Repository private constructor() {
 
-    var universe: Universe = Universe()
+    val universe: Universe = Universe()
+    val settings: Settings = Settings()
 
-    private val settingsLiveData = MutableLiveData<Settings>().apply { value = Settings() }
     private val citiesLiveData = MutableLiveData<Cities>().apply { value = Cities() }
     private val momentLiveData = MutableLiveData<Moment>().apply { value = Moment.forNow(defaultAutomaticCity) }
     private val currentAutomaticTimeLiveData = MutableLiveData<UTC>().apply { value = defaultAutomaticTime }
@@ -56,9 +56,6 @@ class Repository private constructor() {
     val currentOrientation: Orientation
         get() = currentOrientationLiveData.value ?: Orientation.defaultOrientation
 
-    val settingsLD: LiveData<Settings>
-        get() = settingsLiveData
-
     val citiesLD: LiveData<Cities>
         get() = citiesLiveData
 
@@ -80,9 +77,6 @@ class Repository private constructor() {
 
     val targets: List<Target>
         get() = universe.targets.values
-
-    val settings: Settings
-        get() = settingsLiveData.value!!
 
     val solarSystem: SolarSystem
         get() = universe.solarSystem
@@ -109,12 +103,9 @@ class Repository private constructor() {
             }
         }
 
-        Settings().also {
+        settings.also {
             adapter.readSettings(it)
-            if (ensureDefaultSettings(it)) {
-                adapter.saveSettings(it)
-            }
-            settingsLiveData.value = it
+            ensureDefaultSettings(it)
         }
 
         UniverseInitializer(universe).initialize()
@@ -149,8 +140,9 @@ class Repository private constructor() {
         cities.ensureDefaultAutomaticCity()
 
     private fun ensureDefaultSettings(settings: Settings): Boolean =
+        // TODO: Clean
         when {
-            settings.currentLocation.isNullOrEmpty() -> {
+            settings.currentLocation.isEmpty() -> {
                 settings.currentLocation = "Berlin"
                 true
             }
@@ -297,9 +289,10 @@ class Repository private constructor() {
         if (city != null) {
             setCity(city)
         }
-        updateTimeAutomatically = settings.updateTimeAutomatically
-        updateLocationAutomatically = settings.updateLocationAutomatically
-        updateOrientationAutomatically = settings.updateOrientationAutomatically
+        // TODO: clean
+        //        updateTimeAutomatically = settings.updateTimeAutomatically
+        //        updateLocationAutomatically = settings.updateLocationAutomatically
+        //        updateOrientationAutomatically = settings.updateOrientationAutomatically
     }
 
     companion object {

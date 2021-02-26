@@ -2,6 +2,7 @@
 package com.stho.nyota.views
 
 import com.stho.nyota.ui.sky.ISkyViewOptions
+import com.stho.nyota.ui.sky.IViewOptions
 import kotlin.math.log10
 import kotlin.math.pow
 
@@ -32,7 +33,7 @@ class LuminosityCalculator(private val r0: Double, private val Mt: Double, priva
     companion object {
         private const val TEN: Double = 10.0
 
-        fun create(zoomAngle: Double, options: ISkyViewOptions): LuminosityCalculator =
+        fun create(zoomAngle: Double, options: IViewOptions): LuminosityCalculator =
             LuminosityCalculator(options.radius, targetMagnitude(zoomAngle).pow(options.lambda), 1.0, options.gamma)
 
         private fun targetMagnitude(zoomAngle: Double): Double =

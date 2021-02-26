@@ -2,6 +2,7 @@ package com.stho.nyota.ui.sky
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.stho.nyota.settings.Settings
 import com.stho.nyota.sky.universe.Constellations
 import com.stho.nyota.sky.utilities.projections.Projection
 
@@ -10,134 +11,65 @@ import com.stho.nyota.sky.utilities.projections.Projection
 /*
     Implement by settings and stored in DB
  */
-interface ISkyViewSettings
+interface IViewOptions
 {
-    var displaySymbols: Boolean
-    var displayConstellations: Boolean
-    var displayConstellationNames: Boolean
-    var displayPlanetNames: Boolean
-    var displayStarNames: Boolean
-    var displayTargets: Boolean
-    var displaySatellites: Boolean
-    var displayGrid: Boolean
-    var displayEcliptic: Boolean
-    var displayHints: Boolean
-    var sphereProjection: Projection
-    var magnitude: Double
-    fun touch()
+    val displaySymbols: Boolean
+    val displayStarNames: Boolean
+    val displayPlanetNames: Boolean
+    val displayConstellations: Boolean
+    val displayConstellationNames: Boolean
+    val displayGrid: Boolean
+    val displayHints: Boolean
+    val displayTargets: Boolean
+    val displayEcliptic: Boolean
+    val displaySatellites: Boolean
+    val sphereProjection: Projection
+    val gamma: Double
+    val lambda: Double
+    val radius: Double
+    val magnitude: Double
+    val style: Settings.Style
 }
 
-/*
-    Implement by SkyViewOptions and SimpleSkyViewOptions, not persisted
- */
-interface ISkyViewOptions: ISkyViewSettings {
-    var radius: Double
-    var gamma: Double
-    var lambda: Double
-    val style: SkyViewOptions.Style
+interface IConstellationViewOptions: IViewOptions
+{
+    override var displaySymbols: Boolean
+    override var displayStarNames: Boolean
+    override val displayPlanetNames: Boolean
+    override var displayConstellations: Boolean
+    override val displayConstellationNames: Boolean
+    override val displayGrid: Boolean
+    override val displayHints: Boolean
+    override val displayTargets: Boolean
+    override val displayEcliptic: Boolean
+    override val displaySatellites: Boolean
+    override val sphereProjection: Projection
+    override val gamma: Double
+    override val lambda: Double
+    override val radius: Double
+    override val magnitude: Double
+    fun toggleStyle()
+    val versionLD: LiveData<Long>
 }
 
-abstract class SkyViewOptions: ISkyViewOptions {
-
-    enum class Style {
-        Normal,
-        Plain,
-    }
-
-    private val touchLiveData: MutableLiveData<Long> = MutableLiveData<Long>().apply { value = 0 }
-
-    val touchLD: LiveData<Long>
-        get() = touchLiveData
-
-    override fun touch() {
-        val v = touchLiveData.value ?: 0
-        touchLiveData.postValue(v + 1)
-    }
-
-    override var style: Style = Style.Normal
-        set(value) {
-            if (field != value) {
-                field = value
-                touch()
-            }
-        }
-
-    fun toggleStyle() {
-        style = when (style) {
-            Style.Normal -> Style.Plain
-            Style.Plain -> Style.Normal
-        }
-    }
-
-    override var radius: Double = 6.0
-        set(value) {
-            val validRadius = value.coerceIn(MIN_RADIUS, MAX_RADIUS)
-            if (field != validRadius) {
-                field = validRadius
-                touch()
-            }
-        }
-
-    override var gamma: Double = 0.4
-        set(value) {
-            val validGamma = value.coerceIn(MIN_GAMMA, MAX_GAMMA)
-            if (field != validGamma) {
-                field = validGamma
-                touch()
-            }
-        }
-
-    override var lambda: Double = 1.3
-        set(value) {
-            val validLambda = value.coerceIn(MIN_LAMBDA, MAX_LAMBDA)
-            if (field != validLambda) {
-                field = validLambda
-                touch()
-            }
-        }
-
-    companion object {
-        const val MAX_MAGNITUDE: Double = 10.0
-        const val MIN_MAGNITUDE: Double = 0.0
-        const val MIN_ZOOM_ANGLE = 0.5
-        const val MAX_ZOOM_ANGLE = 120.0
-        const val DEFAULT_ZOOM_ANGLE: Double = 45.0
-        const val MIN_RADIUS: Double = 1.0
-        const val MAX_RADIUS: Double = 10.0
-        const val MIN_GAMMA: Double = 0.01
-        const val MAX_GAMMA: Double = 3.00
-        const val MIN_LAMBDA: Double = 0.01
-        const val MAX_LAMBDA: Double = 3.00
-
-        internal fun brightnessToPercent(f: Double): Int =
-            valueToPercent(f, MIN_MAGNITUDE, MAX_MAGNITUDE)
-
-        internal fun percentToBrightness(i: Int): Double =
-            percentToValue(i, MIN_MAGNITUDE, MAX_MAGNITUDE)
-
-        internal fun radiusToPercent(f: Double): Int =
-            valueToPercent(f, MIN_RADIUS, MAX_RADIUS)
-
-        internal fun percentToRadius(i: Int): Double =
-            percentToValue(i, MIN_RADIUS, MAX_RADIUS)
-
-        internal fun gammaToPercent(f: Double): Int =
-            valueToPercent(f, MIN_GAMMA, MAX_GAMMA)
-
-        internal fun percentToGamma(i: Int): Double =
-            percentToValue(i, MIN_GAMMA, MAX_GAMMA)
-
-        internal fun lambdaToPercent(f: Double): Int =
-            valueToPercent(f, MIN_LAMBDA, MAX_LAMBDA)
-
-        internal fun percentToLambda(i: Int): Double =
-            percentToValue(i, MIN_LAMBDA, MAX_LAMBDA)
-
-        private fun valueToPercent(f: Double, min: Double, max: Double): Int =
-            (100 * (f - min) / (max - min) + 0.5).toInt()
-
-        private fun percentToValue(i: Int, min: Double, max: Double): Double =
-            (min + (max - min) * (i / 100.0)).coerceIn(min, max)
-
-    }
+interface ISkyViewOptions: IViewOptions
+{
+    override var displaySymbols: Boolean
+    override var displayStarNames: Boolean
+    override var displayPlanetNames: Boolean
+    override var displayConstellations: Boolean
+    override var displayConstellationNames: Boolean
+    override var displayGrid: Boolean
+    override var displayHints: Boolean
+    override var displayTargets: Boolean
+    override var displayEcliptic: Boolean
+    override var displaySatellites: Boolean
+    override var sphereProjection: Projection
+    override var gamma: Double
+    override var lambda: Double
+    override var radius: Double
+    override var magnitude: Double
+    fun toggleStyle()
+    val versionLD: LiveData<Long>
 }
+

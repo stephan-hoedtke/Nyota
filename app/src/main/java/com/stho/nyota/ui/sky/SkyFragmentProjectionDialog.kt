@@ -23,11 +23,11 @@ class SkyFragmentProjectionDialog(val options: ISkyViewOptions): DialogFragment(
         bindingReference = FragmentSkyDialogProjectionBinding.inflate(inflater, container, false)
 
         binding.buttonOK.setOnClickListener { onOK() }
-        binding.radioButtonSphere.setOnCheckedChangeListener { _, isChecked -> if (isChecked) options.sphereProjection = Projection.SPHERE }
-        binding.radioButtonCentral.setOnCheckedChangeListener { _, isChecked -> if (isChecked) options.sphereProjection = Projection.GNOMONIC }
-        binding.radioButtonMercator.setOnCheckedChangeListener { _, isChecked -> if (isChecked) options.sphereProjection = Projection.MERCATOR }
-        binding.radioButtonArchimedes.setOnCheckedChangeListener { _, isChecked -> if (isChecked) options.sphereProjection = Projection.ARCHIMEDES }
-        binding.radioButtonStereographic.setOnCheckedChangeListener { _, isChecked -> if (isChecked) options.sphereProjection = Projection.STEREOGRAPHIC  }
+        binding.radioButtonSphere.setOnCheckedChangeListener { _, isChecked -> if (isChecked) options.sphereProjection = Projection.Sphere }
+        binding.radioButtonCentral.setOnCheckedChangeListener { _, isChecked -> if (isChecked) options.sphereProjection = Projection.Gnomonic }
+        binding.radioButtonMercator.setOnCheckedChangeListener { _, isChecked -> if (isChecked) options.sphereProjection = Projection.Mercator }
+        binding.radioButtonArchimedes.setOnCheckedChangeListener { _, isChecked -> if (isChecked) options.sphereProjection = Projection.Archimedes }
+        binding.radioButtonStereographic.setOnCheckedChangeListener { _, isChecked -> if (isChecked) options.sphereProjection = Projection.Stereographic  }
         binding.checkBoxDisplayGrid.setOnCheckedChangeListener { _, isChecked -> options.displayGrid = isChecked }
 
         return binding.root
@@ -39,11 +39,11 @@ class SkyFragmentProjectionDialog(val options: ISkyViewOptions): DialogFragment(
     }
 
     private fun updateOptions() {
-        binding.radioButtonSphere.isChecked = options.sphereProjection == Projection.SPHERE
-        binding.radioButtonCentral.isChecked = options.sphereProjection == Projection.GNOMONIC
-        binding.radioButtonMercator.isChecked = options.sphereProjection == Projection.MERCATOR
-        binding.radioButtonArchimedes.isChecked = options.sphereProjection == Projection.ARCHIMEDES
-        binding.radioButtonStereographic.isChecked = options.sphereProjection == Projection.STEREOGRAPHIC
+        binding.radioButtonSphere.isChecked = options.sphereProjection == Projection.Sphere
+        binding.radioButtonCentral.isChecked = options.sphereProjection == Projection.Gnomonic
+        binding.radioButtonMercator.isChecked = options.sphereProjection == Projection.Mercator
+        binding.radioButtonArchimedes.isChecked = options.sphereProjection == Projection.Archimedes
+        binding.radioButtonStereographic.isChecked = options.sphereProjection == Projection.Stereographic
         binding.checkBoxDisplayGrid.isChecked = options.displayGrid
     }
 

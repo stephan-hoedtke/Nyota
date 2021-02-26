@@ -2,15 +2,10 @@ package com.stho.software.nyota.views
 
 import android.content.Context
 import android.util.AttributeSet
-import com.stho.nyota.sky.universe.*
 import com.stho.nyota.sky.utilities.Formatter
 import com.stho.nyota.sky.utilities.Topocentric
-import com.stho.nyota.ui.sky.ISkyViewSettings
-import com.stho.nyota.ui.sky.SkyFragmentViewOptions
 import com.stho.nyota.views.AbstractSkyView
-import com.stho.nyota.views.Luminosity
 import com.stho.nyota.views.LuminosityCalculator
-import com.stho.nyota.views.ReferenceType
 
 /**
  * Created by shoedtke on 07.09.2016.

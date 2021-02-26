@@ -103,11 +103,20 @@ object Formatter {
             }
         }
 
+    fun toString(timeZone: TimeZone, timeFormat: TimeFormat = TimeFormat.TIMEZONE): String =
+        when (timeFormat) {
+            TimeFormat.TIMEZONE -> {
+                formatTimeZone.timeZone = timeZone
+                formatTimeZone.format(Date())
+            }
+            else -> ""
+        }
+
     enum class TimeFormat {
         DATE, DATE_TIMEZONE, TIME, DATETIME, DATETIME_TIMEZONE, DATETIME_SEC, DATETIME_SEC_TIMEZONE, TIMEZONE, TIME_SEC
     }
 
     private fun decimalFormat(): DecimalFormat =
         DecimalFormat.getNumberInstance(Locale.ENGLISH) as DecimalFormat
- }
+}
 

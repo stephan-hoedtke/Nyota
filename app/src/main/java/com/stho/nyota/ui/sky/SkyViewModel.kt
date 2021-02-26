@@ -5,6 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.stho.nyota.RepositoryViewModelArgs
 import com.stho.nyota.repository.Repository
+import com.stho.nyota.settings.Settings
 import com.stho.nyota.sky.universe.Constellation
 import com.stho.nyota.sky.universe.IElement
 import com.stho.nyota.sky.universe.Universe
@@ -51,7 +52,7 @@ class SkyViewModel(application: Application, repository: Repository, val element
     private val isLiveLiveData: MutableLiveData<Boolean> = MutableLiveData<Boolean>().apply { value = false }
     private val showZoomLiveData: MutableLiveData<Boolean> = MutableLiveData<Boolean>().apply { value = false }
     private val skyOrientationLiveData: MutableLiveData<SkyOrientation> = MutableLiveData<SkyOrientation>().apply { value = SkyOrientation.getOK() }
-    private val zoomAngleLiveData: MutableLiveData<Double> = MutableLiveData<Double>().apply { value = SkyViewOptions.DEFAULT_ZOOM_ANGLE }
+    private val zoomAngleLiveData: MutableLiveData<Double> = MutableLiveData<Double>().apply { value = DEFAULT_ZOOM_ANGLE }
     private val centerLiveData: MutableLiveData<Topocentric> = MutableLiveData<Topocentric>().apply { value = element?.position ?: Topocentric(0.0, 0.0) }
     private val tipLiveData: MutableLiveData<Tip> = MutableLiveData<Tip>().apply { value = Tip() }
 
@@ -131,7 +132,7 @@ class SkyViewModel(application: Application, repository: Repository, val element
     }
 
     fun setZoomAngle(zoomAngle: Double) =
-        zoomAngle.coerceIn(SkyViewOptions.MIN_ZOOM_ANGLE, SkyViewOptions.MAX_ZOOM_ANGLE).also {
+        zoomAngle.coerceIn(MIN_ZOOM_ANGLE, MAX_ZOOM_ANGLE).also {
             if (zoomAngleLiveData.value != it) {
                 zoomAngleLiveData.postValue(it)
             }
@@ -143,13 +144,20 @@ class SkyViewModel(application: Application, repository: Repository, val element
     }
 
     fun applyScale(scaleFactor: Double) {
-        val zoomAngle = zoomAngleLiveData.value ?: SkyViewOptions.DEFAULT_ZOOM_ANGLE
+        val zoomAngle = zoomAngleLiveData.value ?: DEFAULT_ZOOM_ANGLE
         setZoomAngle(zoomAngle / scaleFactor)
     }
 
     val universe: Universe = repository.universe
 
-    val options: SkyFragmentViewOptions = SkyFragmentViewOptions(repository.settings)
+    val options: ISkyViewOptions = repository.settings
+
+    companion object {
+        private const val DEFAULT_ZOOM_ANGLE: Double = 45.0
+        private const val MIN_ZOOM_ANGLE = 0.5
+        private const val MAX_ZOOM_ANGLE = 120.0
+
+    }
 }
 
 

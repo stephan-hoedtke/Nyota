@@ -7,10 +7,11 @@ import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
 import com.stho.nyota.SeekBarAdapter
 import com.stho.nyota.databinding.FragmentSkyDialogLuminosityBinding
+import com.stho.nyota.settings.Settings
 import com.stho.nyota.sky.utilities.Formatter
 
 
-class SkyFragmentLuminosityDialog(private val options: SkyViewOptions): DialogFragment() {
+class SkyFragmentLuminosityDialog(private val options: ISkyViewOptions): DialogFragment() {
 
     private var bindingReference: FragmentSkyDialogLuminosityBinding? = null
     private val binding: FragmentSkyDialogLuminosityBinding get() = bindingReference!!
@@ -21,19 +22,19 @@ class SkyFragmentLuminosityDialog(private val options: SkyViewOptions): DialogFr
         binding.sky.setOptions(options)
         binding.buttonOK.setOnClickListener { onOK() }
         binding.seekBarMagnitudeFilter.setOnSeekBarChangeListener(SeekBarAdapter() { progress ->
-            options.magnitude = SkyViewOptions.percentToBrightness(progress)
+            options.magnitude = Settings.percentToBrightness(progress)
             binding.textViewMagnitudeFilter.text = Formatter.df2.format(options.magnitude)
         })
         binding.seekBarRadius.setOnSeekBarChangeListener(SeekBarAdapter() { progress ->
-            options.radius = SkyViewOptions.percentToRadius(progress)
+            options.radius = Settings.percentToRadius(progress)
             binding.textViewRadius.text = Formatter.df2.format(options.radius)
         })
         binding.seekBarGamma.setOnSeekBarChangeListener(SeekBarAdapter() { progress ->
-            options.gamma = SkyViewOptions.percentToGamma(progress)
+            options.gamma = Settings.percentToGamma(progress)
             binding.textViewGamma.text = Formatter.df2.format(options.gamma)
         })
         binding.seekBarLambda.setOnSeekBarChangeListener(SeekBarAdapter() { progress ->
-            options.lambda = SkyViewOptions.percentToLambda(progress)
+            options.lambda = Settings.percentToLambda(progress)
             binding.textViewLambda.text = Formatter.df2.format(options.lambda)
         })
 
@@ -42,19 +43,19 @@ class SkyFragmentLuminosityDialog(private val options: SkyViewOptions): DialogFr
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        options.touchLD.observe(viewLifecycleOwner, { _ -> binding.sky.touch() })
+        options.versionLD.observe(viewLifecycleOwner, { _ -> binding.sky.touch() })
         updateOptions()
     }
 
     private fun updateOptions() {
         binding.textViewMagnitudeFilter.text = Formatter.df2.format(options.magnitude)
-        binding.seekBarMagnitudeFilter.progress = SkyViewOptions.brightnessToPercent(options.magnitude)
+        binding.seekBarMagnitudeFilter.progress = Settings.brightnessToPercent(options.magnitude)
         binding.textViewRadius.text = Formatter.df2.format(options.radius)
-        binding.seekBarRadius.progress = SkyViewOptions.radiusToPercent(options.radius)
+        binding.seekBarRadius.progress = Settings.radiusToPercent(options.radius)
         binding.textViewGamma.text = Formatter.df2.format(options.gamma)
-        binding.seekBarGamma.progress = SkyViewOptions.gammaToPercent(options.gamma)
+        binding.seekBarGamma.progress = Settings.gammaToPercent(options.gamma)
         binding.textViewLambda.text = Formatter.df2.format(options.lambda)
-        binding.seekBarLambda.progress = SkyViewOptions.lambdaToPercent(options.lambda)
+        binding.seekBarLambda.progress = Settings.lambdaToPercent(options.lambda)
     }
 
     private fun onOK() {

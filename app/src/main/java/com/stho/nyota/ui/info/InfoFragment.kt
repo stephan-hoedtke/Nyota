@@ -31,9 +31,7 @@ class InfoFragment : AbstractFragment() {
         get() = viewModel
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        // Inflate the layout for this fragment
         bindingReference = FragmentInfoBinding.inflate(inflater, container, false)
-
         return binding.root
     }
 
@@ -44,12 +42,17 @@ class InfoFragment : AbstractFragment() {
         viewModel.repository.currentOrientationLD.observe(viewLifecycleOwner, { orientation -> updateOrientation(orientation) })
 
         bindElements(viewModel.repository.universe)
+        bindStatistics(viewModel.repository.universe)
     }
 
     private fun bindElements(universe: Universe) {
         binding.textViewConstellations.text = "Constellations: ${universe.constellations.size}"
         binding.textViewStars.text = "Stars: ${universe.stars.size}"
         binding.textViewSatellites.text = "Satellites: ${universe.satellites.size}"
+    }
+
+    private fun bindStatistics(universe: Universe) {
+        binding.textViewUpdateTime.text = "Update time: ${Formatter.df3.format(universe.timeInSeconds)} s"
     }
 
     override fun onDestroyView() {

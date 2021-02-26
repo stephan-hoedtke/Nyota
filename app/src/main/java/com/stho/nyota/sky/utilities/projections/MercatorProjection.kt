@@ -1,13 +1,12 @@
 package com.stho.nyota.sky.utilities.projections
 
-import com.stho.nyota.sky.utilities.Point
 import com.stho.nyota.sky.utilities.Radian
 import com.stho.nyota.views.SkyPoint
 import kotlin.math.*
 
 class MercatorProjection : AbstractSphereProjection(), ISphereProjection {
 
-    override val projection: Projection = Projection.GNOMONIC
+    override val projection: Projection = Projection.Gnomonic
 
     override fun calculateAngle(delta: Double): Double =
         Radian.toDegrees(delta / zoom)

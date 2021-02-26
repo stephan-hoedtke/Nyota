@@ -101,7 +101,7 @@
         android:layout_height="wrap_content"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toStartOf="@id/compass"
-        android:text="@string/label_default_orientation"
+        android:text="@string/default_orientation"
         android:layout_margin="@dimen/image_margin" />
 
     <ImageView

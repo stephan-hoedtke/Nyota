@@ -1,7 +1,6 @@
 package com.stho.nyota.sky.utilities.projections
 
 import com.stho.nyota.sky.utilities.Degree
-import com.stho.nyota.sky.utilities.Point
 import com.stho.nyota.views.SkyPoint
 import kotlin.math.sqrt
 
@@ -10,7 +9,7 @@ import kotlin.math.sqrt
  */
 class GnomonicProjection : AbstractSphereProjection(), ISphereProjection {
 
-    override val projection: Projection = Projection.GNOMONIC
+    override val projection: Projection = Projection.Gnomonic
 
     override fun calculateAngle(delta: Double): Double =
         Degree.arcTan2(delta, zoom)

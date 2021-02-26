@@ -2,12 +2,9 @@ package com.stho.software.nyota.views
 
 import android.content.Context
 import android.util.AttributeSet
-import com.stho.nyota.settings.Settings.Companion.DEFAULT_MAGNITUDE
 import com.stho.nyota.sky.universe.Constellation
 import com.stho.nyota.sky.universe.Star
 import com.stho.nyota.sky.utilities.Topocentric
-import com.stho.nyota.sky.utilities.projections.Projection
-import com.stho.nyota.ui.sky.*
 import com.stho.nyota.views.AbstractSkyView
 import com.stho.nyota.views.ReferenceType
 

@@ -1,7 +1,6 @@
 package com.stho.nyota.sky.utilities.projections
 
 import com.stho.nyota.sky.utilities.Topocentric
-import com.stho.nyota.views.SkyPoint
 import com.stho.nyota.views.SkyPointF
 
 
@@ -18,11 +17,11 @@ interface ISphereProjection {
     companion object {
         fun create(projection: Projection) =
             when (projection) {
-                Projection.SPHERE -> SphereProjection()
-                Projection.GNOMONIC -> GnomonicProjection()
-                Projection.MERCATOR -> MercatorProjection()
-                Projection.ARCHIMEDES -> ArchimedesProjection()
-                Projection.STEREOGRAPHIC -> StereographicProjection()
+                Projection.Sphere -> SphereProjection()
+                Projection.Gnomonic -> GnomonicProjection()
+                Projection.Mercator -> MercatorProjection()
+                Projection.Archimedes -> ArchimedesProjection()
+                Projection.Stereographic -> StereographicProjection()
             }
     }
 }
@@ -31,11 +30,11 @@ interface ISphereProjection {
  * see: https://math.rice.edu/~polking/cartography/cart.pdf
  */
 enum class Projection {
-    GNOMONIC,
-    SPHERE,
-    STEREOGRAPHIC,
-    ARCHIMEDES,
-    MERCATOR;
+    Gnomonic,
+    Sphere,
+    Stereographic,
+    Archimedes,
+    Mercator;
 
     fun serialize(): String =
         toString()
@@ -45,7 +44,7 @@ enum class Projection {
             return try {
                 valueOf(value)
             } catch (ex: Exception) {
-                GNOMONIC
+                Gnomonic
             }
         }
     }

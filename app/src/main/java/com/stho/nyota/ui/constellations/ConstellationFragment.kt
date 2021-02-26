@@ -105,7 +105,7 @@ class ConstellationFragment : AbstractElementFragment() {
         viewModel.universeLD.observe(viewLifecycleOwner, { universe -> onUpdateConstellation(universe.moment) })
         viewModel.zoomAngleLD.observe(viewLifecycleOwner, { zoomAngle -> onObserveZoomAngle(zoomAngle) })
         viewModel.centerLD.observe(viewLifecycleOwner, { center -> onObserveCenter(center) })
-        viewModel.options.touchLD.observe(viewLifecycleOwner, { _ -> binding.sky.touch() })
+        viewModel.options.versionLD.observe(viewLifecycleOwner, { _ -> binding.sky.touch() })
         viewModel.tipLD.observe(viewLifecycleOwner, { tip -> onObserveTip(tip) })
     }
 

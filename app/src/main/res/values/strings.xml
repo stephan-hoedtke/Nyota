@@ -16,7 +16,7 @@
     <string name="label_moon">Moon</string>
     <string name="label_ok">OK</string>
     <string name="label_done">Done</string>
-    <string name="label_default_orientation">115°</string>
+    <string name="default_orientation">115°</string>
     <string name="label_refresh">Refresh</string>
     <string name="label_city_colon">City:</string>
     <string name="label_date_colon">Date:</string>
@@ -38,8 +38,11 @@
     <string name="label_reference_time">Reference Time:</string>
     <string name="label_reference_location">Reference Location:</string>
     <string name="label_update_time_automatically">Update Time Automatically</string>
+    <string name="label_update_orientation_automatically">Update Orientation Automatically</string>
     <string name="label_elements_colon">Elements:</string>
+    <string name="label_luminosity_colon">Star Visibility:</string>
     <string name="label_name_colon">Name:</string>
+    <string name="label_display_colon">Display:</string>
     <string name="label_latitude_colon">Latitude (in °):</string>
     <string name="label_longitude_colon">Longitude (in °):</string>
     <string name="label_altitude_colon">Altitude (in km):</string>
@@ -80,6 +83,7 @@
     <string name="label_radius">Vega Radius</string>
     <string name="label_gamma">Gamma</string>
     <string name="label_lambda">Lambda</string>
+    <string name="label_statistics_colon">Statistics</string>
     <string name="label_zoom_angle">%.0f°</string>
     <string name="label_filter_ptolemaeus">Ptolemaeus"</string>
     <string name="label_filter_zodiac">Zodiac (12)</string>
@@ -189,4 +193,15 @@
     <string name="label_open">Open</string>
     <string name="label_sky">Sky</string>
     <string name="label_finder">Finder</string>
+    <string name="label_display_grid">Grid</string>
+    <string name="label_projection">Projection</string>
+    <string name="label_projection_mercator">Mercator</string>
+    <string name="label_projection_archimedes">Archimedes</string>
+    <string name="label_projection_stereographic">Stereographic</string>
+    <string name="label_projection_sphere">Sphere</string>
+    <string name="label_projection_central">Central</string>
+    <string name="label_live_mode">Live Mode</string>
+    <string name="label_live_mode_off">Off</string>
+    <string name="label_live_mode_hints">Hints</string>
+    <string name="label_live_mode_move_center">Move Center</string>
 </resources>

@@ -1,10 +1,9 @@
 package com.stho.nyota.sky.universe
 
+import com.stho.nyota.settings.Settings
 import com.stho.nyota.sky.utilities.Formatter
 import com.stho.nyota.sky.utilities.Moment
 import com.stho.nyota.sky.utilities.PropertyList
-import com.stho.nyota.ui.sky.SkyViewOptions.Companion.MAX_MAGNITUDE
-import kotlin.math.pow
 
 /**
  * Created by shoedtke on 31.08.2016.
@@ -84,7 +83,7 @@ class Star private constructor(val id: Long, val HD: Int, override val name: Str
         toKey(HD)
 
     fun isBrighterThan(magnitude: Double): Boolean =
-        magn <= magnitude || magnitude >= MAX_MAGNITUDE
+        magn <= magnitude || magnitude >= Settings.MAX_MAGNITUDE
 
     val magnAsString: String =
         Formatter.df2.format(magn)

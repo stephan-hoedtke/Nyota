@@ -4,14 +4,12 @@ import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Paint
 import android.graphics.Path
+import com.stho.nyota.settings.Settings
 import com.stho.nyota.sky.universe.*
 import com.stho.nyota.sky.utilities.Ten
 import com.stho.nyota.sky.utilities.Topocentric
 import com.stho.nyota.sky.utilities.projections.ISphereProjection
-import com.stho.nyota.ui.sky.ISkyViewOptions
-import com.stho.nyota.ui.sky.SkyViewOptions
-import java.util.*
-import kotlin.collections.HashMap
+import com.stho.nyota.ui.sky.IViewOptions
 import kotlin.math.abs
 import kotlin.math.sqrt
 
@@ -25,7 +23,7 @@ class SkyDraw() {
 
     lateinit var canvas: Canvas
     lateinit var center: Topocentric
-    lateinit var options: ISkyViewOptions
+    lateinit var options: IViewOptions
     lateinit var projection: ISphereProjection
 
     private val path = Path()
@@ -127,14 +125,14 @@ class SkyDraw() {
 
     private fun canDrawStarName(star: Star): Boolean =
         when (options.style) {
-            SkyViewOptions.Style.Normal -> options.displayStarNames && star.hasFriendlyName
-            SkyViewOptions.Style.Plain -> false
+            Settings.Style.Normal -> options.displayStarNames && star.hasFriendlyName
+            Settings.Style.Plain -> false
         }
 
     private fun canDrawStarSymbol(star: Star): Boolean =
         when (options.style) {
-            SkyViewOptions.Style.Normal -> options.displaySymbols && star.hasSymbol
-            SkyViewOptions.Style.Plain -> false
+            Settings.Style.Normal -> options.displaySymbols && star.hasSymbol
+            Settings.Style.Plain -> false
         }
 
     fun drawConstellation(constellation: Constellation, referenceType: ReferenceType) {
@@ -156,8 +154,8 @@ class SkyDraw() {
 
     private fun canDrawConstellationLines(referenceType: ReferenceType): Boolean =
         when (options.style) {
-            SkyViewOptions.Style.Normal -> options.displayConstellations || referenceType == ReferenceType.TippedConstellation || referenceType == ReferenceType.Reference
-            SkyViewOptions.Style.Plain -> referenceType == ReferenceType.TippedConstellation
+            Settings.Style.Normal -> options.displayConstellations || referenceType == ReferenceType.TippedConstellation || referenceType == ReferenceType.Reference
+            Settings.Style.Plain -> false
         }
 
     private fun canDrawConstellationName(referenceType: ReferenceType): Boolean =
@@ -250,75 +248,85 @@ class SkyDraw() {
     }
 
     fun drawEcliptic(ecliptic: Collection<Topocentric>) {
-        var previousPoint: SkyPointF? = null
-        path.reset()
-        ecliptic.forEach { p ->
-            calculatePosition(p.azimuth, p.altitude)?.also {
-                if (isOnScreen(it)) {
-                    if (previousPoint == null) {
-                        path.moveTo(it.x, it.y)
-                    }
-                    else {
-                        val dx = it.x - (previousPoint?.x ?: 0f)
-                        val dy = it.y - (previousPoint?.y ?: 0f)
-                        if (abs(dx) > width / 2 || abs(dy) > height / 2) {
+        if (canDrawEcliptic()) {
+            var previousPoint: SkyPointF? = null
+            path.reset()
+            ecliptic.forEach { p ->
+                calculatePosition(p.azimuth, p.altitude)?.also {
+                    if (isOnScreen(it)) {
+                        if (previousPoint == null) {
                             path.moveTo(it.x, it.y)
                         } else {
-                            path.lineTo(it.x, it.y)
+                            val dx = it.x - (previousPoint?.x ?: 0f)
+                            val dy = it.y - (previousPoint?.y ?: 0f)
+                            if (abs(dx) > width / 2 || abs(dy) > height / 2) {
+                                path.moveTo(it.x, it.y)
+                            } else {
+                                path.lineTo(it.x, it.y)
+                            }
                         }
+                        previousPoint = it
+                    } else {
+                        previousPoint = null
                     }
-                    previousPoint = it
-                } else {
-                    previousPoint = null
                 }
             }
+            canvas.drawPath(path, colors.forEcliptic)
         }
-        canvas.drawPath(path, colors.forEcliptic)
     }
 
+    private fun canDrawEcliptic(): Boolean =
+        when (options.style) {
+            Settings.Style.Normal -> options.displayEcliptic
+            Settings.Style.Plain -> false
+        }
+
+
     fun drawHint(hint: Hint) {
-        when (hint.size) {
-            1 -> {
-                getPosition(hint[0])?.also { a ->
-                    if (isOnScreen(a)) {
-                        drawNameAt(hint.toString(), colors.forHints, a)
-                    }
-                }
-            }
-            2 -> {
-                getPosition(hint[0])?.also { a ->
-                    getPosition(hint[1])?.also { b ->
-                        if (isOnScreen(a) && isOnScreen(b)) {
-                            drawArrow(a, b, colors.forHints)
-                            drawNameAt(hint.toString(), colors.forHints, b)
+        if (canDrawHint()) {
+            when (hint.size) {
+                1 -> {
+                    getPosition(hint[0])?.also { a ->
+                        if (isOnScreen(a)) {
+                            drawNameAt(hint.toString(), colors.hintColors.forName, a)
                         }
                     }
                 }
-            }
-            3 -> {
-                getPosition(hint[0])?.also { a ->
-                    getPosition(hint[1])?.also { b ->
-                        getPosition(hint[2])?.also { c ->
-                            if (isOnScreen(a) && isOnScreen(b) && isOnScreen(c)) {
-                                drawTriangle(a, b, c, colors.forTriangle)
-                                val x = (a.x + b.x + c.x) / 3
-                                val y = (a.y + b.y + c.y) / 3
-                                drawNameAt(hint.toString(), colors.forHints, SkyPointF(x, y))
+                2 -> {
+                    getPosition(hint[0])?.also { a ->
+                        getPosition(hint[1])?.also { b ->
+                            if (isOnScreen(a) && isOnScreen(b)) {
+                                drawArrow(a, b, colors.hintColors.forArrow)
+                                drawNameAt(hint.toString(), colors.hintColors.forName, b)
                             }
                         }
                     }
                 }
-            }
-            4 -> {
-                getPosition(hint[0])?.also { a ->
-                    getPosition(hint[1])?.also { b ->
-                        getPosition(hint[2])?.also { c ->
-                            getPosition(hint[3])?.also { d ->
-                                if (isOnScreen(a) && isOnScreen(b) && isOnScreen(c) && isOnScreen(d)) {
-                                    drawRectangle(a, b, c, d, colors.forTriangle)
-                                    val x = (a.x + b.x + c.x + d.x) / 4
-                                    val y = (a.y + b.y + c.y + d.y) / 4
-                                    drawNameAt(hint.toString(), colors.forHints, SkyPointF(x, y))
+                3 -> {
+                    getPosition(hint[0])?.also { a ->
+                        getPosition(hint[1])?.also { b ->
+                            getPosition(hint[2])?.also { c ->
+                                if (isOnScreen(a) && isOnScreen(b) && isOnScreen(c)) {
+                                    drawTriangle(a, b, c, colors.hintColors.forLine)
+                                    val x = (a.x + b.x + c.x) / 3
+                                    val y = (a.y + b.y + c.y) / 3
+                                    drawNameAt(hint.toString(), colors.hintColors.forName, SkyPointF(x, y))
+                                }
+                            }
+                        }
+                    }
+                }
+                4 -> {
+                    getPosition(hint[0])?.also { a ->
+                        getPosition(hint[1])?.also { b ->
+                            getPosition(hint[2])?.also { c ->
+                                getPosition(hint[3])?.also { d ->
+                                    if (isOnScreen(a) && isOnScreen(b) && isOnScreen(c) && isOnScreen(d)) {
+                                        drawRectangle(a, b, c, d, colors.hintColors.forLine)
+                                        val x = (a.x + b.x + c.x + d.x) / 4
+                                        val y = (a.y + b.y + c.y + d.y) / 4
+                                        drawNameAt(hint.toString(), colors.hintColors.forName, SkyPointF(x, y))
+                                    }
                                 }
                             }
                         }
@@ -327,6 +335,12 @@ class SkyDraw() {
             }
         }
     }
+
+    private fun canDrawHint(): Boolean =
+        when (options.style) {
+            Settings.Style.Normal -> options.displayHints
+            Settings.Style.Plain -> false
+        }
 
     private fun drawCircleAt(radius: Float, color: Paint, alpha: Int, p: SkyPointF) {
         canvas.drawCircle(p.x, p.y, radius, color.apply { this.alpha = alpha });

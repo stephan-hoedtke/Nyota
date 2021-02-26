@@ -11,19 +11,19 @@ import android.view.*
 import android.view.GestureDetector.SimpleOnGestureListener
 import android.view.ScaleGestureDetector.SimpleOnScaleGestureListener
 import com.stho.nyota.ISkyViewListener
+import com.stho.nyota.settings.Settings
 import com.stho.nyota.sky.universe.*
 import com.stho.nyota.sky.utilities.Degree
 import com.stho.nyota.sky.utilities.Topocentric
 import com.stho.nyota.sky.utilities.projections.ISphereProjection
 import com.stho.nyota.sky.utilities.projections.SphereProjection
-import com.stho.nyota.ui.sky.ISkyViewOptions
-import com.stho.nyota.ui.sky.SkyViewOptions
+import com.stho.nyota.ui.sky.IViewOptions
 import java.util.*
 
 
 abstract class AbstractSkyView(context: Context?, attrs: AttributeSet?): View(context, attrs), View.OnDragListener {
 
-    lateinit var options: ISkyViewOptions
+    lateinit var options: IViewOptions
         private set
 
 
@@ -31,7 +31,7 @@ abstract class AbstractSkyView(context: Context?, attrs: AttributeSet?): View(co
     private var projection: ISphereProjection = SphereProjection()
     private var draw: SkyDraw = SkyDraw()
 
-    fun setOptions(options: ISkyViewOptions) {
+    fun setOptions(options: IViewOptions) {
         this.options = options
         this.draw.touch()
         invalidate()
@@ -44,9 +44,9 @@ abstract class AbstractSkyView(context: Context?, attrs: AttributeSet?): View(co
 
     val path = Path()
     val center = Topocentric(0.0, 0.0)
-    var zoomAngle: Double = SkyViewOptions.DEFAULT_ZOOM_ANGLE
+    var zoomAngle: Double = Settings.DEFAULT_ZOOM_ANGLE
         set(value) {
-            val validZoomAngle = value.coerceIn(SkyViewOptions.MIN_ZOOM_ANGLE, SkyViewOptions.MAX_ZOOM_ANGLE)
+            val validZoomAngle = value.coerceIn(Settings.MIN_ZOOM_ANGLE, Settings.MAX_ZOOM_ANGLE)
             if (field != validZoomAngle) {
                 field = validZoomAngle
                 touch()
@@ -137,7 +137,7 @@ abstract class AbstractSkyView(context: Context?, attrs: AttributeSet?): View(co
 
     open fun resetTransformation() {
         tippedPosition = null
-        zoomAngle = SkyViewOptions.DEFAULT_ZOOM_ANGLE
+        zoomAngle = Settings.DEFAULT_ZOOM_ANGLE
         raiseOnChangeZoom()
         referencePosition?.apply {
             center.azimuth = azimuth

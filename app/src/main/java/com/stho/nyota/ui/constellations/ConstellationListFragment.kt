@@ -18,6 +18,9 @@ import com.stho.nyota.ui.home.HomeFragment
  */
 class ConstellationListFragment : AbstractFragment() {
 
+    // TODO: implement transaction as described here:
+    // https://material.io/blog/android-material-motion
+
     private lateinit var viewModel: ConstellationListViewModel
     private lateinit var adapter: ConstellationListRecyclerViewAdapter
     private var bindingReference: FragmentConstellationListBinding? = null

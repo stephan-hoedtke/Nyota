@@ -25,19 +25,19 @@
                 android:id="@+id/radioButtonOff"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Off" />
+                android:text="@string/label_live_mode_off" />
 
             <RadioButton
                 android:id="@+id/radioButtonHints"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Hints" />
+                android:text="@string/label_live_mode_hints" />
 
             <RadioButton
                 android:id="@+id/radioButtonMoveCenter"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Move Center" />
+                android:text="@string/label_live_mode_move_center" />
 
         </RadioGroup>
 

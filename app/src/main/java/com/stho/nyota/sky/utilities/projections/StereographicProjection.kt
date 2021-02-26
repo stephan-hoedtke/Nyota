@@ -1,13 +1,11 @@
 package com.stho.nyota.sky.utilities.projections
 
-import com.stho.nyota.sky.utilities.Point
 import com.stho.nyota.sky.utilities.Radian
 import com.stho.nyota.views.SkyPoint
-import kotlin.math.*
 
 class StereographicProjection  : AbstractSphereProjection(), ISphereProjection {
 
-    override val projection: Projection = Projection.STEREOGRAPHIC
+    override val projection: Projection = Projection.Stereographic
 
     override fun calculateAngle(delta: Double): Double =
         Radian.toDegrees(delta / zoom)

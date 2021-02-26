@@ -84,7 +84,7 @@ class SkyFragment : AbstractFragment() {
         viewModel.skyOrientationLD.observe(viewLifecycleOwner, { arrow -> onObserveSkyOrientation(arrow) })
         viewModel.isLiveLD.observe(viewLifecycleOwner, { isLive -> onObserveIsLive(isLive) })
         viewModel.liveModeLD.observe(viewLifecycleOwner, { liveMode -> onObserveLiveMode(liveMode) })
-        viewModel.options.touchLD.observe(viewLifecycleOwner, { _ -> binding.sky.touch() })
+        viewModel.options.versionLD.observe(viewLifecycleOwner, { _ -> binding.sky.touch() })
         viewModel.zoomAngleLD.observe(viewLifecycleOwner, { zoomAngle -> onObserveZoomAngle(zoomAngle) })
         viewModel.centerLD.observe(viewLifecycleOwner, { center -> onObserveCenter(center) })
         viewModel.showZoomLD.observe(viewLifecycleOwner, { showZoom -> onObserveShowZoom(showZoom) })

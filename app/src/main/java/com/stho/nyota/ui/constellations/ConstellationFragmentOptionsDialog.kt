@@ -7,10 +7,11 @@ import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
 import com.stho.nyota.databinding.FragmentConstellationDialogOptionsBinding
 import com.stho.nyota.databinding.FragmentSkyDialogOptionsBinding
+import com.stho.nyota.ui.sky.IConstellationViewOptions
 import com.stho.nyota.ui.sky.ISkyViewOptions
 
 
-class ConstellationFragmentOptionsDialog(val options: ISkyViewOptions): DialogFragment() {
+class ConstellationFragmentOptionsDialog(val options: IConstellationViewOptions): DialogFragment() {
 
     private var bindingReference: FragmentConstellationDialogOptionsBinding? = null
     private val binding: FragmentConstellationDialogOptionsBinding get() = bindingReference!!

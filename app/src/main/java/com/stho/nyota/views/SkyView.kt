@@ -4,8 +4,6 @@ import android.content.Context
 import android.util.AttributeSet
 import com.stho.nyota.sky.universe.*
 import com.stho.nyota.sky.utilities.Topocentric
-import com.stho.nyota.ui.sky.ISkyViewSettings
-import com.stho.nyota.ui.sky.SkyFragmentViewOptions
 import com.stho.nyota.views.AbstractSkyView
 import com.stho.nyota.views.ReferenceType
 

@@ -1,13 +1,12 @@
 package com.stho.nyota.sky.utilities.projections
 
-import com.stho.nyota.sky.utilities.Point
 import com.stho.nyota.sky.utilities.Radian
 import com.stho.nyota.views.SkyPoint
 import kotlin.math.*
 
 class SphereProjection : AbstractSphereProjection(), ISphereProjection {
 
-    override val projection: Projection = Projection.SPHERE
+    override val projection: Projection = Projection.Sphere
 
     override fun calculateAngle(delta: Double): Double =
         Radian.toDegrees(delta / zoom)

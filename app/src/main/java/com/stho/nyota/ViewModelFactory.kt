@@ -16,6 +16,7 @@ import com.stho.nyota.ui.moment.MomentViewModel
 import com.stho.nyota.ui.moon.MoonViewModel
 import com.stho.nyota.ui.planets.PlanetListViewModel
 import com.stho.nyota.ui.satellites.SatelliteListViewModel
+import com.stho.nyota.ui.settings.SettingsViewModel
 import com.stho.nyota.ui.stars.StarListViewModel
 import com.stho.nyota.ui.sun.SunViewModel
 
@@ -36,6 +37,7 @@ class ViewModelFactory(private val application: Application, private val reposit
             modelClass.isAssignableFrom(MomentViewModel::class.java) -> MomentViewModel(application, repository)
             modelClass.isAssignableFrom(MainViewModel::class.java) -> MainViewModel(application, repository)
             modelClass.isAssignableFrom(InfoViewModel::class.java) -> InfoViewModel(application, repository)
+            modelClass.isAssignableFrom(SettingsViewModel::class.java) -> SettingsViewModel(application, repository)
             else -> super.create(modelClass)
         }
         @Suppress("UNCHECKED_CAST")

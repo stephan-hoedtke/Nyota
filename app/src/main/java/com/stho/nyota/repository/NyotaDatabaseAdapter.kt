@@ -1,19 +1,14 @@
 package com.stho.nyota.repository
 
 import android.database.sqlite.SQLiteDatabase
-import com.stho.nyota.repository.contracts.CitiesContract
-import com.stho.nyota.repository.contracts.ConstellationsContract
-import com.stho.nyota.repository.contracts.SatellitesContract
-import com.stho.nyota.repository.contracts.SettingsContract
-import com.stho.nyota.repository.contracts.StarsContract
-import com.stho.nyota.repository.contracts.TargetContract
+import com.stho.nyota.repository.contracts.*
 import com.stho.nyota.settings.Settings
 import com.stho.nyota.sky.universe.*
 import com.stho.nyota.sky.universe.Target
 import com.stho.nyota.sky.utilities.Cities
 import com.stho.nyota.sky.utilities.City
-import com.stho.nyota.sky.utilities.projections.Projection
 import com.stho.nyota.sky.utilities.LiveMode
+import com.stho.nyota.sky.utilities.projections.Projection
 
 
 // see:
@@ -68,67 +63,77 @@ class NyotaDatabaseAdapter(private val db: SQLiteDatabase) {
 
     fun readSettings(settings: Settings) {
         val contract = SettingsContract(db)
-        settings.updateOrientationAutomatically = contract.readBoolean(UpdateOrientationAutomatically, settings.updateOrientationAutomatically)
-        settings.updateLocationAutomatically = contract.readBoolean(UpdateLocationAutomatically, settings.updateLocationAutomatically)
-        settings.updateTimeAutomatically = contract.readBoolean(UpdateTimeAutomatically, settings.updateTimeAutomatically)
-        settings.currentLocation = contract.readStringOrDefault(CurrentLocation, settings.currentLocation)
-        settings.displaySymbols = contract.readBoolean(DisplaySymbols, settings.displaySymbols)
-        settings.displayConstellations = contract.readBoolean(DisplayConstellations, settings.displayConstellations)
-        settings.displayConstellationNames = contract.readBoolean(DisplayConstellationNames, settings.displayConstellationNames)
-        settings.displayPlanetNames = contract.readBoolean(DisplayPlanetNames, settings.displayPlanetNames)
-        settings.displayStarNames = contract.readBoolean(DisplayStarNames, settings.displayStarNames)
-        settings.displayTargets = contract.readBoolean(DisplayTargets, settings.displayTargets)
-        settings.displaySatellites = contract.readBoolean(DisplaySatellites, settings.displaySatellites)
-        settings.displayGrid = contract.readBoolean(DisplayGrid, settings.displayGrid)
-        settings.displayEcliptic = contract.readBoolean(DisplayEcliptic, settings.displayEcliptic)
-        settings.displayHints = contract.readBoolean(DisplayHints, settings.displayHints)
-        settings.sphereProjection = Projection.deserialize(contract.readString(SphereProjectionParameter, settings.sphereProjection.serialize()))
-        settings.magnitude = contract.readDouble(Magnitude, settings.magnitude)
-        settings.liveMode = LiveMode.deserialize(contract.readString(LiveModeParameter, settings.liveMode.serialize()))
+        settings.updateOrientationAutomatically = contract.readBoolean(UpdateOrientationAutomaticallyKey, settings.updateOrientationAutomatically)
+        settings.updateLocationAutomatically = contract.readBoolean(UpdateLocationAutomaticallyKey, settings.updateLocationAutomatically)
+        settings.updateTimeAutomatically = contract.readBoolean(UpdateTimeAutomaticallyKey, settings.updateTimeAutomatically)
+        settings.currentLocation = contract.readString(CurrentLocationKey, settings.currentLocation)
+        settings.displaySymbols = contract.readBoolean(DisplaySymbolsKey, settings.displaySymbols)
+        settings.displayConstellations = contract.readBoolean(DisplayConstellationsKey, settings.displayConstellations)
+        settings.displayConstellationNames = contract.readBoolean(DisplayConstellationNamesKey, settings.displayConstellationNames)
+        settings.displayPlanetNames = contract.readBoolean(DisplayPlanetNamesKey, settings.displayPlanetNames)
+        settings.displayStarNames = contract.readBoolean(DisplayStarNamesKey, settings.displayStarNames)
+        settings.displayTargets = contract.readBoolean(DisplayTargetsKey, settings.displayTargets)
+        settings.displaySatellites = contract.readBoolean(DisplaySatellitesKey, settings.displaySatellites)
+        settings.displayGrid = contract.readBoolean(DisplayGridKey, settings.displayGrid)
+        settings.displayEcliptic = contract.readBoolean(DisplayEclipticKey, settings.displayEcliptic)
+        settings.displayHints = contract.readBoolean(DisplayHintsKey, settings.displayHints)
+        settings.sphereProjection = Projection.deserialize(contract.readString(SphereProjectionKey, settings.sphereProjection.serialize()))
+        settings.magnitude = contract.readDouble(MagnitudeKey, settings.magnitude)
+        settings.radius = contract.readDouble(RadiusKey, settings.radius)
+        settings.lambda = contract.readDouble(LambdaKey, settings.lambda)
+        settings.gamma = contract.readDouble(GammaKey, settings.gamma)
+        settings.liveMode = LiveMode.deserialize(contract.readString(LiveModeKey, settings.liveMode.serialize()))
         settings.isDirty = false
     }
 
     fun saveSettings(settings: Settings) {
         val contract = SettingsContract(db)
-        contract.write(UpdateOrientationAutomatically, settings.updateOrientationAutomatically)
-        contract.write(UpdateLocationAutomatically, settings.updateLocationAutomatically)
-        contract.write(UpdateTimeAutomatically, settings.updateTimeAutomatically)
-        contract.write(CurrentLocation, settings.currentLocation)
-        contract.write(DisplaySymbols, settings.displaySymbols)
-        contract.write(DisplayConstellations, settings.displayConstellations)
-        contract.write(DisplayConstellationNames, settings.displayConstellationNames)
-        contract.write(DisplayPlanetNames, settings.displayPlanetNames)
-        contract.write(DisplayStarNames, settings.displayStarNames)
-        contract.write(DisplayTargets, settings.displayTargets)
-        contract.write(DisplaySatellites, settings.displaySatellites)
-        contract.write(DisplayGrid, settings.displayGrid)
-        contract.write(DisplayEcliptic, settings.displayEcliptic)
-        contract.write(DisplayHints, settings.displayHints)
-        contract.write(SphereProjectionParameter, settings.sphereProjection.serialize())
-        contract.write(Magnitude, settings.magnitude)
-        contract.write(LiveModeParameter, settings.liveMode.serialize())
+        contract.write(UpdateOrientationAutomaticallyKey, settings.updateOrientationAutomatically)
+        contract.write(UpdateLocationAutomaticallyKey, settings.updateLocationAutomatically)
+        contract.write(UpdateTimeAutomaticallyKey, settings.updateTimeAutomatically)
+        contract.write(CurrentLocationKey, settings.currentLocation)
+        contract.write(DisplaySymbolsKey, settings.displaySymbols)
+        contract.write(DisplayConstellationsKey, settings.displayConstellations)
+        contract.write(DisplayConstellationNamesKey, settings.displayConstellationNames)
+        contract.write(DisplayPlanetNamesKey, settings.displayPlanetNames)
+        contract.write(DisplayStarNamesKey, settings.displayStarNames)
+        contract.write(DisplayTargetsKey, settings.displayTargets)
+        contract.write(DisplaySatellitesKey, settings.displaySatellites)
+        contract.write(DisplayGridKey, settings.displayGrid)
+        contract.write(DisplayEclipticKey, settings.displayEcliptic)
+        contract.write(DisplayHintsKey, settings.displayHints)
+        contract.write(SphereProjectionKey, settings.sphereProjection.serialize())
+        contract.write(MagnitudeKey, settings.magnitude)
+        contract.write(RadiusKey, settings.radius)
+        contract.write(LambdaKey, settings.lambda)
+        contract.write(GammaKey, settings.gamma)
+        contract.write(LiveModeKey, settings.liveMode.serialize())
         settings.isDirty = false
     }
 
     companion object {
-        private const val UpdateOrientationAutomatically = "UpdateOrientationAutomatically"
-        private const val UpdateLocationAutomatically = "UpdateLocationAutomatically"
-        private const val UpdateTimeAutomatically = "UpdateTimeAutomatically"
-        private const val CurrentLocation = "CurrentLocation"
-        private const val DisplaySymbols = "DisplaySymbols"
-        private const val DisplayConstellations = "DisplayConstellations"
-        private const val DisplayConstellationNames = "DisplayConstellationNames"
-        private const val DisplayPlanetNames = "DisplayPlanetNames"
-        private const val DisplayStarNames = "DisplayStarNames"
-        private const val DisplayTargets = "DisplayTargets"
-        private const val DisplaySatellites = "DisplaySatellites"
-        private const val DisplayGrid = "DisplayGrid"
-        private const val DisplayEcliptic = "DisplayEcliptic"
-        private const val DisplayHints = "DisplayHints"
-        private const val SphereProjectionParameter = "SphereProjection"
-        private const val Magnitude = "Magnitude"
-        private const val LiveModeParameter = "LiveMode"
+        private const val UpdateOrientationAutomaticallyKey = "UpdateOrientationAutomatically"
+        private const val UpdateLocationAutomaticallyKey = "UpdateLocationAutomatically"
+        private const val UpdateTimeAutomaticallyKey = "UpdateTimeAutomatically"
+        private const val CurrentLocationKey = "CurrentLocation"
+        private const val DisplaySymbolsKey = "DisplaySymbols"
+        private const val DisplayConstellationsKey = "DisplayConstellations"
+        private const val DisplayConstellationNamesKey = "DisplayConstellationNames"
+        private const val DisplayPlanetNamesKey = "DisplayPlanetNames"
+        private const val DisplayStarNamesKey = "DisplayStarNames"
+        private const val DisplayTargetsKey = "DisplayTargets"
+        private const val DisplaySatellitesKey = "DisplaySatellites"
+        private const val DisplayGridKey = "DisplayGrid"
+        private const val DisplayEclipticKey = "DisplayEcliptic"
+        private const val DisplayHintsKey = "DisplayHints"
+        private const val SphereProjectionKey = "SphereProjection"
+        private const val MagnitudeKey = "Magnitude"
+        private const val RadiusKey = "Radius"
+        private const val LambdaKey = "Lambda"
+        private const val GammaKey = "Gamma"
+        private const val LiveModeKey = "LiveMode"
     }
+
 }
 
 

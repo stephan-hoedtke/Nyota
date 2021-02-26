@@ -25,35 +25,35 @@
                 android:id="@+id/radioButtonCentral"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Central"
+                android:text="@string/label_projection_central"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <RadioButton
                 android:id="@+id/radioButtonSphere"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Sphere"
+                android:text="@string/label_projection_sphere"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <RadioButton
                 android:id="@+id/radioButtonStereographic"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Stereographic"
+                android:text="@string/label_projection_stereographic"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <RadioButton
                 android:id="@+id/radioButtonArchimedes"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Archimedes"
+                android:text="@string/label_projection_archimedes"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <RadioButton
                 android:id="@+id/radioButtonMercator"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Mercator"
+                android:text="@string/label_projection_mercator"
                 app:layout_constraintTop_toTopOf="parent" />s
 
         </RadioGroup>
@@ -64,7 +64,7 @@
             android:layout_height="wrap_content"
             app:layout_constraintTop_toBottomOf="@id/radioGroup"
             android:layout_marginTop="@dimen/text_margin"
-            android:text="Grid" />
+            android:text="@string/label_display_grid" />
 
         <ImageView
             android:id="@+id/buttonOK"

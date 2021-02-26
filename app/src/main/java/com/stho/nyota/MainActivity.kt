@@ -93,35 +93,28 @@ class MainActivity : AppCompatActivity(), ActivityCompat.OnRequestPermissionsRes
         return true
     }
 
+    // TODO: rename: openSettings or onSettings...
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
-            R.id.action_settings -> openSettings()
-            R.id.action_cities -> openCities()
-            R.id.action_time -> openMomentTime()
-            R.id.action_location-> openMomentLocation()
+            R.id.action_settings -> { openSettings(); true }
+            R.id.action_cities -> { openCities(); true }
+            R.id.action_time -> { openMomentTime(); true }
+            R.id.action_location-> { openMomentLocation(); true }
             else -> super.onOptionsItemSelected(item)
         }
     }
 
-    private fun openMomentTime(): Boolean {
+    private fun openMomentTime() =
         findNavController().navigate(R.id.action_global_nav_moment_time)
-        return true
-    }
 
-    private fun openMomentLocation(): Boolean {
+    private fun openMomentLocation() =
         findNavController().navigate(R.id.action_global_nav_moment_location)
-        return true
-    }
 
-    private fun openCities(): Boolean {
+    private fun openCities() =
         findNavController().navigate(R.id.action_global_nav_city_picker)
-        return true
-    }
 
-    private fun openSettings(): Boolean {
+    private fun openSettings() =
         findNavController().navigate(R.id.action_global_nav_settings)
-        return true
-    }
 
     private fun findNavController(): NavController =
         findNavController(R.id.nav_host_fragment)
