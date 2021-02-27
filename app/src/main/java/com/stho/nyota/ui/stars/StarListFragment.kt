@@ -69,6 +69,6 @@ class StarListFragment : AbstractFragment() {
 
     private fun bind(moment: Moment) {
         bindTime(binding.timeOverlay, moment)
-        updateActionBar(getString(R.string.label_stars), toLocalDateString(moment))
+        updateActionBar(getString(R.string.label_stars))
     }
 }

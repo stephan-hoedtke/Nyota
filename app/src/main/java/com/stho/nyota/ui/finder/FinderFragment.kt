@@ -78,7 +78,7 @@ class FinderFragment : AbstractFragment() {
         binding.targetAltitude.text = Angle.toString(element.position?.altitude ?: 0.0, Angle.AngleType.ALTITUDE)
         binding.horizonView.targetAltitude = element.position?.altitude ?: 0.0
         binding.targetAzimuthPointer.rotation = viewModel.getRotationToTarget()
-        updateActionBar(element.toString(), toLocalDateString(moment))
+        updateActionBar(element.toString())
     }
 
     private fun onUpdateRingAngle(angle: Double) {

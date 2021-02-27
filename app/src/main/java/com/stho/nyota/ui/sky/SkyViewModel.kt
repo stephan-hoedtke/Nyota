@@ -131,6 +131,10 @@ class SkyViewModel(application: Application, repository: Repository, val element
         isLiveLiveData.postValue(value)
     }
 
+    fun onToggleShowZoom() {
+        showZoom = !showZoom
+    }
+
     fun setZoomAngle(zoomAngle: Double) =
         zoomAngle.coerceIn(MIN_ZOOM_ANGLE, MAX_ZOOM_ANGLE).also {
             if (zoomAngleLiveData.value != it) {

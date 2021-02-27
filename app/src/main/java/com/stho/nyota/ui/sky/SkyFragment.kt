@@ -46,10 +46,10 @@ class SkyFragment : AbstractFragment() {
         binding.buttonZoomIn.setOnClickListener { onZoomIn() }
         binding.buttonZoomOut.setOnClickListener { onZoomOut() }
         binding.buttonToggleStyle.setOnClickListener { onToggleStyle() }
-        binding.orientation.setOnClickListener { onZoomOn() }
-        binding.orientation.setOnLongClickListener { onZoomOff(); true }
-        binding.compass.setOnLongClickListener { onZoomOff(); true }
-        binding.direction.setOnLongClickListener { onZoomOff(); true }
+        binding.orientation.setOnClickListener { onToggleShowZoom() }
+        binding.orientation.setOnLongClickListener { onToggleShowZoom(); true }
+        binding.compass.setOnLongClickListener { onToggleShowZoom(); true }
+        binding.direction.setOnLongClickListener { onToggleShowZoom(); true }
         binding.sky.registerListener(object: ISkyViewListener {
             override fun onChangeCenter() {
                 viewModel.setCenter(binding.sky.center)
@@ -194,15 +194,7 @@ class SkyFragment : AbstractFragment() {
     private fun bind(moment: Moment) {
         bindTime(binding.timeOverlay, moment)
         binding.sky.notifyDataSetChanged()
-        updateActionBar(title, toLocalDateString(moment))
-    }
-
-    private fun onZoomOff() {
-        viewModel.showZoom = false
-    }
-
-    private fun onZoomOn() {
-        viewModel.showZoom = true
+        updateActionBar(title)
     }
 
     private val title: String
@@ -215,6 +207,9 @@ class SkyFragment : AbstractFragment() {
     private fun onZoomOut() {
         viewModel.applyScale(1 / 1.1)
     }
+
+    private fun onToggleShowZoom() =
+        viewModel.onToggleShowZoom()
 
     private fun onToggleStyle() {
         viewModel.options.toggleStyle()

@@ -73,7 +73,7 @@ class StarFragment : AbstractElementFragment() {
     private fun bind(moment: Moment, star: Star) {
         bindTime(binding.timeVisibilityOverlay, moment, star.visibility)
         binding.image.setImageResource(star.largeImageId)
-        updateActionBar(star.toString(), toLocalDateString(moment))
+        updateActionBar(star.toString())
     }
 
     private fun getKeyFromArguments(): String? =

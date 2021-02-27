@@ -13,7 +13,8 @@ import com.stho.nyota.sky.universe.Universe
 
 abstract class AbstractViewModel(application: Application, override val repository: Repository) : AndroidViewModel(application), IAbstractViewModel {
 
-    private val showDetailsLiveData: MutableLiveData<Boolean> = MutableLiveData<Boolean>().also { it.value = false }
+    private val showDetailsLiveData: MutableLiveData<Boolean> = MutableLiveData<Boolean>().apply { value = false }
+    private val showIntervalLiveData: MutableLiveData<Boolean> = MutableLiveData<Boolean>().apply { value = false }
 
     override val interval: Interval
         get() = repository.settings.interval
@@ -52,6 +53,9 @@ abstract class AbstractViewModel(application: Application, override val reposito
     override val showDetailsLD: LiveData<Boolean>
         get() = showDetailsLiveData
 
+    override val showIntervalLD: LiveData<Boolean>
+        get() = showIntervalLiveData
+
     override var showDetails: Boolean
         get() = showDetailsLiveData.value ?: true
         set(value) {
@@ -60,7 +64,19 @@ abstract class AbstractViewModel(application: Application, override val reposito
             }
         }
 
+    override var showInterval: Boolean
+        get() = showIntervalLiveData.value ?: true
+        set(value) {
+            if (showIntervalLiveData.value != value) {
+                showIntervalLiveData.postValue(value)
+            }
+        }
+
     override fun onToggleShowDetails() {
         showDetails = !showDetails
+    }
+
+    override fun onToggleShowInterval() {
+        showInterval = !showInterval
     }
 }

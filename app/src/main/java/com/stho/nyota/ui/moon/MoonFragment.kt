@@ -117,7 +117,7 @@ class MoonFragment : AbstractElementFragment() {
         binding.moonAgeLayout.fullMoon.text = Formatter.toString(moon.fullMoon!!, moment.timeZone, Formatter.TimeFormat.DATETIME)
         binding.moonAgeLayout.nextNewMoon.text = Formatter.toString(moon.nextNewMoon!!, moment.timeZone, Formatter.TimeFormat.DATETIME)
 
-        updateActionBar(moon.name, toLocalDateString(moment))
+        updateActionBar(moon.name)
     }
 
     private fun onPickInterval() {

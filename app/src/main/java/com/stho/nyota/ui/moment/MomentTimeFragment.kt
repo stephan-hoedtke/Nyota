@@ -103,7 +103,7 @@ class MomentTimeFragment : AbstractFragment(),  DatePickerDialog.OnDateSetListen
         binding.editTimeZone.text = Formatter.toString(moment.utc, moment.timeZone, Formatter.TimeFormat.TIMEZONE)
         binding.textViewDistance.text = Formatter.toDistanceKmString(moment.city.distanceInKm)
         updateClock(moment.localTime)
-        updateActionBar(moment.city.name, moment.city.location.toString())
+        updateActionBar(moment.city.name)
     }
 
     private fun updateClock(calendar: Calendar) {

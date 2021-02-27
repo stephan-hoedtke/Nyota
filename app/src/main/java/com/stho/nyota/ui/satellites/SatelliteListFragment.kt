@@ -61,7 +61,7 @@ class SatelliteListFragment : AbstractFragment() {
 
     private fun bind(moment: Moment) {
         bindTime(binding.timeOverlay, moment)
-        updateActionBar(R.string.label_satellites, toLocalDateString(moment))
+        updateActionBar(R.string.label_satellites)
     }
 
     private fun openSatellite(satellite: Satellite) {

@@ -139,6 +139,7 @@
     <string name="default_planet_position">37° E 37°</string>
     <string name="default_time">23:32</string>
     <string name="default_time_seconds">23:32:57</string>
+    <string name="default_time_seconds_timezone">23:32:57 +0100</string>
     <string name="default_date_time">8 Dec 20:00</string>
     <string name="default_date">8 Dec 2020</string>
     <string name="default_timezone">+0100</string>

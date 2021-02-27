@@ -120,14 +120,6 @@ class CityPickerRecyclerViewAdapter(fragment: CityPickerFragment, private val re
     private fun onEdit(position: Int) =
         cities.findCityByIndex(position)?.also { onEdit?.invoke(it) }
 
-    fun select(city: City) {
-        if (selectedCity != city) {
-            selectedCity = city
-            notifyDataSetChanged()
-            onSelectionChanged?.invoke(city)
-        }
-    }
-
     fun updateCities(cities: Cities) {
         this.cities = cities
         notifyDataSetChanged()

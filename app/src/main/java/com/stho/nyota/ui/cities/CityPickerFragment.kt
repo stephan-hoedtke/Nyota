@@ -1,6 +1,7 @@
 package com.stho.nyota.ui.cities
 
 import android.os.Bundle
+import android.util.Log
 import android.view.*
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -36,7 +37,6 @@ class CityPickerFragment : AbstractFragment() {
         adapter.onSelectionChanged = { city -> onSelectionChanged(city) }
         adapter.onEdit = { city -> onEdit(city) }
         adapter.onDelete = { position, city -> onDelete(position, city) }
-        adapter.select(viewModel.moment.city)
 
         binding.list.attachItemTouchHelper(SwipeToDelete(adapter))
         binding.list.layoutManager = LinearLayoutManager(context)
@@ -53,9 +53,9 @@ class CityPickerFragment : AbstractFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel.repository.updateCityDistances()
-        viewModel.citiesLD.observe(viewLifecycleOwner, { cities -> updateCities(cities) })
-        viewModel.selectedCityLD.observe(viewLifecycleOwner, { city -> updateSelectedCity(city) })
-        updateActionBar(getString(R.string.title_choose_city), "")
+        viewModel.citiesLD.observe(viewLifecycleOwner, { cities -> observeCities(cities) })
+        viewModel.selectedCityLD.observe(viewLifecycleOwner, { city -> observeSelectedCity(city) })
+        updateActionBar(getString(R.string.title_choose_city))
     }
 
     override fun onDestroyView() {
@@ -91,14 +91,16 @@ class CityPickerFragment : AbstractFragment() {
         return super.onContextItemSelected(item)
     }
 
-    private fun updateCities(cities: Cities) =
+    private fun observeCities(cities: Cities) =
         adapter.updateCities(cities)
 
-    private fun updateSelectedCity(city: City) {
+    private fun observeSelectedCity(city: City) {
+        Log.d("CITY", "Observe city ${city.nameEx}")
         adapter.selectedCity = city
     }
 
     private fun onSelectionChanged(city: City) {
+        Log.d("CITY", "Selection changed city ${city.nameEx}")
         viewModel.repository.setCity(city)
     }
 

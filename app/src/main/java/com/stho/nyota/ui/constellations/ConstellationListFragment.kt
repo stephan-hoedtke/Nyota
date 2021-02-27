@@ -104,7 +104,7 @@ class ConstellationListFragment : AbstractFragment() {
 
     private fun bind(moment: Moment) {
         bindTime(binding.timeOverlay, moment)
-        updateActionBar(R.string.label_constellations, toLocalDateString(moment))
+        updateActionBar(R.string.label_constellations)
     }
 
     private fun displayConstellationListFragmentFilterDialog() {

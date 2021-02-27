@@ -164,7 +164,7 @@ class ConstellationFragment : AbstractElementFragment() {
         bindTime(binding.timeVisibilityOverlay, moment, constellation.visibility)
         binding.image.setImageResource(constellation.largeImageId)
         binding.sky.notifyDataSetChanged()
-        updateActionBar(constellation.name, toLocalDateString(moment))
+        updateActionBar(constellation.name)
     }
 
     private fun displaySnackbarForPosition(position: Topocentric) {

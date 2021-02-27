@@ -15,8 +15,9 @@ object Formatter {
     private val formatDateTime = SimpleDateFormat("d MMM HH:mm", Locale.ENGLISH)
     private val formatTime = SimpleDateFormat("HH:mm", Locale.ENGLISH)
     private val formatTimeSec = SimpleDateFormat("HH:mm:ss", Locale.ENGLISH)
-    private val formatDateTimeZone = SimpleDateFormat("d MMM yyyy Z", Locale.ENGLISH)
+    private val formatTimeSecTimeZone = SimpleDateFormat("HH:mm:ss Z", Locale.ENGLISH)
     private val formatDate: SimpleDateFormat = SimpleDateFormat("d MMM yyyy", Locale.ENGLISH)
+    private val formatDateTimeZone = SimpleDateFormat("d MMM yyyy Z", Locale.ENGLISH)
     private val formatTimeZone = SimpleDateFormat("Z", Locale.ENGLISH)
     val df0: DecimalFormat = decimalFormat().apply {
         maximumFractionDigits = 0
@@ -101,6 +102,10 @@ object Formatter {
                 formatTimeSec.timeZone = timeZone
                 formatTimeSec.format(utc)
             }
+            TimeFormat.TIME_SEC_TIMEZONE -> {
+                formatTimeSecTimeZone.timeZone = timeZone
+                formatTimeSecTimeZone.format(utc)
+            }
         }
 
     fun toString(timeZone: TimeZone, timeFormat: TimeFormat = TimeFormat.TIMEZONE): String =
@@ -113,7 +118,7 @@ object Formatter {
         }
 
     enum class TimeFormat {
-        DATE, DATE_TIMEZONE, TIME, DATETIME, DATETIME_TIMEZONE, DATETIME_SEC, DATETIME_SEC_TIMEZONE, TIMEZONE, TIME_SEC
+        DATE, DATE_TIMEZONE, TIME, DATETIME, DATETIME_TIMEZONE, DATETIME_SEC, DATETIME_SEC_TIMEZONE, TIMEZONE, TIME_SEC, TIME_SEC_TIMEZONE
     }
 
     private fun decimalFormat(): DecimalFormat =

@@ -50,7 +50,7 @@ class IntervalPickerFragment : AbstractFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel.settings.intervalLD.observe(viewLifecycleOwner, { interval -> updateInterval(interval) })
-        updateActionBar(getString(R.string.title_choose_interval), "")
+        updateActionBar(getString(R.string.title_choose_interval))
     }
 
     override fun onDestroyView() {

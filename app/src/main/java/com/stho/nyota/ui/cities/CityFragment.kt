@@ -57,7 +57,7 @@ class CityFragment : AbstractFragment() {
         viewModel.repository.updateCityDistances()
         viewModel.repository.currentAutomaticLocationLD.observe(viewLifecycleOwner, { utc -> updateAutomaticLocation(utc) })
         updateCity(viewModel.city)
-        updateActionBar(viewModel.city.name, "")
+        updateActionBar(viewModel.city.name)
     }
 
     override fun onDestroyView() {

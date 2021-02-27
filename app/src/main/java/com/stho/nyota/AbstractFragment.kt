@@ -1,14 +1,12 @@
 package com.stho.nyota
 
 import android.os.Bundle
-import android.text.Layout
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AppCompatActivity
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
@@ -43,19 +41,29 @@ abstract class AbstractFragment : Fragment() {
         fun onReset()
 
         val showDetailsLD: LiveData<Boolean>
-        var showDetails: Boolean
+        val showIntervalLD: LiveData<Boolean>
+        val showDetails: Boolean
+        val showInterval: Boolean
+
         fun onToggleShowDetails()
+        fun onToggleShowInterval()
     }
 
     private var bindingReference: AbstractFragmentBinding? = null
     private val binding: AbstractFragmentBinding get() = bindingReference!!
 
+    /**
+     * Implement the Binding manually:
+     * a) Interval footer: buttonPrevious, interval, buttonNext
+     * b) currentTime, imageTime
+     */
     private class AbstractFragmentBinding(view: View) {
         val interval: TextView? = view.findViewById<TextView>(R.id.interval)
         val buttonNext: ImageView? = view.findViewById<ImageView>(R.id.buttonNext)
         val buttonPrevious: ImageView? = view.findViewById<ImageView>(R.id.buttonPrevious)
         val imageTime: ImageView? = view.findViewById<ImageView>(R.id.imageTime)
         val currentTime: TextView? = view.findViewById<TextView>(R.id.currentTime)
+        val currentDate: TextView? = view.findViewById<TextView>(R.id.currentDate)
         val timeIntervalFooter: ViewGroup? = view.findViewById<ViewGroup>(R.id.time_interval_footer)
     }
 
@@ -75,25 +83,30 @@ abstract class AbstractFragment : Fragment() {
         bindingReference = null
     }
 
+    /**
+     * click on Clock
+     * click on Time(Text)    --> toggle Interval footer
+     */
     private fun setupFooterListener() {
         binding.interval?.setOnClickListener { onIntervalSelect() }
         binding.interval?.setOnLongClickListener { onIntervalReset(); true }
         binding.buttonNext?.setOnClickListener { onButtonNext() }
         binding.buttonPrevious?.setOnClickListener { onButtonPrevious() }
-        binding.currentTime?.setOnClickListener { onTime() }
-        binding.currentTime?.setOnLongClickListener { onIntervalReset(); true }
-        binding.imageTime?.setOnLongClickListener { onIntervalReset(); true }
-        abstractViewModel.intervalLD.observe(viewLifecycleOwner) { interval -> updateUpdateInterval(interval) }
-        abstractViewModel.settings.updateTimeAutomaticallyLD.observe(viewLifecycleOwner) { value -> updateTimeAutomatically(value) }
+        binding.currentTime?.setOnClickListener { onToggleShowInterval() }
+        binding.currentTime?.setOnLongClickListener { onToggleShowInterval(); true }
+        binding.imageTime?.setOnLongClickListener { onToggleShowInterval(); true }
+        abstractViewModel.intervalLD.observe(viewLifecycleOwner) { interval -> observeInterval(interval) }
+        abstractViewModel.showIntervalLD.observe(viewLifecycleOwner, { value -> observeShowInterval(value) })
+        abstractViewModel.settings.updateTimeAutomaticallyLD.observe(viewLifecycleOwner) { value -> observeUpdateTimeAutomatically(value) }
     }
 
-    protected fun updateActionBar(resId: Int, subtitle: String) =
-        updateActionBar(getString(resId), subtitle)
+    protected fun updateActionBar(resId: Int) =
+        updateActionBar(getString(resId))
 
-    protected fun updateActionBar(title: String, subtitle: String) {
+    protected fun updateActionBar(title: String) {
         supportActionBar?.also {
             it.title = title
-            it.subtitle = subtitle
+            it.subtitle = null
             it.setDisplayHomeAsUpEnabled(true)
             it.setHomeButtonEnabled(true)
         }
@@ -134,7 +147,15 @@ abstract class AbstractFragment : Fragment() {
     private fun onButtonPrevious() =
         abstractViewModel.onPrevious()
 
-    private fun updateUpdateInterval(interval: Interval) {
+    private fun onToggleShowInterval() =
+        abstractViewModel.onToggleShowInterval()
+
+    private fun observeShowInterval(value: Boolean) {
+        binding.timeIntervalFooter?.visibility = if (value) View.GONE else View.VISIBLE
+        binding.timeIntervalFooter?.layoutParams?.height = if (value) 0 else android.app.ActionBar.LayoutParams.WRAP_CONTENT
+    }
+
+    private fun observeInterval(interval: Interval) {
         binding.interval?.text = interval.name
     }
 
@@ -142,20 +163,22 @@ abstract class AbstractFragment : Fragment() {
         abstractViewModel.settings.updateTimeAutomatically = false
     }
 
-    private fun updateTimeAutomatically(value: Boolean) {
+    private fun observeUpdateTimeAutomatically(value: Boolean) {
         binding.imageTime?.isEnabled = !value
-        binding.timeIntervalFooter?.visibility = if (value) View.GONE else View.VISIBLE
-        binding.timeIntervalFooter?.layoutParams?.height = if (value) 0 else android.app.ActionBar.LayoutParams.WRAP_CONTENT
     }
 
     protected fun bindTime(overlay: TimeOverlayBinding, moment: Moment) {
-        overlay.currentTime.text = toLocalTimeString(moment)
+        overlay.currentTime.text = toTimeString(moment)
+        overlay.currentDate.text = toDateString(moment)
+        overlay.currentCity.text = toCityString(moment)
         overlay.imageTimeHours.rotation = getHoursAngle(moment)
         overlay.imageTimeMinutes.rotation = getMinutesAngle(moment)
     }
 
     protected fun bindTime(overlay: TimeVisibilityOverlayBinding, moment: Moment, visibility: Int) {
-        overlay.currentTime.text = toLocalTimeString(moment)
+        overlay.currentTime.text = toTimeString(moment)
+        overlay.currentDate.text = toDateString(moment)
+        overlay.currentCity.text = toCityString(moment)
         overlay.imageTimeHours.rotation = getHoursAngle(moment)
         overlay.imageTimeMinutes.rotation = getMinutesAngle(moment)
         overlay.currentVisibility.setImageResource(visibility)
@@ -194,15 +217,14 @@ abstract class AbstractFragment : Fragment() {
         findNavController().navigate(R.id.action_global_nav_constellation, bundleOf("CONSTELLATION" to key))
 
     companion object {
-        fun toLocalTimeString(moment: Moment): String {
-            // val a = Formatter.toString(moment.localTime, Formatter.TimeFormat.TIME)
-            // val b = Formatter.toString(moment.utc, moment.timeZone, Formatter.TimeFormat.TIME)
-            // both give equal results...
-            return Formatter.toString(moment.localTime, Formatter.TimeFormat.TIME_SEC)
-        }
-        fun toLocalDateString(moment: Moment): String {
-            return moment.city.nameEx + ' ' + Formatter.toString(moment.localTime, Formatter.TimeFormat.DATE_TIMEZONE)
-        }
+        private fun toTimeString(moment: Moment): String =
+            Formatter.toString(moment.localTime, Formatter.TimeFormat.TIME_SEC_TIMEZONE)
+
+        private fun toDateString(moment: Moment): String =
+            Formatter.toString(moment.localTime, Formatter.TimeFormat.DATE)
+
+        private fun toCityString(moment: Moment): String =
+            moment.city.nameEx
     }
 }
 

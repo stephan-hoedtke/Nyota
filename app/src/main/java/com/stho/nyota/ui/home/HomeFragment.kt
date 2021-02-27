@@ -136,7 +136,7 @@ class HomeFragment : AbstractFragment() {
         binding.imageMoon.setPhase(moon)
         binding.imageSun.setImageResource(sun.imageId)
         binding.imageIss.setImageResource(iss.imageId)
-        updateActionBar(R.string.label_nyota, toLocalDateString(moment))
+        updateActionBar(R.string.label_nyota)
     }
 
     private fun openTarget(element: IElement) {
