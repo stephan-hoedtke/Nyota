@@ -1,9 +1,8 @@
 package com.stho.nyota.ui.sky
 
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import com.stho.nyota.settings.Settings
-import com.stho.nyota.sky.universe.Constellations
+import com.stho.nyota.settings.ViewStyle
 import com.stho.nyota.sky.utilities.projections.Projection
 
 // TODO: make ISkyViewSettings readonly (the view reads the data) and IMutableSkyViewSettings available to the fragment...
@@ -28,7 +27,7 @@ interface IViewOptions
     val lambda: Double
     val radius: Double
     val magnitude: Double
-    val style: Settings.Style
+    val style: ViewStyle
 }
 
 interface IConstellationViewOptions: IViewOptions
@@ -48,7 +47,7 @@ interface IConstellationViewOptions: IViewOptions
     override val lambda: Double
     override val radius: Double
     override val magnitude: Double
-    fun toggleStyle()
+    override var style: ViewStyle
     val versionLD: LiveData<Long>
 }
 
@@ -69,7 +68,7 @@ interface ISkyViewOptions: IViewOptions
     override var lambda: Double
     override var radius: Double
     override var magnitude: Double
-    fun toggleStyle()
+    override var style: ViewStyle
     val versionLD: LiveData<Long>
 }
 

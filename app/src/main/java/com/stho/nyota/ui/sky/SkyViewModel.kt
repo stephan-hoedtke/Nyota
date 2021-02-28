@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import com.stho.nyota.RepositoryViewModelArgs
 import com.stho.nyota.repository.Repository
 import com.stho.nyota.settings.Settings
+import com.stho.nyota.settings.ViewStyle
 import com.stho.nyota.sky.universe.Constellation
 import com.stho.nyota.sky.universe.IElement
 import com.stho.nyota.sky.universe.Universe
@@ -13,7 +14,6 @@ import com.stho.nyota.sky.utilities.Degree
 import com.stho.nyota.sky.utilities.LiveMode
 import com.stho.nyota.sky.utilities.Orientation
 import com.stho.nyota.sky.utilities.Topocentric
-import com.stho.nyota.views.AbstractSkyView
 import kotlin.math.abs
 
 class SkyViewModel(application: Application, repository: Repository, val element: IElement?) : RepositoryViewModelArgs(application, repository)
@@ -55,6 +55,7 @@ class SkyViewModel(application: Application, repository: Repository, val element
     private val zoomAngleLiveData: MutableLiveData<Double> = MutableLiveData<Double>().apply { value = DEFAULT_ZOOM_ANGLE }
     private val centerLiveData: MutableLiveData<Topocentric> = MutableLiveData<Topocentric>().apply { value = element?.position ?: Topocentric(0.0, 0.0) }
     private val tipLiveData: MutableLiveData<Tip> = MutableLiveData<Tip>().apply { value = Tip() }
+    private val styleLiveData: MutableLiveData<ViewStyle> = MutableLiveData<ViewStyle>().apply { value = ViewStyle.Normal }
 
     val isLiveLD: LiveData<Boolean>
         get() = isLiveLiveData
@@ -70,6 +71,9 @@ class SkyViewModel(application: Application, repository: Repository, val element
 
     val currentOrientationLD: LiveData<Orientation>
         get() = repository.currentOrientationLD
+
+    val styleLD: LiveData<ViewStyle>
+        get() = styleLiveData
 
     var isLive: Boolean
         get() = isLiveLiveData.value ?: false
@@ -134,6 +138,16 @@ class SkyViewModel(application: Application, repository: Repository, val element
     fun onToggleShowZoom() {
         showZoom = !showZoom
     }
+
+    fun onToggleStyle() {
+        val style = styleLiveData.value ?: ViewStyle.Normal
+        styleLiveData.postValue(when (style) {
+            ViewStyle.Normal -> ViewStyle.HintsOnly
+            ViewStyle.HintsOnly -> ViewStyle.Plain
+            ViewStyle.Plain -> ViewStyle.Normal
+        })
+    }
+
 
     fun setZoomAngle(zoomAngle: Double) =
         zoomAngle.coerceIn(MIN_ZOOM_ANGLE, MAX_ZOOM_ANGLE).also {

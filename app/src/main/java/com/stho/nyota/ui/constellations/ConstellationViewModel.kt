@@ -7,12 +7,12 @@ import com.stho.nyota.RepositoryViewModelArgs
 import com.stho.nyota.repository.Repository
 import com.stho.nyota.settings.Settings
 import com.stho.nyota.settings.Versionable
+import com.stho.nyota.settings.ViewStyle
 import com.stho.nyota.sky.universe.Constellation
 import com.stho.nyota.sky.universe.Star
 import com.stho.nyota.sky.utilities.Topocentric
 import com.stho.nyota.sky.utilities.projections.Projection
 import com.stho.nyota.ui.sky.IConstellationViewOptions
-import com.stho.nyota.ui.sky.ISkyViewOptions
 
 class ConstellationViewModel(application: Application, repository: Repository, val constellation: Constellation) : RepositoryViewModelArgs(application, repository) {
 
@@ -21,6 +21,7 @@ class ConstellationViewModel(application: Application, repository: Repository, v
     private val zoomAngleLiveData: MutableLiveData<Double> = MutableLiveData<Double>().apply { value = Settings.DEFAULT_ZOOM_ANGLE }
     private val centerLiveData: MutableLiveData<Topocentric> = MutableLiveData<Topocentric>().apply { value = constellation.position }
     private val tipLiveData: MutableLiveData<Tip> = MutableLiveData<Tip>().apply { value = Tip() }
+    private val styleLiveData: MutableLiveData<ViewStyle> = MutableLiveData<ViewStyle>().apply { value = ViewStyle.Normal }
 
     val zoomAngleLD: LiveData<Double>
         get() = zoomAngleLiveData
@@ -30,6 +31,9 @@ class ConstellationViewModel(application: Application, repository: Repository, v
 
     val tipLD: LiveData<Tip>
         get() = tipLiveData
+
+    val styleLD: LiveData<ViewStyle>
+        get() = styleLiveData
 
     fun setZoomAngle(zoomAngle: Double) =
         zoomAngle.coerceIn(Settings.MIN_ZOOM_ANGLE, Settings.MAX_ZOOM_ANGLE).also {
@@ -57,6 +61,15 @@ class ConstellationViewModel(application: Application, repository: Repository, v
     fun applyScale(scaleFactor: Double) {
         val zoomAngle = zoomAngleLiveData.value ?: Settings.DEFAULT_ZOOM_ANGLE
         setZoomAngle(zoomAngle / scaleFactor)
+    }
+
+    fun onToggleStyle() {
+        val style = styleLiveData.value ?: ViewStyle.Normal
+        styleLiveData.postValue(when (style) {
+            ViewStyle.Normal -> ViewStyle.Plain
+            ViewStyle.HintsOnly -> ViewStyle.Plain
+            ViewStyle.Plain -> ViewStyle.Normal
+        })
     }
 
     val options: IConstellationViewOptions = object: Versionable(), IConstellationViewOptions {
@@ -97,20 +110,14 @@ class ConstellationViewModel(application: Application, repository: Repository, v
         override val radius: Double = settings.radius
         override val gamma: Double = settings.gamma
         override val lambda: Double = settings.lambda
-        override var style: Settings.Style = Settings.Style.Normal
+
+        override var style: ViewStyle = ViewStyle.Normal
             set(value) {
                 if (field != value) {
                     field = value
                     touch()
                 }
             }
-
-        override fun toggleStyle() {
-            style = when (style) {
-                Settings.Style.Normal -> Settings.Style.Plain
-                Settings.Style.Plain -> Settings.Style.Normal
-            }
-        }
     }
 }
 

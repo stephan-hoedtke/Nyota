@@ -2,7 +2,8 @@ package com.stho.nyota.views
 
 import android.graphics.Color
 import android.graphics.Paint
-import kotlin.math.ln
+import com.stho.nyota.settings.Settings
+import com.stho.nyota.settings.ViewStyle
 
 interface IStarColors {
     val forStar: Paint
@@ -30,8 +31,9 @@ interface ISkyDrawColors {
     val forGalaxy: Paint // Gray
     val forSensitivity: Paint // Gray
     val hintColors: IHintColors
-    fun getStarColors(referenceType: ReferenceType): IStarColors
-    fun getConstellationColors(referenceType: ReferenceType): IConstellationColors
+    val defaultStarColors: IStarColors
+    fun getStarColors(referenceType: ReferenceType, style: ViewStyle): IStarColors
+    fun getConstellationColors(referenceType: ReferenceType, style: ViewStyle): IConstellationColors
 }
 
 
@@ -42,7 +44,7 @@ data class HintColors(override val forName: Paint, override val forLine: Paint, 
 
 class SkyDrawColors: ISkyDrawColors {
 
-    private val defaultStarColors: IStarColors = StarColors(forStar = txt(white, 255), forName = txt(gray, 170), forSymbol = txt(gray, 200))
+    override val defaultStarColors: IStarColors = StarColors(forStar = txt(white, 255), forName = txt(gray, 170), forSymbol = txt(gray, 200))
     private val referenceStarColors: IStarColors = StarColors(forStar = txt(orange, 255), forName = txt(orange, 210), forSymbol = txt(orange, 210))
     private val tippedStarColors: IStarColors = StarColors(forStar = txt(red, 255), forName = txt(red, 200), forSymbol = txt(red, 200))
     private val tippedConstellationStarColors: IStarColors = StarColors(forStar = txt(green, 255), forName = txt(green, 200), forSymbol = txt(green, 200))
@@ -60,19 +62,34 @@ class SkyDrawColors: ISkyDrawColors {
     override val forGalaxy: Paint = txt(gray, 150)
     override val forSensitivity: Paint = lnl(gray, alpha = 150)
 
-    override fun getStarColors(referenceType: ReferenceType): IStarColors =
-        when (referenceType) {
-            ReferenceType.Default -> defaultStarColors
-            ReferenceType.Reference -> referenceStarColors
-            ReferenceType.TippedStar -> tippedStarColors
-            ReferenceType.TippedConstellation -> tippedConstellationStarColors
+    override fun getStarColors(referenceType: ReferenceType, style: ViewStyle): IStarColors =
+        when (style) {
+            ViewStyle.Plain, ViewStyle.HintsOnly -> when (referenceType) {
+                ReferenceType.Default -> defaultStarColors
+                ReferenceType.Reference -> defaultStarColors
+                ReferenceType.TippedStar -> tippedStarColors
+                ReferenceType.TippedConstellation -> tippedConstellationStarColors
+            }
+            else -> when (referenceType) {
+                ReferenceType.Default -> defaultStarColors
+                ReferenceType.Reference -> referenceStarColors
+                ReferenceType.TippedStar -> tippedStarColors
+                ReferenceType.TippedConstellation -> tippedConstellationStarColors
+            }
         }
 
-    override fun getConstellationColors(referenceType: ReferenceType): IConstellationColors =
-        when (referenceType) {
-            ReferenceType.Default -> defaultConstellationColors
-            ReferenceType.Reference -> referenceConstellationColors
-            ReferenceType.TippedStar, ReferenceType.TippedConstellation -> tippedConstellationColors
+    override fun getConstellationColors(referenceType: ReferenceType, style: ViewStyle): IConstellationColors =
+        when (style) {
+            ViewStyle.Plain, ViewStyle.HintsOnly -> when (referenceType) {
+                ReferenceType.Default -> defaultConstellationColors
+                ReferenceType.Reference -> defaultConstellationColors
+                ReferenceType.TippedStar, ReferenceType.TippedConstellation -> tippedConstellationColors
+            }
+            else -> when (referenceType) {
+                ReferenceType.Default -> defaultConstellationColors
+                ReferenceType.Reference -> referenceConstellationColors
+                ReferenceType.TippedStar, ReferenceType.TippedConstellation -> tippedConstellationColors
+            }
         }
 
     companion object {

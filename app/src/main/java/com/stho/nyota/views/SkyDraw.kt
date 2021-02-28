@@ -5,6 +5,7 @@ import android.graphics.Canvas
 import android.graphics.Paint
 import android.graphics.Path
 import com.stho.nyota.settings.Settings
+import com.stho.nyota.settings.ViewStyle
 import com.stho.nyota.sky.universe.*
 import com.stho.nyota.sky.utilities.Ten
 import com.stho.nyota.sky.utilities.Topocentric
@@ -48,7 +49,7 @@ class SkyDraw() {
     fun drawSun(sun: IElement, bitmap: Bitmap) =
         getPosition(sun)?.let {
             if (isOnScreen(it)) {
-                val clr: IStarColors = colors.getStarColors(ReferenceType.Default)
+                val clr: IStarColors = colors.defaultStarColors
                 drawImageAt(bitmap, it)
                 if (options.displayPlanetNames) {
                     drawNameAt(sun.name, clr.forName, it)
@@ -59,7 +60,7 @@ class SkyDraw() {
     fun drawMoon(moon: IElement, bitmap: Bitmap) =
         getPosition(moon)?.let {
             if (isOnScreen(it)) {
-                val clr: IStarColors = colors.getStarColors(ReferenceType.Default)
+                val clr: IStarColors = colors.defaultStarColors
                 drawImageAt(bitmap, it)
                 if (options.displayPlanetNames) {
                     drawNameAt(moon.name, clr.forName, it)
@@ -70,7 +71,7 @@ class SkyDraw() {
     fun drawPlanet(planet: IElement, bitmap: Bitmap) =
         getPosition(planet)?.let {
             if (isOnScreen(it)) {
-                val clr: IStarColors = colors.getStarColors(ReferenceType.Default)
+                val clr: IStarColors = colors.defaultStarColors
                 drawImageAt(bitmap, it)
                 if (options.displayPlanetNames) {
                     drawNameAt(planet.name, clr.forName, it)
@@ -81,7 +82,7 @@ class SkyDraw() {
     fun drawTarget(target: com.stho.nyota.sky.universe.Target, bitmap: Bitmap) =
         getPosition(target)?.let {
             if (isOnScreen(it)) {
-                val clr: IStarColors = colors.getStarColors(ReferenceType.Default)
+                val clr: IStarColors = colors.defaultStarColors
                 drawImageAt(bitmap, it)
                 drawNameAt(target.name, clr.forName, it)
             }
@@ -90,7 +91,7 @@ class SkyDraw() {
     fun drawNameOf(element: IElement) =
         getPosition(element)?.let {
             if (isOnScreen(it)) {
-                val clr: IStarColors = colors.getStarColors(ReferenceType.Default)
+                val clr: IStarColors = colors.defaultStarColors
                 drawNameAt(element.name, clr.forName, it)
             }
         }
@@ -98,7 +99,7 @@ class SkyDraw() {
     fun drawGalaxy(galaxy: Galaxy, referenceType: ReferenceType) =
         getPosition(galaxy)?.let {
             if (isOnScreen(it)) {
-                val clr: IStarColors = colors.getStarColors(referenceType)
+                val clr: IStarColors = colors.getStarColors(referenceType, options.style)
 
                 drawCircleAt(5f, clr.forStar, 255, it)
 
@@ -112,7 +113,7 @@ class SkyDraw() {
         getPosition(star)?.let {
             if (isOnScreen(it) && star.isBrighterThan(options.magnitude)) {
                 val luminosity = getLuminosity(star)
-                val clr: IStarColors = colors.getStarColors(referenceType)
+                val clr: IStarColors = colors.getStarColors(referenceType, options.style)
 
                 drawCircleAt(luminosity.radius, clr.forStar, luminosity.alpha, it)
 
@@ -125,18 +126,20 @@ class SkyDraw() {
 
     private fun canDrawStarName(star: Star): Boolean =
         when (options.style) {
-            Settings.Style.Normal -> options.displayStarNames && star.hasFriendlyName
-            Settings.Style.Plain -> false
+            ViewStyle.Normal -> options.displayStarNames && star.hasFriendlyName
+            ViewStyle.HintsOnly -> false
+            ViewStyle.Plain -> false
         }
 
     private fun canDrawStarSymbol(star: Star): Boolean =
         when (options.style) {
-            Settings.Style.Normal -> options.displaySymbols && star.hasSymbol
-            Settings.Style.Plain -> false
+            ViewStyle.Normal -> options.displaySymbols && star.hasSymbol
+            ViewStyle.HintsOnly -> false
+            ViewStyle.Plain -> false
         }
 
     fun drawConstellation(constellation: Constellation, referenceType: ReferenceType) {
-        val clr = colors.getConstellationColors(referenceType)
+        val clr = colors.getConstellationColors(referenceType, options.style)
 
         for (star: Star in constellation.stars) {
             drawStar(star, referenceType);
@@ -154,8 +157,9 @@ class SkyDraw() {
 
     private fun canDrawConstellationLines(referenceType: ReferenceType): Boolean =
         when (options.style) {
-            Settings.Style.Normal -> options.displayConstellations || referenceType == ReferenceType.TippedConstellation || referenceType == ReferenceType.Reference
-            Settings.Style.Plain -> false
+            ViewStyle.Normal -> options.displayConstellations || referenceType == ReferenceType.TippedConstellation || referenceType == ReferenceType.Reference
+            ViewStyle.HintsOnly -> false
+            ViewStyle.Plain -> false
         }
 
     private fun canDrawConstellationName(referenceType: ReferenceType): Boolean =
@@ -176,12 +180,12 @@ class SkyDraw() {
         }
 
     fun drawName(position: Topocentric, name: String) =
-        drawName(position, name, colors.getStarColors(ReferenceType.Default).forName)
+        drawName(position, name, colors.defaultStarColors.forName)
 
     fun drawElement(position: Topocentric, name: String, luminosity: Luminosity) =
         calculatePosition(position)?.let {
             if (isOnScreen(it)) {
-                val clr = colors.getStarColors(ReferenceType.Default)
+                val clr = colors.defaultStarColors
                 val fm = clr.forName.fontMetrics
                 val h = fm.descent - fm.ascent;
                 drawNameAt(name, clr.forName, SkyPointF(it.x + h, it.y + h / 2))
@@ -277,8 +281,9 @@ class SkyDraw() {
 
     private fun canDrawEcliptic(): Boolean =
         when (options.style) {
-            Settings.Style.Normal -> options.displayEcliptic
-            Settings.Style.Plain -> false
+            ViewStyle.Normal -> options.displayEcliptic
+            ViewStyle.HintsOnly -> true
+            ViewStyle.Plain -> false
         }
 
 
@@ -338,8 +343,9 @@ class SkyDraw() {
 
     private fun canDrawHint(): Boolean =
         when (options.style) {
-            Settings.Style.Normal -> options.displayHints
-            Settings.Style.Plain -> false
+            ViewStyle.Normal -> options.displayHints
+            ViewStyle.HintsOnly -> true
+            ViewStyle.Plain -> false
         }
 
     private fun drawCircleAt(radius: Float, color: Paint, alpha: Int, p: SkyPointF) {

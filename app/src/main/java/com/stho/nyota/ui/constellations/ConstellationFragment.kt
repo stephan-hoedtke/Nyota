@@ -1,7 +1,6 @@
 package com.stho.nyota.ui.constellations
 
 import android.os.Bundle
-import android.util.DisplayMetrics
 import android.view.*
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.os.bundleOf
@@ -13,11 +12,12 @@ import com.stho.nyota.AbstractViewModel
 import com.stho.nyota.ISkyViewListener
 import com.stho.nyota.R
 import com.stho.nyota.databinding.FragmentConstellationBinding
+import com.stho.nyota.settings.Settings
+import com.stho.nyota.settings.ViewStyle
 import com.stho.nyota.sky.universe.Constellation
 import com.stho.nyota.sky.universe.IElement
 import com.stho.nyota.sky.universe.Star
 import com.stho.nyota.sky.utilities.*
-import com.stho.nyota.ui.sky.SkyFragmentOptionsDialog
 
 
 class ConstellationFragment : AbstractElementFragment() {
@@ -106,6 +106,7 @@ class ConstellationFragment : AbstractElementFragment() {
         viewModel.zoomAngleLD.observe(viewLifecycleOwner, { zoomAngle -> onObserveZoomAngle(zoomAngle) })
         viewModel.centerLD.observe(viewLifecycleOwner, { center -> onObserveCenter(center) })
         viewModel.options.versionLD.observe(viewLifecycleOwner, { _ -> binding.sky.touch() })
+        viewModel.styleLD.observe(viewLifecycleOwner, { style -> onObserveStyle(style) })
         viewModel.tipLD.observe(viewLifecycleOwner, { tip -> onObserveTip(tip) })
     }
 
@@ -158,6 +159,17 @@ class ConstellationFragment : AbstractElementFragment() {
 
     private fun onObserveTip(tip: ConstellationViewModel.Tip) {
         binding.sky.setTippedStar(tip.star)
+    }
+
+    private fun onObserveStyle(style: ViewStyle) {
+        binding.buttonToggleStyle.setImageResource(
+            when (style) {
+                ViewStyle.Normal -> R.drawable.view_style_yellow
+                ViewStyle.HintsOnly -> R.drawable.view_style_red
+                ViewStyle.Plain -> R.drawable.view_style_blue
+            }
+        )
+        viewModel.options.style = style
     }
 
     private fun bind(moment: Moment, constellation: Constellation) {
@@ -222,7 +234,7 @@ class ConstellationFragment : AbstractElementFragment() {
     }
 
     private fun onToggleStyle() {
-        viewModel.options.toggleStyle()
+        viewModel.onToggleStyle()
     }
 
     private fun displayConstellationFragmentOptionsDialog() {

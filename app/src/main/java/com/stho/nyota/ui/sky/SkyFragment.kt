@@ -12,6 +12,8 @@ import com.stho.nyota.AbstractViewModel
 import com.stho.nyota.ISkyViewListener
 import com.stho.nyota.R
 import com.stho.nyota.databinding.FragmentSkyBinding
+import com.stho.nyota.settings.Settings
+import com.stho.nyota.settings.ViewStyle
 import com.stho.nyota.sky.universe.*
 import com.stho.nyota.sky.utilities.*
 
@@ -88,6 +90,7 @@ class SkyFragment : AbstractFragment() {
         viewModel.zoomAngleLD.observe(viewLifecycleOwner, { zoomAngle -> onObserveZoomAngle(zoomAngle) })
         viewModel.centerLD.observe(viewLifecycleOwner, { center -> onObserveCenter(center) })
         viewModel.showZoomLD.observe(viewLifecycleOwner, { showZoom -> onObserveShowZoom(showZoom) })
+        viewModel.styleLD.observe(viewLifecycleOwner, { style -> onObserveStyle(style) })
         viewModel.tipLD.observe(viewLifecycleOwner, { tip -> onObserveTip(tip) })
     }
 
@@ -187,6 +190,17 @@ class SkyFragment : AbstractFragment() {
         binding.sky.setTippedConstellation(tip.constellation)
     }
 
+    private fun onObserveStyle(style: ViewStyle) {
+        binding.buttonToggleStyle.setImageResource(
+            when (style) {
+                ViewStyle.Normal -> R.drawable.view_style_yellow
+                ViewStyle.HintsOnly -> R.drawable.view_style_red
+                ViewStyle.Plain -> R.drawable.view_style_blue
+            }
+        )
+        viewModel.options.style = style
+    }
+
     private fun updateMoment(moment: Moment) {
         bind(moment)
     }
@@ -212,7 +226,7 @@ class SkyFragment : AbstractFragment() {
         viewModel.onToggleShowZoom()
 
     private fun onToggleStyle() {
-        viewModel.options.toggleStyle()
+        viewModel.onToggleStyle()
     }
 
     private fun getElementKeyFromArguments(): String? =

@@ -224,25 +224,13 @@ class Settings: Versionable(), IViewOptions, ISkyViewOptions {
             }
         }
 
-    enum class Style {
-        Normal,
-        Plain,
-    }
-
-    override var style: Style = Style.Normal
+    override var style: ViewStyle = ViewStyle.Normal
         set(value) {
             if (field != value) {
                 field = value
                 touch()
             }
         }
-
-    override fun toggleStyle() {
-        style = when (style) {
-            Style.Normal -> Style.Plain
-            Style.Plain -> Style.Normal
-        }
-    }
 
     override fun touch() {
         isDirty = true
