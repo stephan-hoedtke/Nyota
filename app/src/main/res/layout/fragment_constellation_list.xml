@@ -7,17 +7,27 @@
     android:layout_height="match_parent"
     android:background="@color/colorBackground">
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/constellations"
+    <include android:id="@+id/time_overlay" layout="@layout/time_overlay"/>
+
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginVertical="16dp"
-        app:layoutManager="LinearLayoutManager"
+        android:fillViewport="true"
         app:layout_constraintTop_toBottomOf="@id/time_overlay"
         app:layout_constraintBottom_toTopOf="@id/time_interval_footer"
-        tools:listitem="@layout/fragment_constellation_list_entry" />
+        android:layout_marginBottom="@dimen/button_margin">
 
-    <include android:id="@+id/time_overlay" layout="@layout/time_overlay"/>
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/constellations"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginVertical="16dp"
+
+            app:layoutManager="LinearLayoutManager"
+            tools:listitem="@layout/fragment_constellation_list_entry" />
+
+    </androidx.core.widget.NestedScrollView>
+
     <include android:id="@+id/time_interval_footer" layout="@layout/time_interval_footer"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

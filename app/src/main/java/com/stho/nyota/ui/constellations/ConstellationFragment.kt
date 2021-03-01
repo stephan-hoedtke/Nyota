@@ -131,7 +131,6 @@ class ConstellationFragment : AbstractElementFragment() {
         get() = viewModel.constellation
 
 
-    @Suppress("NON_EXHAUSTIVE_WHEN")
     override fun onPropertyClick(property: IProperty) {
         when (property.keyType) {
             PropertyKeyType.STAR -> viewModel.constellation.findStarInConstellationByKey(property.key)?.let {

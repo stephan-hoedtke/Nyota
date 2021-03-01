@@ -15,6 +15,7 @@ abstract class AbstractViewModel(application: Application, override val reposito
 
     private val showDetailsLiveData: MutableLiveData<Boolean> = MutableLiveData<Boolean>().apply { value = false }
     private val showIntervalLiveData: MutableLiveData<Boolean> = MutableLiveData<Boolean>().apply { value = false }
+    private val showDateLiveData: MutableLiveData<Boolean> = MutableLiveData<Boolean>().apply { value = true }
 
     override val interval: Interval
         get() = repository.settings.interval
@@ -55,6 +56,8 @@ abstract class AbstractViewModel(application: Application, override val reposito
 
     override val showIntervalLD: LiveData<Boolean>
         get() = showIntervalLiveData
+
+
 
     override var showDetails: Boolean
         get() = showDetailsLiveData.value ?: true

@@ -13,8 +13,7 @@
         android:fillViewport="true"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toTopOf="@id/time_interval_footer"
-        android:layout_marginBottom="@dimen/button_margin"
-        >
+        android:layout_marginBottom="@dimen/button_margin">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -25,8 +24,7 @@
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:orientation="horizontal"
-                app:layout_constraintGuide_begin="@dimen/home_image_size"
-                />
+                app:layout_constraintGuide_begin="@dimen/home_image_size" />
 
             <ImageView
                 android:id="@+id/image"
@@ -35,8 +33,7 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="@id/horizontal_guideline1"
                 android:src="@drawable/nyota"
-                android:contentDescription="@string/label_empty"
-                />
+                android:contentDescription="@string/label_empty" />
 
             <include android:id="@+id/time_overlay" layout="@layout/time_overlay" />
 
@@ -49,8 +46,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toStartOf="@id/imageSun"
                 android:layout_marginVertical="32dp"
-                android:scaleType="centerInside"
-                />
+                android:scaleType="centerInside" />
 
             <ImageView
                 android:id="@+id/imageSun"
@@ -62,8 +58,7 @@
                 app:layout_constraintEnd_toStartOf="@id/imageIss"
                 android:layout_marginVertical="32dp"
                 android:scaleType="centerInside"
-                android:contentDescription="@string/label_empty"
-                />
+                android:contentDescription="@string/label_empty" />
 
             <ImageView
                 android:id="@+id/imageIss"
@@ -75,18 +70,16 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 android:layout_marginVertical="32dp"
                 android:scaleType="centerInside"
-                android:contentDescription="@string/label_empty"
-                />
+                android:contentDescription="@string/label_empty" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/targets"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="32dp"
+                android:layout_height="match_parent"
+                android:layout_marginVertical="32dp"
                 app:layoutManager="LinearLayoutManager"
                 app:layout_constraintTop_toBottomOf="@id/imageSun"
-                tools:layout_editor_absoluteX="0dp"
-                tools:listitem="@layout/fragment_element_list_entry" />
+               tools:listitem="@layout/fragment_element_list_entry" />
 
             <ImageView
                 android:id="@+id/buttonSkyView"
@@ -95,6 +88,7 @@
                 android:src="@drawable/sky"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/targets"
+                app:layout_constraintBottom_toTopOf="@id/space"
                 android:layout_margin="16dp"
                 android:contentDescription="@string/label_empty" />
 
@@ -119,6 +113,7 @@
                 android:contentDescription="@string/label_empty" />
 
             <Space
+                android:id="@+id/space"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 app:layout_constraintTop_toBottomOf="@id/buttonSkyView" />

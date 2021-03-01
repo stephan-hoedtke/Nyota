@@ -36,17 +36,19 @@ abstract class AbstractFragment : Fragment() {
 
         val interval: Interval
         val intervalLD: LiveData<Interval>
+
         fun onNext()
         fun onPrevious()
         fun onReset()
 
-        val showDetailsLD: LiveData<Boolean>
         val showIntervalLD: LiveData<Boolean>
-        val showDetails: Boolean
-        val showInterval: Boolean
+        val showDetailsLD: LiveData<Boolean>
 
-        fun onToggleShowDetails()
+        val showInterval: Boolean
+        val showDetails: Boolean
+
         fun onToggleShowInterval()
+        fun onToggleShowDetails()
     }
 
     private var bindingReference: AbstractFragmentBinding? = null
@@ -63,7 +65,6 @@ abstract class AbstractFragment : Fragment() {
         val buttonPrevious: ImageView? = view.findViewById<ImageView>(R.id.buttonPrevious)
         val imageTime: ImageView? = view.findViewById<ImageView>(R.id.imageTime)
         val currentTime: TextView? = view.findViewById<TextView>(R.id.currentTime)
-        val currentDate: TextView? = view.findViewById<TextView>(R.id.currentDate)
         val timeIntervalFooter: ViewGroup? = view.findViewById<ViewGroup>(R.id.time_interval_footer)
     }
 
@@ -93,11 +94,10 @@ abstract class AbstractFragment : Fragment() {
         binding.buttonNext?.setOnClickListener { onButtonNext() }
         binding.buttonPrevious?.setOnClickListener { onButtonPrevious() }
         binding.currentTime?.setOnClickListener { onToggleShowInterval() }
-        binding.currentTime?.setOnLongClickListener { onToggleShowInterval(); true }
-        binding.imageTime?.setOnLongClickListener { onToggleShowInterval(); true }
-        abstractViewModel.intervalLD.observe(viewLifecycleOwner) { interval -> observeInterval(interval) }
-        abstractViewModel.showIntervalLD.observe(viewLifecycleOwner, { value -> observeShowInterval(value) })
-        abstractViewModel.settings.updateTimeAutomaticallyLD.observe(viewLifecycleOwner) { value -> observeUpdateTimeAutomatically(value) }
+        binding.imageTime?.setOnClickListener { onToggleShowInterval() }
+        abstractViewModel.intervalLD.observe(viewLifecycleOwner) { interval -> onObserveInterval(interval) }
+        abstractViewModel.showIntervalLD.observe(viewLifecycleOwner, { value -> onObserveShowInterval(value) })
+        abstractViewModel.settings.updateTimeAutomaticallyLD.observe(viewLifecycleOwner) { value -> onObserveUpdateTimeAutomatically(value) }
     }
 
     protected fun updateActionBar(resId: Int) =
@@ -150,20 +150,20 @@ abstract class AbstractFragment : Fragment() {
     private fun onToggleShowInterval() =
         abstractViewModel.onToggleShowInterval()
 
-    private fun observeShowInterval(value: Boolean) {
-        binding.timeIntervalFooter?.visibility = if (value) View.GONE else View.VISIBLE
-        binding.timeIntervalFooter?.layoutParams?.height = if (value) 0 else android.app.ActionBar.LayoutParams.WRAP_CONTENT
-    }
-
-    private fun observeInterval(interval: Interval) {
-        binding.interval?.text = interval.name
-    }
-
     private fun onTime() {
         abstractViewModel.settings.updateTimeAutomatically = false
     }
 
-    private fun observeUpdateTimeAutomatically(value: Boolean) {
+    private fun onObserveShowInterval(value: Boolean) {
+        binding.timeIntervalFooter?.visibility = if (value) View.GONE else View.VISIBLE
+        binding.timeIntervalFooter?.layoutParams?.height = if (value) 0 else android.app.ActionBar.LayoutParams.WRAP_CONTENT
+    }
+
+    private fun onObserveInterval(interval: Interval) {
+        binding.interval?.text = interval.name
+    }
+
+    private fun onObserveUpdateTimeAutomatically(value: Boolean) {
         binding.imageTime?.isEnabled = !value
     }
 
