@@ -368,24 +368,6 @@ class SkyFragment : AbstractFragment() {
             .setDuration(13000)
             .show()
     }
-
-    private fun onMoon() =
-        findNavController().navigate(R.id.action_global_nav_moon)
-
-    private fun onSun() =
-        findNavController().navigate(R.id.action_global_nav_sun)
-
-    private fun onSatellite(satellite: Satellite) =
-        findNavController().navigate(R.id.action_global_nav_satellite, bundleOf("SATELLITE" to satellite.name))
-
-    private fun onPlanet(planet: AbstractPlanet) =
-        findNavController().navigate(R.id.action_global_nav_planet, bundleOf("PLANET" to planet.key))
-
-    private fun onStar(star: Star) =
-        findNavController().navigate(R.id.action_global_nav_star, bundleOf("STAR" to star.key))
-
-    private fun onGalaxy(galaxy: Galaxy) =
-        onFinderView(galaxy.key)
 }
 
 

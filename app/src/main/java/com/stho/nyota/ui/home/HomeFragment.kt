@@ -37,22 +37,22 @@ class HomeFragment : AbstractFragment() {
         bindingReference = FragmentHomeBinding.inflate(inflater, container, false)
 
         adapter = ElementsRecyclerViewAdapter()
-        adapter.onItemClick = { element -> openTarget(element) }
-        adapter.onItemLongClick = { element -> showPopupMenuFor(element) }
+        adapter.onItemClick = { element -> onElement(element) }
+        adapter.onItemLongClick = { element -> showNextStepDialogForElement(element) }
 
         binding.targets.layoutManager = LinearLayoutManager(requireContext())
         binding.targets.adapter = adapter
         binding.targets.addItemDecoration(RecyclerViewItemDivider(requireContext()))
         binding.buttonSkyView.setOnClickListener { onSkyView() }
         binding.buttonShowOptions.setOnClickListener { displayHomeFragmentOptionsDialog() }
-        binding.imageSun.setOnClickListener { onSun() }
-        binding.imageSun.setOnLongClickListener { onSkyView(viewModel.sun); true }
-        binding.imageMoon.setOnClickListener { onMoon() }
-        binding.imageMoon.setOnLongClickListener { onSkyView(viewModel.moon); true }
-        binding.imageIss.setOnClickListener { onIss() }
-        binding.imageIss.setOnLongClickListener { onSkyView(viewModel.iss); true }
-        binding.image.setOnClickListener { openConstellations() }
-        binding.image.setOnLongClickListener { onSkyView(); true }
+        binding.imageSun.setOnClickListener { viewModel.unselect(); onSun() }
+        binding.imageSun.setOnLongClickListener { viewModel.unselect(); onSkyView(viewModel.sun); true }
+        binding.imageMoon.setOnClickListener { viewModel.unselect(); onMoon() }
+        binding.imageMoon.setOnLongClickListener { viewModel.unselect(); onSkyView(viewModel.moon); true }
+        binding.imageIss.setOnClickListener { viewModel.unselect(); onIss() }
+        binding.imageIss.setOnLongClickListener { viewModel.unselect(); onSkyView(viewModel.iss); true }
+        binding.image.setOnClickListener { viewModel.unselect(); openConstellations() }
+        binding.image.setOnLongClickListener { viewModel.unselect(); onSkyView(); true }
 
         return binding.root
     }
@@ -61,6 +61,7 @@ class HomeFragment : AbstractFragment() {
         super.onViewCreated(view, savedInstanceState)
         viewModel.universeLD.observe(viewLifecycleOwner, { universe -> updateUniverse(universe.moment) })
         viewModel.elementsLD.observe(viewLifecycleOwner, { elements -> onObserveElements(elements) })
+        viewModel.selectedItemLD.observe(viewLifecycleOwner, { item -> adapter.selectItem(item) })
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -109,10 +110,9 @@ class HomeFragment : AbstractFragment() {
         }
     }
 
-    private fun showPopupMenuFor(element: IElement) {
-        val fragmentManager: FragmentManager = requireActivity().supportFragmentManager
-        val tag = "DIALOG"
-        ChooseNextStepDialog(element).show(fragmentManager, tag)
+    override fun showNextStepDialogForElement(element: IElement) {
+        viewModel.unselect()
+        super.showNextStepDialogForElement(element)
     }
 
     private fun displayHomeFragmentOptionsDialog() {
@@ -139,11 +139,11 @@ class HomeFragment : AbstractFragment() {
         updateActionBar(R.string.label_nyota)
     }
 
-    private fun openTarget(element: IElement) {
+    private fun onElement(element: IElement) {
         when (element) {
-            is Star -> onStar(element.key)
-            is Constellation -> onConstellation(element.key)
-            is AbstractPlanet -> onPlanet(element.key)
+            is Star -> onStar(element)
+            is AbstractPlanet -> onPlanet(element)
+            is Constellation -> onConstellation(element)
             else -> showSnackbar("See: ${element.name} ...")
         }
     }
@@ -151,20 +151,51 @@ class HomeFragment : AbstractFragment() {
     private fun openConstellations() =
         findNavController().navigate(HomeFragmentDirections.actionGlobalNavConstellations())
 
-    private fun onSun() =
-        findNavController().navigate(R.id.action_global_nav_sun)
+    override fun onSun() {
+        viewModel.select(viewModel.sun)
+        super.onSun()
+    }
 
-    private fun onMoon() =
-        findNavController().navigate(R.id.action_global_nav_moon)
+    override fun onMoon() {
+        viewModel.select(viewModel.moon)
+        super.onMoon()
+    }
+
+    override fun onStar(star: Star) {
+        viewModel.select(star)
+        super.onStar(star)
+    }
+
+    override fun onPlanet(planet: AbstractPlanet) {
+        viewModel.select(planet)
+        super.onPlanet(planet)
+    }
+
+    override fun onConstellation(constellation: Constellation) {
+        viewModel.select(constellation)
+        super.onConstellation(constellation)
+    }
+
+    override fun onSatellite(satellite: Satellite) {
+        viewModel.select(satellite)
+        super.onSatellite(satellite)
+    }
+
+    override fun onSkyView(element: IElement) {
+        viewModel.select(element)
+        super.onSkyView(element)
+    }
+
+    override fun onFinderView(element: IElement) {
+        viewModel.select(element)
+        super.onFinderView(element)
+    }
 
     private fun onIss() =
-        findNavController().navigate(HomeFragmentDirections.actionNavHomeToNavSatellite(viewModel.iss.name))
+        onSatellite(viewModel.iss.name)
 
     private fun onSkyView() =
         findNavController().navigate(HomeFragmentDirections.actionNavHomeToNavSky(null))
-
-    private fun onSkyView(element: IElement) =
-        findNavController().navigate(HomeFragmentDirections.actionNavHomeToNavSky(element.key))
 
     private fun displayInfo() =
         findNavController().navigate(R.id.action_global_nav_info)

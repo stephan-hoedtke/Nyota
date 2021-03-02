@@ -96,7 +96,7 @@ class CityPickerRecyclerViewAdapter(fragment: CityPickerFragment, private val re
         private val binding: FragmentCityPickerListItemBinding = FragmentCityPickerListItemBinding.bind(view)
 
         fun bind(city: City) {
-            val isSelected = isSelected(city)
+            val isSelected = isItemSelected(city)
             binding.radioButton.isChecked = isSelected
             binding.radioButton.setOnClickListener { onSelect(adapterPosition) }
             binding.textViewName.text = city.nameEx
@@ -112,7 +112,7 @@ class CityPickerRecyclerViewAdapter(fragment: CityPickerFragment, private val re
         (viewHolder as CityPickerRecyclerViewAdapter.ViewHolder).foregroundLayer
 
     override fun getBackgroundColor(isCurrentlyActive: Boolean): Int =
-        ContextCompat.getColor(context, if (isCurrentlyActive) R.color.colorSelectedBackground else R.color.colorBackground)
+        ContextCompat.getColor(context, if (isCurrentlyActive) R.color.colorBackgroundItemSelected else R.color.colorBackground)
 
     private fun onSelect(position: Int) =
         cities.findCityByIndex(position)?.also { onSelectionChanged?.invoke(it) }
@@ -125,9 +125,8 @@ class CityPickerRecyclerViewAdapter(fragment: CityPickerFragment, private val re
         notifyDataSetChanged()
     }
 
-    private fun isSelected(city: City): Boolean {
-        return city.matches(selectedCity)
-    }
+    private fun isItemSelected(city: City): Boolean =
+        city.matches(selectedCity)
 
     override fun delete(position: Int) {
         val city = cities[position]

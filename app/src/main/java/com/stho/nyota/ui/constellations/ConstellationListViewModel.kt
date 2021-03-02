@@ -5,6 +5,7 @@ import android.graphics.Path
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
+import com.stho.nyota.ISelectable
 import com.stho.nyota.RepositoryViewModelNoArgs
 import com.stho.nyota.repository.Repository
 import com.stho.nyota.sky.universe.Constellation
@@ -13,16 +14,20 @@ import com.stho.nyota.sky.universe.IElement
 import com.stho.nyota.sky.universe.Universe
 import com.stho.nyota.ui.home.HomeViewModel
 
-class ConstellationListViewModel(application: Application, repository: Repository) : RepositoryViewModelNoArgs(application, repository) {
+class ConstellationListViewModel(application: Application, repository: Repository) : RepositoryViewModelNoArgs(application, repository), ISelectable<Constellation> {
 
     class Options {
         var filter: Constellations.Filter = Constellations.Filter.Ptolemaeus
     }
 
     private val optionsLiveData: MutableLiveData<Options> = MutableLiveData<Options>().apply { value = Options() }
+    private val selectedItemLiveData: MutableLiveData<Constellation?> = MutableLiveData()
 
     val optionsLD: LiveData<Options>
         get() = optionsLiveData
+
+    val selectedItemLD: LiveData<Constellation?>
+        get() = selectedItemLiveData
 
     val constellationsLD: LiveData<List<Constellation>>
         get() = Transformations.map(optionsLiveData) { options -> createConstellationList(options) }
@@ -35,6 +40,12 @@ class ConstellationListViewModel(application: Application, repository: Repositor
             it.filter = filter
         })
     }
+
+    override fun select(item: Constellation) =
+        selectedItemLiveData.postValue(item)
+
+    override fun unselect() =
+        selectedItemLiveData.postValue(null)
 
     private fun updateOptions(options: Options) {
         optionsLiveData.postValue(options)

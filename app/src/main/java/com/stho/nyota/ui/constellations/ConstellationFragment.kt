@@ -158,6 +158,8 @@ class ConstellationFragment : AbstractElementFragment() {
 
     private fun onObserveTip(tip: ConstellationViewModel.Tip) {
         binding.sky.setTippedStar(tip.star)
+        basicsAdapter.selectItem(tip.star);
+        detailsAdapter.selectItem(tip.star)
     }
 
     private fun onObserveStyle(style: ViewStyle) {
@@ -221,8 +223,10 @@ class ConstellationFragment : AbstractElementFragment() {
         }
     }
 
-    private fun onStar(star: Star) =
-        findNavController().navigate(R.id.action_global_nav_star, bundleOf("STAR" to star.key))
+    override fun onStar(star: Star) {
+        viewModel.setTippedStar(star)
+        super.onStar(star)
+    }
 
     private fun onZoomIn() {
         viewModel.applyScale(1.1)

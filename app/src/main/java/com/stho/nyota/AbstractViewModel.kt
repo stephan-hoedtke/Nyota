@@ -9,6 +9,7 @@ import com.stho.nyota.repository.Repository
 import com.stho.nyota.sky.utilities.Moment
 import com.stho.nyota.AbstractFragment.IAbstractViewModel
 import com.stho.nyota.settings.Settings
+import com.stho.nyota.sky.universe.IElement
 import com.stho.nyota.sky.universe.Universe
 
 abstract class AbstractViewModel(application: Application, override val repository: Repository) : AndroidViewModel(application), IAbstractViewModel {

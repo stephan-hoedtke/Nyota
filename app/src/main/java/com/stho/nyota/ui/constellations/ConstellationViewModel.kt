@@ -3,12 +3,14 @@ package com.stho.nyota.ui.constellations
 import android.app.Application
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.stho.nyota.ISelectable
 import com.stho.nyota.RepositoryViewModelArgs
 import com.stho.nyota.repository.Repository
 import com.stho.nyota.settings.Settings
 import com.stho.nyota.settings.Versionable
 import com.stho.nyota.settings.ViewStyle
 import com.stho.nyota.sky.universe.Constellation
+import com.stho.nyota.sky.universe.IElement
 import com.stho.nyota.sky.universe.Star
 import com.stho.nyota.sky.utilities.Topocentric
 import com.stho.nyota.sky.utilities.projections.Projection

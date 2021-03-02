@@ -14,6 +14,7 @@ import com.stho.nyota.sky.universe.IElement
 class ConstellationListRecyclerViewAdapter : RecyclerView.Adapter<ConstellationListRecyclerViewAdapter.ViewHolder>() {
 
     private var constellations: List<Constellation> = ArrayList<Constellation>()
+    private var selectedItem: Constellation? = null
 
     var onItemClick: ((Constellation) -> Unit)? = null
     var onItemLongClick: ((Constellation) -> Unit)? = null
@@ -40,7 +41,10 @@ class ConstellationListRecyclerViewAdapter : RecyclerView.Adapter<ConstellationL
         fun bind(constellation: Constellation) {
             binding.image.setImageResource(constellation.imageId)
             binding.name.text = constellation.name
-            binding.position.text = constellation.position.toString()
+            binding.azimuth.text = constellation.position?.azimuthAsString
+            binding.altitude.text = constellation.position?.altitudeAsString
+            binding.hints.text = constellation.author
+            binding.root.isSelected = isItemSelected(constellation)
             binding.root.setOnClickListener { getConstellationByIndex(adapterPosition)?.also { onItemClick?.invoke(it) } }
             binding.root.setOnLongClickListener {  getConstellationByIndex(adapterPosition)?.also { onItemLongClick?.invoke(it) }; true }
         }
@@ -50,5 +54,13 @@ class ConstellationListRecyclerViewAdapter : RecyclerView.Adapter<ConstellationL
         this.constellations = constellations
         notifyDataSetChanged()
     }
+
+    fun selectItem(constellation: Constellation?) {
+        selectedItem = constellation
+        notifyDataSetChanged()
+    }
+
+    private fun isItemSelected(constellation: Constellation): Boolean =
+        constellation == selectedItem
 }
 

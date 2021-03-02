@@ -62,7 +62,7 @@
                         android:id="@+id/textViewPitch"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/label_default_pitch"
+                        android:text="@string/default_pitch"
                         android:layout_marginEnd="@dimen/image_margin"
                         style="@style/MyTheme.AccentText" />
 
@@ -86,7 +86,7 @@
                         android:id="@+id/textViewAzimuth"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/label_default_direction"
+                        android:text="@string/default_direction"
                         android:layout_marginEnd="@dimen/image_margin"
                         style="@style/MyTheme.AccentText" />
 
@@ -110,7 +110,7 @@
                         android:id="@+id/textViewRoll"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/label_default_roll"
+                        android:text="@string/default_roll"
                         android:layout_marginEnd="@dimen/image_margin"
                         style="@style/MyTheme.AccentText" />
 
@@ -134,7 +134,7 @@
                         android:id="@+id/textViewDirection"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/label_default_center"
+                        android:text="@string/default_center"
                         android:layout_marginEnd="@dimen/image_margin"
                         style="@style/MyTheme.AccentText" />
 

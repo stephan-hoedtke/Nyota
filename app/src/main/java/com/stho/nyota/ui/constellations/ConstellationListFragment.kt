@@ -40,8 +40,8 @@ class ConstellationListFragment : AbstractFragment() {
         bindingReference = FragmentConstellationListBinding.inflate(inflater, container, false)
 
         adapter = ConstellationListRecyclerViewAdapter()
-        adapter.onItemClick = { constellation -> onConstellation(constellation.key) }
-        adapter.onItemLongClick = { constellation -> showNextStepDialogForElement(constellation.key)}
+        adapter.onItemClick = { constellation -> onConstellation(constellation) }
+        adapter.onItemLongClick = { constellation -> showNextStepDialogForElement(constellation) }
 
         binding.constellations.layoutManager = LinearLayoutManager(requireContext())
         binding.constellations.adapter = adapter
@@ -54,6 +54,7 @@ class ConstellationListFragment : AbstractFragment() {
         super.onViewCreated(view, savedInstanceState)
         viewModel.universeLD.observe(viewLifecycleOwner, { universe -> updateUniverse(universe) })
         viewModel.constellationsLD.observe(viewLifecycleOwner, { constellations -> onObserveConstellations(constellations) })
+        viewModel.selectedItemLD.observe(viewLifecycleOwner, { item -> adapter.selectItem(item) })
     }
 
     override fun onDestroyView() {
@@ -76,6 +77,11 @@ class ConstellationListFragment : AbstractFragment() {
     override fun onPause() {
         super.onPause()
         saveOptions()
+    }
+
+    override fun onConstellation(constellation: Constellation) {
+        viewModel.select(constellation)
+        super.onConstellation(constellation)
     }
 
     private fun loadOptions() {

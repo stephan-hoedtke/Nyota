@@ -55,7 +55,7 @@
         app:layout_constraintTop_toTopOf="@id/iconHorizontal"
         app:layout_constraintBottom_toBottomOf="@id/iconHorizontal"
         android:layout_marginStart="@dimen/element_margin"
-        android:text="@string/label_default_pitch" />
+        android:text="@string/default_pitch" />
 
     <TextView
         android:id="@+id/currentDeviceRoll"
@@ -65,7 +65,7 @@
         app:layout_constraintTop_toTopOf="@id/currentDevicePitch"
         app:layout_constraintBottom_toBottomOf="@id/currentDevicePitch"
         android:layout_marginStart="@dimen/element_margin"
-        android:text="@string/label_default_roll" />
+        android:text="@string/default_roll" />
 
 
     <TextView

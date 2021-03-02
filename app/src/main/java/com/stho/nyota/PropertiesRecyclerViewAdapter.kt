@@ -5,8 +5,11 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.stho.nyota.databinding.PropertyListEntryBinding
+import com.stho.nyota.sky.universe.IElement
 import com.stho.nyota.sky.universe.Satellite
 import com.stho.nyota.sky.utilities.IProperty
+import com.stho.nyota.sky.utilities.Property
+import com.stho.nyota.sky.utilities.PropertyKeyType
 import com.stho.nyota.sky.utilities.PropertyList
 
 /**
@@ -15,6 +18,8 @@ import com.stho.nyota.sky.utilities.PropertyList
 class PropertiesRecyclerViewAdapter : RecyclerView.Adapter<PropertiesRecyclerViewAdapter.ViewHolder>() {
 
     private var entries: PropertyList = PropertyList()
+    private var selectedItem: IElement? = null
+
     var onItemClick: ((IProperty) -> Unit)? = null
     var onItemLongClick: ((IProperty) -> Unit)? = null
 
@@ -44,6 +49,7 @@ class PropertiesRecyclerViewAdapter : RecyclerView.Adapter<PropertiesRecyclerVie
             binding.value.text = entry.value
             binding.hints.text = entry.hints
             binding.hints.visibility = if (entry.hasHints) View.VISIBLE else View.GONE
+            binding.root.isSelected = isItemSelected(entry)
             binding.root.setOnClickListener { onPropertyClick(adapterPosition) }
             binding.root.setOnLongClickListener { onPropertyLongClick(adapterPosition); true }
         }
@@ -59,5 +65,13 @@ class PropertiesRecyclerViewAdapter : RecyclerView.Adapter<PropertiesRecyclerVie
 
     private fun onPropertyLongClick(position: Int) =
         getPropertyByIndex(position)?.let { onItemLongClick?.invoke(it) }
+
+    fun selectItem(element: IElement?) {
+        selectedItem = element
+        notifyDataSetChanged()
+    }
+
+    private fun isItemSelected(entry: IProperty): Boolean =
+        entry.keyType == PropertyKeyType.STAR && entry.key == selectedItem?.key
 
 }

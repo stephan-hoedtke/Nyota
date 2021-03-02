@@ -14,7 +14,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_margin="@dimen/age_margin"
+        android:layout_marginVertical="@dimen/age_margin"
         android:src="@drawable/moonly"
         />
 

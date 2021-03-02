@@ -3,12 +3,13 @@ package com.stho.nyota.ui.home
 import android.app.Application
 import android.opengl.Visibility
 import androidx.lifecycle.*
+import com.stho.nyota.ISelectable
 import com.stho.nyota.RepositoryViewModelNoArgs
 import com.stho.nyota.repository.Repository
 import com.stho.nyota.sky.universe.*
 import com.stho.nyota.sky.utilities.Moment
 
-class HomeViewModel(application: Application, repository: Repository) : RepositoryViewModelNoArgs(application, repository) {
+class HomeViewModel(application: Application, repository: Repository) : RepositoryViewModelNoArgs(application, repository), ISelectable<IElement> {
 
     class Options {
         var showStars: Boolean = true
@@ -19,6 +20,7 @@ class HomeViewModel(application: Application, repository: Repository) : Reposito
     }
 
     private val optionsLiveData = MutableLiveData<Options>().apply { value = Options() }
+    private val selectedItemLiveData: MutableLiveData<IElement?> = MutableLiveData()
 
     val universe: Universe
         get() = repository.universe
@@ -40,6 +42,9 @@ class HomeViewModel(application: Application, repository: Repository) : Reposito
 
     val elementsLD: LiveData<List<IElement>>
         get() = Transformations.map(optionsLiveData) { options -> createElementList(options) }
+
+    val selectedItemLD: LiveData<IElement?>
+        get() = selectedItemLiveData
 
     val options: Options
         get() = optionsLiveData.value ?: Options()
@@ -85,5 +90,11 @@ class HomeViewModel(application: Application, repository: Repository) : Reposito
         else
             list.filter { element -> element.isVisible }
     }
+
+    override fun select(item: IElement) =
+        selectedItemLiveData.postValue(item)
+
+    override fun unselect() =
+        selectedItemLiveData.postValue(null)
 }
 

@@ -19,7 +19,15 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.5"
+        app:layout_constraintGuide_percent="0.6"
+        />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/vertical_guideline3"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.83"
         />
 
     <ImageView
@@ -42,10 +50,11 @@
         app:layout_constraintBottom_toBottomOf="@id/image"
         app:layout_constraintStart_toEndOf="@id/vertical_guideline1"
         android:textAppearance="?attr/textAppearanceListItem"
+        android:textStyle="bold"
         android:text="@string/default_planet_name"/>
 
     <TextView
-        android:id="@+id/position"
+        android:id="@+id/azimuth"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/text_margin"
@@ -53,16 +62,25 @@
         app:layout_constraintBottom_toBottomOf="@id/image"
         app:layout_constraintStart_toStartOf="@id/vertical_guideline2"
         android:textAppearance="?attr/textAppearanceListItem"
-        android:text="@string/default_planet_position" />
+        android:text="@string/default_element_azimuth" />
 
     <TextView
-        android:id="@+id/hints"
+        android:id="@+id/altitude"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/text_margin"
         app:layout_constraintTop_toTopOf="@id/image"
         app:layout_constraintBottom_toBottomOf="@id/image"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@id/vertical_guideline3"
+        android:textAppearance="?attr/textAppearanceListItem"
+        android:text="@string/default_element_altitude" />
+
+    <TextView
+        android:id="@+id/hints"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/name"
+        app:layout_constraintStart_toStartOf="@+id/name"
         android:textAppearance="?attr/textAppearanceListItem"
         android:textColor="@color/colorDarkText"
         android:text="@string/default_hint" />

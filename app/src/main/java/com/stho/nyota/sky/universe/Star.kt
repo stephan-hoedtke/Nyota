@@ -1,6 +1,7 @@
 package com.stho.nyota.sky.universe
 
 import com.stho.nyota.settings.Settings
+import com.stho.nyota.sky.utilities.Angle
 import com.stho.nyota.sky.utilities.Formatter
 import com.stho.nyota.sky.utilities.Moment
 import com.stho.nyota.sky.utilities.PropertyList

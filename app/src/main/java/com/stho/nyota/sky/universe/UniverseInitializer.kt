@@ -963,6 +963,13 @@ class UniverseInitializer(universe: Universe) : AbstractUniverseInitializer(univ
         newHint("Antares (Scorpius)", crux[Symbol.Beta], getStar(Antares))
         newHint("Alpha Centauri", crux[Symbol.Beta], getStar(AlphaCentauri))
 
+        val aries = universe.constellations[Constellation.Aries]
+        val andromeda = universe.constellations[Constellation.Andromeda]
+        val cassiopeia = universe.constellations[Constellation.Cassiopeia]
+        newHint("Cassiopeia", getStar(Polaris), cassiopeia[Symbol.Epsilon])
+        newHint("Andromeda", cassiopeia[Symbol.Epsilon], andromeda[Symbol.Gamma])
+        newHint("Hamal (Aries)", andromeda[Symbol.Gamma], aries[Symbol.Alpha])
+
         newTriangle("Winter Triangle", getStar(Sirius), getStar(Procyon), getStar(Betelgeuse))
         newTriangle("Summer Triangle", getStar(Vega), getStar(Deneb), getStar(Altair))
     }

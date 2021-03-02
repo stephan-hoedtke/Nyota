@@ -13,6 +13,7 @@ import com.stho.nyota.sky.universe.Star
 class ElementsRecyclerViewAdapter : RecyclerView.Adapter<ElementsRecyclerViewAdapter.ViewHolder>() {
 
     private var entries: List<IElement> = ArrayList()
+    private var selectedItem: IElement? = null
 
     var onItemClick: ((IElement) -> Unit)? = null
     var onItemLongClick: ((IElement) -> Unit)? = null
@@ -39,7 +40,8 @@ class ElementsRecyclerViewAdapter : RecyclerView.Adapter<ElementsRecyclerViewAda
         fun bind(element: IElement) {
             binding.image.setImageResource(element.imageId)
             binding.name.text = element.toString()
-            binding.position.text = element.position.toString()
+            binding.azimuth.text = element.position?.azimuthAsString
+            binding.altitude.text = element.position?.altitudeAsString
             if (element is Star) {
                 binding.hints.text = element.magnAsString
                 binding.hints.visibility = View.VISIBLE
@@ -47,6 +49,7 @@ class ElementsRecyclerViewAdapter : RecyclerView.Adapter<ElementsRecyclerViewAda
             else {
                 binding.hints.visibility = View.INVISIBLE
             }
+            binding.root.isSelected = isItemSelected(element)
             binding.root.setOnClickListener { getElementByIndex(adapterPosition)?.also { onItemClick?.invoke(it) } }
             binding.root.setOnLongClickListener {  getElementByIndex(adapterPosition)?.also { onItemLongClick?.invoke(it) }; true }
         }
@@ -61,5 +64,13 @@ class ElementsRecyclerViewAdapter : RecyclerView.Adapter<ElementsRecyclerViewAda
         entries = elements
         notifyDataSetChanged()
     }
+
+    fun selectItem(element: IElement?) {
+        selectedItem = element
+        notifyDataSetChanged()
+    }
+
+    private fun isItemSelected(element: IElement): Boolean =
+        element == selectedItem
 }
 

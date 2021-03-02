@@ -9,7 +9,8 @@
     <color name="colorSecondaryAccentText">#449988</color>
     <color name="colorAccent">#fffde7</color>
     <color name="colorBackground">#000000</color>
-    <color name="colorSelectedBackground">#031747</color>
+    <color name="colorBackgroundItemSelected">#031327</color>
+    <color name="colorBackgroundItemPressed">#031747</color>
     <color name="colorPrimaryText">#fffde7</color>
     <color name="colorPrimaryDisabledText">#eeede7</color>
     <color name="colorDarkText">#999999</color>

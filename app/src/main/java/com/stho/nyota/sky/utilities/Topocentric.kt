@@ -48,6 +48,12 @@ class Topocentric(var azimuth: Double, var altitude: Double, var distance: Doubl
     fun isNear(position: Topocentric, toleranceInDegree: Double): Boolean =
         isNear(position, toleranceInDegree / azimuthDistanceFactor, toleranceInDegree)
 
+    val azimuthAsString: String
+        get() = Angle.toString(azimuth, Angle.AngleType.AZIMUTH)
+
+    val altitudeAsString: String
+        get() = Angle.toString(altitude, Angle.AngleType.ALTITUDE)
+
     fun isNear(position: Topocentric, azimuthTolerance: Double, altitudeTolerance: Double): Boolean =
         abs(Degree.difference(azimuth, position.azimuth)) < azimuthTolerance && abs(Degree.difference(altitude, position.altitude)) < altitudeTolerance
 

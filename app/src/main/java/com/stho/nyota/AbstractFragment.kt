@@ -18,15 +18,16 @@ import com.stho.nyota.databinding.TimeOverlayBinding
 import com.stho.nyota.databinding.TimeVisibilityOverlayBinding
 import com.stho.nyota.repository.Repository
 import com.stho.nyota.settings.Settings
-import com.stho.nyota.sky.universe.Universe
+import com.stho.nyota.sky.universe.*
 import com.stho.nyota.sky.utilities.Formatter
 import com.stho.nyota.sky.utilities.IProperty
 import com.stho.nyota.sky.utilities.Moment
 import com.stho.nyota.sky.utilities.PropertyKeyType
 import com.stho.nyota.ui.constellations.ChooseNextStepDialog
+import com.stho.nyota.ui.home.HomeFragmentDirections
 import java.util.*
 
-abstract class AbstractFragment : Fragment() {
+abstract class AbstractFragment : Fragment(), INavigable {
 
     interface IAbstractViewModel {
         val repository: Repository
@@ -193,25 +194,62 @@ abstract class AbstractFragment : Fragment() {
     protected fun getColor(resId: Int): Int =
         ContextCompat.getColor(requireContext(), resId)
 
-    protected fun showNextStepDialogForElement(key: String) {
+    protected fun showNextStepDialogForElement(key: String) =
         abstractViewModel.repository.getElementByKey(key)?.also {
-            val fragmentManager: FragmentManager = requireActivity().supportFragmentManager
-            val tag = "DIALOG"
-            ChooseNextStepDialog(it).show(fragmentManager, tag)
+            showNextStepDialogForElement(it)
         }
+
+    override fun showNextStepDialogForElement(element: IElement) {
+        val fragmentManager: FragmentManager = requireActivity().supportFragmentManager
+        val tag = "DIALOG"
+        ChooseNextStepDialog(element, this).show(fragmentManager, tag)
     }
 
-    protected fun onSkyView(key: String) =
+    override fun onStar(star: Star) =
+        onStar(star.key)
+
+    override fun onPlanet(planet: AbstractPlanet) =
+        onPlanet(planet.key)
+
+    override fun onConstellation(constellation: Constellation) =
+        onConstellation(constellation.key)
+
+    override fun onSatellite(satellite: Satellite) =
+        onSatellite(satellite.key)
+
+    override fun onGalaxy(galaxy: Galaxy) =
+        onFinderView(galaxy.key)
+
+    private fun onSkyView() =
+        findNavController().navigate(HomeFragmentDirections.actionNavHomeToNavSky(null))
+
+    override fun onSkyView(element: IElement) =
+        onSkyView(element.key)
+
+    override fun onFinderView(element: IElement) =
+        onFinderView(element.key)
+
+
+    private fun onSkyView(key: String) =
         findNavController().navigate(R.id.action_global_nav_sky, bundleOf("ELEMENT" to key))
 
     protected fun onFinderView(key: String) =
         findNavController().navigate(R.id.action_global_nav_finder, bundleOf("ELEMENT" to key))
+
+    override fun onSun() =
+        findNavController().navigate(R.id.action_global_nav_sun)
+
+    override fun onMoon() =
+        findNavController().navigate(R.id.action_global_nav_moon)
 
     protected fun onStar(key: String) =
         findNavController().navigate(R.id.action_global_nav_star, bundleOf("STAR" to key))
 
     protected fun onPlanet(key: String) =
         findNavController().navigate(R.id.action_global_nav_planet, bundleOf("PLANET" to key))
+
+    protected fun onSatellite(key: String) =
+        findNavController().navigate(R.id.action_global_nav_satellite, bundleOf("SATELLITE" to key))
 
     protected fun onConstellation(key: String) =
         findNavController().navigate(R.id.action_global_nav_constellation, bundleOf("CONSTELLATION" to key))

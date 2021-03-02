@@ -81,9 +81,9 @@ abstract class AbstractElementFragment : AbstractFragment() {
         }
 
     protected fun onSkyView() =
-        onSkyView(element.key)
+        onSkyView(element)
 
     protected fun onFinderView() =
-        onFinderView(element.key)
+        onFinderView(element)
 
 }

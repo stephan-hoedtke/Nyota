@@ -33,8 +33,8 @@ class StarListFragment : AbstractFragment() {
         bindingReference = FragmentStarListBinding.inflate(inflater, container, false)
 
         adapter = ElementsRecyclerViewAdapter()
-        adapter.onItemClick = { element -> openTarget(element) }
-        adapter.onItemLongClick = { element -> showNextStepDialogForElement(element.key) }
+        adapter.onItemClick = { element -> onElement(element) }
+        adapter.onItemLongClick = { element -> showNextStepDialogForElement(element) }
 
         binding.stars.layoutManager = LinearLayoutManager(requireContext())
         binding.stars.adapter = adapter
@@ -46,6 +46,7 @@ class StarListFragment : AbstractFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel.universeLD.observe(viewLifecycleOwner, { universe -> updateUniverse(universe) })
+        viewModel.selectedItemLD.observe(viewLifecycleOwner, { item -> adapter.selectItem(item) })
     }
 
     override fun onDestroyView() {
@@ -53,14 +54,16 @@ class StarListFragment : AbstractFragment() {
         bindingReference = null
     }
 
-    private fun openTarget(element: IElement) {
+    private fun onElement(element: IElement) {
         when (element) {
-            is Star -> openStar(element)
+            is Star -> onStar(element)
         }
     }
 
-    private fun openStar(star: Star) =
-        findNavController().navigate(StarListFragmentDirections.actionNavStarsToNavStar(star.key))
+    override fun onStar(star: Star) {
+        viewModel.select(star)
+        super.onStar(star)
+    }
 
     private fun updateUniverse(universe: Universe) {
         adapter.updateElementsUseNewList(universe.vip)
