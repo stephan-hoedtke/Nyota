@@ -1,15 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView
+<com.google.android.material.card.MaterialCardView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:card_view="http://schemas.android.com/apk/res-auto"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:layout_margin="@dimen/button_margin"
-     android:foreground="@drawable/card_view_border"
-    card_view:cardBackgroundColor="@color/colorBackground">
+    android:layout_margin="@dimen/button_margin">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <LinearLayout
         android:layout_width="@dimen/dialog_with"
         android:layout_height="wrap_content"
         android:orientation="vertical"
@@ -20,41 +17,51 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:layout_constraintTop_toTopOf="parent"
-            android:text="Alphabet" />
+            android:textAppearance="?attr/textAppearanceDark"
+            android:text="@string/default_text" />
 
-        <ImageView
-            android:id="@+id/imageOpen"
-            android:layout_width="@dimen/icon_size"
-            android:layout_height="@dimen/icon_size"
-            android:src="@drawable/star"
-            app:layout_constraintTop_toBottomOf="@+id/title"
-            app:layout_constraintStart_toStartOf="parent"
-            android:layout_marginTop="@dimen/text_margin"
-            android:contentDescription="@string/label_empty" />
-
-        <TextView
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/open"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toTopOf="@id/imageOpen"
-            app:layout_constraintBottom_toBottomOf="@id/imageOpen"
-            app:layout_constraintStart_toEndOf="@id/imageOpen"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginStart="@dimen/text_margin"
-            android:text="@string/label_open" />
+            android:layout_marginTop="@dimen/text_margin">
+
+            <ImageView
+                android:id="@+id/imageOpen"
+                android:layout_width="@dimen/icon_size"
+                android:layout_height="@dimen/icon_size"
+                android:src="@drawable/star"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                android:contentDescription="@string/label_empty" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toTopOf="@id/imageOpen"
+                app:layout_constraintBottom_toBottomOf="@id/imageOpen"
+                app:layout_constraintStart_toEndOf="@id/imageOpen"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginStart="@dimen/text_margin"
+                android:text="@string/label_open" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/skyView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/text_margin">
 
         <ImageView
             android:id="@+id/imageSkyView"
             android:layout_width="@dimen/icon_size"
             android:layout_height="@dimen/icon_size"
             android:src="@drawable/sky"
-            app:layout_constraintTop_toBottomOf="@+id/imageOpen"
+            app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            android:layout_marginTop="@dimen/text_margin"
             android:contentDescription="@string/label_empty" />
 
         <TextView
-            android:id="@+id/skyView"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             app:layout_constraintTop_toTopOf="@id/imageSkyView"
@@ -64,18 +71,23 @@
             android:layout_marginStart="@dimen/text_margin"
             android:text="@string/label_sky" />
 
+        </androidx.constraintlayout.widget.ConstraintLayout>
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/finder"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/text_margin">
+
         <ImageView
             android:id="@+id/imageFinderView"
             android:layout_width="@dimen/icon_size"
             android:layout_height="@dimen/icon_size"
             android:src="@drawable/finder"
-            app:layout_constraintTop_toBottomOf="@+id/imageSkyView"
+            app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            android:layout_marginTop="@dimen/text_margin"
             android:contentDescription="@string/label_empty" />
 
         <TextView
-            android:id="@+id/finder"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             app:layout_constraintTop_toTopOf="@id/imageFinderView"
@@ -85,7 +97,12 @@
             android:layout_marginStart="@dimen/text_margin"
             android:text="@string/label_finder" />
 
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
-</androidx.cardview.widget.CardView>
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/text_margin" />
+
+    </LinearLayout>
+</com.google.android.material.card.MaterialCardView>
 

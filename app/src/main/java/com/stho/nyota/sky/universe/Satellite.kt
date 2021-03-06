@@ -84,6 +84,12 @@ class Satellite private constructor(override var id: Long, override val name: St
             else -> com.stho.nyota.R.drawable.satellite128
         }
 
+    val azimuthAsString: String
+        get() = position?.azimuthAsString ?: ""
+
+    val altitudeAsString: String
+        get() = position?.altitudeAsString ?: ""
+
     fun updateFor(moment: Moment) {
         val julianDay: Double = moment.utc.julianDay
         this.updateFor(julianDay)

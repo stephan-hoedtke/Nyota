@@ -3,15 +3,13 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/colorBackground">
+    android:layout_height="match_parent">
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        android:background="@color/colorBackground"
         android:orientation="vertical"
         android:fillViewport="true">
 
@@ -40,9 +38,9 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/label_orientation_colon"
                     android:layout_marginTop="@dimen/button_margin"
-                    style="@style/MyTheme.AccentText" />
+                    android:textAppearance="?attr/textAppearanceAccent"
+                    android:text="@string/label_orientation_colon" />
 
                  <LinearLayout
                     android:layout_width="match_parent"
@@ -55,16 +53,14 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/label_pitch_colon"
-                        android:layout_marginEnd="@dimen/image_margin"
-                        style="@style/MyTheme.AccentText" />
+                        android:layout_marginEnd="@dimen/image_margin" />
 
                     <TextView
                         android:id="@+id/textViewPitch"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/default_pitch"
-                        android:layout_marginEnd="@dimen/image_margin"
-                        style="@style/MyTheme.AccentText" />
+                        android:layout_marginEnd="@dimen/image_margin" />
 
                 </LinearLayout>
 
@@ -79,16 +75,14 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/label_azimuth_colon"
-                        android:layout_marginEnd="@dimen/image_margin"
-                        style="@style/MyTheme.AccentText" />
+                        android:layout_marginEnd="@dimen/image_margin" />
 
                     <TextView
                         android:id="@+id/textViewAzimuth"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/default_direction"
-                        android:layout_marginEnd="@dimen/image_margin"
-                        style="@style/MyTheme.AccentText" />
+                        android:layout_marginEnd="@dimen/image_margin" />
 
                 </LinearLayout>
 
@@ -103,16 +97,14 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/label_roll_colon"
-                        android:layout_marginEnd="@dimen/image_margin"
-                        style="@style/MyTheme.AccentText" />
+                        android:layout_marginEnd="@dimen/image_margin" />
 
                     <TextView
                         android:id="@+id/textViewRoll"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/default_roll"
-                        android:layout_marginEnd="@dimen/image_margin"
-                        style="@style/MyTheme.AccentText" />
+                        android:layout_marginEnd="@dimen/image_margin" />
 
                 </LinearLayout>
 
@@ -127,25 +119,23 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/label_center_colon"
-                        android:layout_marginEnd="@dimen/image_margin"
-                        style="@style/MyTheme.AccentText" />
+                        android:layout_marginEnd="@dimen/image_margin" />
 
                     <TextView
                         android:id="@+id/textViewDirection"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/default_center"
-                        android:layout_marginEnd="@dimen/image_margin"
-                        style="@style/MyTheme.AccentText" />
+                        android:layout_marginEnd="@dimen/image_margin" />
 
                 </LinearLayout>
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:textAppearance="?attr/textAppearanceAccent"
                     android:text="@string/label_current_location_colon"
-                    android:layout_marginTop="@dimen/button_margin"
-                    style="@style/MyTheme.AccentText" />
+                    android:layout_marginTop="@dimen/button_margin" />
 
                 <TextView
                     android:id="@+id/textViewCurrentLocation"
@@ -153,15 +143,14 @@
                     android:layout_height="wrap_content"
                     android:text="@string/default_geo_location"
                     android:layout_marginTop="@dimen/text_margin"
-                    android:layout_marginHorizontal="@dimen/button_margin"
-                    style="@style/MyTheme.NormalText" />
+                    android:layout_marginHorizontal="@dimen/button_margin" />
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:textAppearance="?attr/textAppearanceAccent"
                     android:text="@string/label_current_time_colon"
-                    android:layout_marginTop="@dimen/button_margin"
-                    style="@style/MyTheme.AccentText" />
+                    android:layout_marginTop="@dimen/button_margin" />
 
                 <TextView
                     android:id="@+id/textViewCurrentTime"
@@ -169,15 +158,14 @@
                     android:layout_height="wrap_content"
                     android:text="@string/default_time"
                     android:layout_marginTop="@dimen/text_margin"
-                    android:layout_marginHorizontal="@dimen/button_margin"
-                    style="@style/MyTheme.NormalText" />
+                    android:layout_marginHorizontal="@dimen/button_margin" />
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:textAppearance="?attr/textAppearanceAccent"
                     android:text="@string/label_elements_colon"
-                    android:layout_marginTop="@dimen/button_margin"
-                    style="@style/MyTheme.AccentText" />
+                    android:layout_marginTop="@dimen/button_margin" />
 
                 <TextView
                     android:id="@+id/textViewConstellations"
@@ -185,8 +173,7 @@
                     android:layout_height="wrap_content"
                     android:text="@string/default_elements"
                     android:layout_marginTop="@dimen/text_margin"
-                    android:layout_marginHorizontal="@dimen/button_margin"
-                    style="@style/MyTheme.NormalText" />
+                    android:layout_marginHorizontal="@dimen/button_margin" />
 
                 <TextView
                     android:id="@+id/textViewStars"
@@ -194,8 +181,7 @@
                     android:layout_height="wrap_content"
                     android:text="@string/default_elements"
                     android:layout_marginTop="@dimen/text_margin"
-                    android:layout_marginHorizontal="@dimen/button_margin"
-                    style="@style/MyTheme.NormalText" />
+                    android:layout_marginHorizontal="@dimen/button_margin" />
 
                 <TextView
                     android:id="@+id/textViewSatellites"
@@ -203,15 +189,14 @@
                     android:layout_height="wrap_content"
                     android:text="@string/default_elements"
                     android:layout_marginTop="@dimen/text_margin"
-                    android:layout_marginHorizontal="@dimen/button_margin"
-                    style="@style/MyTheme.NormalText" />
+                    android:layout_marginHorizontal="@dimen/button_margin" />
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:textAppearance="?attr/textAppearanceAccent"
                     android:text="@string/label_statistics_colon"
-                    android:layout_marginTop="@dimen/button_margin"
-                    style="@style/MyTheme.AccentText" />
+                    android:layout_marginTop="@dimen/button_margin" />
                 
                 <TextView
                     android:id="@+id/textViewUpdateTime"
@@ -219,8 +204,7 @@
                     android:layout_height="wrap_content"
                     android:text="@string/default_elements"
                     android:layout_marginTop="@dimen/text_margin"
-                    android:layout_marginHorizontal="@dimen/button_margin"
-                    style="@style/MyTheme.NormalText" />
+                    android:layout_marginHorizontal="@dimen/button_margin" />
 
                 <Space
                     android:layout_width="match_parent"

@@ -30,11 +30,13 @@ class SatelliteListRecyclerViewAdapter : RecyclerView.Adapter<SatelliteListRecyc
         private val binding: FragmentSatelliteListEntryBinding = FragmentSatelliteListEntryBinding.bind(view)
 
         fun bind(satellite: Satellite) {
+            binding.satellite = satellite
             binding.image.setImageResource(satellite.imageId)
             binding.name.text = satellite.name
             binding.noradSatelliteNumber.text = satellite.noradSatelliteNumber.toString()
             binding.displayName.text = satellite.friendlyName
-            binding.position.text = "${satellite.position}"
+            binding.azimuth.text = satellite.azimuthAsString
+            binding.altitude.text = satellite.altitudeAsString
             binding.root.setOnClickListener { satellites.findSatelliteByIndex(adapterPosition)?.also { select(it) } }
         }
     }

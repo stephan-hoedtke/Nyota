@@ -4,7 +4,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorBackground"
     android:orientation="vertical"
     android:fillViewport="true">
 
@@ -30,8 +29,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             android:text="@string/default_copyright"
-            android:textStyle="bold"
-            android:textSize="@dimen/text_size_copyright" />
+            android:textAppearance="?attr/textAppearanceCopyright" />
 
         <LinearLayout
             android:id="@+id/details"
@@ -47,6 +45,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:layout_constraintTop_toBottomOf="@id/copyright"
+                android:textAppearance="@style/Nyota.TextAppearance.Dark"
                 android:text="@string/label_name_colon" />
 
             <EditText
@@ -57,11 +56,13 @@
                 android:inputType="text"
                 android:layout_marginHorizontal="@dimen/text_margin"
                 android:autofillHints="@string/label_empty"
+                android:textColor="@color/colorPrimaryDisabledText"
                 android:hint="@string/label_empty" />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:textAppearance="@style/Nyota.TextAppearance.Dark"
                 android:text="@string/label_latitude_colon" />
 
             <LinearLayout
@@ -93,6 +94,7 @@
                 android:id="@+id/labelLongitude"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:textAppearance="@style/Nyota.TextAppearance.Dark"
                 android:text="@string/label_longitude_colon" />
 
             <EditText
@@ -109,6 +111,7 @@
                 android:id="@+id/labelAltitude"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:textAppearance="@style/Nyota.TextAppearance.Dark"
                 android:text="@string/label_altitude_colon" />
 
             <LinearLayout
@@ -140,21 +143,23 @@
                 android:id="@+id/labelDistance"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:textAppearance="@style/Nyota.TextAppearance.Dark"
                 android:text="@string/label_distance_colon" />
 
             <TextView
                 android:id="@+id/textViewDistance"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/default_distance"
                 android:layout_marginTop="@dimen/element_margin"
                 android:layout_marginHorizontal="@dimen/text_margin"
-                style="@style/MyTheme.LargeText" />
+                android:textAppearance="?attr/textAppearanceLarge"
+                android:text="@string/default_distance" /> <!-- shall look as EditText looks like -->
 
             <TextView
                 android:id="@+id/labelTimeZone"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:textAppearance="@style/Nyota.TextAppearance.Dark"
                 android:text="@string/label_timezone_colon" />
 
             <LinearLayout
@@ -193,8 +198,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/label_fixed"
-                    android:enabled="false"
-                    android:checked="false"
+                    android:enabled="true"
+                    android:checked="true"
                     android:layout_marginEnd="@dimen/text_margin"/>
 
                 <RadioButton
@@ -204,6 +209,7 @@
                     android:text="@string/label_use_device_location"
                     android:enabled="false"
                     android:checked="false" />
+
             </RadioGroup>
 
             <CheckBox

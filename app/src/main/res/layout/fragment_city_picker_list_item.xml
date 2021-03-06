@@ -42,7 +42,6 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            android:textAppearance="?attr/textAppearanceListItem"
             android:textColor="@color/secondaryTextColor"
             android:text="@string/label_delete" />
 
@@ -69,8 +68,6 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             android:layout_marginHorizontal="@dimen/text_margin"
-            android:textAppearance="?attr/textAppearanceListItem"
-            android:textColor="@color/colorSecondary"
             android:text="@string/default_text" />
 
         <TextView
@@ -81,8 +78,6 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             android:layout_marginHorizontal="@dimen/text_margin"
-            android:textAppearance="?attr/textAppearanceListItem"
-            android:textColor="@color/colorSecondary"
             android:text="@string/default_distance" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

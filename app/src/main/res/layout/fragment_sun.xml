@@ -4,8 +4,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/colorBackground">
+    android:layout_height="match_parent">
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
@@ -26,8 +25,7 @@
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:orientation="horizontal"
-                app:layout_constraintGuide_begin="@dimen/image_size"
-                />
+                app:layout_constraintGuide_begin="@dimen/image_size" />
 
             <ImageView
                 android:id="@+id/image"
@@ -37,8 +35,7 @@
                 app:layout_constraintBottom_toBottomOf="@id/horizontal_guideline1"
                 android:layout_margin="@dimen/image_margin"
                 android:contentDescription="@string/label_empty"
-                android:src="@drawable/sun"
-                />
+                android:src="@drawable/sun" />
 
             <include android:id="@+id/time_visibility_overlay" layout="@layout/time_visibility_overlay"/>
 
@@ -48,18 +45,17 @@
                 android:layout_height="wrap_content"
                 app:layout_constraintTop_toBottomOf="@id/horizontal_guideline1"
                 android:layout_margin="@dimen/activity_horizontal_margin"
-                android:text="@string/default_sun"
+                android:textAppearance="?attr/textAppearanceTitle"
                 android:textAlignment="center"
-                android:textStyle="bold"
-                android:textSize="@dimen/text_size_title"
-                />
+                android:text="@string/default_sun" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/basics"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:layout_constraintTop_toBottomOf="@+id/title"
-                />
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                tools:listitem="@layout/property_list_entry"/>
 
             <ImageView
                 android:id="@+id/buttonSkyView"
@@ -69,8 +65,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/basics"
                 android:layout_margin="@dimen/button_margin"
-                android:contentDescription="@string/label_empty"
-                />
+                android:contentDescription="@string/label_empty" />
 
             <ImageView
                 android:id="@+id/buttonFinderView"
@@ -80,8 +75,7 @@
                 app:layout_constraintStart_toEndOf="@id/buttonSkyView"
                 app:layout_constraintTop_toBottomOf="@id/basics"
                 android:layout_margin="@dimen/button_margin"
-                android:contentDescription="@string/label_empty"
-                />
+                android:contentDescription="@string/label_empty" />
 
             <ImageView
                 android:id="@+id/buttonShowDetails"
@@ -91,8 +85,7 @@
                 app:layout_constraintStart_toEndOf="@id/buttonFinderView"
                 app:layout_constraintTop_toBottomOf="@id/basics"
                 android:layout_margin="@dimen/button_margin"
-                android:contentDescription="@string/label_empty"
-                />
+                android:contentDescription="@string/label_empty" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/details"
@@ -100,13 +93,13 @@
                 android:layout_height="wrap_content"
                 app:layout_constraintTop_toBottomOf="@+id/buttonFinderView"
                 android:layout_marginTop="@dimen/text_margin"
-                />
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                tools:listitem="@layout/property_list_entry" />
 
             <Space
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
-                app:layout_constraintTop_toBottomOf="@id/details"
-                />
+                app:layout_constraintTop_toBottomOf="@id/details" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>

@@ -1,64 +1,84 @@
 <resources>
-    <!-- Base application theme. -->
-    <style name="MyTheme" parent="Theme.AppCompat">
-        <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
+
+    <!-- see: https://material.io/components/navigation-drawer/android -->
+    <style name="Nyota.NavigationView" parent="Widget.Design.NavigationView">
     </style>
 
-    <style name="MyTheme.NoActionBar">
-        <item name="windowActionBar">false</item>
-        <item name="windowNoTitle">true</item>
+    <style name="Nyota.TextView" parent="Widget.MaterialComponents.TextView">
+        <item name="android:textAppearance">?attr/textAppearanceNormal</item>
     </style>
 
-    <style name="MyTheme.Overlay" parent="ThemeOverlay.AppCompat.Dark">
-        <item name="android:textColorPrimary">@color/colorPrimaryText</item>
+    <style name="Nyota.RadioButton" parent="Widget.AppCompat.CompoundButton.RadioButton">
+        <item name="android:textColor">@color/button_text_color</item>
+        <item name="android:buttonTint">@color/button_color</item>
+     </style>
+
+    <style name="Nyota.CheckBox" parent="Widget.AppCompat.CompoundButton.CheckBox">s
+        <item name="android:textColor">@color/button_text_color</item>
+        <item name="android:buttonTint">@color/button_color</item>
+    </style>
+
+    <style name="Nyota.EditText" parent="Widget.AppCompat.EditText">
+        <item name="android:textSize">@dimen/text_size_large</item>
         <item name="android:textColor">@color/colorPrimaryText</item>
     </style>
 
+    <style name="Nyota.SeekBar" parent="Widget.AppCompat.SeekBar">
+        <item name="android:textSize">@dimen/text_size_large</item>
+        <item name="android:textColor">@color/colorPrimaryText</item>
+    </style>
+
+    <style name="Nyota.Switch" parent="Widget.AppCompat.CompoundButton.Switch">
+        <item name="android:textSize">@dimen/text_size_large</item>
+        <item name="android:textColor">@color/colorPrimaryText</item>
+    </style>
+
+<!--
+    <style name="Nyota.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" >
+        <item name="android:textColorPrimary">@color/colorPrimaryText</item>
+    </style>
+-->
+
+<!--
+    <style name="Nyota.CardView" parent="@style/Widget.MaterialComponents.CardView">
+        <item name="cardBackgroundColor">@android:color/holo_green_light</item>
+    </style>
+-->
+
+    <!--
+      <style name="Theme.Nyota.EditText" parent="Widget.AppCompat.EditText">
+          <item name="editTextColor">@android:color/holo_red_light</item>
+          <item name="android:textColor">@color/colorSecondaryAccentText</item>
+          <item name="android:textAppearance">?android:attr/textAppearanceMediumInverse</item>
+          <item name="android:textCursorDrawable">@drawable/abc_text_cursor_material</item>
+      </style>
+  -->
+
+    <!--
     <style name="MyTheme.LargeText" parent="TextAppearance.AppCompat.Body1">
         <item name="android:textSize">18sp</item>
     </style>
 
-    <style name="MyTheme.NormalText" parent="TextAppearance.AppCompat.Body1">
-        <item name="android:textSize">16sp</item>
-        <item name="android:textColor">@color/colorPrimaryText</item>
-    </style>
-
-    <style name="MyTheme.AccentText" parent="TextAppearance.AppCompat.Body1">
-        <item name="android:textSize">16sp</item>
-        <item name="android:textColor">@color/colorAccent</item>
-    </style>
-
-    <style name="MyTheme.TinyText" parent="TextAppearance.AppCompat.Body1">
+     <style name="MyTheme.TinyText" parent="TextAppearance.AppCompat.Body1">
         <item name="android:textSize">14sp</item>
     </style>
 
     <style name="MyTheme.CheckBox" parent="Preference.CheckBoxPreference">
         <item name="android:textSize">16sp</item>
     </style>
-
-    <style name="MyTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" >
+-->
+    <!--
+    <style name="Theme.Nyota.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" >
         <item name="android:textColorPrimary">@color/colorPrimaryText</item>
     </style>
 
-    <style name="MyTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light">
+    <style name="Theme.Nyota.PopupOverlay" parent="ThemeOverlay.AppCompat.Light">
     </style>
 
-    <style name="MyTheme.Fragment">
-        <item name="android:background">@color/colorBackground</item>
-        <item name="android:textColor">@color/colorPrimaryText</item>
-        <item name="android:textSize">18sp</item>
-    </style>
+    -->
 
-    <!-- My styles: NormalText and NormalText.Large, see AppTheme.Fragment -->
-    <style name="NormalText" parent="TextAppearance.AppCompat">
-        <item name="android:textColor">@color/colorPrimaryText</item>
-    </style>
-
-    <style name="NormalText.Large">
-        <item name="android:textSize">25sp</item>
+    <style name="Nyota.TextInputLayout" parent="@style/Widget.Design.TextInputLayout">
+        <item name="android:textStyle">bold</item>
     </style>
 
 </resources>

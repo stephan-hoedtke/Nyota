@@ -3,15 +3,13 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/colorBackground">
+    android:layout_height="match_parent">
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        android:background="@color/colorBackground"
         android:orientation="vertical"
         android:fillViewport="true">
 
@@ -41,9 +39,9 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:textAppearance="?attr/textAppearanceAccent"
                     android:text="@string/label_time_colon"
-                    android:layout_marginTop="@dimen/button_margin"
-                    style="@style/MyTheme.AccentText" />
+                    android:layout_marginTop="@dimen/button_margin" />
 
                 <androidx.appcompat.widget.SwitchCompat
                     android:id="@+id/switchUpdateTimeAutomatically"
@@ -51,6 +49,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/text_margin"
                     android:layout_marginHorizontal="@dimen/button_margin"
+                    android:checked="true"
                     android:text="@string/label_update_time_automatically" />
 
                 <TextView
@@ -59,16 +58,15 @@
                     android:layout_height="wrap_content"
                     android:text="@string/default_date_time"
                     android:layout_marginTop="@dimen/button_margin"
-                    android:layout_marginHorizontal="@dimen/button_margin"
-                    style="@style/MyTheme.AccentText" />
+                    android:layout_marginHorizontal="@dimen/button_margin" />
 
                 <!-- LOCATION -->
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:textAppearance="?attr/textAppearanceAccent"
                     android:text="@string/label_current_location_colon"
-                    android:layout_marginTop="@dimen/button_margin"
-                    style="@style/MyTheme.AccentText" />
+                    android:layout_marginTop="@dimen/button_margin" />
 
                 <androidx.appcompat.widget.SwitchCompat
                     android:id="@+id/switchUpdateLocationAutomatically"
@@ -76,6 +74,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/text_margin"
                     android:layout_marginHorizontal="@dimen/button_margin"
+                    android:checked="false"
                     android:text="@string/label_update_location_automatically" />
 
                 <TextView
@@ -84,8 +83,7 @@
                     android:layout_height="wrap_content"
                     android:text="@string/default_geo_location"
                     android:layout_marginTop="@dimen/button_margin"
-                    android:layout_marginHorizontal="@dimen/button_margin"
-                    style="@style/MyTheme.AccentText" />
+                    android:layout_marginHorizontal="@dimen/button_margin" />
 
                 <TextView
                     android:id="@+id/currentCity"
@@ -93,16 +91,13 @@
                     android:layout_height="wrap_content"
                     android:text="@string/default_city"
                     android:layout_marginTop="@dimen/button_margin"
-                    android:layout_marginHorizontal="@dimen/button_margin"
-                    style="@style/MyTheme.AccentText" />
+                    android:layout_marginHorizontal="@dimen/button_margin" />
 
                 <!-- ORIENTATION -->
                  <TextView
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/label_orientation_colon"
-                    android:layout_marginTop="@dimen/button_margin"
-                    style="@style/MyTheme.AccentText" />
+                    android:layout_height="wrap_content" android:textAppearance="?attr/textAppearanceAccent" android:text="@string/label_orientation_colon"
+                    android:layout_marginTop="@dimen/button_margin" />
 
                 <androidx.appcompat.widget.SwitchCompat
                     android:id="@+id/switchUpdateOrientationAutomatically"
@@ -118,16 +113,15 @@
                     android:layout_height="wrap_content"
                     android:text="@string/default_orientation"
                     android:layout_marginTop="@dimen/button_margin"
-                    android:layout_marginHorizontal="@dimen/button_margin"
-                    style="@style/MyTheme.AccentText" />
+                    android:layout_marginHorizontal="@dimen/button_margin" />
 
                 <!-- DISPLAY ON/OFF -->
                 <TextView
                      android:layout_width="match_parent"
                      android:layout_height="wrap_content"
+                     android:textAppearance="?attr/textAppearanceAccent"
                      android:text="@string/label_display_colon"
-                     android:layout_marginTop="@dimen/button_margin"
-                     style="@style/MyTheme.AccentText" />
+                     android:layout_marginTop="@dimen/button_margin" />
 
                  <androidx.appcompat.widget.SwitchCompat
                     android:id="@+id/switchDisplaySymbols"
@@ -223,9 +217,9 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:textAppearance="?attr/textAppearanceAccent"
                     android:text="@string/label_projection"
-                    android:layout_marginTop="@dimen/text_margin"
-                    style="@style/MyTheme.AccentText" />
+                    android:layout_marginTop="@dimen/text_margin" />
 
                 <androidx.appcompat.widget.AppCompatSpinner
                     android:id="@+id/spinnerSphereProjection"
@@ -241,9 +235,9 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:textAppearance="?attr/textAppearanceAccent"
                     android:text="@string/label_live_mode"
-                    android:layout_marginTop="@dimen/text_margin"
-                    style="@style/MyTheme.AccentText" />
+                    android:layout_marginTop="@dimen/text_margin" />
 
                 <androidx.appcompat.widget.AppCompatSpinner
                     android:id="@+id/spinnerLiveMode"
@@ -259,9 +253,9 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:textAppearance="?attr/textAppearanceAccent"
                     android:text="@string/label_luminosity_colon"
-                    android:layout_marginTop="@dimen/text_margin"
-                    style="@style/MyTheme.AccentText" />
+                    android:layout_marginTop="@dimen/text_margin" />
 
                 <TextView
                     android:layout_width="match_parent"

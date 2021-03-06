@@ -63,9 +63,9 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:textAppearance="?attr/textAppearanceAccent"
                     android:text="@string/label_reference_time"
-                    android:layout_marginTop="@dimen/image_margin"
-                    style="@style/MyTheme.NormalText" />
+                    android:layout_marginTop="@dimen/image_margin" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -79,24 +79,21 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/default_date"
-                        android:layout_marginEnd="@dimen/image_margin"
-                        style="@style/MyTheme.AccentText" />
+                        android:layout_marginEnd="@dimen/image_margin" />
 
                     <TextView
                         android:id="@+id/editTime"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/default_time_seconds"
-                        android:layout_marginEnd="@dimen/image_margin"
-                        style="@style/MyTheme.AccentText" />
+                        android:layout_marginEnd="@dimen/image_margin" />
 
                     <TextView
                         android:id="@+id/editTimeZone"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/default_timezone"
-                        android:layout_marginEnd="@dimen/image_margin"
-                        style="@style/MyTheme.NormalText" />
+                        android:layout_marginEnd="@dimen/image_margin" />
 
                 </LinearLayout>
 
@@ -106,15 +103,14 @@
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="@dimen/text_margin"
                     android:checked="true"
-                    android:text="@string/label_update_time_automatically"
-                    style="@style/MyTheme.CheckBox"/>
+                    android:text="@string/label_update_time_automatically" />
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:textAppearance="?attr/textAppearanceAccent"
                     android:text="@string/label_current_location_and_time"
-                    android:layout_marginTop="@dimen/button_margin"
-                    style="@style/MyTheme.NormalText" />
+                    android:layout_marginTop="@dimen/button_margin" />
 
                 <TextView
                     android:id="@+id/currentGeoLocation"
@@ -122,8 +118,7 @@
                     android:layout_height="wrap_content"
                     android:text="@string/default_geo_location"
                     android:layout_marginTop="@dimen/text_margin"
-                    android:layout_marginHorizontal="@dimen/button_margin"
-                    style="@style/MyTheme.NormalText" />
+                    android:layout_marginHorizontal="@dimen/button_margin" />
 
                 <TextView
                     android:id="@+id/currentDateTime"
@@ -131,8 +126,7 @@
                     android:layout_height="wrap_content"
                     android:text="@string/default_date_time_timezone"
                     android:layout_marginTop="@dimen/text_margin"
-                    android:layout_marginHorizontal="@dimen/button_margin"
-                    style="@style/MyTheme.NormalText" />
+                    android:layout_marginHorizontal="@dimen/button_margin" />
 
                 <TextView
                     android:id="@+id/textViewDistance"
@@ -140,8 +134,7 @@
                     android:layout_height="wrap_content"
                     android:text="@string/default_distance"
                     android:layout_marginTop="@dimen/text_margin"
-                    android:layout_marginHorizontal="@dimen/button_margin"
-                    style="@style/MyTheme.NormalText" />
+                    android:layout_marginHorizontal="@dimen/button_margin" />
 
 
                 <Space

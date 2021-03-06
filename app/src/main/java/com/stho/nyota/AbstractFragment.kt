@@ -256,7 +256,7 @@ abstract class AbstractFragment : Fragment(), INavigable {
 
     companion object {
         private fun toTimeString(moment: Moment): String =
-            Formatter.toString(moment.localTime, Formatter.TimeFormat.TIME_SEC_TIMEZONE)
+            Formatter.toString(moment.localTime, Formatter.TimeFormat.TIME_SEC)
 
         private fun toDateString(moment: Moment): String =
             Formatter.toString(moment.localTime, Formatter.TimeFormat.DATE)

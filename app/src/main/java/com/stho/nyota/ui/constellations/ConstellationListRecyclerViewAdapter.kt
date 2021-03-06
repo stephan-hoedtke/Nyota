@@ -38,7 +38,9 @@ class ConstellationListRecyclerViewAdapter : RecyclerView.Adapter<ConstellationL
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         private val binding: FragmentConstellationListEntryBinding = FragmentConstellationListEntryBinding.bind(view)
 
+        // TODO: use data binding or not?
         fun bind(constellation: Constellation) {
+            binding.constellation = constellation
             binding.image.setImageResource(constellation.imageId)
             binding.name.text = constellation.name
             binding.azimuth.text = constellation.position?.azimuthAsString

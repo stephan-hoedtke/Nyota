@@ -22,8 +22,7 @@
         app:layout_constraintTop_toTopOf="parent"
         android:text="@string/default_zoom"
         android:textColor="@android:color/holo_green_dark"
-        android:textSize="13sp"
-        />
+        android:textSize="13sp" />
 
     <ImageView
         android:id="@+id/buttonZoomOut"

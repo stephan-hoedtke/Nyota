@@ -1,0 +1,51 @@
+<resources>
+
+    <!-- Final application theme. -->
+    <style name="Theme.Nyota.DayNight" parent="Theme.Nyota" />
+
+    <!-- Main application theme. -->
+    <style name="Theme.Nyota" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryVariant">@color/colorPrimaryDark</item>
+        <item name="colorSecondary">@color/colorSecondary</item>
+        <item name="colorSecondaryVariant">@color/colorSecondaryDark</item>
+        <item name="colorSurface">@color/colorBackgroundItemSelected</item>
+        <item name="colorError">@color/colorErrorText</item>
+        <item name="colorAccent">@color/colorControlNormal</item>
+        <item name="colorOnPrimary">@color/colorPrimaryText</item>
+        <item name="colorOnSecondary">@color/colorSecondaryText</item>
+        <item name="colorOnSurface">@color/colorPrimaryText</item>
+        <item name="colorControlNormal">@color/colorControlNormal</item>
+        <item name="colorControlActivated">@color/colorControlActivated</item>
+        <item name="colorControlHighlight">@color/colorControlHighlight</item>
+
+        <!-- color of text in the toolbar -->
+        <item name="android:textColorPrimary">@color/colorPrimaryText</item>s
+
+        <item name="android:windowBackground">@color/colorBackground</item>
+        <!--<item name="android:windowBackground">@color/colorDebug</item>-->
+
+        <item name="textAppearanceCopyright">@style/Nyota.TextAppearance.Copyright</item>
+        <item name="textAppearanceNormal">@style/Nyota.TextAppearance.Normal</item>
+        <item name="textAppearanceLarge">@style/Nyota.TextAppearance.Large</item>
+        <item name="textAppearanceTiny">@style/Nyota.TextAppearance.Tiny</item>
+        <item name="textAppearanceDisabled">@style/Nyota.TextAppearance.Disabled</item>
+        <item name="textAppearanceDark">@style/Nyota.TextAppearance.Dark</item>
+        <item name="textAppearanceAccent">@style/Nyota.TextAppearance.Accent</item>
+        <item name="textAppearanceTitle">@style/Nyota.TextAppearance.Title</item>
+        <item name="textAppearanceError">@style/Nyota.TextAppearance.Error</item>
+
+        <item name="navigationViewStyle">@style/Nyota.NavigationView</item>
+        <item name="android:textViewStyle">@style/Nyota.TextView</item>
+        <item name="radioButtonStyle">@style/Nyota.RadioButton</item>
+        <item name="checkboxStyle">@style/Nyota.CheckBox</item>
+        <item name="editTextStyle">@style/Nyota.EditText</item>
+        <item name="seekBarStyle">@style/Nyota.SeekBar</item>
+        <item name="switchStyle">@style/Nyota.Switch</item>
+    </style>
+
+
+</resources>
+

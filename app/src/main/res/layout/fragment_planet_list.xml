@@ -4,17 +4,16 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/colorBackground">
+    android:layout_height="match_parent">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/planets"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginVertical="16dp"
-        app:layoutManager="LinearLayoutManager"
         app:layout_constraintTop_toBottomOf="@id/time_overlay"
         app:layout_constraintBottom_toTopOf="@id/time_interval_footer"
+        app:layoutManager="LinearLayoutManager"
         tools:listitem="@layout/fragment_element_list_entry" />
 
     <include android:id="@+id/time_overlay" layout="@layout/time_overlay" />

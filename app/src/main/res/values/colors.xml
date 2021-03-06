@@ -7,16 +7,22 @@
     <color name="colorSecondaryDark">#cccab5</color>
     <color name="colorSecondaryLight">#ffffff</color>
     <color name="colorSecondaryAccentText">#449988</color>
-    <color name="colorAccent">#fffde7</color>
+    <color name="colorAccentText">#fffde7</color>
     <color name="colorBackground">#000000</color>
     <color name="colorBackgroundItemSelected">#031327</color>
     <color name="colorBackgroundItemPressed">#031747</color>
     <color name="colorPrimaryText">#fffde7</color>
+    <color name="colorTitleText">#1176f3</color>
     <color name="colorPrimaryDisabledText">#eeede7</color>
+    <color name="colorControlDisabled">#90a4ae</color>
+    <color name="colorControlNormal">#42a5f5</color>
+    <color name="colorControlActivated">#1176f3</color>
+    <color name="colorControlHighlight">#41C6f7</color>
     <color name="colorDarkText">#999999</color>
     <color name="colorSecondaryText">#00113c</color>
     <color name="colorErrorText">#FF6666</color>
     <color name="colorSignalBackground">#FF7777</color>
+    <color name="colorDebug">#ffab91</color>
     <!-- Original colors exported from Color Tool -->
     <color name="primaryColor">#073767</color>
     <color name="primaryLightColor">#426095</color>

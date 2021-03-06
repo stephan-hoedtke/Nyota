@@ -4,29 +4,25 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/colorBackground">
+    android:layout_height="match_parent">
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toTopOf="@id/time_interval_footer"
-        android:layout_marginBottom="@dimen/button_margin"
-        >
+        android:layout_marginBottom="@dimen/button_margin">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            tools:context="com.stho.nyota.ui.satellites.SatelliteFragment">
+            android:layout_height="wrap_content">
 
             <androidx.constraintlayout.widget.Guideline
                 android:id="@+id/horizontal_guideline1"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:orientation="horizontal"
-                app:layout_constraintGuide_begin="@dimen/home_image_size"
-                />
+                app:layout_constraintGuide_begin="@dimen/home_image_size" />
 
             <ImageView
                 android:id="@+id/image"
@@ -36,8 +32,7 @@
                 app:layout_constraintBottom_toBottomOf="@id/horizontal_guideline1"
                 android:src="@drawable/star"
                 android:contentDescription="@string/label_empty"
-                android:layout_margin="@dimen/image_margin"
-                />
+                android:layout_margin="@dimen/image_margin" />
 
             <include android:id="@+id/time_visibility_overlay" layout="@layout/time_visibility_overlay"/>
 
@@ -46,14 +41,16 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:layout_constraintTop_toBottomOf="@id/image"
-                />
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                tools:listitem="@layout/property_list_entry" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/details"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:layout_constraintTop_toBottomOf="@+id/basics"
-                />
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                tools:listitem="@layout/property_list_entry" />
 
             <ImageView
                 android:id="@+id/buttonSkyView"
@@ -63,8 +60,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/details"
                 android:layout_margin="@dimen/button_margin"
-                android:contentDescription="@string/label_empty"
-                />
+                android:contentDescription="@string/label_empty" />
 
             <ImageView
                 android:id="@+id/buttonFinderView"
@@ -74,8 +70,7 @@
                 app:layout_constraintStart_toEndOf="@id/buttonSkyView"
                 app:layout_constraintTop_toBottomOf="@id/details"
                 android:layout_margin="@dimen/button_margin"
-                android:contentDescription="@string/label_empty"
-                />
+                android:contentDescription="@string/label_empty" />
 
             <ImageView
                 android:id="@+id/buttonShowDetails"
@@ -85,14 +80,12 @@
                 app:layout_constraintStart_toEndOf="@id/buttonFinderView"
                 app:layout_constraintTop_toBottomOf="@id/details"
                 android:layout_margin="@dimen/button_margin"
-                android:contentDescription="@string/label_empty"
-                />
+                android:contentDescription="@string/label_empty" />
 
             <Space
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/bottom_space"
-                app:layout_constraintTop_toBottomOf="@id/details"
-                />
+                app:layout_constraintTop_toBottomOf="@id/buttonSkyView" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>

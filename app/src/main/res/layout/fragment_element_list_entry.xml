@@ -11,24 +11,21 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.17"
-        />
+        app:layout_constraintGuide_percent="0.17" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/vertical_guideline2"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.6"
-        />
+        app:layout_constraintGuide_percent="0.6" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/vertical_guideline3"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.83"
-        />
+        app:layout_constraintGuide_percent="0.83" />
 
     <ImageView
         android:id="@+id/image"
@@ -37,6 +34,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="@id/vertical_guideline1"
         app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="@dimen/list_entry_space"
         android:src="@drawable/planet_jupiter"
         android:scaleType="fitCenter"
         android:contentDescription="@string/label_empty" />
@@ -49,7 +47,7 @@
         app:layout_constraintTop_toTopOf="@id/image"
         app:layout_constraintBottom_toBottomOf="@id/image"
         app:layout_constraintStart_toEndOf="@id/vertical_guideline1"
-        android:textAppearance="?attr/textAppearanceListItem"
+        android:textAppearance="?attr/textAppearanceLarge"
         android:textStyle="bold"
         android:text="@string/default_planet_name"/>
 
@@ -61,7 +59,7 @@
         app:layout_constraintTop_toTopOf="@id/image"
         app:layout_constraintBottom_toBottomOf="@id/image"
         app:layout_constraintStart_toStartOf="@id/vertical_guideline2"
-        android:textAppearance="?attr/textAppearanceListItem"
+        android:textAppearance="?attr/textAppearanceNormal"
         android:text="@string/default_element_azimuth" />
 
     <TextView
@@ -72,7 +70,7 @@
         app:layout_constraintTop_toTopOf="@id/image"
         app:layout_constraintBottom_toBottomOf="@id/image"
         app:layout_constraintStart_toStartOf="@id/vertical_guideline3"
-        android:textAppearance="?attr/textAppearanceListItem"
+        android:textAppearance="?attr/textAppearanceNormal"
         android:text="@string/default_element_altitude" />
 
     <TextView
@@ -81,13 +79,12 @@
         android:layout_height="wrap_content"
         app:layout_constraintTop_toBottomOf="@id/name"
         app:layout_constraintStart_toStartOf="@+id/name"
-        android:textAppearance="?attr/textAppearanceListItem"
-        android:textColor="@color/colorDarkText"
+        android:textAppearance="?attr/textAppearanceDark"
         android:text="@string/default_hint" />
 
     <Space
         android:layout_width="match_parent"
         android:layout_height="@dimen/list_entry_space"
-        app:layout_constraintTop_toBottomOf="@id/image" />
+        app:layout_constraintTop_toBottomOf="@id/hints" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

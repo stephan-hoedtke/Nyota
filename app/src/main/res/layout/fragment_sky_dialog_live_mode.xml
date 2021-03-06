@@ -1,56 +1,69 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView
+<com.google.android.material.card.MaterialCardView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:card_view="http://schemas.android.com/apk/res-auto"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:layout_margin="@dimen/button_margin"
-     android:foreground="@drawable/card_view_border"
-    card_view:cardBackgroundColor="@color/colorBackground">
+    android:layout_margin="@dimen/button_margin">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <LinearLayout
         android:layout_width="@dimen/dialog_with"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:layout_margin="@dimen/card_view_margin">
 
-        <RadioGroup
-            android:id="@+id/radioGroup"
+        <TextView
+            android:id="@+id/title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toTopOf="parent">
+            app:layout_constraintTop_toTopOf="parent"
+            android:textAppearance="?attr/textAppearanceDark"
+            android:text="@string/title_live_mode" />
 
-            <RadioButton
-                android:id="@+id/radioButtonOff"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/text_margin">
+
+            <RadioGroup
+                android:id="@+id/radioGroup"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/label_live_mode_off" />
+                app:layout_constraintTop_toTopOf="parent">
 
-            <RadioButton
-                android:id="@+id/radioButtonHints"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/label_live_mode_hints" />
+                <RadioButton
+                    android:id="@+id/radioButtonOff"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/label_live_mode_off" />
 
-            <RadioButton
-                android:id="@+id/radioButtonMoveCenter"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/label_live_mode_move_center" />
+                <RadioButton
+                    android:id="@+id/radioButtonHints"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/label_live_mode_hints" />
 
-        </RadioGroup>
+                <RadioButton
+                    android:id="@+id/radioButtonMoveCenter"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/label_live_mode_move_center" />
 
-        <ImageView
-            android:id="@+id/buttonOK"
-            android:layout_width="@dimen/button_size"
-            android:layout_height="@dimen/button_size"
-            android:src="@drawable/ok"
-            android:contentDescription="@string/label_empty"
-            app:layout_constraintTop_toBottomOf="@id/radioGroup"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:layout_margin="@dimen/element_margin" />
+            </RadioGroup>
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
-</androidx.cardview.widget.CardView>
+            <ImageView
+                android:id="@+id/buttonOK"
+                android:layout_width="@dimen/button_size"
+                android:layout_height="@dimen/button_size"
+                android:src="@drawable/ok"
+                android:contentDescription="@string/label_empty"
+                app:layout_constraintTop_toBottomOf="@id/radioGroup"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_margin="@dimen/element_margin" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </LinearLayout>
+</com.google.android.material.card.MaterialCardView>
+
+
 

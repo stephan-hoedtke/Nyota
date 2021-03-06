@@ -48,32 +48,27 @@
         app:layout_constraintTop_toTopOf="@id/imageTime"
         app:layout_constraintBottom_toBottomOf="@id/imageTime"
         app:layout_constraintStart_toEndOf="@id/imageTime"
-        android:text="@string/default_time_seconds_timezone"
-        android:textAppearance="@style/MyTheme.AccentText"
-        android:layout_margin="@dimen/image_margin"
-        />
+        android:textAppearance="?attr/textAppearanceAccent"
+        android:text="@string/default_time_seconds"
+        android:layout_margin="@dimen/image_margin" />
 
     <TextView
         android:id="@+id/currentDate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toBottomOf="@id/currentTime"
-        app:layout_constraintStart_toEndOf="@id/imageTime"
-        android:text="@string/default_date"
-        android:textAppearance="@style/MyTheme.TinyText"
-        android:layout_margin="@dimen/image_margin"
-        />
+        app:layout_constraintStart_toStartOf="@id/currentTime"
+        android:textAppearance="?attr/textAppearanceDark"
+        android:text="@string/default_date" />
 
     <TextView
         android:id="@+id/currentCity"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toBottomOf="@id/currentDate"
-        app:layout_constraintStart_toEndOf="@id/imageTime"
-        android:text="@string/default_city"
-        android:textAppearance="@style/MyTheme.TinyText"
-        android:layout_margin="@dimen/image_margin"
-        />
+        app:layout_constraintStart_toStartOf="@id/currentTime"
+        android:textAppearance="?attr/textAppearanceTiny"
+        android:text="@string/default_city" />
 
     <ImageView
         android:id="@+id/currentVisibility"

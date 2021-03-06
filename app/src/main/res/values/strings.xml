@@ -186,7 +186,12 @@
     <string name="title_choose_interval">Interval</string>
     <string name="title_choose_city">Reference location</string>
     <string name="title_choose_time">Reference date and time</string>
+    <string name="title_display">Configure Display</string>
+    <string name="title_filter">Configure Filter</string>
+    <string name="title_live_mode">Configure Live Mode</string>
+    <string name="title_luminosity">Configure Star Visibility</string>
     <string name="title_permission_request">Permission Request</string>
+    <string name="title_projection">Configure Projection</string>
 
     <!-- Hints -->
     <string name="hint_choose_interval">Select an interval</string>

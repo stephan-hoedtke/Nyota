@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_height="match_parent"
     android:layout_width="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="@color/colorBackground"
     android:screenOrientation="portrait"
     android:keepScreenOn="true">
 
@@ -12,16 +12,14 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.40"
-        />
+        app:layout_constraintGuide_percent="0.40" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/horizontal_guideline2"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.75"
-        />
+        app:layout_constraintGuide_percent="0.75" />
 
 
     <com.stho.software.nyota.views.HorizonView
@@ -34,8 +32,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_margin="@dimen/text_margin"
         android:contentDescription="@string/label_empty"
-        android:background="@android:color/transparent"
-        />
+        android:background="@android:color/transparent" />
 
     <ImageView
         android:id="@+id/iconHorizontal"
@@ -67,7 +64,6 @@
         android:layout_marginStart="@dimen/element_margin"
         android:text="@string/default_roll" />
 
-
     <TextView
         android:id="@+id/targetAltitude"
         android:layout_width="wrap_content"
@@ -77,7 +73,6 @@
         app:layout_constraintBottom_toBottomOf="@id/iconHorizontal"
         android:layout_marginEnd="@dimen/element_margin"
         android:text="@string/default_orientation" />
-
 
     <FrameLayout
         android:layout_width="0dp"
