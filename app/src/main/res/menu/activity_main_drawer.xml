@@ -11,6 +11,10 @@
             android:icon="@drawable/menu_home"
             android:title="@string/menu_home" />
         <item
+            android:id="@+id/nav_constellations"
+            android:icon="@drawable/menu_constellations"
+            android:title="@string/menu_constellations" />
+        <item
             android:id="@+id/nav_satellites"
             android:icon="@drawable/menu_satellites"
             android:title="@string/menu_satellites" />
@@ -19,13 +23,13 @@
             android:icon="@drawable/menu_planets"
             android:title="@string/menu_planets" />
         <item
-            android:id="@+id/nav_constellations"
-            android:icon="@drawable/menu_constellations"
-            android:title="@string/menu_constellations" />
-        <item
             android:id="@+id/nav_stars"
             android:icon="@drawable/menu_stars"
             android:title="@string/menu_stars" />
+        <item
+            android:id="@+id/nav_sky"
+            android:icon="@drawable/menu_sky"
+            android:title="@string/menu_sky" />
     </group>
     <group
         android:id="@+id/menu_two"

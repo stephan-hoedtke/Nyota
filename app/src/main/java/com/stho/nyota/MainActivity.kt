@@ -80,7 +80,8 @@ class MainActivity : AppCompatActivity(), ActivityCompat.OnRequestPermissionsRes
                 R.id.nav_satellites,
                 R.id.nav_planets,
                 R.id.nav_constellations,
-                R.id.nav_stars
+                R.id.nav_stars,
+                R.id.nav_sky,
             )
             , drawerLayout)
 

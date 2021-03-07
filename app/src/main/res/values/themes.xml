@@ -31,6 +31,7 @@
         <item name="textAppearanceNormal">@style/Nyota.TextAppearance.Normal</item>
         <item name="textAppearanceLarge">@style/Nyota.TextAppearance.Large</item>
         <item name="textAppearanceTiny">@style/Nyota.TextAppearance.Tiny</item>
+        <item name="textAppearanceTinyDark">@style/Nyota.TextAppearance.TinyDark</item>
         <item name="textAppearanceDisabled">@style/Nyota.TextAppearance.Disabled</item>
         <item name="textAppearanceDark">@style/Nyota.TextAppearance.Dark</item>
         <item name="textAppearanceAccent">@style/Nyota.TextAppearance.Accent</item>

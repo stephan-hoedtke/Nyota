@@ -1,7 +1,10 @@
 <resources>
 
-    <!-- see: https://material.io/components/navigation-drawer/android -->
-    <style name="Nyota.NavigationView" parent="Widget.Design.NavigationView">
+    <!-- see: https://material.io/components/navigation-drawer/android#theming -->
+    <style name="Nyota.NavigationView" parent="Widget.MaterialComponents.NavigationView">
+        <item name="itemIconTint">@color/navigation_item_color</item>
+        <item name="itemTextColor">@color/navigation_item_color</item>
+        <item name="itemShapeFillColor">@color/navigation_item_background_color</item>
     </style>
 
     <style name="Nyota.TextView" parent="Widget.MaterialComponents.TextView">

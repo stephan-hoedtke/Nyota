@@ -17,7 +17,9 @@
         app:layout_constraintEnd_toEndOf="parent"
         android:text="@string/default_interval"
         android:textColor="@color/text_button_color"
-        />
+        android:background="?android:attr/selectableItemBackgroundBorderless"
+        android:clickable="true"
+        android:focusable="true" />
 
     <ImageView
         android:id="@+id/buttonPrevious"
@@ -26,6 +28,9 @@
         android:src="@drawable/left_left"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
+        android:background="?android:attr/selectableItemBackgroundBorderless"
+        android:clickable="true"
+        android:focusable="true"
         android:contentDescription="@string/label_empty" />
 
     <ImageView
@@ -35,6 +40,9 @@
         android:src="@drawable/right_right"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        android:background="?android:attr/selectableItemBackgroundBorderless"
+        android:clickable="true"
+        android:focusable="true"
         android:contentDescription="@string/label_empty" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

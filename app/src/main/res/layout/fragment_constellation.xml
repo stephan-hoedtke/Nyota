@@ -87,31 +87,19 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <TextView
-                android:id="@+id/title"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="@dimen/activity_horizontal_margin"
-                app:layout_constraintTop_toTopOf="parent"
-                android:textAppearance="?attr/textAppearanceTitle"
-                android:textAlignment="center"
-                android:text="@string/default_sun" />
-
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/basics"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:layout_constraintTop_toBottomOf="@id/title"
-                tools:listitem="@layout/property_list_entry"
-                />
+                app:layout_constraintTop_toTopOf="parent"
+                tools:listitem="@layout/property_list_entry" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/details"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:layout_constraintTop_toBottomOf="@+id/basics"
-                tools:listitem="@layout/property_list_entry"
-                />
+                tools:listitem="@layout/property_list_entry" />
 
             <ImageView
                 android:id="@+id/buttonSkyView"
@@ -121,8 +109,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/details"
                 android:layout_margin="16dp"
-                android:contentDescription="@string/label_empty"
-                />
+                android:contentDescription="@string/label_empty" />
 
             <ImageView
                 android:id="@+id/buttonFinderView"
@@ -132,8 +119,7 @@
                 app:layout_constraintStart_toEndOf="@id/buttonSkyView"
                 app:layout_constraintTop_toBottomOf="@id/details"
                 android:layout_margin="16dp"
-                android:contentDescription="@string/label_empty"
-                />
+                android:contentDescription="@string/label_empty" />
 
             <ImageView
                 android:id="@+id/buttonShowDetails"
@@ -143,14 +129,12 @@
                 app:layout_constraintStart_toEndOf="@id/buttonFinderView"
                 app:layout_constraintTop_toBottomOf="@id/details"
                 android:layout_margin="16dp"
-                android:contentDescription="@string/label_empty"
-                />
+                android:contentDescription="@string/label_empty" />
 
             <Space
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
-                app:layout_constraintTop_toBottomOf="@id/details"
-                />
+                app:layout_constraintTop_toBottomOf="@id/details" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>

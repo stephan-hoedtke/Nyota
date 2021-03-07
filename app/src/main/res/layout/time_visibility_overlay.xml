@@ -15,7 +15,9 @@
         android:src="@drawable/time_back"
         android:contentDescription="@string/label_empty"
         android:layout_margin="@dimen/image_margin"
-        />
+        android:background="?android:attr/selectableItemBackgroundBorderless"
+        android:clickable="true"
+        android:focusable="true" />
 
     <ImageView
         android:id="@+id/imageTimeHours"
@@ -48,8 +50,11 @@
         app:layout_constraintTop_toTopOf="@id/imageTime"
         app:layout_constraintBottom_toBottomOf="@id/imageTime"
         app:layout_constraintStart_toEndOf="@id/imageTime"
-        android:textAppearance="?attr/textAppearanceAccent"
+        android:textAppearance="?attr/textAppearanceNormal"
         android:text="@string/default_time_seconds"
+        android:background="?android:attr/selectableItemBackgroundBorderless"
+        android:clickable="true"
+        android:focusable="true"
         android:layout_margin="@dimen/image_margin" />
 
     <TextView
@@ -58,7 +63,7 @@
         android:layout_height="wrap_content"
         app:layout_constraintTop_toBottomOf="@id/currentTime"
         app:layout_constraintStart_toStartOf="@id/currentTime"
-        android:textAppearance="?attr/textAppearanceDark"
+        android:textAppearance="?attr/textAppearanceTinyDark"
         android:text="@string/default_date" />
 
     <TextView
