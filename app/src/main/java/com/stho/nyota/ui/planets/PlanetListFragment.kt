@@ -46,6 +46,7 @@ class PlanetListFragment : AbstractFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel.universeLD.observe(viewLifecycleOwner, { universe -> updateUniverse(universe) })
+        viewModel.selectedItemLD.observe(viewLifecycleOwner, { item -> adapter.selectItem(item) })
     }
 
     override fun onDestroyView() {
@@ -65,22 +66,24 @@ class PlanetListFragment : AbstractFragment() {
 
     private fun openElement(element: IElement) {
         when (element) {
-            is AbstractPlanet -> openPlanet(element)
-            is Moon -> openMoon()
-            is Sun -> openSun()
+            is AbstractPlanet -> onPlanet(element)
+            is Moon -> onMoon()
+            is Sun -> onSun()
         }
     }
 
-    private fun openPlanet(planet: AbstractPlanet) {
-        val action = PlanetListFragmentDirections.actionNavPlanetsToNavPlanet(planet.name)
-        findNavController().navigate(action)
+    override fun onPlanet(planet: AbstractPlanet) {
+        viewModel.select(planet)
+        super.onPlanet(planet)
     }
 
-    private fun openMoon() {
-        findNavController().navigate(R.id.action_global_nav_moon)
+    override fun onMoon() {
+        viewModel.select(viewModel.moon)
+        super.onMoon()
     }
 
-    private fun openSun() {
-        findNavController().navigate(R.id.action_global_nav_sun)
+    override fun onSun() {
+        viewModel.select(viewModel.sun)
+        super.onSun()
     }
 }

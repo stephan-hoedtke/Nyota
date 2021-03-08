@@ -65,7 +65,6 @@ class PlanetFragment : AbstractElementFragment() {
         bindTime(binding.timeVisibilityOverlay, moment, planet.visibility)
         binding.image.setImageResource(planet.largeImageId)
         binding.image.setPhase(planet)
-        binding.title.text = planet.name
         updateActionBar(planet.name)
     }
 
