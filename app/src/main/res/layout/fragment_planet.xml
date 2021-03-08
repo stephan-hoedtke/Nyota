@@ -37,22 +37,12 @@
 
             <include android:id="@+id/time_visibility_overlay" layout="@layout/time_visibility_overlay"/>
 
-            <TextView
-                android:id="@+id/title"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:layout_constraintTop_toBottomOf="@id/image"
-                android:layout_margin="@dimen/activity_horizontal_margin"
-                android:textAppearance="?attr/textAppearanceTitle"
-                android:text="@string/default_planet_name"
-                android:textAlignment="center" />
-
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/basics"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:layout_constraintTop_toBottomOf="@+id/title"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                app:layout_constraintTop_toBottomOf="@+id/horizontal_guideline1"
+                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 tools:listitem="@layout/property_list_entry" />
 
             <androidx.recyclerview.widget.RecyclerView

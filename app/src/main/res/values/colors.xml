@@ -12,7 +12,7 @@
     <color name="colorBackgroundItemSelected">#031327</color>
     <color name="colorBackgroundItemPressed">#031747</color>
     <color name="colorPrimaryText">#fffde7</color>
-    <color name="colorTitleText">#1176f3</color>
+    <color name="colorTitleText">#999999</color>
     <color name="colorPrimaryDisabledText">#eeede7</color>
     <color name="colorControlDisabled">#90a4ae</color>
     <color name="colorControlNormal">#42a5f5</color>

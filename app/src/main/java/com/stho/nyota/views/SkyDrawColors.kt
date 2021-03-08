@@ -54,7 +54,7 @@ class SkyDrawColors: ISkyDrawColors {
     private val tippedConstellationColors: IConstellationColors = ConstellationColors(forName =  txt(green, 210), forLine = lnl(green, 210))
 
     override val forSky: Paint = txt(blue, alpha = 30)
-    override val forEcliptic: Paint = lnl(yellow, 180)
+    override val forEcliptic: Paint = lnl(gray, 180)
     override val hintColors: IHintColors = HintColors(forArrow = txt(fire, alpha = 255), forName = txt(fire, alpha = 130), forLine = lnl(green, alpha = 130))
     override val visibleGridColor: Paint = txt(green, 110)
     override val invisibleGridColor: Paint = txt(blue, 140)

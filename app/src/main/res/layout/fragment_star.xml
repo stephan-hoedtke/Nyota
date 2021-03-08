@@ -40,7 +40,7 @@
                 android:id="@+id/basics"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:layout_constraintTop_toBottomOf="@id/image"
+                app:layout_constraintTop_toBottomOf="@id/horizontal_guideline1"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 tools:listitem="@layout/property_list_entry" />
 

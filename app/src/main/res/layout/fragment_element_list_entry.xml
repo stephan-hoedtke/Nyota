@@ -47,7 +47,7 @@
         app:layout_constraintTop_toTopOf="@id/image"
         app:layout_constraintBottom_toBottomOf="@id/image"
         app:layout_constraintStart_toEndOf="@id/vertical_guideline1"
-        android:textAppearance="?attr/textAppearanceLarge"
+        android:textAppearance="?attr/textAppearanceNormal"
         android:textStyle="bold"
         android:text="@string/default_planet_name"/>
 
