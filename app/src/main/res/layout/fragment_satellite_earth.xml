@@ -33,6 +33,9 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toStartOf="@id/buttonHome"
+        android:background="?android:attr/selectableItemBackgroundBorderless"
+        android:clickable="true"
+        android:focusable="true"
         android:contentDescription="@string/label_empty" />
 
     <ImageView
@@ -44,6 +47,9 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@id/buttonZoomOut"
         app:layout_constraintEnd_toStartOf="@id/buttonTarget"
+        android:background="?android:attr/selectableItemBackgroundBorderless"
+        android:clickable="true"
+        android:focusable="true"
         android:contentDescription="@string/label_empty" />
 
     <ImageView
@@ -55,6 +61,9 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@id/buttonHome"
         app:layout_constraintEnd_toStartOf="@id/buttonZoomIn"
+        android:background="?android:attr/selectableItemBackgroundBorderless"
+        android:clickable="true"
+        android:focusable="true"
         android:contentDescription="@string/label_empty" />
 
     <ImageView
@@ -66,6 +75,9 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@id/buttonTarget"
         app:layout_constraintEnd_toEndOf="parent"
+        android:background="?android:attr/selectableItemBackgroundBorderless"
+        android:clickable="true"
+        android:focusable="true"
         android:contentDescription="@string/label_empty" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

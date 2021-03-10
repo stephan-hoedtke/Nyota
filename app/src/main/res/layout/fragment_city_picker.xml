@@ -15,7 +15,7 @@
         app:layoutManager="LinearLayoutManager"
         tools:listitem="@layout/fragment_city_picker_list_item" />
 
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/buttonDone"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -31,6 +31,9 @@
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_margin="@dimen/button_margin"
         android:src="@drawable/add"
+        android:background="?android:attr/selectableItemBackgroundBorderless"
+        android:clickable="true"
+        android:focusable="true"
         android:contentDescription="@string/label_empty" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

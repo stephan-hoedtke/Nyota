@@ -163,7 +163,7 @@ class UniverseInitializer(universe: Universe) : AbstractUniverseInitializer(univ
         asVIP(setFriendlyNameTo(148478, Antares))
         asVIP(setFriendlyNameTo(124897, Arcturus))
         asVIP(setFriendlyNameTo(111123, "Becrux"))
-        asVIP(setFriendlyNameTo(39801,Betelgeuse).setColor(Star.Color.Red))
+        asVIP(setFriendlyNameTo(39801,Betelgeuse))
         asVIP(setFriendlyNameTo(60179, Castor)) // Gemini
         asVIP(setFriendlyNameTo(45348, Canopus))
         asVIP(setFriendlyNameTo(34029, Capella))
@@ -176,7 +176,7 @@ class UniverseInitializer(universe: Universe) : AbstractUniverseInitializer(univ
         asVIP(setFriendlyNameTo(62509, "Pollux"))
         asVIP(setFriendlyNameTo(61421, Procyon))
         asVIP(setFriendlyNameTo(87901, Regulus))
-        asVIP(setFriendlyNameTo(34085, Rigel).setColor(Star.Color.BlueWhite))
+        asVIP(setFriendlyNameTo(34085, Rigel))
         asVIP(setFriendlyNameTo(48915, Sirius))
         asVIP(setFriendlyNameTo(158926, "Shaula"))
         asVIP(setFriendlyNameTo(116658, Spica))

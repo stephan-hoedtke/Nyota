@@ -25,7 +25,7 @@
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         tools:listitem="@layout/fragment_interval_picker_list_item" />
 
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/buttonDone"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

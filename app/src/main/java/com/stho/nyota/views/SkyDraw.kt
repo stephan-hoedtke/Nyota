@@ -49,10 +49,9 @@ class SkyDraw() {
     fun drawSun(sun: IElement, bitmap: Bitmap) =
         getPosition(sun)?.let {
             if (isOnScreen(it)) {
-                val clr: IStarColors = colors.defaultStarColors
                 drawImageAt(bitmap, it)
                 if (options.displayPlanetNames) {
-                    drawNameAt(sun.name, clr.forName, it)
+                    drawNameAt(sun.name, colors.forName, it)
                 }
             }
         }
@@ -60,10 +59,9 @@ class SkyDraw() {
     fun drawMoon(moon: IElement, bitmap: Bitmap) =
         getPosition(moon)?.let {
             if (isOnScreen(it)) {
-                val clr: IStarColors = colors.defaultStarColors
                 drawImageAt(bitmap, it)
                 if (options.displayPlanetNames) {
-                    drawNameAt(moon.name, clr.forName, it)
+                    drawNameAt(moon.name, colors.forName, it)
                 }
             }
         }
@@ -71,10 +69,9 @@ class SkyDraw() {
     fun drawPlanet(planet: IElement, bitmap: Bitmap) =
         getPosition(planet)?.let {
             if (isOnScreen(it)) {
-                val clr: IStarColors = colors.defaultStarColors
                 drawImageAt(bitmap, it)
                 if (options.displayPlanetNames) {
-                    drawNameAt(planet.name, clr.forName, it)
+                    drawNameAt(planet.name, colors.forName, it)
                 }
             }
         }
@@ -82,17 +79,15 @@ class SkyDraw() {
     fun drawTarget(target: com.stho.nyota.sky.universe.Target, bitmap: Bitmap) =
         getPosition(target)?.let {
             if (isOnScreen(it)) {
-                val clr: IStarColors = colors.defaultStarColors
                 drawImageAt(bitmap, it)
-                drawNameAt(target.name, clr.forName, it)
+                drawNameAt(target.name, colors.forName, it)
             }
         }
 
     fun drawNameOf(element: IElement) =
         getPosition(element)?.let {
             if (isOnScreen(it)) {
-                val clr: IStarColors = colors.defaultStarColors
-                drawNameAt(element.name, clr.forName, it)
+                drawNameAt(element.name, colors.forName, it)
             }
         }
 
@@ -101,7 +96,7 @@ class SkyDraw() {
             if (isOnScreen(it)) {
                 val clr: IStarColors = colors.getStarColors(referenceType, options.style)
 
-                drawCircleAt(5f, clr.forStar, 255, it)
+                drawCircleAt(5f, clr.forStar(StarColor.White), 255, it)
 
                 when {
                     options.displayPlanetNames -> drawNameAt(galaxy.name, colors.forGalaxy, it)
@@ -113,9 +108,8 @@ class SkyDraw() {
         getPosition(star)?.let {
             if (isOnScreen(it) && star.isBrighterThan(options.magnitude)) {
                 val luminosity = getLuminosity(star)
-                val clr: IStarColors = colors.getStarColors(referenceType, options.style)
-
-                drawCircleAt(luminosity.radius, clr.forStar, luminosity.alpha, it)
+                val clr: IStarColors = colors.getStarColors(referenceType = referenceType, style = options.style)
+                drawCircleAt(luminosity.radius, clr.forStar(starColor = star.color), luminosity.alpha, it)
 
                 when {
                     canDrawStarName(star) -> drawNameAt(star.friendlyName, clr.forName, it)
@@ -180,16 +174,16 @@ class SkyDraw() {
         }
 
     fun drawName(position: Topocentric, name: String) =
-        drawName(position, name, colors.defaultStarColors.forName)
+        drawName(position, name, colors.forName)
 
     fun drawElement(position: Topocentric, name: String, luminosity: Luminosity) =
         calculatePosition(position)?.let {
             if (isOnScreen(it)) {
-                val clr = colors.defaultStarColors
+                val clr = colors.getStarColors(referenceType = ReferenceType.Default, style = ViewStyle.Plain)
                 val fm = clr.forName.fontMetrics
                 val h = fm.descent - fm.ascent;
                 drawNameAt(name, clr.forName, SkyPointF(it.x + h, it.y + h / 2))
-                drawCircleAt(luminosity.radius, clr.forStar, luminosity.alpha, it)
+                drawCircleAt(luminosity.radius, clr.forStar(starColor = StarColor.White), luminosity.alpha, it)
             }
         }
 

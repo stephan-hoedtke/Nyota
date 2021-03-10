@@ -356,9 +356,12 @@
                     android:layout_width="@dimen/icon_size"
                     android:layout_height="@dimen/icon_size"
                     android:src="@drawable/button_reset"
-                    android:contentDescription="@string/label_empty"
                     android:layout_marginTop="@dimen/properties_margin"
-                    android:layout_marginHorizontal="@dimen/button_margin" />
+                    android:layout_marginHorizontal="@dimen/button_margin"
+                    android:background="?android:attr/selectableItemBackgroundBorderless"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:contentDescription="@string/label_empty" />
 
                 <Space
                     android:layout_width="match_parent"

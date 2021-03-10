@@ -150,11 +150,11 @@
                     android:layout_height="@dimen/button_margin"
                     app:layout_constraintTop_toBottomOf="@id/details" />
 
-                <Button
+                <com.google.android.material.button.MaterialButton
                     android:id="@+id/buttonDone"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/text_margin"
+                    android:layout_marginVertical="@dimen/text_margin"
                     android:text="@string/label_done" />
 
                 <Space

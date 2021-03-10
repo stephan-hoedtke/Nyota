@@ -17,14 +17,15 @@ internal class StarsContract(private val db: SQLiteDatabase) : BaseContract() {
             val declination = getDouble(cursor, 6)
             val magnitude = getDouble(cursor, 7, 100.0)
             val distance = getDouble(cursor, 8)
-            val constellationId = getLong(cursor, 9)
-            stars.createWithId(id, hd, name, friendlyName, symbol, rightAscension, declination, magnitude, distance, constellationId)
+            val color = getString(cursor, 9)
+            val constellationId = getLong(cursor, 10)
+            stars.createWithId(id, hd, name, friendlyName, symbol, rightAscension, declination, magnitude, distance, StarColor.parseString(color), constellationId)
         }
         cursor.close()
     }
 
     companion object {
-        private const val SQL_QUERY_ALL = "SELECT id, hd, name, friendlyName, symbol, rightAscension, declination, magnitude, distance, constellationId FROM stars ORDER BY id ASC"
+        private const val SQL_QUERY_ALL = "SELECT id, hd, name, friendlyName, symbol, rightAscension, declination, magnitude, distance, color, constellationId FROM stars ORDER BY id ASC"
     }
 
 }

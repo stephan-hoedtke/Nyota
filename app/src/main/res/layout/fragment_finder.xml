@@ -155,7 +155,7 @@
 
     <include android:id="@+id/time_visibility_overlay" layout="@layout/time_visibility_overlay" />
 
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/buttonRefresh"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

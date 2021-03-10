@@ -23,6 +23,13 @@
     <color name="colorErrorText">#FF6666</color>
     <color name="colorSignalBackground">#FF7777</color>
     <color name="colorDebug">#ffab91</color>
+    <color name="starColorBlue">#92B5FF</color>
+    <color name="starColorDeepBlueWhite">#A2C0FF</color>
+    <color name="starColorBlueWhite">#D5E0FF</color>
+    <color name="starColorWhite">#F9F5FF</color>
+    <color name="starColorYellowishWhite">#FFEDE3</color>
+    <color name="starColorPaleYellowOrange">#FFDAB5</color>
+    <color name="starColorLightOrangeRed">#FFB56C</color>
     <!-- Original colors exported from Color Tool -->
     <color name="primaryColor">#073767</color>
     <color name="primaryLightColor">#426095</color>

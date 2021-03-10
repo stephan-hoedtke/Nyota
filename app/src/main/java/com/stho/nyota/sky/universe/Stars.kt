@@ -43,8 +43,8 @@ class Stars(private val constellations: Constellations) {
             false -> null
         }
 
-    fun createWithId(id: Long, hd: Int, name: String, friendlyName: String, symbol: String, rightAscension: Double, declination: Double, magnitude: Double, distance: Double, constellationId: Long) {
-        Star.createWithId(id, hd, name, friendlyName, Symbol.fromString(symbol), rightAscension, declination, magnitude, distance).also { star ->
+    fun createWithId(id: Long, hd: Int, name: String, friendlyName: String, symbol: String, rightAscension: Double, declination: Double, magnitude: Double, distance: Double, color: StarColor, constellationId: Long) {
+        Star.createWithId(id, hd, name, friendlyName, Symbol.fromString(symbol), rightAscension, declination, magnitude, distance, color).also { star ->
             add(star)
             constellations.findConstellationById(constellationId)?.also { constellation ->
                 constellation.register(star)

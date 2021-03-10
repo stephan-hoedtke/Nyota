@@ -167,7 +167,7 @@ class SatelliteEarthFragment : AbstractFragment() {
     }
 
     private fun displayZoom() {
-        binding.zoomInfo.text = viewModel.zoom.toString()
+        binding.zoomInfo.text = Formatter.df2.format(viewModel.zoom)
     }
 
     private fun onUpdateCurrentAutomaticLocation(location: Location) =
