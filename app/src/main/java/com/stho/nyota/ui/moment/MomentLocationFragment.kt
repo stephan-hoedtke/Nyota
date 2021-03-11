@@ -100,7 +100,7 @@ class MomentLocationFragment : AbstractFragment(),  DatePickerDialog.OnDateSetLi
             binding.radioButtonUseDeviceLocation.isEnabled = false
         }
         binding.editTimeZone.text = moment.timeZone.id
-        updateActionBar(moment.city.name)
+        setActionBarTitle(moment.city.name)
     }
 
     private fun updateLocationAutomatically(auto: Boolean) {

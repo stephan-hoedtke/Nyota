@@ -1,7 +1,6 @@
 package com.stho.nyota.ui.home
 
 import android.content.Context
-import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.*
 import androidx.fragment.app.FragmentManager
@@ -11,7 +10,6 @@ import com.stho.nyota.*
 import com.stho.nyota.databinding.FragmentHomeBinding
 import com.stho.nyota.sky.universe.*
 import com.stho.nyota.sky.utilities.Moment
-import com.stho.nyota.ui.constellations.ChooseNextStepDialog
 
 // TODO: display list more proper
 
@@ -136,7 +134,7 @@ class HomeFragment : AbstractFragment() {
         binding.imageMoon.setPhase(moon)
         binding.imageSun.setImageResource(sun.imageId)
         binding.imageIss.setImageResource(iss.imageId)
-        updateActionBar(R.string.label_nyota)
+        setActionBarTitle(R.string.label_nyota)
     }
 
     private fun onElement(element: IElement) {

@@ -78,7 +78,7 @@ class SatelliteFragment : AbstractElementFragment() {
             true -> binding.buttonDownloadTle.setImageResource(R.drawable.download_tle_red)
             false -> binding.buttonDownloadTle.setImageResource(R.drawable.download_tle_green)
         }
-        updateActionBar(satellite.name)
+        setActionBarTitle(satellite.name)
     }
 
     private fun getSatelliteKeyFromArguments(): String? {

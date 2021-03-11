@@ -14,10 +14,10 @@
     <color name="colorPrimaryText">#fffde7</color>
     <color name="colorTitleText">#999999</color>
     <color name="colorPrimaryDisabledText">#eeede7</color>
-    <color name="colorControlDisabled">#90a4ae</color>
-    <color name="colorControlNormal">#42a5f5</color>
-    <color name="colorControlActivated">#1176f3</color>
-    <color name="colorControlHighlight">#41C6f7</color>
+    <color name="colorControlDisabled">#B0B0B0</color>
+    <color name="colorControlNormal">#eeddc7</color>
+    <color name="colorControlActivated">#ffe0b2</color>
+    <color name="colorControlHighlight">#FFB56C</color>
     <color name="colorDarkText">#999999</color>
     <color name="colorSecondaryText">#00113c</color>
     <color name="colorErrorText">#FF6666</color>

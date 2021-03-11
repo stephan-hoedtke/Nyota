@@ -71,7 +71,7 @@ class SatelliteDownloadElementsFragment : AbstractFragment() {
             binding.tleStatus.text = getString(R.string.label_ok)
             binding.buttonDownloadTle.setImageResource(R.drawable.download_tle_green)
         }
-        updateActionBar(satellite.name)
+        setActionBarTitle(satellite.name)
     }
 
     private fun updateErrorMessage(errorMessage: String?) {

@@ -31,8 +31,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_margin="@dimen/text_margin"
-        android:contentDescription="@string/label_empty"
-        android:background="@android:color/transparent" />
+        android:contentDescription="@string/label_empty" />
 
     <ImageView
         android:id="@+id/iconHorizontal"

@@ -1,6 +1,7 @@
 package com.stho.nyota
 
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
@@ -13,6 +14,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.LiveData
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.ui.NavigationUI
 import com.google.android.material.snackbar.Snackbar
 import com.stho.nyota.databinding.TimeOverlayBinding
 import com.stho.nyota.databinding.TimeVisibilityOverlayBinding
@@ -78,6 +80,7 @@ abstract class AbstractFragment : Fragment(), INavigable {
         super.onViewCreated(view, savedInstanceState)
         bindingReference = AbstractFragmentBinding(view)
         setupFooterListener()
+        //setActionBarIcon()
     }
 
     override fun onDestroyView() {
@@ -101,17 +104,20 @@ abstract class AbstractFragment : Fragment(), INavigable {
         abstractViewModel.settings.updateTimeAutomaticallyLD.observe(viewLifecycleOwner) { value -> onObserveUpdateTimeAutomatically(value) }
     }
 
-    protected fun updateActionBar(resId: Int) =
-        updateActionBar(getString(resId))
+    private fun setActionBarIcon() =
+        supportActionBar?.apply {
+            setDisplayHomeAsUpEnabled(true)
+            setHomeButtonEnabled(true)
+        }
 
-    protected fun updateActionBar(title: String) {
+    protected fun setActionBarTitle(resId: Int) =
+        setActionBarTitle(getString(resId))
+
+    protected fun setActionBarTitle(title: String) =
         supportActionBar?.also {
             it.title = title
             it.subtitle = null
-            it.setDisplayHomeAsUpEnabled(true)
-            it.setHomeButtonEnabled(true)
         }
-    }
 
     @Suppress("NON_EXHAUSTIVE_WHEN")
     protected open fun onPropertyClick(property: IProperty) {
@@ -129,12 +135,11 @@ abstract class AbstractFragment : Fragment(), INavigable {
         }
     }
 
-    fun showSnackbar(message: String) {
+    fun showSnackbar(message: String) =
         Snackbar.make(requireView(), message, Snackbar.LENGTH_LONG)
             .setBackgroundTint(getColor(R.color.colorSignalBackground))
             .setTextColor(getColor(R.color.colorSecondaryText))
             .show()
-    }
 
     private fun onIntervalSelect() =
         findNavController().navigate(R.id.action_global_nav_interval_picker)
@@ -221,7 +226,7 @@ abstract class AbstractFragment : Fragment(), INavigable {
         onFinderView(galaxy.key)
 
     private fun onSkyView() =
-        findNavController().navigate(HomeFragmentDirections.actionNavHomeToNavSky(null))
+        findNavController().navigate(R.id.action_global_nav_sky)
 
     override fun onSkyView(element: IElement) =
         onSkyView(element.key)

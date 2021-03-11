@@ -1,23 +1,15 @@
 package com.stho.nyota.ui.stars
 
 import android.os.Bundle
-import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.PopupMenu
-import androidx.fragment.app.FragmentManager
 import com.stho.nyota.AbstractElementFragment
 import com.stho.nyota.AbstractViewModel
-import com.stho.nyota.R
 import com.stho.nyota.databinding.FragmentStarBinding
 import com.stho.nyota.sky.universe.IElement
 import com.stho.nyota.sky.universe.Star
-import com.stho.nyota.sky.utilities.IProperty
 import com.stho.nyota.sky.utilities.Moment
-import com.stho.nyota.sky.utilities.PropertyKeyType
-import com.stho.nyota.ui.constellations.ChooseNextStepDialog
-import com.stho.nyota.ui.sky.SkyFragmentLiveModeDialog
 
 
 class StarFragment : AbstractElementFragment() {
@@ -73,7 +65,7 @@ class StarFragment : AbstractElementFragment() {
     private fun bind(moment: Moment, star: Star) {
         bindTime(binding.timeVisibilityOverlay, moment, star.visibility)
         binding.image.setImageResource(star.largeImageId)
-        updateActionBar(star.toString())
+        setActionBarTitle(star.toString())
     }
 
     private fun getKeyFromArguments(): String? =

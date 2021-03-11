@@ -2,17 +2,14 @@ package com.stho.nyota.ui.sky
 
 import android.os.Bundle
 import android.view.*
-import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.FragmentManager
-import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
 import com.stho.nyota.AbstractFragment
 import com.stho.nyota.AbstractViewModel
 import com.stho.nyota.ISkyViewListener
 import com.stho.nyota.R
 import com.stho.nyota.databinding.FragmentSkyBinding
-import com.stho.nyota.settings.Settings
 import com.stho.nyota.settings.ViewStyle
 import com.stho.nyota.sky.universe.*
 import com.stho.nyota.sky.utilities.*
@@ -37,7 +34,7 @@ class SkyFragment : AbstractFragment() {
         val key = getElementKeyFromArguments()
         viewModel = createSkyViewModel(key)
         setHasOptionsMenu(true)
-    }
+     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         bindingReference = FragmentSkyBinding.inflate(inflater, container, false)
@@ -208,7 +205,7 @@ class SkyFragment : AbstractFragment() {
     private fun bind(moment: Moment) {
         bindTime(binding.timeOverlay, moment)
         binding.sky.notifyDataSetChanged()
-        updateActionBar(title)
+        setActionBarTitle(title)
     }
 
     private val title: String

@@ -77,11 +77,11 @@ class MainActivity : AppCompatActivity(), ActivityCompat.OnRequestPermissionsRes
         appBarConfiguration = AppBarConfiguration(
             setOf(
                 R.id.nav_home,
-                R.id.nav_satellites,
-                R.id.nav_planets,
-                R.id.nav_constellations,
-                R.id.nav_stars,
-                R.id.nav_sky,
+//                R.id.nav_satellites,
+//                R.id.nav_planets,
+//                R.id.nav_constellations,
+//                R.id.nav_stars,
+//                // R.id.nav_sky,
             )
             , drawerLayout)
 

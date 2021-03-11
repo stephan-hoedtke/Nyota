@@ -55,7 +55,7 @@ class CityPickerFragment : AbstractFragment() {
         viewModel.repository.updateCityDistances()
         viewModel.citiesLD.observe(viewLifecycleOwner, { cities -> observeCities(cities) })
         viewModel.selectedCityLD.observe(viewLifecycleOwner, { city -> observeSelectedCity(city) })
-        updateActionBar(getString(R.string.title_choose_city))
+        setActionBarTitle(getString(R.string.title_choose_city))
     }
 
     override fun onDestroyView() {

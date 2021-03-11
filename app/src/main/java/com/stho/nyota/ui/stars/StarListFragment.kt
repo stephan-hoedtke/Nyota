@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.stho.nyota.*
 import com.stho.nyota.databinding.FragmentStarListBinding
@@ -72,6 +71,6 @@ class StarListFragment : AbstractFragment() {
 
     private fun bind(moment: Moment) {
         bindTime(binding.timeOverlay, moment)
-        updateActionBar(getString(R.string.label_stars))
+        setActionBarTitle(getString(R.string.label_stars))
     }
 }

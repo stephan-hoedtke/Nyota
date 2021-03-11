@@ -2,7 +2,6 @@ package com.stho.nyota.ui.finder
 
 
 import android.os.Bundle
-import android.os.Handler
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -78,7 +77,7 @@ class FinderFragment : AbstractFragment() {
         binding.targetAltitude.text = Angle.toString(element.position?.altitude ?: 0.0, Angle.AngleType.ALTITUDE)
         binding.horizonView.targetAltitude = element.position?.altitude ?: 0.0
         binding.targetAzimuthPointer.rotation = viewModel.getRotationToTarget()
-        updateActionBar(element.toString())
+        setActionBarTitle(element.toString())
     }
 
     private fun onUpdateRingAngle(angle: Double) {

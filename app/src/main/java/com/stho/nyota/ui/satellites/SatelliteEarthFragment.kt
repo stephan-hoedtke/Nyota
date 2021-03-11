@@ -146,7 +146,7 @@ class SatelliteEarthFragment : AbstractFragment() {
         displaySatellite(satellite, moment)
         displayTitle(satellite, moment)
         displayZoom()
-        updateActionBar(satellite.friendlyName)
+        setActionBarTitle(satellite.friendlyName)
     }
 
     private fun onUpdateZoom(zoom: Double) {

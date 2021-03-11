@@ -3,16 +3,13 @@ package com.stho.nyota.ui.constellations
 import android.os.Bundle
 import android.view.*
 import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.core.os.bundleOf
 import androidx.fragment.app.FragmentManager
-import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
 import com.stho.nyota.AbstractElementFragment
 import com.stho.nyota.AbstractViewModel
 import com.stho.nyota.ISkyViewListener
 import com.stho.nyota.R
 import com.stho.nyota.databinding.FragmentConstellationBinding
-import com.stho.nyota.settings.Settings
 import com.stho.nyota.settings.ViewStyle
 import com.stho.nyota.sky.universe.Constellation
 import com.stho.nyota.sky.universe.IElement
@@ -177,7 +174,7 @@ class ConstellationFragment : AbstractElementFragment() {
         bindTime(binding.timeVisibilityOverlay, moment, constellation.visibility)
         binding.image.setImageResource(constellation.largeImageId)
         binding.sky.notifyDataSetChanged()
-        updateActionBar(constellation.name)
+        setActionBarTitle(constellation.name)
     }
 
     private fun displaySnackbarForPosition(position: Topocentric) {

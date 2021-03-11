@@ -11,6 +11,18 @@ enum class StarColor(val imageId: Int) {
     PaleYellowOrange(R.drawable.star_pale_yellow_orange),   // #ffdab5
     LightOrangeRed(R.drawable.star_light_orange_red);       // #ffb56c
 
+    override fun toString(): String {
+        return when (this) {
+            Blue -> "O (blue)"
+            DeepBlueWhite -> "B (deep blue white)"
+            BlueWhite -> "A (blue white)"
+            White -> "F (white)"
+            YellowishWhite -> "G (yellowish white)"
+            PaleYellowOrange -> "K (pale yellow orange)"
+            LightOrangeRed -> "M (light orange red)"
+        }
+    }
+
     companion object {
         fun parseString(color: String): StarColor =
             when (color) {

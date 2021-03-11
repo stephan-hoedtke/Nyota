@@ -60,6 +60,6 @@ class SunFragment : AbstractElementFragment() {
     private fun bind(moment: Moment, sun: Sun) {
         bindTime(binding.timeVisibilityOverlay, moment, sun.visibility)
         binding.title.text = sun.name
-        updateActionBar(sun.name)
+        setActionBarTitle(sun.name)
     }
 }

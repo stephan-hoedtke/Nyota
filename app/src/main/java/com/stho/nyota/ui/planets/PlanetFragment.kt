@@ -65,7 +65,7 @@ class PlanetFragment : AbstractElementFragment() {
         bindTime(binding.timeVisibilityOverlay, moment, planet.visibility)
         binding.image.setImageResource(planet.largeImageId)
         binding.image.setPhase(planet)
-        updateActionBar(planet.name)
+        setActionBarTitle(planet.name)
     }
 
     private fun getPlanetNameFromArguments(): String? {

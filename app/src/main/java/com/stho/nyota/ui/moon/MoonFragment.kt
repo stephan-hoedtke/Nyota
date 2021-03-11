@@ -18,7 +18,6 @@ import com.stho.nyota.sky.universe.IElement
 import com.stho.nyota.sky.universe.Moon
 import com.stho.nyota.sky.utilities.Formatter
 import com.stho.nyota.sky.utilities.Moment
-import com.stho.nyota.sky.utilities.UTC
 import kotlin.math.abs
 
 
@@ -117,7 +116,7 @@ class MoonFragment : AbstractElementFragment() {
         binding.moonAgeLayout.fullMoon.text = Formatter.toString(moon.fullMoon!!, moment.timeZone, Formatter.TimeFormat.DATETIME)
         binding.moonAgeLayout.nextNewMoon.text = Formatter.toString(moon.nextNewMoon!!, moment.timeZone, Formatter.TimeFormat.DATETIME)
 
-        updateActionBar(moon.name)
+        setActionBarTitle(moon.name)
     }
 
     private fun onPickInterval() {

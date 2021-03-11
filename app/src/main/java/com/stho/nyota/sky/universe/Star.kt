@@ -65,6 +65,7 @@ class Star private constructor(val id: Long, val HD: Int, override val name: Str
         super.getDetails(moment).apply {
             add(R.drawable.empty, "Henry Draper", HD.toString())
             add(R.drawable.empty, "Name", name)
+            add(color.imageId, "Color", color.toString())
         }
 
     override val key: String =

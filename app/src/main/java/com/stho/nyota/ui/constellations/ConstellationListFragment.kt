@@ -4,13 +4,11 @@ import android.content.Context
 import android.os.Bundle
 import android.view.*
 import androidx.fragment.app.FragmentManager
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.stho.nyota.*
 import com.stho.nyota.databinding.FragmentConstellationListBinding
 import com.stho.nyota.sky.universe.*
 import com.stho.nyota.sky.utilities.Moment
-import com.stho.nyota.ui.home.HomeFragment
 
 
 /**
@@ -110,7 +108,7 @@ class ConstellationListFragment : AbstractFragment() {
 
     private fun bind(moment: Moment) {
         bindTime(binding.timeOverlay, moment)
-        updateActionBar(R.string.label_constellations)
+        setActionBarTitle(R.string.label_constellations)
     }
 
     private fun displayConstellationListFragmentFilterDialog() {
