@@ -124,7 +124,7 @@ class Degree {
             }
 
         /**
-         * difference of two angles in degree from -180° to 180°
+         * difference x - y of two angles x and y in degree from -180° to 180°
          */
         fun difference(x: Double, y: Double): Double =
             normalizeTo180(x - y)
