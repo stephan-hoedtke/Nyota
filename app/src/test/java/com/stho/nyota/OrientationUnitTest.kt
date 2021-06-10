@@ -14,7 +14,7 @@ class OrientationUnitTest {
 
     private fun orientation_rotationToNorth_isCorrect(deviceAzimuth: Double, expected: Float) {
         // Arrange
-        val orientation: Orientation = Orientation(deviceAzimuth, 1.0, -89.0, 3.0)
+        val orientation: Orientation = Orientation(deviceAzimuth, 1.0, -89.0, 3.0, centerAltitude = 0.0)
 
         // Execute
         val actual = orientation.getRotationToNorth()
@@ -33,7 +33,7 @@ class OrientationUnitTest {
 
     private fun orientation_rotationToTarget_isCorrect(deviceAzimuth: Double, targetAzimuth: Double, expected: Float) {
         // Arrange
-        val orientation: Orientation = Orientation(deviceAzimuth, 1.0, -89.0, 3.0)
+        val orientation: Orientation = Orientation(deviceAzimuth, 1.0, -89.0, 3.0, centerAltitude = 0.0)
 
         // Execute
         val actual = orientation.getRotationToTargetAt(targetAzimuth)

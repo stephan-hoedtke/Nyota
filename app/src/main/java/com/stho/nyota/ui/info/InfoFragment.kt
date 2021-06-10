@@ -1,19 +1,14 @@
 package com.stho.nyota.ui.info
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.stho.nyota.AbstractFragment
-import com.stho.nyota.R
 import com.stho.nyota.createViewModel
 import com.stho.nyota.databinding.FragmentInfoBinding
-import com.stho.nyota.databinding.FragmentMomentLocationBinding
 import com.stho.nyota.sky.universe.Universe
 import com.stho.nyota.sky.utilities.*
-import com.stho.nyota.ui.moment.MomentViewModel
-import java.text.Normalizer
 
 class InfoFragment : AbstractFragment() {
 
@@ -69,8 +64,8 @@ class InfoFragment : AbstractFragment() {
     }
 
     private fun updateOrientation(orientation: Orientation) {
-        binding.textViewAzimuth.text = Formatter.df0.format(orientation.pointerAzimuth)
-        binding.textViewPitch.text = Formatter.df0.format(orientation.pointerAltitude)
+        binding.textViewAzimuth.text = Formatter.df0.format(orientation.azimuth)
+        binding.textViewPitch.text = Formatter.df0.format(orientation.altitude)
         binding.textViewDirection.text = Angle.toString(orientation.centerAzimuth, orientation.centerAltitude, Angle.AngleType.ORIENTATION)
         binding.textViewRoll.text = Formatter.df0.format(orientation.roll)
     }

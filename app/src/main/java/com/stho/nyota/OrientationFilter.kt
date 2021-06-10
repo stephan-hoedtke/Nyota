@@ -1,94 +1,55 @@
 package com.stho.nyota
 
-import com.stho.nyota.Acceleration
-import com.stho.nyota.IOrientationFilter
-import com.stho.nyota.LowPassFilterAnglesInDegree
 import com.stho.nyota.sky.utilities.*
-
+import com.stho.nyota.views.Rotation
 
 
 /*
-    The class takes updates of the orientation vector by listening to onOrientationAnglesChanged(angles).
+    The class takes updates of the orientation vector by listening to onOrientationChanged(rotationMatrix).
     The values will be stored and smoothed with acceleration.
     A handler will regularly read the updated smoothed orientation
  */
 class OrientationAccelerationFilter: IOrientationFilter {
 
-    private val pointerAzimuthAcceleration: Acceleration = Acceleration(0.5)
-    private val pointerAltitudeAcceleration: Acceleration = Acceleration(0.5)
-    private val rollAcceleration: Acceleration = Acceleration(0.5)
-    private val centerAzimuthAcceleration: Acceleration = Acceleration(0.5)
-    private val centerAltitudeAcceleration: Acceleration = Acceleration(0.5)
-    private val lowPassFilter: LowPassFilterAnglesInDegree = LowPassFilterAnglesInDegree()
+    private val azimuthAcceleration: Acceleration = Acceleration(ACCELERATION_FACTOR)
+    private val pitchAcceleration: Acceleration = Acceleration(ACCELERATION_FACTOR)
+    private val rollAcceleration: Acceleration = Acceleration(ACCELERATION_FACTOR)
+    private val centerAzimuthAcceleration: Acceleration = Acceleration(ACCELERATION_FACTOR)
+    private val centerAltitudeAcceleration: Acceleration = Acceleration(ACCELERATION_FACTOR)
 
-    val currentOrientation: Orientation
-        get() {
-            return Orientation(
-                pointerAzimuth = Degree.normalize(pointerAzimuthAcceleration.position),
-                pointerAltitude = Degree.normalizeTo180(pointerAltitudeAcceleration.position),
-                roll =  Degree.normalizeTo180(rollAcceleration.position),
-                centerAzimuth = Degree.normalize(centerAzimuthAcceleration.position),
-                centerAltitude = Degree.normalizeTo180(centerAltitudeAcceleration.position),
-            )
-        }
+    override val currentOrientation: Orientation
+        get() = Orientation(
+            azimuth = Degree.normalize(azimuthAcceleration.position),
+            pitch = Degree.normalizeTo180(pitchAcceleration.position),
+            roll = Degree.normalizeTo180(rollAcceleration.position),
+            centerAzimuth = Degree.normalize(centerAzimuthAcceleration.position),
+            centerAltitude = Degree.normalizeTo180(centerAltitudeAcceleration.position)
+        )
 
-    /**
-     * to retrieve the orientation of the phone:
-     *
-     */
-
-    override fun onOrientationChanged(R: FloatArray) {
-
-        /*
-            1) azimuth and altitude: north vector = (0, 1, 0)
-                R * north vector = (x = R[1], y = R[4], z = R[7])
-                    azimuth = atan2(x, y) = atan2(R[1], R[4])
-                    altitude = -asin(R[Z]) = asin(-R[7)
-
-            2) roll: ???
-                    roll = atan2(x, z) = atan2(R[6], R[8])
-
-                see: SensorManager.getOrientation()
-                    values[0] = (float) Math.atan2(R[1], R[4]);
-                    values[1] = (float) Math.asin(-R[7]);
-                    values[2] = (float) Math.atan2(-R[6], R[8]);
-
-            3) center: center vector = (0, 0, -1)
-                R * center vector = (x = -R[2], y = -R[5], z = -R[8])
-                    azimuth = atan2(x, y) = atan2(-R[2], -R[5])
-                    altitude = asin(z) = asin(-R[8])
-        */
-
-        val angles: DoubleArray = doubleArrayOf(
-            Degree.arcTan2(R[1].toDouble(), R[4].toDouble()),
-            Degree.arcSin(R[7].toDouble()),
-            Degree.arcTan2(-R[6].toDouble(), R[8].toDouble()),
-            Degree.arcTan2(-R[2].toDouble(), -R[5].toDouble()),
-            Degree.arcSin(-R[8].toDouble()))
-
-        if (lookAtThePhoneFromAbove(angles[2])) {
-            lowPassFilter.setAngles(angles)
-        } else {
-            lowPassFilter.setAngles(adjustForLookingAtThePhoneFromBelow(angles))
-        }
-
-        pointerAzimuthAcceleration.rotateTo(lowPassFilter.angles[0])
-        pointerAltitudeAcceleration.rotateTo(lowPassFilter.angles[1])
-        rollAcceleration.rotateTo(lowPassFilter.angles[2])
-        centerAzimuthAcceleration.rotateTo(lowPassFilter.angles[3])
-        centerAltitudeAcceleration.rotateTo(lowPassFilter.angles[4])
+    override fun onOrientationChanged(rotationMatrix: FloatArray) {
+        val rotation = Rotation(rotationMatrix)
+        val orientation = rotation.getOrientation()
+        onOrientationChanged(orientation)
     }
 
-    private fun lookAtThePhoneFromAbove(roll: Double) =
-        -90 < roll && roll < 90
+    private fun onOrientationChanged(orientation: Orientation) {
+        if (Rotation.requireAdjustmentForLookingAtThePhoneFromBelow(orientation)) {
+            setOrientation(Rotation.adjustForLookingAtThePhoneFromBelow(orientation))
+        } else {
+            setOrientation(orientation)
+        }
+    }
 
-    private fun adjustForLookingAtThePhoneFromBelow(angles: DoubleArray): DoubleArray =
-        doubleArrayOf(
-            -angles[0],
-            180 - angles[1],
-            180 - angles[2],
-            angles[3],
-            angles[4])
+    private fun setOrientation(orientation: Orientation) {
+        azimuthAcceleration.rotateTo(orientation.azimuth)
+        pitchAcceleration.rotateTo(orientation.pitch)
+        rollAcceleration.rotateTo(orientation.roll)
+        centerAzimuthAcceleration.rotateTo(orientation.centerAzimuth)
+        centerAltitudeAcceleration.rotateTo(orientation.centerAltitude)
+    }
 
+    companion object {
+        private const val ACCELERATION_FACTOR = 0.3
+    }
 }
 

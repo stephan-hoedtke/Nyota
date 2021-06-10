@@ -8,16 +8,12 @@ import android.hardware.SensorManager
 import android.view.Display
 import android.view.Surface
 import android.view.WindowManager
+import com.stho.nyota.sky.utilities.Orientation
+import com.stho.nyota.views.Rotation
 
 interface IOrientationFilter {
-    /**
-     * Called when the phone's orientation changed measured by the acceleration and magnetic field sensors
-     * @param R Rotation Matrix
-     *
-     * To rotate a vector in phone coordinates into earth coordinates: earth = R * phone
-     * To rotate a vector in earth coordinates into phone coordinates: phone = R_inverse * earth = R_transpose * earth
-     */
-    fun onOrientationChanged(R: FloatArray)
+    fun onOrientationChanged(rotationMatrix: FloatArray)
+    val currentOrientation: Orientation
 }
 
 
@@ -25,16 +21,12 @@ class OrientationSensorListener(private val context: Context, private val filter
 
     private val sensorManager: SensorManager = context.getSystemService(Context.SENSOR_SERVICE) as SensorManager
     private val windowManager: WindowManager = context.getSystemService(Context.WINDOW_SERVICE) as WindowManager
-    private val accelerometerReading = FloatArray(3)
-    private val magnetometerReading = FloatArray(3)
-    private val rotationMatrix = FloatArray(9)
-    private val rotationMatrixAdjusted = FloatArray(9)
+    private val rotationVectorReading = FloatArray(5)
     private var display: Display? = null
 
     internal fun onResume() {
         display = windowManager.defaultDisplay
-        initializeAccelerationSensor()
-        initializeMagneticFieldSensor()
+        initializeRotationVectorSensor()
     }
 
     internal fun onPause() {
@@ -42,17 +34,13 @@ class OrientationSensorListener(private val context: Context, private val filter
         removeSensorListeners()
     }
 
-    private fun initializeAccelerationSensor() {
-        val accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)
-        if (accelerometer != null) {
-            sensorManager.registerListener(this, accelerometer, SensorManager.SENSOR_DELAY_GAME, SensorManager.SENSOR_DELAY_GAME)
-        }
-    }
-
-    private fun initializeMagneticFieldSensor() {
-        val magneticField = sensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD)
-        if (magneticField != null) {
-            sensorManager.registerListener(this, magneticField, SensorManager.SENSOR_DELAY_GAME, SensorManager.SENSOR_DELAY_GAME)
+    /**
+     * The rotation vector sensor is fusing gyroscope, accelerometer and magnetometer. No further sensor fusion required.
+     */
+    private fun initializeRotationVectorSensor() {
+        val rotationVectorSensor = sensorManager.getDefaultSensor(Sensor.TYPE_ROTATION_VECTOR)
+        if (rotationVectorSensor != null) {
+            sensorManager.registerListener(this, rotationVectorSensor, SensorManager.SENSOR_DELAY_GAME, SensorManager.SENSOR_DELAY_GAME)
         }
     }
 
@@ -65,42 +53,38 @@ class OrientationSensorListener(private val context: Context, private val filter
 
     override fun onSensorChanged(event: SensorEvent) {
         when (event.sensor?.type) {
-            Sensor.TYPE_ACCELEROMETER -> {
-                System.arraycopy(event.values, 0, accelerometerReading, 0, accelerometerReading.size)
-                updateOrientationAngles()
-            }
-            Sensor.TYPE_MAGNETIC_FIELD -> {
-                System.arraycopy(event.values, 0, magnetometerReading, 0, magnetometerReading.size)
-                updateOrientationAngles()
+            Sensor.TYPE_ROTATION_VECTOR -> {
+                System.arraycopy(event.values, 0, rotationVectorReading, 0, rotationVectorReading.size)
+                updateOrientationFromRotationVectorReadings()
             }
         }
     }
 
-    // Compute the three orientation angles based on the most recent readings from
-    // the device's accelerometer and magnetometer.
-    private fun updateOrientationAngles() {
-        if (SensorManager.getRotationMatrix(rotationMatrix, null, accelerometerReading, magnetometerReading)) {
-            filter.onOrientationChanged(getAdjustedRotationMatrix())
-        }
+    private fun updateOrientationFromRotationVectorReadings() {
+        val rotationMatrix = FloatArray(9)
+        SensorManager.getRotationMatrixFromVector(rotationMatrix, rotationVectorReading)
+        val adjustedRotationMatrix = getAdjustedRotationMatrix(rotationMatrix)
+        filter.onOrientationChanged(adjustedRotationMatrix)
     }
 
     /*
       See the following training materials from google.
       https://codelabs.developers.google.com/codelabs/advanced-android-training-sensor-orientation/index.html?index=..%2F..advanced-android-training#0
      */
-    private fun getAdjustedRotationMatrix(): FloatArray {
+    private fun getAdjustedRotationMatrix(rotationMatrix: FloatArray): FloatArray {
+        val adjustedRotationMatrix = FloatArray(9)
         when (display?.rotation) {
             Surface.ROTATION_90 -> {
-                SensorManager.remapCoordinateSystem(rotationMatrix, SensorManager.AXIS_Y, SensorManager.AXIS_MINUS_X, rotationMatrixAdjusted)
-                return rotationMatrixAdjusted
+                SensorManager.remapCoordinateSystem(rotationMatrix, SensorManager.AXIS_Y, SensorManager.AXIS_MINUS_X, adjustedRotationMatrix)
+                return adjustedRotationMatrix
             }
             Surface.ROTATION_180 -> {
-                SensorManager.remapCoordinateSystem(rotationMatrix, SensorManager.AXIS_MINUS_X, SensorManager.AXIS_MINUS_Y, rotationMatrixAdjusted)
-                return rotationMatrixAdjusted
+                SensorManager.remapCoordinateSystem(rotationMatrix, SensorManager.AXIS_MINUS_X, SensorManager.AXIS_MINUS_Y, adjustedRotationMatrix)
+                return adjustedRotationMatrix
             }
             Surface.ROTATION_270 -> {
-                SensorManager.remapCoordinateSystem(rotationMatrix, SensorManager.AXIS_MINUS_Y, SensorManager.AXIS_X, rotationMatrixAdjusted)
-                return rotationMatrixAdjusted
+                SensorManager.remapCoordinateSystem(rotationMatrix, SensorManager.AXIS_MINUS_Y, SensorManager.AXIS_X, adjustedRotationMatrix)
+                return adjustedRotationMatrix
             }
             else -> {
                 return rotationMatrix

@@ -69,7 +69,7 @@ class DirectionPointerView(context: Context?, attrs: AttributeSet?) : View(conte
         val middle = t / 2.6f
         val letter = t / 2.5f
         canvas.translate(w / 2.toFloat(), h / 2.toFloat())
-        canvas.rotate(0 - currentDeviceOrientation.pointerAzimuth.toFloat())
+        canvas.rotate(0 - currentDeviceOrientation.azimuth.toFloat())
         for (p in dots) {
             val x =
                 (middle * cos(Math.toRadians(p.toDouble()))).toFloat()
