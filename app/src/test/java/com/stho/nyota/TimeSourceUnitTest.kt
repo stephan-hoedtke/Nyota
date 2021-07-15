@@ -1,6 +1,7 @@
 package com.stho.nyota
 
 import android.os.SystemClock
+import com.stho.nyota.sky.utilities.SystemClockTimeSource
 import org.junit.Assert
 import org.junit.Test
 import org.mockito.Mockito

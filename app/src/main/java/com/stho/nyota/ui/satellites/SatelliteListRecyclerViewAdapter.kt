@@ -37,7 +37,7 @@ class SatelliteListRecyclerViewAdapter : RecyclerView.Adapter<SatelliteListRecyc
             binding.displayName.text = satellite.friendlyName
             binding.azimuth.text = satellite.azimuthAsString
             binding.altitude.text = satellite.altitudeAsString
-            binding.root.setOnClickListener { satellites.findSatelliteByIndex(adapterPosition)?.also { select(it) } }
+            binding.root.setOnClickListener { satellites.findSatelliteByIndex(absoluteAdapterPosition)?.also { select(it) } }
         }
     }
 

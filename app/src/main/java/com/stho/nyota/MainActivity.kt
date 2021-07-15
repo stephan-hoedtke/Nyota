@@ -2,6 +2,7 @@ package com.stho.nyota
 
 import android.os.Bundle
 import android.os.Handler
+import android.os.Looper
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -53,7 +54,7 @@ class MainActivity : AppCompatActivity(), ActivityCompat.OnRequestPermissionsRes
         val toolbar: Toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
 
-        handler = Handler()
+        handler = Handler(Looper.getMainLooper())
         viewModel = createViewModel(MainViewModel::class.java)
 
         orientationFilter = OrientationAccelerationFilter()
@@ -200,10 +201,10 @@ class MainActivity : AppCompatActivity(), ActivityCompat.OnRequestPermissionsRes
                 CoroutineScope(Default).launch {
                     viewModel.updateOrientation(orientationFilter.currentOrientation)
                 }
-                handler.postDelayed(this, 200)
+                handler.postDelayed(this, DEFAULT_ORIENTATION_REFRESH_DELAY)
             }
         }
-        handler.postDelayed(runnableCode, 200)
+        handler.postDelayed(runnableCode, DEFAULT_ORIENTATION_REFRESH_DELAY)
     }
 
     override fun onStop() {
@@ -220,6 +221,10 @@ class MainActivity : AppCompatActivity(), ActivityCompat.OnRequestPermissionsRes
             .setBackgroundTint(getColor(R.color.colorSignalBackground))
             .setTextColor(getColor(R.color.colorSecondaryText))
             .show()
+    }
+
+    companion object {
+        private const val DEFAULT_ORIENTATION_REFRESH_DELAY = 90L
     }
 }
 

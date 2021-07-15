@@ -50,8 +50,8 @@ class ElementsRecyclerViewAdapter : RecyclerView.Adapter<ElementsRecyclerViewAda
                 binding.hints.visibility = View.INVISIBLE
             }
             binding.root.isSelected = isItemSelected(element)
-            binding.root.setOnClickListener { getElementByIndex(adapterPosition)?.also { onItemClick?.invoke(it) } }
-            binding.root.setOnLongClickListener {  getElementByIndex(adapterPosition)?.also { onItemLongClick?.invoke(it) }; true }
+            binding.root.setOnClickListener { getElementByIndex(absoluteAdapterPosition)?.also { onItemClick?.invoke(it) } }
+            binding.root.setOnLongClickListener {  getElementByIndex(absoluteAdapterPosition)?.also { onItemLongClick?.invoke(it) }; true }
         }
     }
 

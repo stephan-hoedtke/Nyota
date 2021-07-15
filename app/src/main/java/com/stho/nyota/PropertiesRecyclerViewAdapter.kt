@@ -50,8 +50,8 @@ class PropertiesRecyclerViewAdapter : RecyclerView.Adapter<PropertiesRecyclerVie
             binding.hints.text = entry.hints
             binding.hints.visibility = if (entry.hasHints) View.VISIBLE else View.GONE
             binding.root.isSelected = isItemSelected(entry)
-            binding.root.setOnClickListener { onPropertyClick(adapterPosition) }
-            binding.root.setOnLongClickListener { onPropertyLongClick(adapterPosition); true }
+            binding.root.setOnClickListener { onPropertyClick(absoluteAdapterPosition) }
+            binding.root.setOnLongClickListener { onPropertyLongClick(absoluteAdapterPosition); true }
         }
     }
 

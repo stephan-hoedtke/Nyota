@@ -98,11 +98,11 @@ class CityPickerRecyclerViewAdapter(fragment: CityPickerFragment, private val re
         fun bind(city: City) {
             val isSelected = isItemSelected(city)
             binding.radioButton.isChecked = isSelected
-            binding.radioButton.setOnClickListener { onSelect(adapterPosition) }
+            binding.radioButton.setOnClickListener { onSelect(absoluteAdapterPosition) }
             binding.textViewName.text = city.nameEx
             binding.textViewDistance.text = Formatter.toDistanceKmString(city.distanceInKm)
             binding.root.isSelected = isSelected
-            binding.root.setOnLongClickListener { onEdit(adapterPosition); true }
+            binding.root.setOnLongClickListener { onEdit(absoluteAdapterPosition); true }
         }
 
         internal val foregroundLayer: View = binding.foregroundLayer

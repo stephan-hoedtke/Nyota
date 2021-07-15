@@ -42,14 +42,4 @@ class LocationServiceListener(context: Context, private val filter: ILocationFil
     override fun onStatusChanged(provider: String?, status: Int, extras: Bundle?) {
         // Ignored
     }
-
-    override fun onProviderEnabled(provider: String?) {
-        // Ignored
-    }
-
-    override fun onProviderDisabled(provider: String?) {
-        // Ignored
-    }
-
-
 }

@@ -1,5 +1,6 @@
 package com.stho.nyota
 
+import com.stho.nyota.sky.utilities.TimeSource
 import org.junit.Assert
 import org.junit.Test
 

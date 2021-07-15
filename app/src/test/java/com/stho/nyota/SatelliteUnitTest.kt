@@ -35,12 +35,9 @@ class SatelliteUnitTest : AbstractAstronomicUnitTest() {
     }
 
     private fun satellitePosition_isCorrect(tle: TLE, julianDay: Double, latitude: Double, longitude: Double, altitude: Double, speed: Double) {
-        val position = com.stho.nyota.sky.utilities.Vector()
-        val velocity = com.stho.nyota.sky.utilities.Vector()
+        val positionVelocity = SatelliteAlgorithms.calculatePositionVelocity(tle, julianDay)
 
-        SatelliteAlgorithms.calculatePositionVelocity(tle, julianDay, position, velocity)
-
-        val location: Location = Algorithms.getLocationForECI(position, julianDay)
+        val location: Location = Algorithms.getLocationForECI(positionVelocity.position, julianDay)
 
         Assert.assertEquals("Latitude (in °)", latitude, location.latitude, 0.01)
         Assert.assertEquals("Longitude (in °)", longitude, location.longitude, 0.01)

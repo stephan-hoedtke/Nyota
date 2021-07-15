@@ -14,9 +14,7 @@ abstract class AbstractSatellite : IElement {
     override var position: Topocentric? = null
         protected set
 
-    protected val positionVector: Vector = Vector()
-
-    protected val velocity: Vector = Vector()
+    protected var positionVelocity: PositionVelocity = PositionVelocity(Vector.default, Vector.default)
 
     var location: Location = Location(0.0, 0.0, 0.0)
 
@@ -27,7 +25,7 @@ abstract class AbstractSatellite : IElement {
      * @return
      */
     val speed: Double
-        get() = 60 * velocity.length
+        get() = 60 * positionVelocity.velocity.length
 
     override fun getBasics(moment: Moment): PropertyList =
         PropertyList().apply {

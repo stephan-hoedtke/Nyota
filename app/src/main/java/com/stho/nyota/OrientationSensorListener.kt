@@ -8,23 +8,26 @@ import android.hardware.SensorManager
 import android.view.Display
 import android.view.Surface
 import android.view.WindowManager
-import com.stho.nyota.sky.utilities.Orientation
-import com.stho.nyota.views.Rotation
-
-interface IOrientationFilter {
-    fun onOrientationChanged(rotationMatrix: FloatArray)
-    val currentOrientation: Orientation
-}
+import com.stho.nyota.sky.utilities.*
 
 
 class OrientationSensorListener(private val context: Context, private val filter: IOrientationFilter) : SensorEventListener {
 
     private val sensorManager: SensorManager = context.getSystemService(Context.SENSOR_SERVICE) as SensorManager
     private val windowManager: WindowManager = context.getSystemService(Context.WINDOW_SERVICE) as WindowManager
-    private val rotationVectorReading = FloatArray(5)
+    private val accelerometerReading = FloatArray(3)
+    private val magnetometerReading = FloatArray(3)
+    private val gyroscopeReading = FloatArray(3)
     private var display: Display? = null
+    private val timer: Timer = Timer()
+    private var hasMagnetometer: Boolean = false
+    private var hasAccelerationMagnetometer: Boolean = false
+    private var hasGyro: Boolean = false
+    private var accelerationMagnetometerOrientation: Quaternion = Quaternion.default
+    private var estimate: Quaternion = Quaternion.default
 
     internal fun onResume() {
+        // TODO: for API30 you shall user: context.display.rotation
         display = windowManager.defaultDisplay
         initializeRotationVectorSensor()
     }
@@ -38,10 +41,14 @@ class OrientationSensorListener(private val context: Context, private val filter
      * The rotation vector sensor is fusing gyroscope, accelerometer and magnetometer. No further sensor fusion required.
      */
     private fun initializeRotationVectorSensor() {
-        val rotationVectorSensor = sensorManager.getDefaultSensor(Sensor.TYPE_ROTATION_VECTOR)
-        if (rotationVectorSensor != null) {
-            sensorManager.registerListener(this, rotationVectorSensor, SensorManager.SENSOR_DELAY_GAME, SensorManager.SENSOR_DELAY_GAME)
-        }
+        val accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)
+        sensorManager.registerListener(this, accelerometer, SensorManager.SENSOR_DELAY_GAME, SensorManager.SENSOR_DELAY_GAME)
+
+        val magnetometer = sensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD)
+        sensorManager.registerListener(this, magnetometer, SensorManager.SENSOR_DELAY_GAME, SensorManager.SENSOR_DELAY_GAME)
+
+        val gyroscope = sensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE)
+        sensorManager.registerListener(this, gyroscope, SensorManager.SENSOR_DELAY_GAME, SensorManager.SENSOR_DELAY_GAME)
     }
 
     private fun removeSensorListeners() =
@@ -53,23 +60,70 @@ class OrientationSensorListener(private val context: Context, private val filter
 
     override fun onSensorChanged(event: SensorEvent) {
         when (event.sensor?.type) {
-            Sensor.TYPE_ROTATION_VECTOR -> {
-                System.arraycopy(event.values, 0, rotationVectorReading, 0, rotationVectorReading.size)
-                updateOrientationFromRotationVectorReadings()
+            Sensor.TYPE_ACCELEROMETER -> {
+                System.arraycopy(event.values, 0, accelerometerReading, 0, accelerometerReading.size)
+                updateOrientationAnglesFromAcceleration()
+            }
+            Sensor.TYPE_MAGNETIC_FIELD -> {
+                System.arraycopy(event.values, 0, magnetometerReading, 0, magnetometerReading.size)
+                hasMagnetometer = true
+            }
+            Sensor.TYPE_GYROSCOPE -> {
+                System.arraycopy(event.values, 0, gyroscopeReading, 0, gyroscopeReading.size)
+                updateOrientationAnglesFromGyroscope()
             }
         }
     }
 
-    private fun updateOrientationFromRotationVectorReadings() {
+    private fun updateOrientationAnglesFromAcceleration() {
+        // If magnetometer is not initialized yet, don't continue...
+        if (!hasMagnetometer)
+            return
+
         val rotationMatrix = FloatArray(9)
-        SensorManager.getRotationMatrixFromVector(rotationMatrix, rotationVectorReading)
-        val adjustedRotationMatrix = getAdjustedRotationMatrix(rotationMatrix)
-        filter.onOrientationChanged(adjustedRotationMatrix)
+        if (SensorManager.getRotationMatrix(rotationMatrix, null, accelerometerReading, magnetometerReading)) {
+            // TODO: get quaternion from readings directly
+            val adjustedRotationMatrix = RotationMatrix.fromFloatArray(getAdjustedRotationMatrix(rotationMatrix))
+            accelerationMagnetometerOrientation = Quaternion.fromRotationMatrix(adjustedRotationMatrix)
+            hasAccelerationMagnetometer = true
+        }
     }
 
-    /*
-      See the following training materials from google.
-      https://codelabs.developers.google.com/codelabs/advanced-android-training-sensor-orientation/index.html?index=..%2F..advanced-android-training#0
+    private fun updateOrientationAnglesFromGyroscope() {
+        // If acceleration is not initialized yet, don't continue...
+        if (!hasAccelerationMagnetometer)
+            return
+
+        // If gyro is not initialized yet, do it now...
+        if (!hasGyro) {
+            estimate = Quaternion.default * accelerationMagnetometerOrientation
+            hasGyro = true
+        }
+
+        val dt = timer.getNextTime()
+        if (dt > 0) {
+            filterUpdate(dt)
+            filter.onOrientationAnglesChanged(estimate)
+        }
+    }
+
+    private fun filterUpdate(dt: Double) {
+
+        val omega = Vector.fromFloatArray(gyroscopeReading)
+
+        // Get updated Gyro delta rotation from gyroscope readings
+        val deltaRotation = Rotation.getRotationFromGyro(omega, dt)
+
+        // update the gyro orientation
+        val gyroOrientation = estimate * deltaRotation
+
+        // fuse sensors
+        estimate = Quaternion.interpolate(gyroOrientation, accelerationMagnetometerOrientation, DEFAULT_FILTER_COEFFICIENT)
+    }
+
+    /**
+     * See the following training materials from google.
+     * https://codelabs.developers.google.com/codelabs/advanced-android-training-sensor-orientation/index.html?index=..%2F..advanced-android-training#0
      */
     private fun getAdjustedRotationMatrix(rotationMatrix: FloatArray): FloatArray {
         val adjustedRotationMatrix = FloatArray(9)
@@ -90,5 +144,9 @@ class OrientationSensorListener(private val context: Context, private val filter
                 return rotationMatrix
             }
         }
+    }
+
+    companion object {
+        private const val DEFAULT_FILTER_COEFFICIENT: Double = 0.001
     }
 }

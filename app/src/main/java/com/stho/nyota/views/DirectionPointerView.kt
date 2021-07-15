@@ -29,7 +29,7 @@ class DirectionPointerView(context: Context?, attrs: AttributeSet?) : View(conte
             }
         }
 
-    var currentDeviceOrientation: Orientation = Orientation.defaultOrientation
+    var currentDeviceOrientation: Orientation = Orientation.default
         set(value) {
             if (field != value) {
                 field = value

@@ -1,8 +1,8 @@
 package com.stho.nyota
 
-import com.stho.nyota.sky.utilities.*
-import com.stho.nyota.views.Rotation
-
+import com.stho.nyota.sky.utilities.Orientation
+import com.stho.nyota.sky.utilities.Quaternion
+import com.stho.nyota.sky.utilities.QuaternionAcceleration
 
 /*
     The class takes updates of the orientation vector by listening to onOrientationChanged(rotationMatrix).
@@ -11,45 +11,18 @@ import com.stho.nyota.views.Rotation
  */
 class OrientationAccelerationFilter: IOrientationFilter {
 
-    private val azimuthAcceleration: Acceleration = Acceleration(ACCELERATION_FACTOR)
-    private val pitchAcceleration: Acceleration = Acceleration(ACCELERATION_FACTOR)
-    private val rollAcceleration: Acceleration = Acceleration(ACCELERATION_FACTOR)
-    private val centerAzimuthAcceleration: Acceleration = Acceleration(ACCELERATION_FACTOR)
-    private val centerAltitudeAcceleration: Acceleration = Acceleration(ACCELERATION_FACTOR)
+    private val acceleration: QuaternionAcceleration = QuaternionAcceleration(DEFAULT_ACCELERATION_FACTOR)
 
     override val currentOrientation: Orientation
-        get() = Orientation(
-            azimuth = Degree.normalize(azimuthAcceleration.position),
-            pitch = Degree.normalizeTo180(pitchAcceleration.position),
-            roll = Degree.normalizeTo180(rollAcceleration.position),
-            centerAzimuth = Degree.normalize(centerAzimuthAcceleration.position),
-            centerAltitude = Degree.normalizeTo180(centerAltitudeAcceleration.position)
-        )
+        get() = acceleration.position.toOrientation().normalize()
 
-    override fun onOrientationChanged(rotationMatrix: FloatArray) {
-        val rotation = Rotation(rotationMatrix)
-        val orientation = rotation.getOrientation()
-        onOrientationChanged(orientation)
-    }
-
-    private fun onOrientationChanged(orientation: Orientation) {
-        if (Rotation.requireAdjustmentForLookingAtThePhoneFromBelow(orientation)) {
-            setOrientation(Rotation.adjustForLookingAtThePhoneFromBelow(orientation))
-        } else {
-            setOrientation(orientation)
-        }
-    }
-
-    private fun setOrientation(orientation: Orientation) {
-        azimuthAcceleration.rotateTo(orientation.azimuth)
-        pitchAcceleration.rotateTo(orientation.pitch)
-        rollAcceleration.rotateTo(orientation.roll)
-        centerAzimuthAcceleration.rotateTo(orientation.centerAzimuth)
-        centerAltitudeAcceleration.rotateTo(orientation.centerAltitude)
+    override fun onOrientationAnglesChanged(orientation: Quaternion) {
+        acceleration.rotateTo(orientation)
     }
 
     companion object {
-        private const val ACCELERATION_FACTOR = 0.3
+        private const val DEFAULT_ACCELERATION_FACTOR: Double = 0.25
     }
 }
+
 

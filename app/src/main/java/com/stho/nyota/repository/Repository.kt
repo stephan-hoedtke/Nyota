@@ -21,7 +21,7 @@ class Repository private constructor() {
     private val momentLiveData = MutableLiveData<Moment>().apply { value = Moment.forNow(defaultAutomaticCity) }
     private val currentAutomaticTimeLiveData = MutableLiveData<UTC>().apply { value = defaultAutomaticTime }
     private val currentAutomaticLocationLiveData = MutableLiveData<Location>().apply { value = defaultAutomaticLocation }
-    private val currentOrientationLiveData = MutableLiveData<Orientation>().apply { value = Orientation.defaultOrientation }
+    private val currentOrientationLiveData = MutableLiveData<Orientation>().apply { value = Orientation.default }
 
     val momentLD: LiveData<Moment>
         get() = momentLiveData
@@ -54,7 +54,7 @@ class Repository private constructor() {
         get() = currentOrientationLiveData
 
     val currentOrientation: Orientation
-        get() = currentOrientationLiveData.value ?: Orientation.defaultOrientation
+        get() = currentOrientationLiveData.value ?: Orientation.default
 
     val citiesLD: LiveData<Cities>
         get() = citiesLiveData

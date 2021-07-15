@@ -27,7 +27,7 @@ class HorizonView(context: Context?, attrs: AttributeSet?) : View(context, attrs
             }
         }
 
-    var currentDeviceOrientation: Orientation = Orientation(35.0, 5.0, -85.0, 12.0, centerAltitude = -85.0) // Orientation.defaultOrientation
+    var currentDeviceOrientation: Orientation = Orientation(35.0, 5.0, -85.0, 12.0, centerAltitude = -85.0)
         set(value) {
             if (field != value) {
                 field = value

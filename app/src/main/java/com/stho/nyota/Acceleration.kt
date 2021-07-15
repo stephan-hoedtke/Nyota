@@ -1,7 +1,8 @@
 package com.stho.nyota
 
 import com.stho.nyota.sky.utilities.Degree
-import kotlin.math.abs
+import com.stho.nyota.sky.utilities.SystemClockTimeSource
+import com.stho.nyota.sky.utilities.TimeSource
 import kotlin.math.exp
 
 internal class Acceleration(factorInSeconds: Double = 0.8, private val timeSource: TimeSource = SystemClockTimeSource()) {

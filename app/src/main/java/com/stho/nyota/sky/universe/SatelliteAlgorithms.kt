@@ -1,6 +1,8 @@
 package com.stho.nyota.sky.universe
 
+import android.view.VelocityTracker
 import com.stho.nyota.sky.universe.Algorithms.getThetaG
+import com.stho.nyota.sky.utilities.PositionVelocity
 import com.stho.nyota.sky.utilities.Vector
 
 /**
@@ -39,11 +41,11 @@ object SatelliteAlgorithms {
     private const val xke = 0.0743669161331734132
     private const val a3ovk2 = minus_xj3 / ck2 * ae * ae * ae
 
-    fun calculatePositionVelocity(tle: TLE, julianDay: Double, position: Vector, velocity: Vector?) {
+    fun calculatePositionVelocity(tle: TLE, julianDay: Double): PositionVelocity {
         val parameters = SatelliteParameters()
         SDP8_init(tle, parameters)
         val minutes = GetMinutesSinceTLE(tle, julianDay)
-        SDP8(minutes, tle, parameters, position, velocity)
+        return SDP8(minutes, tle, parameters)
     }
 
     private fun GetMinutesSinceTLE(tle: TLE, julianDay: Double): Double {
@@ -109,7 +111,7 @@ object SatelliteAlgorithms {
         Deep_dpinit(tle, Params)
     }
 
-    private fun SDP8(tsince: Double, tle: TLE, Params: SatelliteParameters, position: Vector, velocity: Vector?) {
+    private fun SDP8(tsince: Double, tle: TLE, Params: SatelliteParameters): PositionVelocity {
         val am: Double
         val aovr: Double
         val axnm: Double
@@ -251,14 +253,18 @@ object SatelliteAlgorithms {
         temp = Math.sqrt(1.0 - y4 * y4 - y5 * y5) * 2.0
         uz = y4 * temp
         vz = y5 * temp
-        position.x = rr * ux * earth_radius_in_km
-        position.y = rr * uy * earth_radius_in_km
-        position.z = rr * uz * earth_radius_in_km
-        if (velocity != null) {
-            velocity.x = (rdot * ux + rvdot * vx) * earth_radius_in_km
-            velocity.y = (rdot * uy + rvdot * vy) * earth_radius_in_km
-            velocity.z = (rdot * uz + rvdot * vz) * earth_radius_in_km
-        }
+        return PositionVelocity(
+            position = Vector(
+                x = rr * ux * earth_radius_in_km,
+                y = rr * uy * earth_radius_in_km,
+                z = rr * uz * earth_radius_in_km,
+            ),
+            velocity = Vector(
+                x = (rdot * ux + rvdot * vx) * earth_radius_in_km,
+                y = (rdot * uy + rvdot * vy) * earth_radius_in_km,
+                z = (rdot * uz + rvdot * vz) * earth_radius_in_km,
+            ),
+        )
     }
 
     private fun sxp8_common_init(tle: TLE, Params: SatelliteParameters) {

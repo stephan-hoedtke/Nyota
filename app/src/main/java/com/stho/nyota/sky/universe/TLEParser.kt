@@ -113,8 +113,6 @@ class TLEParser {
         if (line.length < 69) return false
         for (i in 0..67) {
             when (line[i]) {
-                '0' -> {
-                }
                 '1' -> sum += 1
                 '2' -> sum += 2
                 '3' -> sum += 3
@@ -127,8 +125,8 @@ class TLEParser {
                 '-' -> sum += 1
             }
         }
-        val checksum = ('0'.toInt() + sum % 10).toChar()
-        return if (line[68] != checksum) false else true
+        val checksum = ('0'.code + sum % 10).toChar()
+        return (line[68] == checksum)
     }
 
     companion object {

@@ -1,10 +1,10 @@
 package com.stho.nyota
 
+import com.stho.nyota.sky.utilities.TimeSource
 import org.junit.Assert
 import org.junit.Test
 import com.stho.nyota.sky.utilities.Vector
 import kotlin.math.abs
-import kotlin.math.pow
 
 
 class LowPassFilterUnitTest {

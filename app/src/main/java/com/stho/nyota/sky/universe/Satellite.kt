@@ -93,15 +93,12 @@ class Satellite private constructor(override var id: Long, override val name: St
     fun updateFor(moment: Moment) {
         val julianDay: Double = moment.utc.julianDay
         this.updateFor(julianDay)
-        // TODO relative is not used, why?
-        val eci = getECI(moment.location, julianDay)
-        val relative = positionVector.minus(eci)
-        position = getTopocentricFromPosition(moment, positionVector)
+        position = getTopocentricFromPosition(moment, positionVelocity.position)
     }
 
     override fun updateFor(julianDay: Double) {
-        SatelliteAlgorithms.calculatePositionVelocity(tle, julianDay, positionVector, velocity)
-        location = getLocationForECI(positionVector, julianDay)
+        positionVelocity = SatelliteAlgorithms.calculatePositionVelocity(tle, julianDay)
+        location = getLocationForECI(positionVelocity.position, julianDay)
     }
 
     companion object {

@@ -47,10 +47,9 @@ class SatellitePreview {
 
         private fun getPreviewPoint(satellite: Satellite, observer: Moment, utc: UTC, level: Int): SatelliteGeoPoint {
             val julianDay = utc.julianDay
-            val position = Vector()
-            calculatePositionVelocity(satellite.tle, julianDay, position, null)
-            val location = getLocationForECI(position, julianDay)
-            val topocentric = getTopocentricFromPosition(observer.location, julianDay, position)
+            val positionVelocity = calculatePositionVelocity(satellite.tle, julianDay)
+            val location = getLocationForECI(positionVelocity.position, julianDay)
+            val topocentric = getTopocentricFromPosition(observer.location, julianDay, positionVelocity.position)
             val sunForObserver = getSunFor(observer.location, utc)
             val sunForSatellite = getSunFor(location, utc)
             val isDark = sunForObserver.isDark

@@ -49,8 +49,9 @@ class IntervalPickerRecyclerViewAdapter : RecyclerView.Adapter<IntervalPickerRec
             binding.radioButton.isChecked = isSelected
             binding.textView.text = interval.toString()
             binding.root.isSelected = isSelected
-            binding.root.setOnClickListener { getIntervalByIndex(adapterPosition)?.also { onItemClick?.invoke(it) }  }
-            binding.radioButton.setOnClickListener { getIntervalByIndex(adapterPosition)?.also {  onSelectionChanged?.invoke(it) } }
+            // TODO: check if absoluteAdapterPosition or bindingAdapterPosition would be correct!!
+            binding.root.setOnClickListener { getIntervalByIndex(absoluteAdapterPosition)?.also { onItemClick?.invoke(it) }  }
+            binding.radioButton.setOnClickListener { getIntervalByIndex(absoluteAdapterPosition)?.also {  onSelectionChanged?.invoke(it) } }
         }
     }
 

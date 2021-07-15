@@ -18,7 +18,7 @@ class SwipeToDelete(private val adapter: ISwipeToDeleteAdapter) : ItemTouchHelpe
     }
 
     override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-        val position = viewHolder.adapterPosition
+        val position = viewHolder.absoluteAdapterPosition
         if (direction == ItemTouchHelper.LEFT || direction == ItemTouchHelper.RIGHT) {
             adapter.delete(position)
         }

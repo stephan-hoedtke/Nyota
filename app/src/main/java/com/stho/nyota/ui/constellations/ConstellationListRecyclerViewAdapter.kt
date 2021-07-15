@@ -47,8 +47,8 @@ class ConstellationListRecyclerViewAdapter : RecyclerView.Adapter<ConstellationL
             binding.altitude.text = constellation.position?.altitudeAsString
             binding.hints.text = constellation.author
             binding.root.isSelected = isItemSelected(constellation)
-            binding.root.setOnClickListener { getConstellationByIndex(adapterPosition)?.also { onItemClick?.invoke(it) } }
-            binding.root.setOnLongClickListener {  getConstellationByIndex(adapterPosition)?.also { onItemLongClick?.invoke(it) }; true }
+            binding.root.setOnClickListener { getConstellationByIndex(absoluteAdapterPosition)?.also { onItemClick?.invoke(it) } }
+            binding.root.setOnLongClickListener {  getConstellationByIndex(absoluteAdapterPosition)?.also { onItemLongClick?.invoke(it) }; true }
         }
     }
 

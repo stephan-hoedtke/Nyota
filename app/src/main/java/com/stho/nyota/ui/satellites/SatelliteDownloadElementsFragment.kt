@@ -2,19 +2,24 @@ package com.stho.nyota.ui.satellites
 
 import android.os.Bundle
 import android.os.Handler
+import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.stho.nyota.AbstractFragment
 import com.stho.nyota.AbstractViewModel
 import com.stho.nyota.R
-import com.stho.nyota.TLELoaderTask
 import com.stho.nyota.databinding.FragmentSatelliteDownloadElementsBinding
 import com.stho.nyota.sky.universe.Satellite
+import com.stho.nyota.sky.universe.TLELoader
 import com.stho.nyota.sky.utilities.Formatter
 import com.stho.nyota.sky.utilities.Moment
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 
 class SatelliteDownloadElementsFragment : AbstractFragment() {
@@ -46,7 +51,7 @@ class SatelliteDownloadElementsFragment : AbstractFragment() {
         viewModel.universeLD.observe(viewLifecycleOwner, { universe -> updateSatellite(universe.moment) })
         viewModel.errorMessageLD.observe(viewLifecycleOwner, { errorMessage -> updateErrorMessage(errorMessage) })
         viewModel.processingStatusLD.observe(viewLifecycleOwner) { processing -> updateProcessingStatus(processing) }
-        Handler().postDelayed( { onClickDownloadTle() }, 100)
+        Handler(Looper.getMainLooper()).postDelayed( { onClickDownloadTle() }, 100)
     }
 
     override fun onDestroyView() {
@@ -91,8 +96,32 @@ class SatelliteDownloadElementsFragment : AbstractFragment() {
     }
 
     private fun onClickDownloadTle() {
-        val task = TLELoaderTask(viewModel)
-        task.execute()
+        viewLifecycleOwner.lifecycleScope.launch {
+            try {
+                viewModel.setProcessingStatus(true)
+                val satelliteNumber: Int = viewModel.satellite.noradSatelliteNumber
+                val elements = load(satelliteNumber)
+                if (elements.isNullOrBlank()) {
+                    throw Exception("TLE not available.")
+                }
+                viewModel.updateElements(elements)
+                viewModel.setProcessingStatus(false)
+
+            } catch(ex: Exception) {
+                viewModel.setErrorMessage("Exception: " + ex.localizedMessage)
+                viewModel.setProcessingStatus(false)
+            }
+        }
+    }
+
+    /**
+     * load satellite elements by calling the Web service.
+     * The method shall be called by a coroutine in IO thread (not in the main thread).
+     */
+    private suspend fun load(satelliteNumber: Int): String? {
+        return withContext(Dispatchers.IO) {
+            TLELoader().download(satelliteNumber)
+        }
     }
 
     private fun onClickEarthView() {
