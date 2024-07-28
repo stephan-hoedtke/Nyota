@@ -119,19 +119,19 @@ abstract class AbstractFragment : Fragment(), INavigable {
             it.subtitle = null
         }
 
-    @Suppress("NON_EXHAUSTIVE_WHEN")
     protected open fun onPropertyClick(property: IProperty) {
         when (property.keyType) {
             PropertyKeyType.CONSTELLATION -> onConstellation(property.key)
             PropertyKeyType.STAR -> onStar(property.key)
+            else -> {} // Nothing to do
         }
     }
 
-    @Suppress("NON_EXHAUSTIVE_WHEN")
     protected open fun onPropertyLongClick(property: IProperty) {
         when (property.keyType) {
             PropertyKeyType.STAR -> showNextStepDialogForElement(property.key)
             PropertyKeyType.CONSTELLATION -> showNextStepDialogForElement(property.key)
+            else -> {} // Nothing to do
         }
     }
 

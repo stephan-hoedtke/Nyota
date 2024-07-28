@@ -38,8 +38,4 @@ class LocationServiceListener(context: Context, private val filter: ILocationFil
     override fun onLocationChanged(location: android.location.Location) {
         filter.onLocationChanged(location)
     }
-
-    override fun onStatusChanged(provider: String?, status: Int, extras: Bundle?) {
-        // Ignored
-    }
 }

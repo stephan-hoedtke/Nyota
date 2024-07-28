@@ -111,7 +111,6 @@ class SkyFragment : AbstractFragment() {
         return super.onOptionsItemSelected(item)
     }
 
-    @Suppress("NON_EXHAUSTIVE_WHEN")
     private fun onObserveOrientation(orientation: Orientation) {
         when (viewModel.liveMode) {
             LiveMode.Hints -> {
@@ -120,6 +119,7 @@ class SkyFragment : AbstractFragment() {
             LiveMode.MoveCenter -> {
                 binding.sky.setCenter(orientation.centerAzimuth, orientation.centerAltitude)
             }
+            LiveMode.Off -> {} // Nothing
         }
         binding.orientation.text = Angle.toString(orientation.centerAzimuth, orientation.centerAltitude, Angle.AngleType.ORIENTATION)
         binding.compass.rotation = orientation.centerAzimuth.toFloat() - 25f
