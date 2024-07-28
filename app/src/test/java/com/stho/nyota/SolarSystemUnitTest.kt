@@ -193,4 +193,24 @@ class SolarSystemUnitTest : AbstractAstronomicUnitTest() {
         assertCalendar("Sunrise", getCESTasUTC(2016, Calendar.SEPTEMBER, 12, 6, 36), universe.solarSystem.sun.position!!.riseTime!!)
         assertCalendar("Sunset", getCESTasUTC(2016, Calendar.SEPTEMBER, 12, 19, 28), universe.solarSystem.sun.position!!.setTime!!)
     }
+
+    @Test
+    fun sunSet_inAhrenshoop_isCorrect() {
+
+        // Ahrenshoop: 54.3788° N, 12.4178° E
+        // Sunset was actually at 2024-07-20 T 20:29, but the app had predicted 2024-07-07 T 20:16
+        val moment: Moment = Moment.forUTC(
+            getCity(54.3788, 12.4178),
+            getCESTasUTC(2024, Calendar.JULY, 20, 21, 30)
+        )
+        val universe: Universe = Universe().apply {
+            updateFor(moment, true)
+        }
+
+        // compare with https://sunrisesunsetmap.com/
+        // 54°23'N 012°25'E, Saturday 20 July 2024, Rise: 05:03 CEST, Set: 21:29 CEST
+        assertCalendar("Sunrise", getCESTasUTC(2024, Calendar.JULY, 20, 5, 3), universe.solarSystem.sun.position!!.riseTime!!)
+        assertCalendar("Sunset", getCESTasUTC(224, Calendar.JULY, 20, 21, 29), universe.solarSystem.sun.position!!.setTime!!)
+    }
+
 }
